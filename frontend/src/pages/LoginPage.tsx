@@ -35,7 +35,7 @@ const LoginPage = () => {
             <div className="w-full md:w-1/2 flex flex-col items-center justify-center p-8">
                 <div className="w-full max-w-md">
                     <img src={logo} alt="Talk to pro logo" className="w-12 h-12 mb-4" />
-                    <h2 className="text-2xl font-semibold mb-6">Log in to <span className="text-primary">Talk</span></h2>
+                    <h2 className="text-2xl font-semibold mb-6">Log in to <span className="text-primary">Talk to pro</span></h2>
                     <Formik
                         initialValues={initialValues}
                         validationSchema={validationSchema}
