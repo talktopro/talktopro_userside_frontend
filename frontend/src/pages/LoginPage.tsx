@@ -1,8 +1,7 @@
 import { useCallback, useState } from "react";
-import loginImage from "../assets/auth-image.png";
 import logo from "../assets/logo.svg";
 import { Link } from "react-router-dom";
-// import { ROUTES } from "../routes/routes";
+import { ROUTES } from "../routes/routes";
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
@@ -10,6 +9,7 @@ import { useForm } from "react-hook-form";
 import * as z from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Eye, EyeOff } from "lucide-react";
+import AuthImageSection from "@/components/AuthImageSection";
 
 
 const formSchema = z.object({
@@ -38,8 +38,11 @@ const LoginPage = () => {
     }, []);
 
     return (
-        <div className="h-screen flex bg-blue-white">
-            <div className="hidden md:block w-1/2 bg-cover bg-center" style={{ backgroundImage: `url(${loginImage})` }}></div>
+        <div className="min-h-screen flex bg-blue-white">
+            {/* Left side */}
+            <AuthImageSection />
+
+            {/* Right side */}
             <div className="w-full md:w-1/2 flex flex-col items-center justify-center p-8">
                 <div className="w-full max-w-md">
                     <img src={logo} alt="Talk to pro logo" className="size-12 mb-4" />
@@ -57,7 +60,7 @@ const LoginPage = () => {
                                             <FormItem>
                                                 <FormLabel>Email</FormLabel>
                                                 <FormControl>
-                                                    <Input type="text" className="mt-2" placeholder="Enter your email" {...field} />
+                                                    <Input type="text" className="mt-2" placeholder="Enter your email address" {...field} />
                                                 </FormControl>
                                                 <FormMessage />
                                             </FormItem>
@@ -70,26 +73,26 @@ const LoginPage = () => {
                                             <FormItem>
                                                 <FormLabel>Password</FormLabel>
                                                 <FormControl>
-                                                        <div className="relative">
-                                                            <Input
-                                                                type={showPassword ? "text" : "password"}
-                                                                className="mt-2 pr-8" placeholder="Enter your password" {...field} />
-                                                            <button
-                                                                onClick={() => setShowPassword((prev) => !prev)}
-                                                                type="button" className="absolute right-1 top-1/2 transform -translate-1/2">
-                                                                {!showPassword ?
-                                                                    <Eye className="size-5 text-foreground/50" /> :
-                                                                    <EyeOff className="size-5 text-foreground/50" />
-                                                                }
-                                                            </button>
-                                                        </div>
+                                                    <div className="relative">
+                                                        <Input
+                                                            type={showPassword ? "text" : "password"}
+                                                            className="mt-2 pr-8" placeholder="Enter your password" {...field} />
+                                                        <button
+                                                            onClick={() => setShowPassword((prev) => !prev)}
+                                                            type="button" className="absolute right-1 top-1/2 transform -translate-1/2">
+                                                            {!showPassword ?
+                                                                <Eye className="size-5 text-foreground/50" /> :
+                                                                <EyeOff className="size-5 text-foreground/50" />
+                                                            }
+                                                        </button>
+                                                    </div>
                                                 </FormControl>
                                                 <FormMessage />
-                                                        <div className="mt-2 text-right">
-                                                            <Link to="/forgot-password" className="text-sm hover:underline">
-                                                                Forgot Password?
-                                                            </Link>
-                                                        </div>
+                                                <div className="mt-2 text-right">
+                                                    <Link to={ROUTES.FORGOT_PASSWORD} className="text-sm hover:underline">
+                                                        Forgot Password?
+                                                    </Link>
+                                                </div>
                                             </FormItem>
                                         )}
                                     />
@@ -99,9 +102,12 @@ const LoginPage = () => {
                                 </form>
                             </Form>
                         </div>
+                        <p className="w-full text-center text-sm mt-1">
+                            Don&apos;t have an account? <Link className="font-semibold" to={ROUTES.SIGNUP}>Signup</Link> now
+                        </p>
                         <div className="flex flex-col">
                             <div className="mt-4 text-center font-medium text-sm text-foreground/50">Or</div>
-                            <Button variant="outline" className="mt-4 w-full flex items-center justify-center gap-2">
+                            <Button variant="outline" className="mt-3 w-full flex items-center justify-center gap-2">
                                 <img
                                     src="https://w7.pngwing.com/pngs/326/85/png-transparent-google-logo-google-text-trademark-logo-thumbnail.png"
                                     alt="Google"
