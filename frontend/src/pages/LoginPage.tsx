@@ -1,32 +1,40 @@
-import { useCallback } from "react";
+import { useCallback, useState } from "react";
 import loginImage from "../assets/auth-image.png";
 import logo from "../assets/logo.svg";
 import { Link } from "react-router-dom";
 import { ROUTES } from "../routes/routes";
-import { ErrorMessage, Field, Form, Formik } from "formik";
-import * as Yup from "yup";
-import PasswordInput from "../components/PasswordInput";
+import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
+import { Input } from "@/components/ui/input";
+import { Button } from "@/components/ui/button";
+import { useForm } from "react-hook-form";
+import * as z from "zod";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { Eye, EyeOff } from "lucide-react";
 
-type LoginValues = {
-    email: string;
-    password: string;
-};
 
-const initialValues: LoginValues = {
-    email: "",
-    password: "",
-};
-
-const validationSchema = Yup.object({
-    email: Yup.string().email("Invalid email address").required("Email is required"),
-    password: Yup.string().min(8, "Password must be at least 8 characters").required("Password is required"),
+const formSchema = z.object({
+    email: z.string().email({
+        message: "Please enter a valid email address.",
+    }),
+    password: z.string().min(6, {
+        message: "Password must be at least 6 characters long.",
+    }),
 });
 
 const LoginPage = () => {
 
-    const handleLogin = useCallback((values: LoginValues, { setSubmitting }: { setSubmitting: (isSubmitting: boolean) => void }) => {
-        console.log(values);
-        setSubmitting(false);
+    const [showPassword, setShowPassword] = useState<boolean>(false);
+
+    const form = useForm<z.infer<typeof formSchema>>({
+        resolver: zodResolver(formSchema),
+        defaultValues: {
+            email: "",
+            password: "",
+        },
+    })
+
+    const submitFn = useCallback(async (values: z.infer<typeof formSchema>) => {
+        console.log(values)
     }, []);
 
     return (
@@ -34,55 +42,77 @@ const LoginPage = () => {
             <div className="hidden md:block w-1/2 bg-cover bg-center" style={{ backgroundImage: `url(${loginImage})` }}></div>
             <div className="w-full md:w-1/2 flex flex-col items-center justify-center p-8">
                 <div className="w-full max-w-md">
-                    <img src={logo} alt="Talk to pro logo" className="w-12 h-12 mb-4" />
+                    <img src={logo} alt="Talk to pro logo" className="size-12 mb-4" />
                     <h2 className="text-2xl font-semibold mb-6">Log in to <span className="text-primary">Talk to pro</span></h2>
-                    <Formik
-                        initialValues={initialValues}
-                        validationSchema={validationSchema}
-                        onSubmit={handleLogin}
-                    >
-                        {({ isSubmitting }) => (
-                            <Form>
-                                <div className="mb-4">
-                                    <label className="block text-sm font-medium mb-1" htmlFor="email">Email</label>
-                                    <Field id="email"
-                                        type="email"
+
+
+                    <div>
+                        <div>
+                            <Form {...form}>
+                                <form onSubmit={form.handleSubmit(submitFn)} className="space-y-6">
+                                    <FormField
+                                        control={form.control}
                                         name="email"
-                                        className="w-full p-2 border border-[#E6E6E6] rounded-lg focus:outline-none"
-                                        placeholder="Enter email"
+                                        render={({ field }) => (
+                                            <FormItem>
+                                                <FormLabel>Email</FormLabel>
+                                                <FormControl>
+                                                    <Input type="text" className="mt-2" placeholder="Enter your email" {...field} />
+                                                </FormControl>
+                                                <FormMessage />
+                                            </FormItem>
+                                        )}
                                     />
-                                    <ErrorMessage name="email" component="div" className="mt-1 text-red-500 text-sm" />
-                                </div>
-                                <div className="mb-4">
-                                    <label className="block text-sm font-medium mb-1" htmlFor="password">Password</label>
-                                    <PasswordInput id="password" name="password" />
-                                    <ErrorMessage name="password" component="div" className="mt-1 text-red-500 text-sm" />
-                                    <div className="mt-1 text-right">
-                                        <Link to={ROUTES.FORGOT_PASSWORD} className="text-sm hover:underline">Forgot password?</Link>
-                                    </div>
-                                </div>
-                                <button
-                                    disabled={isSubmitting}
-                                    type="submit"
-                                    className="w-full bg-primary text-white py-2 rounded-lg hover:opacity-90 hover:cursor-pointer transition"
-                                >Log in</button>
-                                <div className="mt-4 text-center">
-                                    <span className="text-sm text-gray-600">Don&apos;t have an account? </span>
-                                    <Link to={ROUTES.SIGNUP} className="text-sm font-semibold">
-                                        Sign up
-                                    </Link>
-                                    <span className="text-sm text-gray-600"> now.</span>
-                                </div>
+                                    <FormField
+                                        control={form.control}
+                                        name="password"
+                                        render={({ field }) => (
+                                            <FormItem>
+                                                <FormLabel>Password</FormLabel>
+                                                <FormControl>
+                                                        <div className="relative">
+                                                            <Input
+                                                                type={showPassword ? "text" : "password"}
+                                                                className="mt-2 pr-8" placeholder="Enter your password" {...field} />
+                                                            <button
+                                                                onClick={() => setShowPassword((prev) => !prev)}
+                                                                type="button" className="absolute right-1 top-1/2 transform -translate-1/2">
+                                                                {!showPassword ?
+                                                                    <Eye className="size-5 text-foreground/50" /> :
+                                                                    <EyeOff className="size-5 text-foreground/50" />
+                                                                }
+                                                            </button>
+                                                        </div>
+                                                </FormControl>
+                                                <FormMessage />
+                                                        <div className="mt-2 text-right">
+                                                            <Link to="/forgot-password" className="text-sm hover:underline">
+                                                                Forgot Password?
+                                                            </Link>
+                                                        </div>
+                                            </FormItem>
+                                        )}
+                                    />
+                                    <Button type="submit" className="w-full hover:cursor-pointer">
+                                        Log in
+                                    </Button>
+                                </form>
                             </Form>
-                        )}
-                    </Formik>
-                    <div className="mt-4 text-center font-medium text-sm text-gray-500">
-                        Or
+                        </div>
+                        <div className="flex flex-col">
+                            <div className="mt-4 text-center font-medium text-sm text-foreground/50">Or</div>
+                            <Button variant="outline" className="mt-4 w-full flex items-center justify-center gap-2">
+                                <img
+                                    src="https://w7.pngwing.com/pngs/326/85/png-transparent-google-logo-google-text-trademark-logo-thumbnail.png"
+                                    alt="Google"
+                                    width={20}
+                                    height={20}
+                                />
+                                Continue with Google
+                            </Button>
+                        </div>
                     </div>
-                    <button className="mt-4 font-semibold w-full flex items-center justify-center gap-2 p-2 border border-gray-300 rounded-lg text-gray-700 hover:cursor-pointer hover:bg-gray-100">
-                        <img src="https://w7.pngwing.com/pngs/326/85/png-transparent-google-logo-google-text-trademark-logo-thumbnail.png" alt="Google" className="h-5 w-5" />
-                        Continue with Google
-                    </button>
+
                 </div>
             </div>
         </div>
