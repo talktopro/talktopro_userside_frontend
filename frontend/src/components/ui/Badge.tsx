@@ -3,7 +3,6 @@ type BadgeProps = {
   background?: "Gray" | "Light" | "Green" | "Red";
 };
 
-//
 export const Badge: React.FC<BadgeProps> = ({
   content,
   background = "Gray",
