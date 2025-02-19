@@ -120,7 +120,7 @@ const ProfessionalDetails = () => {
                 </h2>
                 <p className="mt-2 text-gray-600">{professionalData.about}</p>
 
-                <hr className="border-t border-gray-100 my-5" />
+                <hr className="border-t my-5" />
 
                 <h2 className="text-lg font-semibold">Languages</h2>
                 <div className="mt-2 flex flex-wrap gap-2">
@@ -131,7 +131,7 @@ const ProfessionalDetails = () => {
                   )}
                 </div>
 
-                <hr className="border-t border-gray-100 my-5" />
+                <hr className="border-t my-5" />
 
                 <h2 className="text-lg font-semibold">Skills & Expertise</h2>
                 <div className="mt-2 flex flex-wrap gap-2">

@@ -11,7 +11,8 @@ import {
   Settings,
   User,
   UserRound,
-  Search,
+  Moon,
+  Sun,
 } from "lucide-react";
 import {
   Select,
@@ -19,10 +20,20 @@ import {
   SelectItem,
   SelectTrigger,
 } from "@/components/ui/select";
-import { useState } from "react";
+import { ROUTES } from "../routes/routes";
+import { useNavigate } from "react-router-dom";
+import useTheme from "@/hooks/useTheme";
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipProvider,
+  TooltipTrigger,
+} from "./ui/tooltip";
 
 const Navbar = () => {
-  const [isSearchVisible, setIsSearchVisible] = useState(false);
+  const { theme, toggleTheme } = useTheme();
+  1;
+  const navigate = useNavigate();
 
   interface MenuItem {
     label: string;
@@ -40,7 +51,7 @@ const Navbar = () => {
     },
     {
       label: "Bookings",
-      pathLocation: "",
+      pathLocation: ROUTES.BOOKINGS,
       value: "bookings",
       icon: <NotebookText strokeWidth={1.5} size={18} />,
     },
@@ -76,12 +87,16 @@ const Navbar = () => {
     },
   ];
   return (
-    <nav className="bg-white fixed w-full z-10 border-b-1 border-b-gray-200">
+    <nav
+      className={`fixed w-full z-10 border-b-1 ${
+        theme === "light" ? "bg-white" : "bg-black"
+      }`}
+    >
       <div className="container mx-auto px-8 flex items-center justify-between h-18">
         <div className="flex items-center gap-2">
           <img src={logo} width={35} />
-          <h3 className="text-2xl font-bold text-gray-800 flex items-center gap-1">
-            Talk<span>To</span> <span className="text-primary">Pro</span>
+          <h3 className="text-2xl font-bold flex items-center gap-1">
+            Talk<span>To</span> <span className="text-purple-500">Pro</span>
           </h3>
         </div>
 
@@ -92,31 +107,67 @@ const Navbar = () => {
         />
 
         <div className="flex items-center">
-          <div
-            className="bg-transparent px-2 py-1 flex justify-center items-center rounded-sm hover:bg-gray-100 transition duration-300 cursor-pointer sm:hidden"
-            onClick={() => setIsSearchVisible(!isSearchVisible)}
-          >
-            <Search strokeWidth={1.5} width={18} />
-          </div>
+          <TooltipProvider>
+            <Tooltip>
+              <TooltipTrigger>
+                <div className="bg-transparent px-2 py-1 flex justify-center items-center rounded-sm hover:bg-muted transition duration-300 cursor-pointer">
+                  <Bell strokeWidth={1.5} width={18} />
+                </div>
+              </TooltipTrigger>
+              <TooltipContent className="bg-white border-1 border-gray-200 text-black">
+                <p>Notification</p>
+              </TooltipContent>
+            </Tooltip>
+          </TooltipProvider>
 
-          <div className="bg-transparent px-2 py-1 flex justify-center items-center rounded-sm hover:bg-gray-100 transition duration-300 cursor-pointer">
-            <Bell strokeWidth={1.5} width={18} />
-          </div>
+          <TooltipProvider>
+            <Tooltip>
+              <TooltipTrigger>
+                <div
+                  className="bg-transparent p-2 flex justify-center items-center rounded-sm hover:bg-muted transition duration-300 cursor-pointer"
+                  onClick={toggleTheme}
+                >
+                  {theme === "light" ? (
+                    <Sun strokeWidth={1.5} size={18} />
+                  ) : (
+                    <Moon strokeWidth={1.5} size={18} />
+                  )}
+                </div>
+              </TooltipTrigger>
+              <TooltipContent className="bg-white border-1 border-gray-200 text-black">
+                <p>Theme</p>
+              </TooltipContent>
+            </Tooltip>
+          </TooltipProvider>
 
-          <div className="bg-transparent px-2 py-1 flex justify-center items-center rounded-sm hover:bg-gray-100 transition duration-300 cursor-pointer">
-            <Select>
-              <SelectTrigger className="shadow-none border-none focus:ring-0 focus:outline-none p-0 h-auto [&>svg]:text-black">
-                <User strokeWidth={1.5} width={18} />
+          <div className="bg-transparent px-2 py-1 flex justify-center items-center rounded-sm hover:bg-muted transition duration-300 cursor-pointer">
+            <Select
+              onValueChange={(value) => {
+                const selectedItem = menuItems.find(
+                  (item) => item.value === value
+                );
+                if (selectedItem) navigate(selectedItem.pathLocation);
+              }}
+            >
+              <SelectTrigger className="shadow-none border-none focus:ring-0 focus:outline-none p-0 h-auto">
+                <TooltipProvider>
+                  <Tooltip>
+                    <TooltipTrigger>
+                      <User strokeWidth={1.5} width={18} />
+                    </TooltipTrigger>
+                    <TooltipContent className="bg-white border-1 border-gray-200 text-black mt-1.5">
+                      <p>Profile & More</p>
+                    </TooltipContent>
+                  </Tooltip>
+                </TooltipProvider>
               </SelectTrigger>
               <SelectContent>
                 {menuItems.map((item: MenuItem) => (
                   <SelectItem
                     key={item.value}
                     value={item.value}
-                    className={`flex items-center transition duration-300 cursor-pointer ${
-                      item.value === "logout"
-                        ? "text-red-400 hover:bg-gradient-to-r from-[#ffeded] to-[#ffd5d5]"
-                        : "text-gray-700 hover:text-black hover:bg-gradient-to-r from-[#FFF9F9] to-[#ebdfff]"
+                    className={`flex items-center transition duration-300 cursor-pointer hover:bg-muted ${
+                      item.value === "logout" && "text-red-600"
                     }`}
                   >
                     <div className="flex items-center gap-2">
@@ -130,16 +181,6 @@ const Navbar = () => {
           </div>
         </div>
       </div>
-      {isSearchVisible && (
-        <div className="absolute top-full left-0 w-full bg-white border-b border-gray-200 sm:hidden px-8 pb-2">
-          <Input
-            type="text"
-            placeholder="Search..."
-            className="w-full p-2 focus:ring-0 focus:outline-none"
-            autoFocus
-          />
-        </div>
-      )}
     </nav>
   );
 };

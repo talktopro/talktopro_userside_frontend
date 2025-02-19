@@ -25,6 +25,13 @@ const Footer = () => {
       image: "../profile-path",
     },
     {
+      id: 5,
+      name: "Ashin Joy",
+      handle: "ashinjoy@gmail.com",
+      role: "Backend architecture of Talk to pro",
+      image: "../profile-path",
+    },
+    {
       id: 3,
       name: "Ananthu Mohan",
       handle: "ananthumohan368@gmail.com",
@@ -55,7 +62,7 @@ const Footer = () => {
   const About: string[] = ["Company", "Careers", "Help"];
 
   return (
-    <footer className="border-1 border-t-gray-100 mt-15">
+    <footer className="border-t-1 mt-15">
       <div className="container max-w-screen-xl mx-auto">
         <div className="flex flex-wrap justify-around">
           <div className="space-y-4 mx-10 mt-10">

@@ -6,6 +6,7 @@ import SignupPage from "@/pages/SignupPage";
 import ForgotPasswordPage from "@/pages/ForgotPasswordPage";
 import ProfessionalDetails from "@/pages/ProfessionalProfile";
 import AllMentors from "@/pages/AllMentors";
+import Bookings from "@/pages/Bookings";
 
 const AppRoutes = () => {
   return (
@@ -19,6 +20,8 @@ const AppRoutes = () => {
       <Route path={ROUTES.MENTOR_DETAILS} element={<ProfessionalDetails />} />
       {/* all professonals listing page */}
       <Route path={ROUTES.ALL_MENTORS} element={<AllMentors />} />
+      {/* User booking table with details */}
+      <Route path={ROUTES.BOOKINGS} element={<Bookings />} />
     </Routes>
   );
 };
