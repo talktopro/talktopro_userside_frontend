@@ -4,22 +4,25 @@ import { ROUTES } from "./routes";
 import HomePage from "@/pages/HomePage";
 import SignupPage from "@/pages/SignupPage";
 import ForgotPasswordPage from "@/pages/ForgotPasswordPage";
-import ProfessionalDetails from "@/pages/ProfessionalProfile";
-import AllMentors from "@/pages/AllMentors";
 import Bookings from "@/pages/Bookings";
+import ProfessionalDetailsPage from "@/pages/ProfessionalDetailsPage";
+import AllProfessionalsPage from "@/pages/AllProfessionalsPage";
+import MainLayout from "@/layouts/MainLayout";
 
 const AppRoutes = () => {
   return (
     <Routes>
-      <Route path={ROUTES.HOME} element={<HomePage />} />
+      {/* Routes with Navbar and footer */}
+      <Route element={<MainLayout />}>
+        <Route path={ROUTES.HOME} element={<HomePage />} />
+        <Route path={ROUTES.PROFESSIONALS.LIST} element={<AllProfessionalsPage />} />
+      </Route>
       {/* Authentication Routes */}
-      <Route path={ROUTES.LOGIN} element={<LoginPage />} />
-      <Route path={ROUTES.SIGNUP} element={<SignupPage />} />
-      <Route path={ROUTES.FORGOT_PASSWORD} element={<ForgotPasswordPage />} />
+      <Route path={ROUTES.AUTH.LOGIN} element={<LoginPage />} />
+      <Route path={ROUTES.AUTH.SIGNUP} element={<SignupPage />} />
+      <Route path={ROUTES.AUTH.FORGOT_PASSWORD} element={<ForgotPasswordPage />} />
       {/* Professional profile area from user side */}
-      <Route path={ROUTES.MENTOR_DETAILS} element={<ProfessionalDetails />} />
-      {/* all professonals listing page */}
-      <Route path={ROUTES.ALL_MENTORS} element={<AllMentors />} />
+      <Route path={ROUTES.PROFESSIONALS.DETAILS()} element={<ProfessionalDetailsPage />} />
       {/* User booking table with details */}
       <Route path={ROUTES.BOOKINGS} element={<Bookings />} />
     </Routes>

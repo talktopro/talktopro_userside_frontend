@@ -1,8 +1,9 @@
 import Footer from "@/components/Footer";
 import MentorCard from "@/components/MentorCard";
-import Navbar from "@/components/Navbar";
 import Banner from "@/components/ui/banner";
+import { ROUTES } from "@/routes/routes";
 import { ChevronRight } from "lucide-react";
+import { Link } from "react-router-dom";
 
 const MentorSection = () => (
   <section className="flex justify-center items-center">
@@ -18,8 +19,7 @@ const MentorSection = () => (
 
 const HomePage = () => {
   return (
-    <div className="min-h-screen flex flex-col">
-      <Navbar />
+    <div className="min-h-screen flex flex-col py-10">
       <div className="px-8 mb-15">
         <Banner
           image="Frame170.svg"
@@ -29,10 +29,10 @@ const HomePage = () => {
         />
         <div className="flex justify-between items-center group mb-5">
           <span className="text-lg font-semibold">Top Mentors for You</span>
-          <span className="flex items-center cursor-pointer">
+          <Link to={ROUTES.PROFESSIONALS.LIST} className="flex items-center cursor-pointer">
             See all
             <ChevronRight className="w-6 h-6 transition-opacity duration-200" />
-          </span>
+          </Link>
         </div>
 
         <MentorSection />

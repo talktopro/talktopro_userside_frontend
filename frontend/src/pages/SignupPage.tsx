@@ -152,7 +152,7 @@ const SignupPage = () => {
                     </Form>
 
                     <p className="text-center text-sm mt-1">
-                        Already have an account? <Link className="font-semibold" to={ROUTES.LOGIN}>Login here</Link>
+                        Already have an account? <Link className="font-semibold" to={ROUTES.AUTH.SIGNUP}>Login here</Link>
                     </p>
                     <div className="flex flex-col">
                         <div className="mt-3 text-center font-medium text-sm text-foreground/50">Or</div>

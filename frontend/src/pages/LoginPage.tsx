@@ -89,7 +89,7 @@ const LoginPage = () => {
                                                 </FormControl>
                                                 <FormMessage />
                                                 <div className="mt-2 text-right">
-                                                    <Link to={ROUTES.FORGOT_PASSWORD} className="text-sm hover:underline">
+                                                    <Link to={ROUTES.AUTH.FORGOT_PASSWORD} className="text-sm hover:underline">
                                                         Forgot Password?
                                                     </Link>
                                                 </div>
@@ -103,7 +103,7 @@ const LoginPage = () => {
                             </Form>
                         </div>
                         <p className="w-full text-center text-sm mt-1">
-                            Don&apos;t have an account? <Link className="font-semibold" to={ROUTES.SIGNUP}>Signup</Link> now
+                            Don&apos;t have an account? <Link className="font-semibold" to={ROUTES.AUTH.SIGNUP}>Signup</Link> now
                         </p>
                         <div className="flex flex-col">
                             <div className="mt-4 text-center font-medium text-sm text-foreground/50">Or</div>

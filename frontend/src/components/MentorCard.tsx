@@ -1,9 +1,11 @@
 import { ChevronRight } from "lucide-react";
 import sample from "../assets/sampleProfessionalImage.jpg";
+import { Link } from "react-router-dom";
+import { ROUTES } from "@/routes/routes";
 
 const MentorCard = () => {
   return (
-    <div className="max-w-[300px] h-full rounded-lg bg-white shadow-lg relative group cursor-pointer overflow-hidden transition-all duration-600 hover:drop-shadow-xl hover:bg-black/10">
+    <Link to={`${ROUTES.PROFESSIONALS.DETAILS("123")}`} className="max-w-[300px] h-full rounded-lg bg-white shadow-lg relative group cursor-pointer overflow-hidden transition-all duration-600 hover:drop-shadow-xl hover:bg-black/10">
       <img src={sample} alt="Profile" className="w-full object-cover" />
       <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/50 to-transparent p-4 transition-all duration-300 group-hover:from-black/80 group-hover:via-black/40">
         <div className="flex items-center justify-between">
@@ -23,7 +25,7 @@ const MentorCard = () => {
           <ChevronRight className="w-6 h-6 text-white opacity-0 group-hover:opacity-100 transition-opacity duration-200" />
         </div>
       </div>
-    </div>
+    </Link>
   );
 };
 

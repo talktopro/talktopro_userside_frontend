@@ -21,7 +21,7 @@ import {
   SelectTrigger,
 } from "@/components/ui/select";
 import { ROUTES } from "../routes/routes";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import useTheme from "@/hooks/useTheme";
 import {
   Tooltip,
@@ -88,17 +88,18 @@ const Navbar = () => {
   ];
   return (
     <nav
-      className={`fixed w-full z-10 border-b-1 ${
-        theme === "light" ? "bg-white" : "bg-black"
-      }`}
+      className={`fixed w-full z-10 border-b-1 ${theme === "light" ? "bg-white" : "bg-black"
+        }`}
     >
       <div className="container mx-auto px-8 flex items-center justify-between h-18">
-        <div className="flex items-center gap-2">
-          <img src={logo} width={35} />
-          <h3 className="text-2xl font-bold flex items-center gap-1">
-            Talk<span>To</span> <span className="text-purple-500">Pro</span>
-          </h3>
-        </div>
+        <Link to={ROUTES.HOME}>
+          <div className="flex items-center gap-2">
+            <img src={logo} width={35} />
+            <h3 className="text-2xl font-bold flex items-center gap-1">
+              Talk<span>To</span> <span className="text-purple-500">Pro</span>
+            </h3>
+          </div>
+        </Link>
 
         <Input
           type="text"
@@ -166,9 +167,8 @@ const Navbar = () => {
                   <SelectItem
                     key={item.value}
                     value={item.value}
-                    className={`flex items-center transition duration-300 cursor-pointer hover:bg-muted ${
-                      item.value === "logout" && "text-red-600"
-                    }`}
+                    className={`flex items-center transition duration-300 cursor-pointer hover:bg-muted ${item.value === "logout" && "text-red-600"
+                      }`}
                   >
                     <div className="flex items-center gap-2">
                       <span>{item.icon}</span>

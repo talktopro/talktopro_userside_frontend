@@ -14,7 +14,7 @@ import {
 import BookingCalendar from "@/components/BookingCalendar";
 import Navbar from "@/components/Navbar";
 
-const ProfessionalDetails = () => {
+const ProfessionalDetailsPage = () => {
   const professionalData: ProfessionalData = {
     name: "Vishwas",
     department: "Senior Software Developer",
@@ -151,4 +151,4 @@ const ProfessionalDetails = () => {
   );
 };
 
-export default ProfessionalDetails;
+export default ProfessionalDetailsPage;
