@@ -2,7 +2,6 @@ import { JSX } from "react";
 import { Input } from "@/components/ui/input";
 import logo from "../assets/logo.svg";
 import {
-  Bell,
   CreditCard,
   Heart,
   LayoutTemplate,
@@ -29,6 +28,7 @@ import {
   TooltipProvider,
   TooltipTrigger,
 } from "./ui/tooltip";
+import Notification from "./Notification";
 
 const Navbar = () => {
   const { theme, toggleTheme } = useTheme();
@@ -109,18 +109,7 @@ const Navbar = () => {
         />
 
         <div className="flex items-center">
-          <TooltipProvider>
-            <Tooltip>
-              <TooltipTrigger>
-                <div className="bg-transparent px-2 py-1 flex justify-center items-center rounded-sm hover:bg-muted transition duration-300 cursor-pointer">
-                  <Bell strokeWidth={1.5} width={18} />
-                </div>
-              </TooltipTrigger>
-              <TooltipContent className="bg-white border-1 border-gray-200 text-black">
-                <p>Notification</p>
-              </TooltipContent>
-            </Tooltip>
-          </TooltipProvider>
+          <Notification />
 
           <TooltipProvider>
             <Tooltip>
