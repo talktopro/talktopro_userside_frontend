@@ -41,7 +41,14 @@ const ProfessionalDetailsPage = () => {
         <div className="mx-auto overflow-hidden">
           <div className="flex flex-col md:flex-row">
             <div>
-              <div className="bg-gradient-to-r from-[#FFF9F9] to-[#F9F5FF] p-10 flex flex-wrap gap-10">
+              {/* <div
+                className={`p-10 flex flex-wrap gap-10 ${
+                  theme === "light"
+                    ? "bg-gradient-to-r from-[#FFF9F9] to-[#F9F5FF]"    //! I just commented this code because when i change the theme gradient is not updating quickly
+                    : "bg-gradient-to-r from-[#171718] to-[#111013]"
+                }`}
+              > */}
+              <div className="p-10 flex flex-wrap gap-10 border-b">
                 <div className="md:w-1/4 md:h-auto w-full flex justify-center">
                   <img
                     src={sampleProfessionalImage}
@@ -55,7 +62,7 @@ const ProfessionalDetailsPage = () => {
                       <h1 className="text-2xl font-bold">
                         {professionalData.name}
                       </h1>
-                      <p className="text-gray-600">
+                      <p className="opacity-70">
                         {professionalData.department}
                       </p>
                     </div>
@@ -65,20 +72,14 @@ const ProfessionalDetailsPage = () => {
                       {professionalData.rating}
                     </span>
                     <span className="text-yellow-400">★</span>
-                    <span className="text-sm text-gray-600 ml-2">
-                      5k Reviews
-                    </span>
+                    <span className="text-sm opacity-70 ml-2">5k Reviews</span>
                   </div>
                   <div className="mt-5">
                     <h2 className="text-lg font-semibold">Specializations</h2>
                     <div className="mt-2 flex flex-wrap gap-2">
                       {professionalData.Specializations.map(
                         (content: string, key: number) => (
-                          <Badge
-                            content={content}
-                            key={key}
-                            background="Light"
-                          />
+                          <Badge content={content} key={key} />
                         )
                       )}
                     </div>
@@ -118,7 +119,7 @@ const ProfessionalDetailsPage = () => {
                 <h2 className="text-lg font-semibold">
                   About {professionalData.name}
                 </h2>
-                <p className="mt-2 text-gray-600">{professionalData.about}</p>
+                <p className="mt-2 opacity-70">{professionalData.about}</p>
 
                 <hr className="border-t my-5" />
 
