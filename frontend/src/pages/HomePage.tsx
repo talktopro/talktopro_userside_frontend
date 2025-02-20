@@ -1,4 +1,3 @@
-import Footer from "@/components/Footer";
 import MentorCard from "@/components/MentorCard";
 import Banner from "@/components/ui/banner";
 import { ROUTES } from "@/routes/routes";
@@ -46,15 +45,14 @@ const HomePage = () => {
 
         <div className="flex justify-between items-center group mb-5">
           <span className="text-lg font-semibold">Top Mentors for You</span>
-          <span className="flex items-center cursor-pointer">
+          <Link to={ROUTES.PROFESSIONALS.LIST} className="flex items-center cursor-pointer">
             See all
             <ChevronRight className="w-6 h-6 transition-opacity duration-200" />
-          </span>
+          </Link>
         </div>
 
         <MentorSection />
       </div>
-      <Footer />
     </div>
   );
 };
