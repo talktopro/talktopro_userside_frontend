@@ -45,7 +45,7 @@ const Navbar = () => {
   const menuItems: MenuItem[] = [
     {
       label: "Account Details",
-      pathLocation: "",
+      pathLocation: ROUTES.ACCOUNT_SETTINGS,
       value: "account_details",
       icon: <UserRound strokeWidth={1.5} size={18} />,
     },
@@ -88,8 +88,9 @@ const Navbar = () => {
   ];
   return (
     <nav
-      className={`fixed w-full z-10 border-b-1 ${theme === "light" ? "bg-white" : "bg-black"
-        }`}
+      className={`fixed w-full z-10 border-b-1 ${
+        theme === "light" ? "bg-white" : "bg-black"
+      }`}
     >
       <div className="container mx-auto px-8 flex items-center justify-between h-18">
         <Link to={ROUTES.HOME}>
@@ -167,8 +168,9 @@ const Navbar = () => {
                   <SelectItem
                     key={item.value}
                     value={item.value}
-                    className={`flex items-center transition duration-300 cursor-pointer hover:bg-muted ${item.value === "logout" && "text-red-600"
-                      }`}
+                    className={`flex items-center transition duration-300 cursor-pointer hover:bg-muted ${
+                      item.value === "logout" && "text-red-600"
+                    }`}
                   >
                     <div className="flex items-center gap-2">
                       <span>{item.icon}</span>

@@ -13,4 +13,5 @@ export const ROUTES = {
     },
 
     BOOKINGS: "/bookings",
+    ACCOUNT_SETTINGS: "/account-settings",
 };
