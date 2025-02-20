@@ -1,17 +1,62 @@
-import { Button } from "@/components/ui/button"
+import Footer from "@/components/Footer";
+import MentorCard from "@/components/MentorCard";
+import Navbar from "@/components/Navbar";
+import Banner from "@/components/ui/banner";
+import { ChevronRight } from "lucide-react";
+
+const MentorSection = () => (
+  <section className="flex justify-center items-center">
+    <div className="container mx-auto">
+      <div className="flex justify-between gap-6 flex-wrap">
+        {[...Array(4)].map((_, index) => (
+          <MentorCard key={index} />
+        ))}
+      </div>
+    </div>
+  </section>
+);
 
 const HomePage = () => {
-    return (
-        <div className="flex h-screen justify-center items-center">
-            <div className="space-y-3">
-                <h1>Home Page</h1>
-                <p>Welcome to the TalktoPro Homepage.</p>
-                <p>This is a placeholder for the main content of the home page.</p>
-                <Button>Primary</Button>
-                <Button className="ml-4" variant="outline">Outline</Button>
-            </div>
+  return (
+    <div className="min-h-screen flex flex-col">
+      <Navbar />
+      <div className="px-8 mb-15">
+        <Banner
+          image="Frame170.svg"
+          title="Unlock Your Potential with Expert Mentorship!"
+          description="Connect with professionals to receive tailored guidance for your growth."
+          buttonText="Get Started"
+        />
+        <div className="flex justify-between items-center group mb-5">
+          <span className="text-lg font-semibold">Top Mentors for You</span>
+          <span className="flex items-center cursor-pointer">
+            See all
+            <ChevronRight className="w-6 h-6 transition-opacity duration-200" />
+          </span>
         </div>
-    )
-}
 
-export default HomePage
+        <MentorSection />
+        <Banner
+          image="Frame179.svg"
+          title="Free Seminar for Aspiring Software Developers"
+          subtitle="Learn from John Doe, Former Microsoft Engineer."
+          description="Date: 29th June 2024 | Time: 4:00 PM - 6:00 PM (IST)"
+          buttonText="Click here for more Info"
+        />
+
+        <div className="flex justify-between items-center group mb-5">
+          <span className="text-lg font-semibold">Top Mentors for You</span>
+          <span className="flex items-center cursor-pointer">
+            See all
+            <ChevronRight className="w-6 h-6 transition-opacity duration-200" />
+          </span>
+        </div>
+
+        <MentorSection />
+      </div>
+      <Footer />
+    </div>
+  );
+};
+
+export default HomePage;
