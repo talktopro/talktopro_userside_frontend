@@ -10,6 +10,7 @@ import AllProfessionalsPage from "@/pages/AllProfessionalsPage";
 import MainLayout from "@/layouts/MainLayout";
 import AccountSettings from "@/pages/AccountSettings";
 import ChangePasswordPage from "@/pages/ChangePasswordPage";
+import SignupOtpPage from "@/pages/SignupOtpPage";
 
 const AppRoutes = () => {
   return (
@@ -30,6 +31,8 @@ const AppRoutes = () => {
         element={<ForgotPasswordPage />}
       />
       <Route path={ROUTES.AUTH.CHANGE_PASSWORD} element={<ChangePasswordPage />} />
+      <Route path={ROUTES.AUTH.OTP_SIGNUP} element={<SignupOtpPage />} />
+
       {/* Professional profile area from user side */}
       <Route
         path={ROUTES.PROFESSIONALS.DETAILS()}
