@@ -1,5 +1,5 @@
 import MentorCard from "@/components/MentorCard";
-import Banner from "@/components/banner";
+import Banner from "@/components/Banner";
 import { ROUTES } from "@/routes/routes";
 import { ChevronRight } from "lucide-react";
 import { Link } from "react-router-dom";

@@ -1,7 +1,7 @@
 import { Mail, Phone, MoreVertical } from "lucide-react";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
-import img from "../assets/logo.svg";
+import img from "../assets/sampleProfessionalImage.jpg";
 import {
   Tooltip,
   TooltipContent,
@@ -19,8 +19,17 @@ import {
 } from "@/components/ui/drawer";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
+import { useRef } from "react";
 
 const AccountSettings = () => {
+  const inputRef = useRef<HTMLInputElement | null>(null);
+
+  const handleInputTrigger = (): void => {
+    if (inputRef.current) {
+      inputRef.current.click();
+    }
+  };
+
   return (
     <>
       <Navbar />
@@ -29,7 +38,7 @@ const AccountSettings = () => {
           <div className="w-full h-32 bg-muted rounded-lg" />
           <div className="px-10 pb-4">
             <div className="relative flex justify-center">
-              <div className="absolute -top-16 w-24 h-24 rounded-full border-4 border-white overflow-hidden">
+              <div className="absolute -top-16 w-auto h-32 rounded-md overflow-hidden">
                 <img
                   src={img}
                   alt="Profile picture"
@@ -38,7 +47,7 @@ const AccountSettings = () => {
               </div>
             </div>
 
-            <div className="mt-12">
+            <div className="mt-20">
               <div className="flex justify-center items-center gap-1 ml-4">
                 <h1 className="text-2xl font-semibold whitespace-nowrap">
                   Rhaenyra Targaryen
@@ -70,6 +79,17 @@ const AccountSettings = () => {
                         </DrawerDescription>
                       </DrawerHeader>
                       <div className="px-6 space-y-4 pt-3">
+                        <div className="flex items-center flex-col">
+                          <div className="w-auto h-32 rounded-md overflow-hidden">
+                            <img
+                              src={img}
+                              alt="Profile picture"
+                              className="w-full h-full object-cover"
+                              onClick={handleInputTrigger}
+                            />
+                            <input type="file" hidden ref={inputRef} />
+                          </div>
+                        </div>
                         <div>
                           <label
                             htmlFor="name"

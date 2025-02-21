@@ -16,4 +16,7 @@ export const ROUTES = {
 
     BOOKINGS: "/bookings",
     ACCOUNT_SETTINGS: "/account-settings",
+    MENTOR: {
+        REGISTER: "/mentor/register"
+    }
 };

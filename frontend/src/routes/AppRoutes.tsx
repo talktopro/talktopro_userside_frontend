@@ -11,6 +11,7 @@ import MainLayout from "@/layouts/MainLayout";
 import AccountSettings from "@/pages/AccountSettings";
 import ChangePasswordPage from "@/pages/ChangePasswordPage";
 import SignupOtpPage from "@/pages/SignupOtpPage";
+import MentorResiterPage from "@/pages/MentorRegister";
 
 const AppRoutes = () => {
   return (
@@ -30,7 +31,10 @@ const AppRoutes = () => {
         path={ROUTES.AUTH.FORGOT_PASSWORD}
         element={<ForgotPasswordPage />}
       />
-      <Route path={ROUTES.AUTH.CHANGE_PASSWORD} element={<ChangePasswordPage />} />
+      <Route
+        path={ROUTES.AUTH.CHANGE_PASSWORD}
+        element={<ChangePasswordPage />}
+      />
       <Route path={ROUTES.AUTH.OTP_SIGNUP} element={<SignupOtpPage />} />
 
       {/* Professional profile area from user side */}
@@ -42,6 +46,9 @@ const AppRoutes = () => {
       <Route path={ROUTES.BOOKINGS} element={<Bookings />} />
       {/* User account details page */}
       <Route path={ROUTES.ACCOUNT_SETTINGS} element={<AccountSettings />} />
+
+      {/* All mentor routes */}
+      <Route path={ROUTES.MENTOR.REGISTER} element={<MentorResiterPage />} />
     </Routes>
   );
 };

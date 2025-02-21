@@ -1,11 +1,25 @@
 import { FC } from "react";
+import { X } from "lucide-react";
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipProvider,
+  TooltipTrigger,
+} from "./tooltip";
 
 type BadgeProps = {
   content: string;
   background?: "Gray" | "Light" | "Green" | "Red" | "Yellow";
+  showCrossIcon?: boolean;
+  onCrossClick?: () => void;
 };
 
-export const Badge: FC<BadgeProps> = ({ content, background = "Gray" }) => {
+export const Badge: FC<BadgeProps> = ({
+  content,
+  background = "Gray",
+  showCrossIcon = false,
+  onCrossClick,
+}) => {
   const renderClassName = (): string => {
     switch (background) {
       case "Light":
@@ -23,9 +37,27 @@ export const Badge: FC<BadgeProps> = ({ content, background = "Gray" }) => {
 
   return (
     <span
-      className={`px-3 py-1 rounded-sm border text-sm whitespace-nowrap ${renderClassName()}`}
+      className={`px-3 py-1 rounded-sm min-h-8 max-h-8 border text-sm whitespace-nowrap flex items-center gap-2 w-fit ${renderClassName()}`}
     >
-      {content}
+      <span className="-mt-0.5 capitalize">{content}</span>
+
+      {showCrossIcon && (
+        <TooltipProvider>
+          <Tooltip>
+            <TooltipTrigger>
+              <button
+                onClick={onCrossClick}
+                className="flex items-center justify-center p-0.5 cursor-pointer"
+              >
+                <X size={14} strokeWidth={2} />
+              </button>
+            </TooltipTrigger>
+            <TooltipContent className="bg-white border-1 border-gray-200 text-black">
+              <p>Remove</p>
+            </TooltipContent>
+          </Tooltip>
+        </TooltipProvider>
+      )}
     </span>
   );
 };
