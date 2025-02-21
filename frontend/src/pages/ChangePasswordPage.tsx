@@ -5,7 +5,7 @@ import logo from "../assets/logo.svg";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 
-const ForgotPasswordPage: React.FC = () => {
+const ChangePasswordPage: React.FC = () => {
   return (
     <div className="mx-auto flex min-h-screen w-full flex-col items-center justify-center px-4">
       <div className="w-full max-w-sm space-y-6">
@@ -14,24 +14,35 @@ const ForgotPasswordPage: React.FC = () => {
             <img src={logo} alt="Talk to Pro logo" className="size-8" />
           </div>
 
-          <h1 className="text-2xl font-semibold">Forgot password?</h1>
+          <h1 className="text-2xl font-semibold">Change Password</h1>
           <p className="text-sm text-gray-500">
-            Enter your email address and we'll send you a link to reset your
-            password.
+            Enter a new password below to reset your account security.
           </p>
         </div>
+
         <div className="space-y-4">
           <div className="space-y-2">
             <Input
-              id="email"
-              placeholder="Enter your email"
-              type="email"
+              id="new-password"
+              placeholder="New Password"
+              type="password"
               required
             />
           </div>
+
+          <div className="space-y-2">
+            <Input
+              id="confirm-password"
+              placeholder="Confirm Password"
+              type="password"
+              required
+            />
+          </div>
+
           <Button className="w-full bg-[#7C3AED] hover:bg-[#6D28D9]">
-            Verify email
+            Change Password
           </Button>
+
           <a
             href="/login"
             className="inline-flex w-full items-center justify-center gap-2 text-sm text-gray-500 hover:text-gray-800 transition"
@@ -45,4 +56,4 @@ const ForgotPasswordPage: React.FC = () => {
   );
 };
 
-export default ForgotPasswordPage;
+export default ChangePasswordPage;
