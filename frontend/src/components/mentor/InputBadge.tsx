@@ -8,7 +8,7 @@ import {
   TooltipTrigger,
 } from "../ui/tooltip";
 
-interface SkillButtonProps {
+interface BadgeButtonProps {
   onClick: () => void;
 }
 interface InputBoxProps {
@@ -16,7 +16,7 @@ interface InputBoxProps {
   onClose: () => void;
 }
 
-export const SkillButton: React.FC<SkillButtonProps> = ({ onClick }) => {
+export const BadgeButton: React.FC<BadgeButtonProps> = ({ onClick }) => {
   return (
     <div
       className="bg-transparent pl-1 pr-2 py-1.5 border-1 gap-1 min-h-8 max-h-8 flex items-center justify-center rounded-sm hover:border-1 hover:bg-muted transition duration-300 cursor-pointer min-w-30 max-w-30"

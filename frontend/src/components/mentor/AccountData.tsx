@@ -1,7 +1,7 @@
 import { Mail } from "lucide-react";
 import { Textarea } from "../ui/textarea";
 import img from "../../assets/annan.jpg";
-import { SkillButton, InputBox } from "./SkillButton";
+import { BadgeButton, InputBox } from "./InputBadge";
 import { Label } from "../ui/label";
 import { Input } from "../ui/input";
 import { Checkbox } from "../ui/checkbox";
@@ -9,7 +9,13 @@ import { Badge } from "../ui/Badge";
 import { Button } from "../ui/button";
 import useMentorRegister from "@/hooks/useMentorRegister";
 
-const RegisterBody = () => {
+interface RegisterBodyProps {
+  fromRegisterPage: boolean;
+}
+
+const RegisterBody: React.FC<RegisterBodyProps> = ({
+  fromRegisterPage = true,
+}) => {
   const {
     mentorRegisterDetails,
     isBadgeInputVisible,
@@ -22,7 +28,11 @@ const RegisterBody = () => {
   } = useMentorRegister();
 
   return (
-    <div className="w-full mx-auto pt-20 px-10 not-sm:px-3">
+    <div
+      className={`w-full ${
+        fromRegisterPage ? "mx-auto pt-25 px-10 not-sm:px-3" : ""
+      }`}
+    >
       <div className="relative">
         <div className="w-full h-32 bg-muted rounded-lg" />
         <div className="px-10">
@@ -146,7 +156,7 @@ const RegisterBody = () => {
                     onClose={handleCloseBadgeInput}
                   />
                 ) : (
-                  <SkillButton
+                  <BadgeButton
                     onClick={() => handleShowBadgeInput("forSkill")}
                   />
                 )}
@@ -173,14 +183,17 @@ const RegisterBody = () => {
                     onClose={handleCloseBadgeInput}
                   />
                 ) : (
-                  <SkillButton
+                  <BadgeButton
                     onClick={() => handleShowBadgeInput("forLanguage")}
                   />
                 )}
               </div>
             </div>
           </div>
-          <div className="mx-10 not-sm:mx-0 pt-2 pb-4 px-4 rounded-md border-1">
+          <div
+            className="mx-10 not-sm:mx-0 pt-2 pb-4 px-4 rounded-md border-1"
+            hidden={!fromRegisterPage}
+          >
             <h2 className="text-md font-semibold mb-2">Terms and Conditions</h2>
             <div className="space-y-2 mt-4">
               <p className="text-xs opacity-70">
@@ -227,7 +240,7 @@ const RegisterBody = () => {
               }
               className="border-red-500 text-red-500 hover:text-red-600"
             >
-              Discard and Cancel
+              {fromRegisterPage ? "Discard and Cancel" : "Discard"}
             </Button>
             <Button
               onClick={() =>
@@ -235,7 +248,7 @@ const RegisterBody = () => {
               }
               className="bg-primary"
             >
-              Save and Verify
+              {fromRegisterPage ? "Save and Verify" : "Save"}
             </Button>
           </div>
         </div>

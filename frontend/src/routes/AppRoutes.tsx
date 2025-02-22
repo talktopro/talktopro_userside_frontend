@@ -5,13 +5,20 @@ import HomePage from "@/pages/HomePage";
 import SignupPage from "@/pages/SignupPage";
 import ForgotPasswordPage from "@/pages/ForgotPasswordPage";
 import Bookings from "@/pages/Bookings";
+import MentorBookings from "@/pages/mentor/Bookings";
 import ProfessionalDetailsPage from "@/pages/ProfessionalDetailsPage";
 import AllProfessionalsPage from "@/pages/AllProfessionalsPage";
 import MainLayout from "@/layouts/MainLayout";
 import AccountSettings from "@/pages/AccountSettings";
 import ChangePasswordPage from "@/pages/ChangePasswordPage";
 import SignupOtpPage from "@/pages/SignupOtpPage";
-import MentorResiterPage from "@/pages/MentorRegister";
+import MentorLayout from "@/layouts/MentorLayout";
+import Dashboard from "@/pages/mentor/Dashboard";
+import MentorResiterPage from "@/pages/mentor/MentorRegister";
+import MentorAccountDetails from "@/pages/mentor/AccountDetails";
+import SlotManagement from "@/pages/mentor/SlotManagement";
+import Analytics from "@/pages/mentor/Analytics";
+import NotificationSettings from "@/pages/mentor/NotificationSettings";
 
 const AppRoutes = () => {
   return (
@@ -49,6 +56,23 @@ const AppRoutes = () => {
 
       {/* All mentor routes */}
       <Route path={ROUTES.MENTOR.REGISTER} element={<MentorResiterPage />} />
+      <Route element={<MentorLayout />}>
+        <Route path={ROUTES.MENTOR.DASHBOARD} element={<Dashboard />} />
+        <Route path={ROUTES.MENTOR.BOOKINGS} element={<MentorBookings />} />
+        <Route
+          path={ROUTES.MENTOR.SLOT_MANAGEMENT}
+          element={<SlotManagement />}
+        />
+        <Route path={ROUTES.MENTOR.ANALYTICS} element={<Analytics />} />
+        <Route
+          path={ROUTES.MENTOR.ACCOUNT_SETTINGS}
+          element={<MentorAccountDetails />}
+        />
+        <Route
+          path={ROUTES.MENTOR.NOTIFICATION_SETTINGS}
+          element={<NotificationSettings />}
+        />
+      </Route>
     </Routes>
   );
 };

@@ -10,3 +10,8 @@ export interface IMentorRegisterDetails {
    termsAndConditions: boolean;
    privacyAndPolicy: boolean
 }
+
+export interface SidebarFooterMentorDetails {
+   name: string;
+   email: string;
+}

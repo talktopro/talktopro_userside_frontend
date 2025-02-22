@@ -64,7 +64,7 @@ const BookingsTable: React.FC<BookingsTableProps> = ({ bookingDetails }) => {
               <TableCell className="py-3 w-48 text-center whitespace-nowrap">
                 {booking.dateTime}
               </TableCell>
-              <TableCell className="py-3 w-48 text-center whitespace-nowrap">
+              <TableCell className="py-3 w-48 flex justify-center whitespace-nowrap">
                 <Badge
                   content={booking.status}
                   background={

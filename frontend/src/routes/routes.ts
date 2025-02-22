@@ -17,6 +17,12 @@ export const ROUTES = {
     BOOKINGS: "/bookings",
     ACCOUNT_SETTINGS: "/account-settings",
     MENTOR: {
-        REGISTER: "/mentor/register"
+        DASHBOARD: "/mentor/dashboard",
+        BOOKINGS: "/mentor/bookings",
+        SLOT_MANAGEMENT: "/mentor/slot-management",
+        ANALYTICS: "/mentor/analytics",
+        ACCOUNT_SETTINGS: "/mentor/account-settings",
+        NOTIFICATION_SETTINGS: "/mentor/notification-settings",
+        REGISTER: "/mentor/register",
     }
 };

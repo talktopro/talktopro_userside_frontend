@@ -113,7 +113,7 @@ const Notification = () => {
         </PopoverTrigger>
         <PopoverContent className="p-1 w-100 not-sm:w-80 mr-10">
           <div className="grid gap-4">
-            <div className="space-y-2 max-h-96 overflow-auto scrollbar-none">
+            <div className="space-y-2 max-h-96 overflow-auto custom-scrollbar">
               {isNotificationLoading
                 ? Array.from({ length: 5 }).map((_, index) => (
                     <div key={index} className="px-4 py-2 rounded-sm">

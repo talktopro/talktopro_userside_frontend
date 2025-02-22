@@ -63,7 +63,7 @@ const Navbar = () => {
     },
     {
       label: "Service Provider Console",
-      pathLocation: "",
+      pathLocation: ROUTES.MENTOR.DASHBOARD,
       value: "service_provider_console",
       icon: <LayoutTemplate strokeWidth={1.5} size={18} />,
     },

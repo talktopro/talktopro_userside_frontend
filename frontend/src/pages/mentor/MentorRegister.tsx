@@ -1,12 +1,12 @@
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
-import RegisterBody from "@/components/mentor/RegisterBody";
+import AccountData from "@/components/mentor/AccountData";
 
 const MentorResiterPage = () => {
   return (
     <>
       <Navbar />
-      <RegisterBody />
+      <AccountData fromRegisterPage={true} />
       <Footer />
     </>
   );
