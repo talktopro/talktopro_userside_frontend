@@ -5,6 +5,8 @@ export const ROUTES = {
         LOGIN: "/login",
         SIGNUP: "/signup",
         FORGOT_PASSWORD: "/forgot-password",
+        CHANGE_PASSWORD: "/change-password",
+        OTP_SIGNUP: "/signup/otp",
     },
 
     PROFESSIONALS: {
@@ -13,4 +15,8 @@ export const ROUTES = {
     },
 
     BOOKINGS: "/bookings",
+    ACCOUNT_SETTINGS: "/account-settings",
+    MENTOR: {
+        REGISTER: "/mentor/register"
+    }
 };

@@ -62,7 +62,7 @@ const Footer = () => {
   const About: string[] = ["Company", "Careers", "Help"];
 
   return (
-    <footer className="border-t-1 mt-15">
+    <footer className="border-t-1 mt-10">
       <div className="container max-w-screen-xl mx-auto">
         <div className="flex flex-wrap justify-around">
           <div className="space-y-4 mx-10 mt-10">
