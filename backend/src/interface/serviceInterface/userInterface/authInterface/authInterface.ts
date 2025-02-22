@@ -5,6 +5,7 @@ export interface IEmailService {
     params: IEmailAuthData
   ): Promise<IUserModel | null | undefined>;
   verifyOtpService(params: IVerifyOtp): Promise<IUserData | null>;
+  emailLoginService(params: IEmailLogin): Promise<IUserData> 
 }
 
 export interface IEmailAuthData {
@@ -29,4 +30,9 @@ export interface IUserData {
   phone: number;
   accessToken: string;
   refreshToken: string;
+}
+
+export interface IEmailLogin{
+  email:string
+  password:string
 }

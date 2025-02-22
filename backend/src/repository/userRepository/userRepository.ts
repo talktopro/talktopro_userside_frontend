@@ -1,7 +1,6 @@
 import { Model } from "mongoose";
 import {
   IEmailAuthData,
-  IVerifyOtp,
 } from "../../interface/serviceInterface/userInterface/authInterface/authInterface";
 import {
   IOtpDetails,
@@ -45,4 +44,21 @@ export class UserRepository implements IUserRepository {
       throw error;
     }
   };
+  getUserByEmail = async (email:string):Promise<IUserModel| null> => {
+    try {
+      return await this.userModel.findOne({email}).select("-otpDetails")
+    } catch (error) {
+      console.error(error);
+      throw error
+    }
+  }
+  // getUserByEmailAndUpdate = async (email:string,refreshToken:string):Promise<IUserModel | null> => {
+  //   try {
+  //     return await this.userModel.findOneAndUpdate({email},{$set:{refreshToken}},{upsert:true,new:true})
+  //   } catch (error) {
+  //     console.error(error);
+  //     throw error
+  //   }
+    
+  // }
 }

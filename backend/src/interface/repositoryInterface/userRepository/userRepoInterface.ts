@@ -5,6 +5,8 @@ export interface IUserRepository {
   createUser(params: IEmailAuthData): Promise<IUserModel | null>;
   getUserOtpDetails(id:string):Promise<IOtpDetails>
   saveUserDetails(id:string,token:string):Promise<IUserModel | null>
+  getUserByEmail(email:string):Promise<IUserModel| null>
+  // getUserByEmailAndUpdate(id:string,token:string):Promise<IUserModel | null>
 }
 
 export interface IUserModel extends Document {
@@ -28,3 +30,5 @@ export interface IOtpDetails extends Document  {
     createdTime: Date;
   }
 }
+
+

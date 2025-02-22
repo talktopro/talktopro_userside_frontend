@@ -1,6 +1,6 @@
 import express from "express";
 import { requestValidator } from "../../middleware/inputValidator/validator";
-import { emailSignup, verifyOtp } from "../../schemas/userSchema";
+import { emailSignup, login, verifyOtp } from "../../schemas/userSchema";
 import { EmailAuthService } from "../../services/userService/emailAuthService";
 import { UserRepository } from "../../repository/userRepository/userRepository";
 import { EmailAuthentication } from "../../controllers/userController/emailAuth";
@@ -16,5 +16,5 @@ userRoutes.post(
   emailAuthController.emailSignup
 );
 userRoutes.post("/auth/verify-otp",requestValidator(verifyOtp),emailAuthController.verifyOtp)
-userRoutes.post('/login',)
+userRoutes.post('/auth/login',requestValidator(login),emailAuthController.emailLogin)
 export { userRoutes };

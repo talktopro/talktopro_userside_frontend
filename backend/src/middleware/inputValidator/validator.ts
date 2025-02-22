@@ -7,8 +7,10 @@ export const requestValidator = (schema: ObjectSchema) => {
        res.status(400).json({
         message: "Validation error",
         errors: error.details.map((detail) => detail.message),
-      });
+      }); 
+      return
     }
     next();
   };
 };
+ 

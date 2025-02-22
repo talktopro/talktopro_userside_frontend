@@ -2,11 +2,12 @@ import { BadRequestError } from "../../errors/badRequestError";
 import { IUserRepository } from "../../interface/repositoryInterface/userRepository/userRepoInterface";
 import {
   IEmailAuthData,
+  IEmailLogin,
   IEmailService,
   IUserData,
   IVerifyOtp,
 } from "../../interface/serviceInterface/userInterface/authInterface/authInterface";
-import { hashPassword } from "../../utils/bcrypt";
+import { comparePassword, hashPassword } from "../../utils/bcrypt";
 import { createOTP } from "../../utils/generateOtp";
 import { createAccessToken, createRefreshToken } from "../../utils/token";
 
@@ -66,6 +67,43 @@ export class EmailAuthService implements IEmailService {
         uname: userData?.uname,
         email: userData?.email,
         phone: userData?.phone,
+        accessToken,
+        refreshToken,
+      };
+      return formattedData;
+    } catch (error) {
+      console.error(error);
+      throw error;
+    }
+  };
+  emailLoginService = async (loginData: IEmailLogin): Promise<IUserData> => {
+    try {
+      const { email, password } = loginData;
+      const isUserValid = await this.userRepository.getUserByEmail(email);
+      if (!isUserValid) {
+        throw new BadRequestError("Invalid Email Address! Enter correct Email");
+      }
+      const isPasswordValid = await comparePassword(
+        password,
+        isUserValid?.password
+      );
+      if (!isPasswordValid) {
+        throw new BadRequestError("Invalid password! Enter correct Password");
+      }
+      const accessToken = await createAccessToken(isUserValid?._id);
+      const refreshToken = await createRefreshToken(isUserValid?._id);
+      const userDetails = await this.userRepository.saveUserDetails(
+        isUserValid?._id,
+        refreshToken
+      );
+      if (!userDetails) {
+        throw new Error("Error occured");
+      }
+      const formattedData = {
+        id: userDetails?._id,
+        uname: userDetails?.uname,
+        email: userDetails?.email,
+        phone: userDetails?.phone,
         accessToken,
         refreshToken,
       };
