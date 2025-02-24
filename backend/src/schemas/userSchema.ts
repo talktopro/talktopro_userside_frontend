@@ -31,3 +31,24 @@ export const emailSignup = Joi.object({
     "any.required": "Confirm Password is required.",
   }),
 });
+
+export const verifyOtp = Joi.object({
+  id: Joi.string().required(),
+  otp: Joi.string().length(6).required().messages({
+    "string.length": "OTP must be exactly 6 characters long",
+    "any.required": "OTP is required",
+  }),
+});
+
+export const login = Joi.object({
+  email: Joi.string().email().required().messages({
+    "string.email": "Invalid email format",
+    "string.empty": "Email is required",
+    "any.required": "Email is required",
+  }),
+  password: Joi.string().min(6).max(30).messages({
+    "string.min": "Password must be at least 6 characters long.",
+    "string.max": "Password must not exceed 128 characters.",
+    "any.required": "Password is required.",
+  }),
+});
