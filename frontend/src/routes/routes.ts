@@ -24,5 +24,10 @@ export const ROUTES = {
         ACCOUNT_SETTINGS: "/mentor/account-settings",
         NOTIFICATION_SETTINGS: "/mentor/notification-settings",
         REGISTER: "/mentor/register",
+    },
+
+    ADMIN: {
+        LOGIN: "/admin/login",
+        BOOKINGS: "/admin/bookings"
     }
 };

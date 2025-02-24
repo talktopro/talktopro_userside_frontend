@@ -7,6 +7,10 @@ import {
   HoverCardContent,
   HoverCardTrigger,
 } from "@/components/ui/hover-card";
+import ananthuMohan from "@/assets/team/ananthu.jpg";
+import visnuPrem from "@/assets/team/vishnu.jpg";
+import abhirajTR from "@/assets/team/abhiraj.jpg";
+import ashin from "@/assets/team/ashin.jpg";
 
 const Footer = () => {
   const teamMembers = [
@@ -15,36 +19,36 @@ const Footer = () => {
       name: "Vishnu Prem",
       handle: "vishnuprem5152@gmail.com",
       role: "CEO of Talk to pro and All rounder",
-      image: "../profile-path",
+      image: visnuPrem,
     },
     {
       id: 2,
       name: "Abhiraj T R",
       handle: "abhirajtr007@gmail.com",
       role: "Backend developer and Team lead of Talk to pro",
-      image: "../profile-path",
+      image: abhirajTR,
     },
     {
       id: 5,
       name: "Ashin Joy",
-      handle: "ashinjoy@gmail.com",
+      handle: "ashinjoy.contact@gmail.com",
       role: "Backend architecture of Talk to pro",
-      image: "../profile-path",
+      image: ashin,
     },
     {
       id: 3,
       name: "Ananthu Mohan",
       handle: "ananthumohan368@gmail.com",
       role: "Backend developer and API architect",
-      image: "../profile-path",
+      image: ananthuMohan,
     },
-    {
-      id: 4,
-      name: "Sameen K A",
-      handle: "sameensameen60@gmail.com",
-      role: "Frontend developer and UI/UX enthusiast",
-      image: "../profile-path",
-    },
+    // {
+    //   id: 4,
+    //   name: "Sameen K A",
+    //   handle: "sameensameen60@gmail.com",
+    //   role: "Frontend developer and UI/UX enthusiast",
+    //   image: "../profile-path",
+    // },
   ];
 
   const Products: string[] = [
@@ -65,7 +69,7 @@ const Footer = () => {
     <footer className="border-t-1 mt-10">
       <div className="container max-w-screen-xl mx-auto">
         <div className="flex flex-wrap justify-around">
-          <div className="space-y-4 mx-10 mt-10">
+          <div className="space-y-4 sm:mx-10 not-sm:mx-4 mt-10">
             <h3 className="font-medium">Product</h3>
             <ul className="space-y-3">
               {Products.map((item: string) => (
@@ -78,7 +82,7 @@ const Footer = () => {
             </ul>
           </div>
 
-          <div className="space-y-4 mx-10 mt-10">
+          <div className="space-y-4 sm:mx-10 not-sm:mx-4 mt-10">
             <h3 className="font-medium">Learning</h3>
             <ul className="space-y-3">
               {Learning.map((item: string) => (
@@ -91,7 +95,7 @@ const Footer = () => {
             </ul>
           </div>
 
-          <div className="space-y-4 mx-10 mt-10">
+          <div className="space-y-4 sm:mx-10 not-sm:mx-4 mt-10">
             <h3 className="font-medium">About</h3>
             <ul className="space-y-3 flex flex-col items-start">
               {About.map((item: string) => (
@@ -112,13 +116,13 @@ const Footer = () => {
                   <HoverCard>
                     <HoverCardTrigger>
                       <Avatar>
-                        <AvatarImage src="https://github.com/shadcn.png" />
+                        <AvatarImage src={member.image} />
                       </Avatar>
                     </HoverCardTrigger>
                     <HoverCardContent style={{ width: "auto" }}>
                       <div className="flex items-start">
                         <Avatar>
-                          <AvatarImage src="https://github.com/shadcn.png" />
+                          <AvatarImage src={member.image} />
                         </Avatar>
                         <div className="ml-3">
                           <h4 className="font-bold text-sm">{member.name}</h4>
