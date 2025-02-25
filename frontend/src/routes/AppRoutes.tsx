@@ -48,7 +48,7 @@ const AppRoutes = () => {
         path={ROUTES.AUTH.CHANGE_PASSWORD}
         element={<ChangePasswordPage />}
       />
-      <Route path={ROUTES.AUTH.OTP_SIGNUP} element={<SignupOtpPage />} />
+      <Route path={ROUTES.AUTH.SIGNUP_OTP_VERIFY} element={<SignupOtpPage />} />
 
       {/* Professional profile area from user side */}
       <Route

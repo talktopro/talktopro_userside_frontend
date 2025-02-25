@@ -5,8 +5,8 @@ import {
   SelectGroup,
   SelectTrigger,
   SelectValue,
+  SelectItem, 
 } from "@/components/ui/select";
-import { SelectItem } from "@radix-ui/react-select";
 
 const BookingsHeader: React.FC = () => {
   return (
@@ -18,18 +18,8 @@ const BookingsHeader: React.FC = () => {
         </SelectTrigger>
         <SelectContent>
           <SelectGroup>
-            <SelectItem
-              value="asc"
-              className="flex items-center cursor-pointer px-2 py-1 focus:ring-0 focus:outline-none hover:bg-muted"
-            >
-              Date Ascending
-            </SelectItem>
-            <SelectItem
-              value="desc"
-              className="flex items-center cursor-pointer px-2 py-1 focus:ring-0 focus:outline-none hover:bg-muted"
-            >
-              Date Descending
-            </SelectItem>
+            <SelectItem value="asc">Date Ascending</SelectItem>
+            <SelectItem value="desc">Date Descending</SelectItem>
           </SelectGroup>
         </SelectContent>
       </Select>
