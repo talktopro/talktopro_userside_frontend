@@ -28,6 +28,8 @@ export const ROUTES = {
 
     ADMIN: {
         LOGIN: "/admin/login",
-        BOOKINGS: "/admin/bookings"
+        BOOKINGS: "/admin/bookings",
+        USERS: "/admin/users",
+        MENTORS: "/admin/mentors",
     }
 };

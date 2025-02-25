@@ -23,6 +23,8 @@ import NotificationSettings from "@/pages/mentor/NotificationSettings";
 //! Admin pages
 import AdminLoginPage from "@/pages/admin/Login";
 import AdminBookings from "@/pages/admin/Bookings";
+import MentorsTable from "@/pages/admin/MentorsTable";
+import UsersTable from "@/pages/admin/UsersTable";
 
 const AppRoutes = () => {
   return (
@@ -81,6 +83,8 @@ const AppRoutes = () => {
       {/* All admin routes */}
       <Route path={ROUTES.ADMIN.LOGIN} element={<AdminLoginPage />} />
       <Route path={ROUTES.ADMIN.BOOKINGS} element={<AdminBookings />} />
+      <Route path={ROUTES.ADMIN.USERS} element={<UsersTable />} />
+      <Route path={ROUTES.ADMIN.MENTORS} element={<MentorsTable />} />
     </Routes>
   );
 };
