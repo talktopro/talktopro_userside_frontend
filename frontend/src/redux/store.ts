@@ -1,0 +1,31 @@
+import { configureStore } from "@reduxjs/toolkit";
+import authReducer from "./slices/authSlice";
+import { persistStore, persistReducer } from "redux-persist";
+import storage from "redux-persist/lib/storage";
+import { combineReducers } from "redux";
+
+// Persist config
+const persistConfig = {
+    key: "root",
+    storage,
+    whitelist: ["auth"], // Persist only auth
+};
+
+const rootReducer = combineReducers({
+    auth: authReducer,
+});
+
+const persistedReducer = persistReducer(persistConfig, rootReducer);
+
+// Create store
+export const store = configureStore({
+    reducer: persistedReducer,
+    middleware: (getDefaultMiddleware) => getDefaultMiddleware({ serializableCheck: false }),
+});
+
+// Persistor
+export const persistor = persistStore(store);
+
+// Types
+export type RootState = ReturnType<typeof store.getState>;
+export type AppDispatch = typeof store.dispatch;

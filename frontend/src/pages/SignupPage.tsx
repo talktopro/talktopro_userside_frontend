@@ -1,6 +1,6 @@
 import { useCallback } from "react";
 import logo from "../assets/logo.svg";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { ROUTES } from "../routes/routes";
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
@@ -10,6 +10,10 @@ import * as z from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import AuthImageSection from "@/components/AuthImageSection";
 import { PasswordInput } from "@/components/ui/password-input";
+import { useDispatch, useSelector } from "react-redux";
+import { AppDispatch } from "@/redux/store";
+import { selectAuth, signupUser } from "@/redux/slices/authSlice";
+import { toast } from "sonner";
 
 const countryCodes = [
     { code: "+91", country: "India" },
@@ -33,6 +37,9 @@ const formSchema = z
     });
 
 const SignupPage = () => {
+    const dispatch = useDispatch<AppDispatch>();
+    const navigate = useNavigate();
+    const { loading } = useSelector(selectAuth);
     const form = useForm<z.infer<typeof formSchema>>({
         resolver: zodResolver(formSchema),
         defaultValues: {
@@ -45,9 +52,19 @@ const SignupPage = () => {
         },
     });
 
-    const submitFn = useCallback(async (values: z.infer<typeof formSchema>) => {
-        console.log(`Signup Data:`, values);
-    }, []);
+    const submitFn = useCallback(
+        async (values: z.infer<typeof formSchema>) => {
+            console.log(`Signup Data:`, values);
+            try {
+                await dispatch(signupUser({ ...values }));
+                navigate(`${ROUTES.AUTH.SIGNUP_OTP_VERIFY}?email=${values.email}`);
+            } catch (error: unknown) {
+                toast.error(error as string);
+            }
+        },
+        [dispatch, navigate]
+    );
+
 
     return (
         <div className="min-h-screen flex bg-blue-white">
@@ -145,14 +162,14 @@ const SignupPage = () => {
                                     </FormItem>
                                 )}
                             />
-                            <Button type="submit" className="w-full mt-1">
-                                Sign up
+                            <Button type="submit" className="w-full mt-1" disabled={loading}>
+                                {loading ? "Signing up..." : "Sign Up"}
                             </Button>
                         </form>
                     </Form>
 
                     <p className="text-center text-sm mt-1">
-                        Already have an account? <Link className="font-semibold" to={ROUTES.AUTH.SIGNUP}>Login here</Link>
+                        Already have an account? <Link className="font-semibold" to={ROUTES.AUTH.LOGIN}>Login here</Link>
                     </p>
                     <div className="flex flex-col">
                         <div className="mt-3 text-center font-medium text-sm text-foreground/50">Or</div>

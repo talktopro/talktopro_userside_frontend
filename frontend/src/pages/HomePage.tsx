@@ -7,7 +7,7 @@ import { Link } from "react-router-dom";
 const MentorSection = () => (
   <section className="flex justify-center items-center">
     <div className="container mx-auto">
-      <div className="flex justify-between gap-6 flex-wrap">
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 place-items-center">
         {[...Array(4)].map((_, index) => (
           <MentorCard key={index} />
         ))}

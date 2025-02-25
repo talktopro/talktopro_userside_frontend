@@ -6,7 +6,7 @@ export const ROUTES = {
         SIGNUP: "/signup",
         FORGOT_PASSWORD: "/forgot-password",
         CHANGE_PASSWORD: "/change-password",
-        OTP_SIGNUP: "/signup/otp",
+        SIGNUP_OTP_VERIFY: "/signup/verify-otp",
     },
 
     PROFESSIONALS: {
@@ -24,5 +24,10 @@ export const ROUTES = {
         ACCOUNT_SETTINGS: "/mentor/account-settings",
         NOTIFICATION_SETTINGS: "/mentor/notification-settings",
         REGISTER: "/mentor/register",
+    },
+
+    ADMIN: {
+        LOGIN: "/admin/login",
+        BOOKINGS: "/admin/bookings"
     }
 };

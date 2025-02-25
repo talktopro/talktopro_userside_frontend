@@ -20,6 +20,10 @@ import SlotManagement from "@/pages/mentor/SlotManagement";
 import Analytics from "@/pages/mentor/Analytics";
 import NotificationSettings from "@/pages/mentor/NotificationSettings";
 
+//! Admin pages
+import AdminLoginPage from "@/pages/admin/Login";
+import AdminBookings from "@/pages/admin/Bookings";
+
 const AppRoutes = () => {
   return (
     <Routes>
@@ -42,7 +46,7 @@ const AppRoutes = () => {
         path={ROUTES.AUTH.CHANGE_PASSWORD}
         element={<ChangePasswordPage />}
       />
-      <Route path={ROUTES.AUTH.OTP_SIGNUP} element={<SignupOtpPage />} />
+      <Route path={ROUTES.AUTH.SIGNUP_OTP_VERIFY} element={<SignupOtpPage />} />
 
       {/* Professional profile area from user side */}
       <Route
@@ -73,6 +77,10 @@ const AppRoutes = () => {
           element={<NotificationSettings />}
         />
       </Route>
+
+      {/* All admin routes */}
+      <Route path={ROUTES.ADMIN.LOGIN} element={<AdminLoginPage />} />
+      <Route path={ROUTES.ADMIN.BOOKINGS} element={<AdminBookings />} />
     </Routes>
   );
 };
