@@ -3,6 +3,8 @@ import Banner from "@/components/Banner";
 import { ROUTES } from "@/routes/routes";
 import { ChevronRight } from "lucide-react";
 import { Link } from "react-router-dom";
+import { useSelector } from "react-redux";
+import { selectAuth } from "@/redux/slices/authSlice";
 
 const MentorSection = () => (
   <section className="flex justify-center items-center">
@@ -17,6 +19,9 @@ const MentorSection = () => (
 );
 
 const HomePage = () => {
+  const { accessToken } = useSelector(selectAuth);
+  console.log("access",accessToken);
+  
   return (
     <div className="min-h-screen flex flex-col py-10">
       <div className="px-8 mb-15">

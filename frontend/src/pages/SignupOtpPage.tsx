@@ -33,7 +33,7 @@ const FormSchema = z.object({
 const SignupOtpPage = () => {
     const dispatch = useDispatch<AppDispatch>();
     const navigate = useNavigate();
-    const { loading, userId } = useSelector(selectAuth);
+    const { loading, id } = useSelector(selectAuth);
     const [searchParams] = useSearchParams();
     const email = searchParams.get("email") || "";
 
@@ -65,16 +65,17 @@ const SignupOtpPage = () => {
     };
 
     const onSubmit = async (data: z.infer<typeof FormSchema>) => {
-        if (!userId) {
+        if (!id) {
             toast.error("User ID is missing. Please try signing up again.");
             return;
         }
 
         try {
-            const result = await dispatch(verifyOtp({ userId, otp: data.pin })).unwrap();
-            if (result.token) {
-                navigate(ROUTES.HOME);
-            }
+            const result = await dispatch(verifyOtp({ id, otp: data.pin })).unwrap();
+            console.log(result);
+            navigate(ROUTES.HOME);
+            // if (result.accessToken) {
+            // }
         } catch (err: unknown) {
             toast.error(err as string);
         }

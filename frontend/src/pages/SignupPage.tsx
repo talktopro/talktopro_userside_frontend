@@ -56,7 +56,7 @@ const SignupPage = () => {
         async (values: z.infer<typeof formSchema>) => {
             console.log(`Signup Data:`, values);
             try {
-                await dispatch(signupUser({ ...values }));
+                await dispatch(signupUser({ ...values })).unwrap();
                 navigate(`${ROUTES.AUTH.SIGNUP_OTP_VERIFY}?email=${values.email}`);
             } catch (error: unknown) {
                 toast.error(error as string);

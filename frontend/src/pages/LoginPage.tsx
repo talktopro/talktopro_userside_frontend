@@ -1,6 +1,6 @@
 import { useCallback, useState } from "react";
 import logo from "../assets/logo.svg";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { ROUTES } from "../routes/routes";
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
@@ -10,6 +10,10 @@ import * as z from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Eye, EyeOff } from "lucide-react";
 import AuthImageSection from "@/components/AuthImageSection";
+import { useDispatch } from "react-redux";
+import { AppDispatch } from "@/redux/store";
+import { loginUser } from "@/redux/slices/authSlice";
+import { toast } from "sonner";
 
 
 const formSchema = z.object({
@@ -22,7 +26,8 @@ const formSchema = z.object({
 });
 
 const LoginPage = () => {
-
+    const dispatch = useDispatch<AppDispatch>();
+    const navigate = useNavigate();
     const [showPassword, setShowPassword] = useState<boolean>(false);
 
     const form = useForm<z.infer<typeof formSchema>>({
@@ -35,7 +40,17 @@ const LoginPage = () => {
 
     const submitFn = useCallback(async (values: z.infer<typeof formSchema>) => {
         console.log(values)
-    }, []);
+        try {
+            const result = await dispatch(loginUser(values)).unwrap();
+            console.log(result);
+            if (result.accessToken) {
+                navigate(ROUTES.HOME);
+                toast.success("Logged in successfully");
+            }
+        } catch (error: unknown) {
+            toast.error(error as string);
+        }
+    }, [dispatch]);
 
     return (
         <div className="min-h-screen flex bg-blue-white">

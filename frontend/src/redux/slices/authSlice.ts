@@ -1,18 +1,18 @@
 import { createSlice, createAsyncThunk, PayloadAction } from "@reduxjs/toolkit";
 import { RootState } from "../store";
-import { signupUserAPI, verifyOtpAPI } from "@/api/authService";
+import { loginUserAPI, signupUserAPI, verifyOtpAPI } from "@/api/authService";
 import { handleApiError } from "@/utils/errorHandler";
 
 interface AuthState {
-    userId: string | null;
-    token: string | null;
+    id: string | null;
+    accessToken: string | null;
     loading: boolean;
     error: string | null;
 }
 
 const initialState: AuthState = {
-    userId: null,
-    token: null,
+    id: null,
+    accessToken: null,
     loading: false,
     error: null,
 };
@@ -22,23 +22,38 @@ export const signupUser = createAsyncThunk<string, { username: string; email: st
     async (userData, { rejectWithValue }) => {
         try {
             const response = await signupUserAPI(userData);
-            return response.id; // Returning userId
+            return response.id; // Returning id
         } catch (error) {
             return rejectWithValue(handleApiError(error));
         }
     }
 );
 
-export const verifyOtp = createAsyncThunk<{ userId: string; token: string }, { userId: string; otp: string }, { rejectValue: string }>(
+export const verifyOtp = createAsyncThunk<{ id: string; accessToken: string }, { id: string; otp: string }, { rejectValue: string }>(
     "auth/verifyOtp",
     async (otpData, { rejectWithValue }) => {
         try {
-            return await verifyOtpAPI(otpData);
+            const response = await verifyOtpAPI(otpData);
+            console.log(response);
+            return response;
         } catch (error) {
             return rejectWithValue(handleApiError(error));
         }
     }
 );
+
+export const loginUser = createAsyncThunk<{ id: string; accessToken: string }, { email: string; password: string }, { rejectValue: string }>(
+    "auth/loginUser",
+    async (userData, { rejectWithValue }) => {
+        try {
+            return await loginUserAPI(userData);
+        } catch (error) {
+            console.log(handleApiError(error));
+            return rejectWithValue(handleApiError(error));
+        }
+    }
+)
+
 
 // ✅ Auth Slice
 const authSlice = createSlice({
@@ -46,8 +61,8 @@ const authSlice = createSlice({
     initialState,
     reducers: {
         logout: (state) => {
-            state.userId = null;
-            state.token = null;
+            state.id = null;
+            state.accessToken = null;
             state.error = null;
         },
     },
@@ -60,7 +75,7 @@ const authSlice = createSlice({
             })
             .addCase(signupUser.fulfilled, (state, action: PayloadAction<string>) => {
                 state.loading = false;
-                state.userId = action.payload;
+                state.id = action.payload;
             })
             .addCase(signupUser.rejected, (state, action) => {
                 state.loading = false;
@@ -72,15 +87,31 @@ const authSlice = createSlice({
                 state.loading = true;
                 state.error = null;
             })
-            .addCase(verifyOtp.fulfilled, (state, action: PayloadAction<{ userId: string; token: string }>) => {
+            .addCase(verifyOtp.fulfilled, (state, action: PayloadAction<{ id: string; accessToken: string }>) => {
+                console.log("ppppp",action.payload);
+                console.log("ppppp",action.payload);
+                
                 state.loading = false;
-                state.userId = action.payload.userId;
-                state.token = action.payload.token;
+                state.id = action.payload.id;
+                state.accessToken = action.payload.accessToken;
             })
             .addCase(verifyOtp.rejected, (state, action) => {
                 state.loading = false;
                 state.error = action.payload || "OTP verification failed";
-            });
+            })
+            .addCase(loginUser.pending, (state) => {
+                state.loading = true;
+                state.error = null;
+            })
+            .addCase(loginUser.fulfilled, (state, action: PayloadAction<{ id: string; accessToken: string }>) => {
+                state.loading = false;
+                state.id = action.payload.id;
+                state.accessToken = action.payload.accessToken;
+            })
+            .addCase(loginUser.rejected, (state, action) => {
+                state.loading = false;
+                state.error = action.payload || "Login failed";
+            })
     },
 });
 
