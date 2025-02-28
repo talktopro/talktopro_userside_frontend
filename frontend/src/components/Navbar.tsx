@@ -2,12 +2,10 @@ import { JSX } from "react";
 import { Input } from "@/components/ui/input";
 import logo from "../assets/logo.svg";
 import {
-  CreditCard,
   Heart,
   LayoutTemplate,
   LogOut,
   NotebookText,
-  Settings,
   User,
   UserRound,
   Moon,
@@ -56,28 +54,16 @@ const Navbar = () => {
       icon: <NotebookText strokeWidth={1.5} size={18} />,
     },
     {
-      label: "Transactions",
-      pathLocation: "",
-      value: "transactions",
-      icon: <CreditCard strokeWidth={1.5} size={18} />,
-    },
-    {
-      label: "Service Provider Console",
+      label: "Professional Dashboard",
       pathLocation: ROUTES.MENTOR.DASHBOARD,
       value: "service_provider_console",
       icon: <LayoutTemplate strokeWidth={1.5} size={18} />,
     },
     {
-      label: "Favorite",
+      label: "Favourites",
       pathLocation: "",
-      value: "favorite",
+      value: "favourites",
       icon: <Heart strokeWidth={1.5} size={18} />,
-    },
-    {
-      label: "Settings",
-      pathLocation: "",
-      value: "settings",
-      icon: <Settings strokeWidth={1.5} size={18} />,
     },
     {
       label: "Logout",

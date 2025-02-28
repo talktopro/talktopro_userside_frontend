@@ -7,64 +7,9 @@ import {
   HoverCardContent,
   HoverCardTrigger,
 } from "@/components/ui/hover-card";
-import ananthuMohan from "@/assets/team/ananthu.jpg";
-import visnuPrem from "@/assets/team/vishnu.jpg";
-import abhirajTR from "@/assets/team/abhiraj.jpg";
-import ashin from "@/assets/team/ashin.jpg";
+import { teamMembers, About, Learning, Products } from "@/constants/footerData";
 
 const Footer = () => {
-  const teamMembers = [
-    {
-      id: 1,
-      name: "Vishnu Prem",
-      handle: "vishnuprem5152@gmail.com",
-      role: "CEO of Talk to pro and All rounder",
-      image: visnuPrem,
-    },
-    {
-      id: 2,
-      name: "Abhiraj T R",
-      handle: "abhirajtr007@gmail.com",
-      role: "Backend developer and Team lead of Talk to pro",
-      image: abhirajTR,
-    },
-    {
-      id: 5,
-      name: "Ashin Joy",
-      handle: "ashinjoy.contact@gmail.com",
-      role: "Backend architecture of Talk to pro",
-      image: ashin,
-    },
-    {
-      id: 3,
-      name: "Ananthu Mohan",
-      handle: "ananthumohan368@gmail.com",
-      role: "Backend developer and API architect",
-      image: ananthuMohan,
-    },
-    // {
-    //   id: 4,
-    //   name: "Sameen K A",
-    //   handle: "sameensameen60@gmail.com",
-    //   role: "Frontend developer and UI/UX enthusiast",
-    //   image: "../profile-path",
-    // },
-  ];
-
-  const Products: string[] = [
-    "Business",
-    "Designers",
-    "Classrooms",
-    "Newcomers",
-  ];
-  const Learning: string[] = [
-    "Learn Hub",
-    "Manuals",
-    "Tutorials",
-    "Communities",
-  ];
-  const About: string[] = ["Company", "Careers", "Help"];
-
   return (
     <footer className="border-t-1 mt-10">
       <div className="container max-w-screen-xl mx-auto">
@@ -110,7 +55,7 @@ const Footer = () => {
 
           <div className="space-y-4 mx-10 mt-10 relative">
             <h3 className="font-medium text-center">Team</h3>
-            <ul className="flex gap-3">
+            <ul className="grid grid-cols-6 md:grid-cols-3 gap-3">
               {teamMembers.map((member) => (
                 <li key={member.id} className="relative">
                   <HoverCard>
