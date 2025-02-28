@@ -19,6 +19,9 @@ interface LoginResponse {
         accessToken: string;
     };
 }
+interface ResendOtpResponse {
+    id: string;
+}
 
 // ✅ Signup API
 export const signupUserAPI = async (userData: { username: string; email: string; phone: string; password: string }): Promise<SignupResponse> => {
@@ -41,4 +44,13 @@ export const verifyOtpAPI = async (otpData: { id: string; otp: string }): Promis
 export const loginUserAPI = async (userData: { email: string; password: string }): Promise<LoginResponse["data"]> => {
     const response: AxiosResponse<LoginResponse> = await axios.post(`${API_BASE_URL}/login`, userData);
     return response.data.data;
+}
+
+export const resendOtpAPI = async (userData: { id: string; email: string }): Promise<ResendOtpResponse> => {
+    console.log("resend otp api",userData);
+    
+    const response: AxiosResponse<ResendOtpResponse> = await axios.post(`${API_BASE_URL}/resend-otp`, userData);
+    console.log("resend otp response",response);
+    return response.data;
+    
 }

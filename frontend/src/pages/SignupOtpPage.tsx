@@ -1,7 +1,7 @@
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
-import { useState, useEffect } from "react";
+// import { useState, useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import {
     Form,
@@ -22,6 +22,8 @@ import { selectAuth, verifyOtp } from "@/redux/slices/authSlice";
 import { AppDispatch } from "@/redux/store";
 import { ROUTES } from "@/routes/routes";
 import { toast } from "sonner";
+import { useOtpTimer } from "@/components/OtpTimer";
+import { resendOtpUser } from "@/redux/slices/otpSlice";
 
 const FormSchema = z.object({
     pin: z
@@ -33,6 +35,7 @@ const FormSchema = z.object({
 const SignupOtpPage = () => {
     const dispatch = useDispatch<AppDispatch>();
     const navigate = useNavigate();
+    const { isDisabled, timer } = useOtpTimer();
     const { loading, id } = useSelector(selectAuth);
     const [searchParams] = useSearchParams();
     const email = searchParams.get("email") || "";
@@ -44,19 +47,19 @@ const SignupOtpPage = () => {
         },
     });
 
-    const [timer, setTimer] = useState(120);
-    const [isResendDisabled, setIsResendDisabled] = useState(true);
+    // const [timer, setTimer] = useState(120);
+    // const [isResendDisabled, setIsResendDisabled] = useState(true);
 
-    useEffect(() => {
-        if (timer > 0) {
-            const interval = setInterval(() => {
-                setTimer((prev) => prev - 1);
-            }, 1000);
-            return () => clearInterval(interval);
-        } else {
-            setIsResendDisabled(false);
-        }
-    }, [timer]);
+    // useEffect(() => {
+    //     if (timer > 0) {
+    //         const interval = setInterval(() => {
+    //             setTimer((prev) => prev - 1);
+    //         }, 1000);
+    //         return () => clearInterval(interval);
+    //     } else {
+    //         setIsResendDisabled(false);
+    //     }
+    // }, [timer]);
 
     const formatTime = (seconds: number) => {
         const minutes = Math.floor(seconds / 60);
@@ -73,20 +76,20 @@ const SignupOtpPage = () => {
         try {
             const result = await dispatch(verifyOtp({ id, otp: data.pin })).unwrap();
             console.log(result);
-            navigate(ROUTES.HOME);
-            // if (result.accessToken) {
-            // }
+            if (result.accessToken) {
+                navigate(ROUTES.HOME);
+            }
         } catch (err: unknown) {
             toast.error(err as string);
         }
     };
 
     const handleResend = async () => {
-        // TODO: Add API call to resend OTP here
-        toast.info("A new OTP has been sent to your email.");
-
-        setTimer(120);
-        setIsResendDisabled(true);
+        if (!id) {
+            toast.error("User ID is missing. Please try signing up again.");
+            return;
+        }
+        dispatch(resendOtpUser({ id, email }));
     };
 
     return (
@@ -141,9 +144,9 @@ const SignupOtpPage = () => {
                                 type="button"
                                 className="text-primary hover:underline"
                                 onClick={handleResend}
-                                disabled={isResendDisabled}
+                                disabled={isDisabled}
                             >
-                                {isResendDisabled ? `Resend OTP in ${formatTime(timer)}` : "Resend OTP"}
+                                {isDisabled ? `Resend OTP in ${formatTime(timer)}` : "Resend OTP"}
                             </button>
                         </p>
                     </form>
