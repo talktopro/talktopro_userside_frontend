@@ -3,10 +3,10 @@ import {
   Select,
   SelectContent,
   SelectGroup,
+  SelectItem,
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { SelectItem } from "@radix-ui/react-select";
 import { Input } from "../ui/input";
 
 interface TableHeadingProps {
