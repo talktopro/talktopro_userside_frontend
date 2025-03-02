@@ -1,26 +1,22 @@
 import AdminTableBody from "@/components/admin/TableBody";
 import AdminTableHeader from "@/components/admin/TableHeading";
-import Footer from "@/components/Footer";
 import useBookingsTable from "@/hooks/admin/useBookingsTable";
 
 const MentorsTable = () => {
   const { tableTitle, tableRows } = useBookingsTable();
 
   return (
-    <>
-      <div className="pt-10 sm:px-12 not-sm:px-4">
-        <AdminTableHeader
-          heading="Bookings"
-          searchPlaceholder="Search Bookings..."
-        />
-        <AdminTableBody
-          tableRows={tableRows}
-          tableTitle={tableTitle}
-          showActionButton={true}
-        />
-      </div>
-      <Footer />
-    </>
+    <div className="px-4">
+      <AdminTableHeader
+        heading="Bookings"
+        searchPlaceholder="Search Bookings..."
+      />
+      <AdminTableBody
+        tableRows={tableRows}
+        tableTitle={tableTitle}
+        showActionButton={true}
+      />
+    </div>
   );
 };
 

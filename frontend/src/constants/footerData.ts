@@ -3,6 +3,7 @@ import visnuPrem from "@/assets/team/vishnu.jpg";
 import abhirajTR from "@/assets/team/abhiraj.jpg";
 import ashin from "@/assets/team/ashin.jpg";
 import abhinav from "@/assets/team/abhinav.jpg";
+import sameen from "@/assets/team/sameen.jpg";
 
 export const teamMembers = [
    {
@@ -18,6 +19,13 @@ export const teamMembers = [
       handle: "abhirajtr007@gmail.com",
       role: "Backend Developer | System Architect",
       image: abhirajTR,
+   },
+   {
+      id: 6,
+      name: "Sameen K A",
+      handle: "sameensameen60@gmail.com",
+      role: "Frontend Developer | Team Lead",
+      image: sameen,
    },
    {
       id: 3,
@@ -40,14 +48,6 @@ export const teamMembers = [
       role: "UI/UX Designer | Enthusiast",
       image: abhinav,
    },
-   // {
-   //   id: 6,
-   //   name: "Sameen K A",
-   //   handle: "sameensameen60@gmail.com",
-   //   role: "Frontend Developer | Team Lead",
-   //   image: "../profile-path",
-   // },
-
 ];
 
 export const Products: string[] = [

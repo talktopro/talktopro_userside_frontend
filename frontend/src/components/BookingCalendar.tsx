@@ -51,7 +51,7 @@ const BookingCalendar = () => {
               ))}
             </div>
           </div>
-          <div className="flex gap-3 mt-10">
+          <div className="flex gap-3 mt-10 not-sm:hidden">
             <DrawerClose asChild>
               <Button className="w-full cursor-pointer" variant="outline">
                 Cancel
@@ -60,6 +60,15 @@ const BookingCalendar = () => {
 
             <Button className="w-full cursor-pointer">Pay now</Button>
           </div>
+        </div>
+        <div className="flex gap-3 mt-10 not-sm:fixed not-sm:bottom-0 not-sm:z-10 not-sm:w-screen not-sm:bg-background not-sm:pt-3 not-sm:border-t-1 not-sm:px-4 sm:hidden">
+          <DrawerClose asChild>
+            <Button className="w-full cursor-pointer" variant="outline">
+              Cancel
+            </Button>
+          </DrawerClose>
+
+          <Button className="w-full cursor-pointer">Pay now</Button>
         </div>
       </div>
     </>

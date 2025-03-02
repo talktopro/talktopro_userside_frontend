@@ -25,6 +25,8 @@ import AdminLoginPage from "@/pages/admin/Login";
 import AdminBookings from "@/pages/admin/Bookings";
 import MentorsTable from "@/pages/admin/MentorsTable";
 import UsersTable from "@/pages/admin/UsersTable";
+import AdminLayout from "@/layouts/AdminLayout";
+import AdminDashboard from "@/pages/admin/Dashboard";
 
 const AppRoutes = () => {
   return (
@@ -82,9 +84,13 @@ const AppRoutes = () => {
 
       {/* All admin routes */}
       <Route path={ROUTES.ADMIN.LOGIN} element={<AdminLoginPage />} />
-      <Route path={ROUTES.ADMIN.BOOKINGS} element={<AdminBookings />} />
-      <Route path={ROUTES.ADMIN.USERS} element={<UsersTable />} />
-      <Route path={ROUTES.ADMIN.MENTORS} element={<MentorsTable />} />
+      <Route path={ROUTES.ADMIN.SETTINGS} element={<AdminLoginPage />} />
+      <Route element={<AdminLayout />}>
+        <Route path={ROUTES.ADMIN.DASHBOARD} element={<AdminDashboard />} />
+        <Route path={ROUTES.ADMIN.BOOKINGS} element={<AdminBookings />} />
+        <Route path={ROUTES.ADMIN.USERS} element={<UsersTable />} />
+        <Route path={ROUTES.ADMIN.MENTORS} element={<MentorsTable />} />
+      </Route>
     </Routes>
   );
 };

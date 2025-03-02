@@ -11,7 +11,7 @@ import { teamMembers, About, Learning, Products } from "@/constants/footerData";
 
 const Footer = () => {
   return (
-    <footer className="border-t-1 mt-10">
+    <footer className="border-t-1 mt-10 not-sm:mb-10">
       <div className="container max-w-screen-xl mx-auto">
         <div className="flex flex-wrap justify-around">
           <div className="space-y-4 sm:mx-10 not-sm:mx-4 mt-10">

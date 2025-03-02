@@ -13,6 +13,7 @@ import {
 } from "@/components/ui/drawer";
 import BookingCalendar from "@/components/BookingCalendar";
 import Navbar from "@/components/Navbar";
+import { FC, JSX } from "react";
 
 const ProfessionalDetailsPage = () => {
   const professionalData: ProfessionalData = {
@@ -34,6 +35,38 @@ const ProfessionalDetailsPage = () => {
     ],
   };
 
+  interface ITriggerSlots {
+    trigger: JSX.Element;
+  }
+  const TriggerSlots: FC<ITriggerSlots> = ({ trigger }) => {
+    return (
+      <Drawer>
+        <DrawerTrigger>{trigger}</DrawerTrigger>
+        <DrawerContent>
+          <div className="max-h-[80vh] overflow-y-auto custom-scrollbar">
+            <DrawerHeader>
+              <DrawerTitle className="text-center mt-5">
+                Select Date and Time
+              </DrawerTitle>
+              <DrawerDescription className="text-center">
+                Choose your appointment date and time from the calendar.
+              </DrawerDescription>
+              <div className="flex justify-center items-center gap-2">
+                <div className="w-3 h-3 bg-white border border-gray-300 rounded" />
+                <span className="text-sm">Available</span>
+                <div className="w-3 h-3 bg-purple-50 border border-purple-500 rounded ml-3" />
+                <span className="text-sm">Selected</span>
+                <div className="w-3 h-3 bg-gray-400 border border-gray-700 rounded ml-3" />
+                <span className="text-sm">Not Available</span>
+              </div>
+              <BookingCalendar />
+            </DrawerHeader>
+          </div>
+        </DrawerContent>
+      </Drawer>
+    );
+  };
+
   return (
     <>
       <Navbar />
@@ -48,7 +81,7 @@ const ProfessionalDetailsPage = () => {
                     : "bg-gradient-to-r from-[#171718] to-[#111013]"
                 }`}
               > */}
-              <div className="p-10 flex flex-wrap gap-10 border-b">
+              <div className="sm:p-10 not-sm:p-4 flex flex-wrap gap-10 border-b">
                 <div className="md:w-1/4 md:h-auto w-full flex justify-center">
                   <img
                     src={sampleProfessionalImage}
@@ -84,38 +117,31 @@ const ProfessionalDetailsPage = () => {
                       )}
                     </div>
                   </div>
-                  <Drawer>
-                    <DrawerTrigger>
-                      <div className="mt-6 flex flex-wrap gap-3">
-                        <Button className="cursor-pointer">
-                          Book a Session
-                        </Button>
-                      </div>
-                    </DrawerTrigger>
-                    <DrawerContent className="max-h-[90vh]">
-                      <DrawerHeader>
-                        <DrawerTitle className="text-center mt-5">
-                          Select Date and Time
-                        </DrawerTitle>
-                        <DrawerDescription className="text-center">
-                          Choose your appointment date and time from the
-                          calendar.
-                        </DrawerDescription>
-                        <div className="flex justify-center items-center gap-2">
-                          <div className="w-3 h-3 bg-white border border-gray-300 rounded" />
-                          <span className="text-sm">Available</span>
-                          <div className="w-3 h-3 bg-purple-50 border border-purple-500 rounded ml-3" />
-                          <span className="text-sm">Selected</span>
-                          <div className="w-3 h-3 bg-gray-400 border border-gray-700 rounded ml-3" />
-                          <span className="text-sm">Not Available</span>
+                  <div className="not-sm:hidden">
+                    <TriggerSlots
+                      trigger={
+                        <div className="mt-6 flex flex-wrap gap-3 ">
+                          <Button className="cursor-pointer">
+                            Book a Session
+                          </Button>
                         </div>
-                        <BookingCalendar />
-                      </DrawerHeader>
-                    </DrawerContent>
-                  </Drawer>
+                      }
+                    />
+                  </div>
                 </div>
               </div>
-              <div className="pt-10 px-10 lg:w-3/4 md:w-3/4 w-full ml-auto lg:px-15 md:px-15">
+              <div className="sm:hidden">
+                <TriggerSlots
+                  trigger={
+                    <div className="flex flex-wrap gap-3 not-sm:fixed not-sm:bottom-0 not-sm:z-10 not-sm:w-screen not-sm:bg-background not-sm:pt-3 not-sm:border-t-1 not-sm:px-4">
+                      <Button className="cursor-pointer w-full">
+                        Book a Session
+                      </Button>
+                    </div>
+                  }
+                />
+              </div>
+              <div className="pt-10 sm:px-10 not-sm:px-4 lg:w-3/4 md:w-3/4 w-full ml-auto lg:px-15 md:px-15">
                 <h2 className="text-lg font-semibold">
                   About {professionalData.name}
                 </h2>

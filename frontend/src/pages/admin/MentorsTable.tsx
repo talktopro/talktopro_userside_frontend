@@ -1,26 +1,36 @@
+import MentorTab from "@/components/admin/MentorTab";
 import AdminTableBody from "@/components/admin/TableBody";
 import AdminTableHeader from "@/components/admin/TableHeading";
-import Footer from "@/components/Footer";
 import useMentorsTable from "@/hooks/admin/useMentorsTable";
+import { useState } from "react";
 
 const MentorsTable = () => {
-  const { tableTitle, tableRows } = useMentorsTable();
+  const { tableTitle, tableRows, requestsTableRows, RequestTableTitle } =
+    useMentorsTable();
+  const [activeTab, setActiveTab] = useState<"approved" | "requests">(
+    "approved"
+  );
 
   return (
-    <>
-      <div className="pt-10 sm:px-12 not-sm:px-4">
-        <AdminTableHeader
-          heading="Mentors"
-          searchPlaceholder="Search Mentors..."
-        />
+    <div className="px-4 max-w-screen">
+      <AdminTableHeader
+        heading="Mentors"
+        searchPlaceholder="Search Mentors..."
+      />
+      <MentorTab activeTab={activeTab} setActiveTab={setActiveTab} />
+      {activeTab === "approved" ? (
         <AdminTableBody
           tableRows={tableRows}
           tableTitle={tableTitle}
           showActionButton={true}
         />
-      </div>
-      <Footer />
-    </>
+      ) : (
+        <AdminTableBody
+          tableRows={requestsTableRows}
+          tableTitle={RequestTableTitle}
+        />
+      )}
+    </div>
   );
 };
 

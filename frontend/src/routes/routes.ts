@@ -28,6 +28,8 @@ export const ROUTES = {
 
     ADMIN: {
         LOGIN: "/admin/login",
+        SETTINGS: "/admin/settings",
+        DASHBOARD: "/admin/dashboard",
         BOOKINGS: "/admin/bookings",
         USERS: "/admin/users",
         MENTORS: "/admin/mentors",
