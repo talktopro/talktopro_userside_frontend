@@ -17,6 +17,30 @@ import { selectAuth } from "@/redux/slices/authSlice";
 import { useNavigate } from "react-router-dom";
 import { ROUTES } from "@/routes/routes";
 import apiClient from "@/api/axiosInstance";
+import { AutocompleteInput } from "../ui/autocomplete-input";
+
+// Sample suggestion lists (replace with your own or fetch from API)
+const professionSuggestions = [
+  "Software Engineer",
+  "Data Scientist",
+  "Product Manager",
+  "Designer",
+];
+
+const skillSuggestions = [
+  "JavaScript",
+  "Python",
+  "React",
+  "SQL",
+];
+
+const languageSuggestions = [
+  "Malayalam",
+  "English",
+  "Spanish",
+  "French",
+  "Japanese",
+];
 
 interface RegisterBodyProps {
   fromRegisterPage: boolean;
@@ -72,8 +96,11 @@ const RegisterBody: FC<RegisterBodyProps> = ({ fromRegisterPage = true }) => {
   };
 
   const handleSaveBadgeData = (content: string, field: "skills" | "languages") => {
+    const formattedContent = field === "languages" 
+      ? content.charAt(0).toUpperCase() + content.slice(1).toLowerCase() 
+      : content;
     const currentArray = form.getValues(field);
-    const updatedArray = [...currentArray, content];
+    const updatedArray = [...currentArray, formattedContent];
     form.setValue(field, updatedArray, { shouldValidate: true });
     handleCloseBadgeInput();
   };
@@ -209,10 +236,11 @@ const RegisterBody: FC<RegisterBodyProps> = ({ fromRegisterPage = true }) => {
                       <FormItem className="sm:w-1/2 not-sm:w-full sm:pl-2">
                         <FormLabel className="text-xs ml-3">Profession</FormLabel>
                         <FormControl>
-                          <Input
+                          <AutocompleteInput
                             type="text"
                             placeholder="Enter profession"
                             className="hover:bg-muted transition-colors duration-300 mt-1"
+                            suggestions={professionSuggestions}
                             {...field}
                           />
                         </FormControl>
@@ -257,6 +285,7 @@ const RegisterBody: FC<RegisterBodyProps> = ({ fromRegisterPage = true }) => {
                       <InputBox
                         onSave={(content) => handleSaveBadgeData(content, "skills")}
                         onClose={handleCloseBadgeInput}
+                        suggestions={skillSuggestions}
                       />
                     ) : (
                       <BadgeButton onClick={() => handleShowBadgeInput("forSkill")} />
@@ -281,6 +310,7 @@ const RegisterBody: FC<RegisterBodyProps> = ({ fromRegisterPage = true }) => {
                       <InputBox
                         onSave={(content) => handleSaveBadgeData(content, "languages")}
                         onClose={handleCloseBadgeInput}
+                        suggestions={languageSuggestions}
                       />
                     ) : (
                       <BadgeButton onClick={() => handleShowBadgeInput("forLanguage")} />

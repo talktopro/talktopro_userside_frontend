@@ -14,7 +14,8 @@ const apiClient = axios.create({
 apiClient.interceptors.request.use(
   (config) => {
     // Access Redux state
-    const { auth } = store.getState();
+    const state = store.getState() as { auth: { accessToken: string } };
+    const { auth } = state;
     const token = auth.accessToken;
     if (token) {
       config.headers.Authorization = `Bearer ${token}`;

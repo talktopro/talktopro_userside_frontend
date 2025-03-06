@@ -14,8 +14,12 @@ import {
 import BookingCalendar from "@/components/BookingCalendar";
 import Navbar from "@/components/Navbar";
 import { FC, JSX } from "react";
+import { useLocation } from "react-router-dom";
+import { Mentor } from "./AllProfessionalsPage";
 
 const ProfessionalDetailsPage = () => {
+  const location = useLocation();
+  const { mentor } = location.state as { mentor: Mentor };
   const professionalData: ProfessionalData = {
     name: "Vishwas",
     department: "Senior Software Developer",
@@ -70,17 +74,11 @@ const ProfessionalDetailsPage = () => {
   return (
     <>
       <Navbar />
-      <div className="min-h-screen pt-18">
-        <div className="mx-auto overflow-hidden">
-          <div className="flex flex-col md:flex-row">
+      <div className="min-h-screen pt-18 bg-red-100">
+        <div className="mx-auto overflow-hidden bg-amber-100">
+          <div className="flex flex-col md:flex-row bg-blue-200">
             <div>
-              {/* <div
-                className={`p-10 flex flex-wrap gap-10 ${
-                  theme === "light"
-                    ? "bg-gradient-to-r from-[#FFF9F9] to-[#F9F5FF]"    //! I just commented this code because when i change the theme gradient is not updating quickly
-                    : "bg-gradient-to-r from-[#171718] to-[#111013]"
-                }`}
-              > */}
+              
               <div className="sm:p-10 not-sm:p-4 flex flex-wrap gap-10 border-b">
                 <div className="md:w-1/4 md:h-auto w-full flex justify-center">
                   <img
@@ -93,10 +91,10 @@ const ProfessionalDetailsPage = () => {
                   <div className="flex items-start justify-between">
                     <div>
                       <h1 className="text-2xl font-bold">
-                        {professionalData.name}
+                        {`${mentor.mentorDetails.first_name} ${mentor.mentorDetails.last_name}`}
                       </h1>
                       <p className="opacity-70">
-                        {professionalData.department}
+                        {mentor.mentorDetails.profession}
                       </p>
                     </div>
                   </div>
@@ -110,7 +108,7 @@ const ProfessionalDetailsPage = () => {
                   <div className="mt-5">
                     <h2 className="text-lg font-semibold">Specializations</h2>
                     <div className="mt-2 flex flex-wrap gap-2">
-                      {professionalData.Specializations.map(
+                      {mentor.mentorDetails.skills.map(
                         (content: string, key: number) => (
                           <Badge content={content} key={key} />
                         )
@@ -143,15 +141,16 @@ const ProfessionalDetailsPage = () => {
               </div>
               <div className="pt-10 sm:px-10 not-sm:px-4 lg:w-3/4 md:w-3/4 w-full ml-auto lg:px-15 md:px-15">
                 <h2 className="text-lg font-semibold">
-                  About {professionalData.name}
+                  About {`${mentor.mentorDetails.first_name} ${mentor.mentorDetails.last_name}`}
                 </h2>
-                <p className="mt-2 opacity-70">{professionalData.about}</p>
+                {/* <p className="mt-2 opacity-70">{professionalData.about}</p> */}
+                <p className="mt-2 opacity-70">{mentor.mentorDetails.about}</p>
 
                 <hr className="border-t my-5" />
 
                 <h2 className="text-lg font-semibold">Languages</h2>
                 <div className="mt-2 flex flex-wrap gap-2">
-                  {professionalData.Languages.map(
+                  {mentor.mentorDetails.languages.map(
                     (content: string, key: number) => (
                       <Badge content={content} key={key} />
                     )
@@ -162,13 +161,14 @@ const ProfessionalDetailsPage = () => {
 
                 <h2 className="text-lg font-semibold">Skills & Expertise</h2>
                 <div className="mt-2 flex flex-wrap gap-2">
-                  {professionalData.Skills.map(
+                  {mentor.mentorDetails.skills.map(
                     (content: string, key: number) => (
                       <Badge content={content} key={key} />
                     )
                   )}
                 </div>
               </div>
+
             </div>
           </div>
         </div>

@@ -6,12 +6,36 @@ import { Link } from "react-router-dom";
 import { useSelector } from "react-redux";
 import { selectAuth } from "@/redux/slices/authSlice";
 
+const dummyMentor = {
+  "_id": "67bd68abe8a276928c8e102a",
+  "uname": "abcde",
+  "email": "abcde@gmail.com",
+  "phone": 1231231231,
+  "isMentor": true,
+  "mentor_application_status": "Accepted",
+  "__v": 0,
+  "refreshToken": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY3YmQ2OGFiZThhMjc2OTI4YzhlMTAyYSIsImlhdCI6MTc0MDUwNzYzNCwiZXhwIjoxNzQwOTM5NjM0fQ.n602GNEprukQ2iEOb_B8FqIrhD5b1IeKibnFA9sK0Uo",
+  "mentorDetails": {
+      "first_name": "ashin",
+      "last_name": "j",
+      "profession": "pani",
+      "about": "lklkklkl",
+      "skills": [
+          "java"
+      ],
+      "languages": [
+          "english"
+      ],
+      "_id": "67bd6bfa701c9938b3211f20"
+  }
+}
+
 const MentorSection = () => (
   <section className="flex justify-center items-center">
     <div className="container mx-auto">
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 place-items-center">
         {[...Array(4)].map((_, index) => (
-          <MentorCard key={index} />
+          <MentorCard key={index} mentor={dummyMentor} />
         ))}
       </div>
     </div>

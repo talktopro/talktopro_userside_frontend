@@ -3,15 +3,43 @@ import sample from "../assets/sampleProfessionalImage.jpg";
 import { Link } from "react-router-dom";
 import { ROUTES } from "@/routes/routes";
 
-const MentorCard = () => {
+export interface Mentor {
+  _id: string
+  uname: string
+  email: string
+  phone: number
+  isMentor: boolean
+  mentor_application_status: string
+  __v: number
+  refreshToken: string
+  mentorDetails: MentorDetails
+}
+
+export interface MentorDetails {
+  first_name: string
+  last_name: string
+  profession: string
+  about: string
+  skills: string[]
+  languages: string[]
+  _id: string
+}
+
+interface MentorCardProps {
+  mentor: Mentor;
+}
+
+const MentorCard = ({ mentor }: MentorCardProps) => {
   return (
-    <Link to={`${ROUTES.PROFESSIONALS.DETAILS("123")}`} className="max-w-[300px] h-full rounded-lg bg-white shadow-lg relative group cursor-pointer overflow-hidden transition-all duration-600 hover:drop-shadow-xl hover:bg-black/10">
+    <Link to={`${ROUTES.PROFESSIONALS.DETAILS(mentor._id)}`}
+      state={{ mentor }}
+      className="max-w-[300px] h-full rounded-lg bg-white shadow-lg relative group cursor-pointer overflow-hidden transition-all duration-600 hover:drop-shadow-xl hover:bg-black/10">
       <img src={sample} alt="Profile" className="w-full object-cover" />
       <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/50 to-transparent p-4 transition-all duration-300 group-hover:from-black/80 group-hover:via-black/40">
         <div className="flex items-center justify-between">
           <div>
-            <h2 className="text-xl font-semibold text-white">Vishwas</h2>
-            <p className="text-gray-200">Software Development</p>
+            <h2 className="text-xl font-semibold text-white">{`${mentor.mentorDetails.first_name} ${mentor.mentorDetails.last_name}`}</h2>
+            <p className="text-gray-200">{mentor.mentorDetails.profession}</p>
             <div className="flex items-center mt-1">
               <svg
                 className="w-5 h-5 text-yellow-400 fill-current"
