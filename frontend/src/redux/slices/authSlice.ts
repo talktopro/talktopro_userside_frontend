@@ -1,6 +1,6 @@
 import { createSlice, createAsyncThunk, PayloadAction } from "@reduxjs/toolkit";
 import { RootState } from "../store";
-import { loginUserAPI, signupUserAPI, verifyOtpAPI } from "@/api/authService";
+import { loginUserAPI, verifyOtpAPI } from "@/api/authService";
 import { handleApiError } from "@/utils/errorHandler";
 
 interface AuthState {
@@ -17,24 +17,11 @@ const initialState: AuthState = {
     error: null,
 };
 
-export const signupUser = createAsyncThunk<string, { username: string; email: string; phone: string; password: string }, { rejectValue: string }>(
-    "auth/signupUser",
-    async (userData, { rejectWithValue }) => {
-        try {
-            const response = await signupUserAPI(userData);
-            return response.id; // Returning id
-        } catch (error) {
-            return rejectWithValue(handleApiError(error));
-        }
-    }
-);
-
 export const verifyOtp = createAsyncThunk<{ id: string; accessToken: string }, { id: string; otp: string }, { rejectValue: string }>(
     "auth/verifyOtp",
     async (otpData, { rejectWithValue }) => {
         try {
             const response = await verifyOtpAPI(otpData);
-            console.log(response);
             return response;
         } catch (error) {
             return rejectWithValue(handleApiError(error));
@@ -68,29 +55,15 @@ const authSlice = createSlice({
     },
     extraReducers: (builder) => {
         builder
-            // ✅ Signup Reducers
-            .addCase(signupUser.pending, (state) => {
-                state.loading = true;
-                state.error = null;
-            })
-            .addCase(signupUser.fulfilled, (state, action: PayloadAction<string>) => {
-                state.loading = false;
-                state.id = action.payload;
-            })
-            .addCase(signupUser.rejected, (state, action) => {
-                state.loading = false;
-                state.error = action.payload || "Signup failed";
-            })
-
             // ✅ Verify OTP Reducers
             .addCase(verifyOtp.pending, (state) => {
                 state.loading = true;
                 state.error = null;
             })
             .addCase(verifyOtp.fulfilled, (state, action: PayloadAction<{ id: string; accessToken: string }>) => {
-                console.log("ppppp",action.payload);
-                console.log("ppppp",action.payload);
-                
+                console.log("ppppp", action.payload);
+                console.log("ppppp", action.payload);
+
                 state.loading = false;
                 state.id = action.payload.id;
                 state.accessToken = action.payload.accessToken;

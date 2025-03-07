@@ -1,18 +1,17 @@
 import axios, { AxiosResponse } from "axios";
 
-// API Base URL from Environment Variables
-const API_BASE_URL = "http://localhost:3000/api/auth";
+const backendUrl = import.meta.env.VITE_BACKEND_URL;
 
-interface SignupResponse {
-    id: string; // User ID returned after signup
+if (!backendUrl) {
+    console.error(
+        "No VITE_BACKEND_URL provided. For development, please set VITE_BACKEND_URL in your .env file. Example:\nVITE_BACKEND_URL=http://localhost:3000/api"
+    );
+    throw new Error("VITE_BACKEND_URL environment variable is not provided.");
 }
 
-// interface VerifyOtpResponse {
-//     id: string;
-//     accessToken: string;
-// }
 
-interface LoginResponse {
+
+interface Response {
     message: string;
     data: {
         id: string;
@@ -23,34 +22,19 @@ interface ResendOtpResponse {
     id: string;
 }
 
-// ✅ Signup API
-export const signupUserAPI = async (userData: { username: string; email: string; phone: string; password: string }): Promise<SignupResponse> => {
-    const response: AxiosResponse<SignupResponse> = await axios.post(`${API_BASE_URL}/`, {
-        uname: userData.username,
-        email: userData.email,
-        phone: userData.phone,
-        pwd: userData.password,
-        confirm_pwd: userData.password,
-    });
-    return response.data;
-};
-
 // ✅ Verify OTP API
-export const verifyOtpAPI = async (otpData: { id: string; otp: string }): Promise<LoginResponse["data"]> => {
-    const response: AxiosResponse<LoginResponse> = await axios.post(`${API_BASE_URL}/verify-otp`, otpData);
+export const verifyOtpAPI = async (otpData: { id: string; otp: string }): Promise<Response["data"]> => {
+    const response: AxiosResponse<Response> = await axios.post(`${backendUrl}/auth/verify-otp`, otpData);
     return response.data.data;
 };
 
-export const loginUserAPI = async (userData: { email: string; password: string }): Promise<LoginResponse["data"]> => {
-    const response: AxiosResponse<LoginResponse> = await axios.post(`${API_BASE_URL}/login`, userData);
+export const loginUserAPI = async (userData: { email: string; password: string }): Promise<Response["data"]> => {
+    const response: AxiosResponse<Response> = await axios.post(`${backendUrl}/auth/login`, userData);
     return response.data.data;
 }
 
 export const resendOtpAPI = async (userData: { id: string; email: string }): Promise<ResendOtpResponse> => {
-    console.log("resend otp api",userData);
-    
-    const response: AxiosResponse<ResendOtpResponse> = await axios.post(`${API_BASE_URL}/resend-otp`, userData);
-    console.log("resend otp response",response);
+    const response: AxiosResponse<ResendOtpResponse> = await axios.post(`${backendUrl}/auth/resend-otp`, userData);
     return response.data;
-    
+
 }

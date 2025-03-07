@@ -46,7 +46,6 @@ const otpSlice = createSlice({
     },
     extraReducers: (builder) => {
         builder.addCase(resendOtpUser.pending, () => {
-            console.log("OTP Resend in Progress...");
         });
     },
 });

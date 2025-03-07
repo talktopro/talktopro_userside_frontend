@@ -27,8 +27,13 @@ import {
   TooltipTrigger,
 } from "./ui/tooltip";
 import Notification from "./Notification";
+import { useDispatch, useSelector } from "react-redux";
+import { logout, selectAuth } from "@/redux/slices/authSlice";
+import { Button } from "./ui/button";
 
 const Navbar = () => {
+  const dispatch = useDispatch();
+  const { accessToken } = useSelector(selectAuth);
   const { theme, toggleTheme } = useTheme();
   1;
   const navigate = useNavigate();
@@ -72,11 +77,13 @@ const Navbar = () => {
       icon: <LogOut strokeWidth={1.5} size={18} />,
     },
   ];
+  const handleLogout = async () => {
+    await dispatch(logout());
+  }
   return (
     <nav
-      className={`fixed w-full z-10 border-b-1 ${
-        theme === "light" ? "bg-white" : "bg-black"
-      }`}
+      className={`fixed w-full z-10 border-b-1 ${theme === "light" ? "bg-white" : "bg-black"
+        }`}
     >
       <div className="container mx-auto px-8 flex items-center justify-between h-18">
         <Link to={ROUTES.HOME}>
@@ -118,44 +125,57 @@ const Navbar = () => {
           </TooltipProvider>
 
           <div className="bg-transparent px-2 py-1 flex justify-center items-center rounded-sm hover:bg-muted transition duration-300 cursor-pointer">
-            <Select
-              onValueChange={(value) => {
-                const selectedItem = menuItems.find(
-                  (item) => item.value === value
-                );
-                if (selectedItem) navigate(selectedItem.pathLocation);
-              }}
-            >
-              <SelectTrigger className="shadow-none border-none focus:ring-0 focus:outline-none p-0 h-auto">
-                <TooltipProvider>
-                  <Tooltip>
-                    <TooltipTrigger>
-                      <User strokeWidth={1.5} width={18} />
-                    </TooltipTrigger>
-                    <TooltipContent className="bg-white border-1 border-gray-200 text-black mt-1.5">
-                      <p>Profile & More</p>
-                    </TooltipContent>
-                  </Tooltip>
-                </TooltipProvider>
-              </SelectTrigger>
-              <SelectContent>
-                {menuItems.map((item: MenuItem) => (
-                  <SelectItem
-                    key={item.value}
-                    value={item.value}
-                    className={`flex items-center transition duration-300 cursor-pointer hover:bg-muted ${
-                      item.value === "logout" && "text-red-600"
-                    }`}
-                  >
-                    <div className="flex items-center gap-2">
-                      <span>{item.icon}</span>
-                      <span>{item.label}</span>
-                    </div>
-                  </SelectItem>
-                ))}
-              </SelectContent>
-            </Select>
+            {accessToken ? (
+              <Select
+                onValueChange={(value) => {
+                  const selectedItem = menuItems.find(
+                    (item) => item.value === value
+                  );
+                  if (selectedItem) {
+                    if (selectedItem.value === "logout") {
+                      handleLogout();
+                    } else {
+                      navigate(selectedItem.pathLocation);
+                    }
+                  }
+                }}
+              >
+                <SelectTrigger className="shadow-none border-none focus:ring-0 focus:outline-none p-0 h-auto">
+                  <TooltipProvider>
+                    <Tooltip>
+                      <TooltipTrigger>
+                        <User strokeWidth={1.5} width={18} />
+                      </TooltipTrigger>
+                      <TooltipContent className="bg-white border-1 border-gray-200 text-black mt-1.5">
+                        <p>Profile & More</p>
+                      </TooltipContent>
+                    </Tooltip>
+                  </TooltipProvider>
+                </SelectTrigger>
+                <SelectContent>
+                  {menuItems.map((item: MenuItem) => (
+                    <SelectItem
+                      key={item.value}
+                      value={item.value}
+                      className={`flex items-center transition duration-300 cursor-pointer hover:bg-muted ${item.value === "logout" ? "text-red-600" : ""
+                        }`}
+                    >
+                      <div className="flex items-center gap-2">
+                        <span>{item.icon}</span>
+                        <span>{item.label}</span>
+                      </div>
+                    </SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
+            ) : (
+              <Button asChild>
+                <Link to={ROUTES.AUTH.LOGIN}>Login</Link>
+              </Button>
+
+            )}
           </div>
+
         </div>
       </div>
     </nav>

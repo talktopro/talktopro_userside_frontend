@@ -16,7 +16,7 @@ import {
     InputOTPGroup,
     InputOTPSlot,
 } from "@/components/ui/input-otp";
-import { useNavigate, useSearchParams } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { selectAuth, verifyOtp } from "@/redux/slices/authSlice";
 import { AppDispatch } from "@/redux/store";
@@ -24,6 +24,11 @@ import { ROUTES } from "@/routes/routes";
 import { toast } from "sonner";
 import { useOtpTimer } from "@/components/OtpTimer";
 import { resendOtpUser } from "@/redux/slices/otpSlice";
+
+interface OtpState {
+    id: string;
+    email: string;
+}
 
 const FormSchema = z.object({
     pin: z
@@ -33,13 +38,12 @@ const FormSchema = z.object({
 });
 
 const SignupOtpPage = () => {
+    const location = useLocation();
     const dispatch = useDispatch<AppDispatch>();
     const navigate = useNavigate();
     const { isDisabled, timer } = useOtpTimer();
-    const { loading, id } = useSelector(selectAuth);
-    const [searchParams] = useSearchParams();
-    const email = searchParams.get("email") || "";
-
+    const { loading, } = useSelector(selectAuth);
+    const { email, id } = location.state as OtpState;
     const form = useForm<z.infer<typeof FormSchema>>({
         resolver: zodResolver(FormSchema),
         defaultValues: {
@@ -75,7 +79,6 @@ const SignupOtpPage = () => {
 
         try {
             const result = await dispatch(verifyOtp({ id, otp: data.pin })).unwrap();
-            console.log(result);
             if (result.accessToken) {
                 navigate(ROUTES.HOME);
             }
@@ -85,8 +88,8 @@ const SignupOtpPage = () => {
     };
 
     const handleResend = async () => {
-        if (!id) {
-            toast.error("User ID is missing. Please try signing up again.");
+        if (!id || !email) {
+            toast.error("User ID or email is missing. Please try signing up again.");
             return;
         }
         dispatch(resendOtpUser({ id, email }));

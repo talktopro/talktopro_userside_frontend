@@ -1,4 +1,4 @@
-import { useCallback } from "react";
+import { useCallback, useState } from "react";
 import logo from "../assets/logo.svg";
 import { Link, useNavigate } from "react-router-dom";
 import { ROUTES } from "../routes/routes";
@@ -10,59 +10,66 @@ import * as z from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import AuthImageSection from "@/components/AuthImageSection";
 import { PasswordInput } from "@/components/ui/password-input";
-import { useDispatch, useSelector } from "react-redux";
-import { AppDispatch } from "@/redux/store";
-import { selectAuth, signupUser } from "@/redux/slices/authSlice";
 import { toast } from "sonner";
+import apiClient from "@/api/axiosInstance";
+import { AxiosError } from "axios";
 
 const countryCodes = [
     { code: "+91", country: "India" },
-    { code: "+1", country: "USA" },
-    { code: "+44", country: "UK" },
-    { code: "+81", country: "Japan" },
+    // { code: "+1", country: "USA" },
+    // { code: "+44", country: "UK" },
+    // { code: "+81", country: "Japan" },
 ];
 
 const formSchema = z
     .object({
-        username: z.string().min(4, "Username must be at least 4 characters long."),
+        uname: z.string().min(4, "Username must be at least 4 characters long."),
         email: z.string().email("Please enter a valid email address."),
         countryCode: z.string().nonempty("Country code is required."),
         phone: z.string().regex(/^\d{10,15}$/, "Enter a valid phone number."),
-        password: z.string().min(6, "Password must be at least 6 characters long."),
-        confirmPassword: z.string(),
+        pwd: z.string().min(6, "Password must be at least 6 characters long."),
+        confirm_pwd: z.string(),
     })
-    .refine((data) => data.password === data.confirmPassword, {
+    .refine((data) => data.pwd === data.confirm_pwd, {
         message: "Passwords do not match.",
-        path: ["confirmPassword"],
+        path: ["confirm_pwd"],
     });
 
 const SignupPage = () => {
-    const dispatch = useDispatch<AppDispatch>();
     const navigate = useNavigate();
-    const { loading } = useSelector(selectAuth);
+    const [loading, setLoading] = useState<boolean>(false);
     const form = useForm<z.infer<typeof formSchema>>({
         resolver: zodResolver(formSchema),
         defaultValues: {
-            username: "",
+            uname: "",
             email: "",
             countryCode: "+91",
             phone: "",
-            password: "",
-            confirmPassword: "",
+            pwd: "",
+            confirm_pwd: "",
         },
     });
 
     const submitFn = useCallback(
         async (values: z.infer<typeof formSchema>) => {
             console.log(`Signup Data:`, values);
+            setLoading(true);
             try {
-                await dispatch(signupUser({ ...values })).unwrap();
-                navigate(`${ROUTES.AUTH.SIGNUP_OTP_VERIFY}?email=${values.email}`);
+                const { countryCode, ...payload } = values;
+                const { data } = await apiClient.post("/auth", payload);
+                toast.success(data.message);
+                navigate(ROUTES.AUTH.SIGNUP_OTP_VERIFY, { state: { email: data.email, id: data.id } });
             } catch (error: unknown) {
-                toast.error(error as string);
+                console.log(error);
+
+                if (error instanceof AxiosError) {
+                    toast.error(error.response?.data?.errors[0]);
+                }
+            } finally {
+                setLoading(false);
             }
         },
-        [dispatch, navigate]
+        [navigate]
     );
 
 
@@ -83,12 +90,12 @@ const SignupPage = () => {
                         <form onSubmit={form.handleSubmit(submitFn)} className="space-y-3">
                             <FormField
                                 control={form.control}
-                                name="username"
+                                name="uname"
                                 render={({ field }) => (
                                     <FormItem>
                                         <FormLabel>Username</FormLabel>
                                         <FormControl>
-                                            <Input type="text" placeholder="Enter your username" {...field} />
+                                            <Input type="text" placeholder="Enter your uname" {...field} />
                                         </FormControl>
                                         <FormMessage />
                                     </FormItem>
@@ -138,12 +145,12 @@ const SignupPage = () => {
                             </div>
                             <FormField
                                 control={form.control}
-                                name="password"
+                                name="pwd"
                                 render={({ field }) => (
                                     <FormItem>
                                         <FormLabel>Password</FormLabel>
                                         <FormControl>
-                                            <PasswordInput placeholder="Enter your password" {...field} />
+                                            <PasswordInput placeholder="Enter your pwd" {...field} />
                                         </FormControl>
                                         <FormMessage />
                                     </FormItem>
@@ -151,12 +158,12 @@ const SignupPage = () => {
                             />
                             <FormField
                                 control={form.control}
-                                name="confirmPassword"
+                                name="confirm_pwd"
                                 render={({ field }) => (
                                     <FormItem>
                                         <FormLabel>Confirm Password</FormLabel>
                                         <FormControl>
-                                            <PasswordInput placeholder="Confirm your password" {...field} />
+                                            <PasswordInput placeholder="Confirm your pwd" {...field} />
                                         </FormControl>
                                         <FormMessage />
                                     </FormItem>

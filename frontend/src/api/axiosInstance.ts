@@ -2,9 +2,8 @@ import { store } from "@/redux/store";
 import axios, { AxiosError } from "axios";
 import { toast } from "sonner";
 
-// Create an Axios instance
 const apiClient = axios.create({
-  baseURL: "http://localhost:3000/api", // Adjust based on environment (e.g., process.env.REACT_APP_API_URL)
+  baseURL: import.meta.env.VITE_BACKEND_URL,
   headers: {
     "Content-Type": "application/json",
   },
@@ -32,10 +31,11 @@ apiClient.interceptors.response.use(
     if (error.response?.status === 401) {
       toast.error("Session expired. Please log in again.");
       // Note: Redirect must be handled in a component since navigate isn't available here
-    } else {
-      const errorMessage = (error.response?.data as { errors?: string[] })?.errors?.[0] || "An error occurred.";
-      toast.error(errorMessage);
     }
+    // else {
+    //   const errorMessage = (error.response?.data as { errors?: string[] })?.errors?.[0] || "An error occurred.";
+    //   toast.error(errorMessage);
+    // }
     return Promise.reject(error);
   }
 );

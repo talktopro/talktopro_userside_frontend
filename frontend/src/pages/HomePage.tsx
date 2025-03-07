@@ -3,8 +3,6 @@ import Banner from "@/components/Banner";
 import { ROUTES } from "@/routes/routes";
 import { ChevronRight } from "lucide-react";
 import { Link } from "react-router-dom";
-import { useSelector } from "react-redux";
-import { selectAuth } from "@/redux/slices/authSlice";
 
 const dummyMentor = {
   "_id": "67bd68abe8a276928c8e102a",
@@ -43,8 +41,6 @@ const MentorSection = () => (
 );
 
 const HomePage = () => {
-  const { accessToken } = useSelector(selectAuth);
-  console.log("access",accessToken);
   
   return (
     <div className="min-h-screen flex flex-col py-10">
