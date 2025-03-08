@@ -14,6 +14,7 @@ import { useDispatch } from "react-redux";
 import { AppDispatch } from "@/redux/store";
 import { loginUser } from "@/redux/slices/authSlice";
 import { toast } from "sonner";
+import GoogleLoginButton from "@/components/GoogleLoginButton";
 
 
 const formSchema = z.object({
@@ -123,13 +124,14 @@ const LoginPage = () => {
                         <div className="flex flex-col">
                             <div className="mt-4 text-center font-medium text-sm text-foreground/50">Or</div>
                             <Button variant="outline" className="mt-3 w-full flex items-center justify-center gap-2">
-                                <img
+                                <GoogleLoginButton />
+                                {/* <img
                                     src="https://w7.pngwing.com/pngs/326/85/png-transparent-google-logo-google-text-trademark-logo-thumbnail.png"
                                     alt="Google"
                                     width={20}
                                     height={20}
-                                />
-                                Continue with Google
+                                /> */}
+                                {/* Continue with Google */}
                             </Button>
                         </div>
                     </div>

@@ -13,6 +13,7 @@ import { PasswordInput } from "@/components/ui/password-input";
 import { toast } from "sonner";
 import apiClient from "@/api/axiosInstance";
 import { AxiosError } from "axios";
+import GoogleLoginButton from "@/components/GoogleLoginButton";
 
 const countryCodes = [
     { code: "+91", country: "India" },
@@ -52,7 +53,6 @@ const SignupPage = () => {
 
     const submitFn = useCallback(
         async (values: z.infer<typeof formSchema>) => {
-            console.log(`Signup Data:`, values);
             setLoading(true);
             try {
                 const { countryCode, ...payload } = values;
@@ -180,15 +180,7 @@ const SignupPage = () => {
                     </p>
                     <div className="flex flex-col">
                         <div className="mt-3 text-center font-medium text-sm text-foreground/50">Or</div>
-                        <Button variant="outline" className="mt-3 w-full flex items-center justify-center gap-2">
-                            <img
-                                src="https://w7.pngwing.com/pngs/326/85/png-transparent-google-logo-google-text-trademark-logo-thumbnail.png"
-                                alt="Google"
-                                width={20}
-                                height={20}
-                            />
-                            Continue with Google
-                        </Button>
+                        <GoogleLoginButton />
                     </div>
                 </div>
             </div>
