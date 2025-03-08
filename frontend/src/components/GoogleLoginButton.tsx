@@ -5,6 +5,7 @@ import { FcGoogle } from "react-icons/fc";
 import { setUser } from '@/redux/slices/authSlice';
 import { useNavigate } from 'react-router-dom';
 import { ROUTES } from '@/routes/routes';
+import { Button } from './ui/button';
 
 const GoogleLoginButton = () => {
     const dispatch = useDispatch();
@@ -27,13 +28,13 @@ const GoogleLoginButton = () => {
     });
 
     return (
-        <button
+        <Button variant="outline"
             onClick={() => handleGoogleLogin()}
             className="flex items-center justify-center gap-1 hover:cursor-pointer"
         >
             <FcGoogle className='size-5' />
             <span>Sign in with Google</span>
-        </button>
+        </Button>
     );
 };
 

@@ -123,16 +123,7 @@ const LoginPage = () => {
                         </p>
                         <div className="flex flex-col">
                             <div className="mt-4 text-center font-medium text-sm text-foreground/50">Or</div>
-                            <Button variant="outline" className="mt-3 w-full flex items-center justify-center gap-2">
-                                <GoogleLoginButton />
-                                {/* <img
-                                    src="https://w7.pngwing.com/pngs/326/85/png-transparent-google-logo-google-text-trademark-logo-thumbnail.png"
-                                    alt="Google"
-                                    width={20}
-                                    height={20}
-                                /> */}
-                                {/* Continue with Google */}
-                            </Button>
+                            <GoogleLoginButton />
                         </div>
                     </div>
 
