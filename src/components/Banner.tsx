@@ -20,7 +20,7 @@ const Banner: React.FC<BannerProps> = ({
 }) => {
   return (
     <div
-      className="w-full bg-cover bg-center bg-no-repeat flex flex-col lg:flex-row md:flex-col sm:flex-col items-center px-8 my-10 rounded-lg gap-6"
+      className="w-full bg-cover bg-center bg-no-repeat flex flex-col lg:flex-row md:flex-col sm:flex-col items-center sm:px-8 not-sm:px-4 my-10 rounded-lg gap-6"
       style={{ backgroundImage: `url('/${bg}')` }}
     >
       {/* Image Section */}

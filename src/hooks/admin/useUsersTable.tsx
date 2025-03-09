@@ -123,7 +123,7 @@ const useUsersTable = () => {
           <TableCell className="py-3 w-24 whitespace-nowrap text-center">
             {user.SL}
           </TableCell>
-          <TableCell className="py-3 lg:pl-10 xl:pl:10 flex-grow whitespace-nowrap">
+          <TableCell className="py-3 lg:pl-10 xl:pl:10 flex-grow min-w-sm whitespace-nowrap">
             <div className="flex items-center">
               <div className="w-auto h-12 rounded-md overflow-hidden">
                 <img

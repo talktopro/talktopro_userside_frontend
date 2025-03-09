@@ -79,13 +79,14 @@ const Navbar = () => {
   ];
   const handleLogout = async () => {
     await dispatch(logout());
-  }
+  };
   return (
     <nav
-      className={`fixed w-full z-10 border-b-1 ${theme === "light" ? "bg-white" : "bg-black"
-        }`}
+      className={`fixed w-full z-10 border-b-1 ${
+        theme === "light" ? "bg-white" : "bg-black"
+      }`}
     >
-      <div className="container mx-auto px-8 flex items-center justify-between h-18">
+      <div className="container mx-auto sm:px-8 not-sm:px-4  flex items-center justify-between h-18">
         <Link to={ROUTES.HOME}>
           <div className="flex items-center gap-2">
             <img src={logo} width={35} />
@@ -124,8 +125,8 @@ const Navbar = () => {
             </Tooltip>
           </TooltipProvider>
 
-          <div className="bg-transparent px-2 py-1 flex justify-center items-center rounded-sm hover:bg-muted transition duration-300 cursor-pointer">
-            {accessToken ? (
+          {accessToken ? (
+            <div className="bg-transparent px-2 py-1 flex justify-center items-center rounded-sm hover:bg-muted transition duration-300 cursor-pointer">
               <Select
                 onValueChange={(value) => {
                   const selectedItem = menuItems.find(
@@ -157,8 +158,9 @@ const Navbar = () => {
                     <SelectItem
                       key={item.value}
                       value={item.value}
-                      className={`flex items-center transition duration-300 cursor-pointer hover:bg-muted ${item.value === "logout" ? "text-red-600" : ""
-                        }`}
+                      className={`flex items-center transition duration-300 cursor-pointer hover:bg-muted ${
+                        item.value === "logout" ? "text-red-600" : ""
+                      }`}
                     >
                       <div className="flex items-center gap-2">
                         <span>{item.icon}</span>
@@ -168,14 +170,12 @@ const Navbar = () => {
                   ))}
                 </SelectContent>
               </Select>
-            ) : (
-              <Button asChild>
-                <Link to={ROUTES.AUTH.LOGIN}>Login</Link>
-              </Button>
-
-            )}
-          </div>
-
+            </div>
+          ) : (
+            <Button asChild size="sm">
+              <Link to={ROUTES.AUTH.LOGIN}>Login</Link>
+            </Button>
+          )}
         </div>
       </div>
     </nav>

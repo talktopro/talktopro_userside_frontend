@@ -6,7 +6,7 @@ const MentorsTable = () => {
   const { tableTitle, tableRows } = useBookingsTable();
 
   return (
-    <div className="px-4">
+    <div className="px-4 max-w-screen">
       <AdminTableHeader
         heading="Bookings"
         searchPlaceholder="Search Bookings..."

@@ -1,6 +1,6 @@
 import {
   CalendarDays,
-  ChartGantt,
+  // ChartGantt,
   ChevronRight,
   House,
   NotebookText,
@@ -63,14 +63,14 @@ const SidebarList = () => {
           <span>Slot Management</span>
         </SidebarMenuButton>
 
-        <SidebarMenuButton
+        {/* <SidebarMenuButton
           tooltip="Analytics"
           className="cursor-pointer"
           onClick={() => navigate(ROUTES.MENTOR.ANALYTICS)}
         >
           <ChartGantt strokeWidth={1.5} size={18} />
           <span>Analytics</span>
-        </SidebarMenuButton>
+        </SidebarMenuButton> */}
 
         <Collapsible>
           <SidebarMenuItem>
@@ -89,7 +89,7 @@ const SidebarList = () => {
                   >
                     <span className="cursor-pointer">Account settings</span>
                   </SidebarMenuSubButton>
-                  <SidebarMenuSubButton
+                  {/* <SidebarMenuSubButton
                     onClick={() =>
                       navigate(ROUTES.MENTOR.NOTIFICATION_SETTINGS)
                     }
@@ -97,7 +97,7 @@ const SidebarList = () => {
                     <span className="cursor-pointer">
                       Notification settings
                     </span>
-                  </SidebarMenuSubButton>
+                  </SidebarMenuSubButton> */}
                 </SidebarMenuSubItem>
               </SidebarMenuSub>
             </CollapsibleContent>

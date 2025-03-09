@@ -6,7 +6,7 @@ const UsersTable = () => {
   const { tableTitle, tableRows } = useUsersTable();
 
   return (
-    <div className="px-4">
+    <div className="px-4 max-w-screen">
       <AdminTableHeader heading="Users" searchPlaceholder="Search Users..." />
       <AdminTableBody
         tableRows={tableRows}

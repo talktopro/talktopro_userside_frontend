@@ -5,28 +5,25 @@ import { ChevronRight } from "lucide-react";
 import { Link } from "react-router-dom";
 
 const dummyMentor = {
-  "_id": "67bd68abe8a276928c8e102a",
-  "uname": "abcde",
-  "email": "abcde@gmail.com",
-  "phone": 1231231231,
-  "isMentor": true,
-  "mentor_application_status": "Accepted",
-  "__v": 0,
-  "refreshToken": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY3YmQ2OGFiZThhMjc2OTI4YzhlMTAyYSIsImlhdCI6MTc0MDUwNzYzNCwiZXhwIjoxNzQwOTM5NjM0fQ.n602GNEprukQ2iEOb_B8FqIrhD5b1IeKibnFA9sK0Uo",
-  "mentorDetails": {
-      "first_name": "ashin",
-      "last_name": "j",
-      "profession": "pani",
-      "about": "lklkklkl",
-      "skills": [
-          "java"
-      ],
-      "languages": [
-          "english"
-      ],
-      "_id": "67bd6bfa701c9938b3211f20"
-  }
-}
+  _id: "67bd68abe8a276928c8e102a",
+  uname: "abcde",
+  email: "abcde@gmail.com",
+  phone: 1231231231,
+  isMentor: true,
+  mentor_application_status: "Accepted",
+  __v: 0,
+  refreshToken:
+    "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY3YmQ2OGFiZThhMjc2OTI4YzhlMTAyYSIsImlhdCI6MTc0MDUwNzYzNCwiZXhwIjoxNzQwOTM5NjM0fQ.n602GNEprukQ2iEOb_B8FqIrhD5b1IeKibnFA9sK0Uo",
+  mentorDetails: {
+    first_name: "ashin",
+    last_name: "j",
+    profession: "pani",
+    about: "lklkklkl",
+    skills: ["java"],
+    languages: ["english"],
+    _id: "67bd6bfa701c9938b3211f20",
+  },
+};
 
 const MentorSection = () => (
   <section className="flex justify-center items-center">
@@ -41,10 +38,9 @@ const MentorSection = () => (
 );
 
 const HomePage = () => {
-  
   return (
     <div className="min-h-screen flex flex-col py-10">
-      <div className="px-8 mb-15">
+      <div className="sm:px-8 not-sm:px-4 mb-15">
         <Banner
           bg="firstframe.svg"
           image="Clip path group.png"

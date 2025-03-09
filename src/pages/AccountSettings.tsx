@@ -33,7 +33,7 @@ const AccountSettings = () => {
   return (
     <>
       <Navbar />
-      <div className="w-full mx-auto pt-20 px-10">
+      <div className="w-full mx-auto pt-20 sm:px-10 not-sm:px-4">
         <div className="relative">
           <div className="w-full h-32 bg-muted rounded-lg" />
           <div className="px-10 pb-4">

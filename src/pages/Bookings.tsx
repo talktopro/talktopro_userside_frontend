@@ -89,7 +89,7 @@ const Bookings: React.FC = () => {
   return (
     <>
       <Navbar />
-      <div className="pt-28 px-12">
+      <div className="pt-28 sm:px-12 not-sm:px-4">
         <BookingsHeader />
         <BookingsTable bookingDetails={bookingsData} />
       </div>
