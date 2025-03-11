@@ -38,6 +38,11 @@ const AppRoutes = () => {
           path={ROUTES.PROFESSIONALS.LIST}
           element={<AllProfessionalsPage />}
         />
+        {/* Professional profile area from user side */}
+        <Route
+          path={ROUTES.PROFESSIONALS.DETAILS()}
+          element={<ProfessionalDetailsPage />}
+        />
       </Route>
       {/* Authentication Routes */}
       <Route path={ROUTES.AUTH.LOGIN} element={<LoginPage />} />
@@ -52,11 +57,6 @@ const AppRoutes = () => {
       />
       <Route path={ROUTES.AUTH.SIGNUP_OTP_VERIFY} element={<SignupOtpPage />} />
 
-      {/* Professional profile area from user side */}
-      <Route
-        path={ROUTES.PROFESSIONALS.DETAILS()}
-        element={<ProfessionalDetailsPage />}
-      />
       {/* User booking table with details */}
       <Route path={ROUTES.BOOKINGS} element={<Bookings />} />
       {/* User account details page */}
