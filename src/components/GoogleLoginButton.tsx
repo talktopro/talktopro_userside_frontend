@@ -30,7 +30,7 @@ const GoogleLoginButton = () => {
     return (
         <Button variant="outline"
             onClick={() => handleGoogleLogin()}
-            className="flex items-center justify-center gap-1 hover:cursor-pointer"
+            className="flex items-center justify-center gap-1 hover:cursor-pointer w-full"
         >
             <FcGoogle className='size-5' />
             <span>Sign in with Google</span>

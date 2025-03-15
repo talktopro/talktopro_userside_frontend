@@ -121,8 +121,8 @@ const LoginPage = () => {
                         <p className="w-full text-center text-sm mt-1">
                             Don&apos;t have an account? <Link className="font-semibold" to={ROUTES.AUTH.SIGNUP}>Signup</Link> now
                         </p>
-                        <div className="flex flex-col">
-                            <div className="mt-4 text-center font-medium text-sm text-foreground/50">Or</div>
+                        <div className="flex flex-col items-center justify-center text-center">
+                            <div className="my-1 text-center font-medium text-sm text-foreground/50">Or</div>
                             <GoogleLoginButton />
                         </div>
                     </div>

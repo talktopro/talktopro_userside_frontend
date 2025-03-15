@@ -57,13 +57,21 @@ const SignupPage = () => {
             try {
                 const { countryCode, ...payload } = values;
                 const { data } = await apiClient.post("/auth", payload);
-                toast.success(data.message);
-                navigate(ROUTES.AUTH.SIGNUP_OTP_VERIFY, { state: { email: data.email, id: data.id } });
-            } catch (error: unknown) {
-                console.log(error);
 
+                navigate(ROUTES.AUTH.SIGNUP_OTP_VERIFY, {
+                    state: { email: data.email, id: data.id },
+                });
+            } catch (error: unknown) {
+                console.error("Authentication error:", error);
                 if (error instanceof AxiosError) {
-                    toast.error(error.response?.data?.errors[0]);
+                    const errorMessage =
+                        error.response?.data?.errors?.[0]?.message ||
+                        error.response?.data?.message ||
+                        "An unknown error occurred!";
+
+                    toast.error(errorMessage);
+                } else {
+                    toast.error("Something went wrong. Please try again.");
                 }
             } finally {
                 setLoading(false);
@@ -150,7 +158,7 @@ const SignupPage = () => {
                                     <FormItem>
                                         <FormLabel>Password</FormLabel>
                                         <FormControl>
-                                            <PasswordInput placeholder="Enter your pwd" {...field} />
+                                            <PasswordInput placeholder="Enter your password" {...field} />
                                         </FormControl>
                                         <FormMessage />
                                     </FormItem>
@@ -163,7 +171,7 @@ const SignupPage = () => {
                                     <FormItem>
                                         <FormLabel>Confirm Password</FormLabel>
                                         <FormControl>
-                                            <PasswordInput placeholder="Confirm your pwd" {...field} />
+                                            <PasswordInput placeholder="Confirm your password" {...field} />
                                         </FormControl>
                                         <FormMessage />
                                     </FormItem>
@@ -178,8 +186,8 @@ const SignupPage = () => {
                     <p className="text-center text-sm mt-1">
                         Already have an account? <Link className="font-semibold" to={ROUTES.AUTH.LOGIN}>Login here</Link>
                     </p>
-                    <div className="flex flex-col">
-                        <div className="mt-3 text-center font-medium text-sm text-foreground/50">Or</div>
+                    <div className="flex flex-col text-center items-center justify-center">
+                        <div className="my-1 text-center font-medium text-sm text-foreground/50">Or</div>
                         <GoogleLoginButton />
                     </div>
                 </div>
