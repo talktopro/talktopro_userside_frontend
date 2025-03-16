@@ -64,12 +64,7 @@ const SignupPage = () => {
             } catch (error: unknown) {
                 console.error("Authentication error:", error);
                 if (error instanceof AxiosError) {
-                    const errorMessage =
-                        error.response?.data?.errors?.[0]?.message ||
-                        error.response?.data?.message ||
-                        "An unknown error occurred!";
-
-                    toast.error(errorMessage);
+                    toast.error(error.response?.data.errors[0]);
                 } else {
                     toast.error("Something went wrong. Please try again.");
                 }
@@ -103,7 +98,7 @@ const SignupPage = () => {
                                     <FormItem>
                                         <FormLabel>Username</FormLabel>
                                         <FormControl>
-                                            <Input type="text" placeholder="Enter your uname" {...field} />
+                                            <Input type="text" placeholder="Enter your username" {...field} />
                                         </FormControl>
                                         <FormMessage />
                                     </FormItem>
