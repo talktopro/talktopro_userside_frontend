@@ -1,32 +1,40 @@
 import { Mentor } from "./AllProfessionalsPage";
 import sampleProfessionalImage from "../assets/sampleProfessionalImage.jpg";
 import { Badge } from "@/components/ui/Badge";
-import { FC, JSX } from "react";
+import { FC, JSX, useEffect, useState } from "react";
 import { Drawer, DrawerContent, DrawerDescription, DrawerHeader, DrawerTitle, DrawerTrigger } from "@/components/ui/drawer";
 import BookingCalendar from "@/components/BookingCalendar";
 import { Button } from "@/components/ui/button";
+import { useLocation, useParams } from "react-router-dom";
+import apiClient from "@/api/axiosInstance";
 
-const mentorData: Mentor = {
-  _id: "mentor123",
-  uname: "johndoe",
-  email: "john.doe@example.com",
-  phone: 1234567890,
-  isMentor: true,
-  mentor_application_status: "approved",
-  __v: 0,
-  refreshToken: "dummyRefreshToken123",
-  mentorDetails: {
-    first_name: "John",
-    last_name: "Doe",
-    profession: "Senior Software Engineer",
-    about:
-      "John is a seasoned software engineer with over 10 years of experience, specializing in building scalable web applications and mentoring aspiring developers.",
-    skills: ["JavaScript", "TypeScript", "React", "Node.js"],
-    languages: ["English", "Spanish"],
-    _id: "details123",
-  },
-};
 const ProfessionalDetailsPage = () => {
+  const { id } = useParams<{ id: string }>();
+  const location = useLocation();
+  const initialMentor = location.state?.mentor as Mentor | null;
+  const [mentor, setMentor] = useState<Mentor | null>(initialMentor);
+  const [loading, setLoading] = useState<boolean>(!mentor);
+  const [error, setError] = useState<string | null>(null);
+
+  useEffect(() => {
+    if (!mentor) {
+      const fetchMentor = async () => {
+        try {
+          setLoading(true);
+          const { data } = await apiClient.get(`/mentor/${id}`);
+          setMentor(data.data);
+        } catch (error) {
+          setError("An unexpected error occurred.");
+        } finally {
+          setLoading(false);
+        }
+      };
+      fetchMentor();
+    }
+  }, [mentor, id]);
+  if (loading) return <p className="text-gray-500 text-center">Loading mentor details...</p>;
+  if (error) return <p className="text-red-500 text-center">{error}</p>;
+  if (!mentor) return <p className="text-red-500 text-center">Mentor data is missing.</p>;
 
   interface ITriggerSlots {
     trigger: JSX.Element;
@@ -74,10 +82,10 @@ const ProfessionalDetailsPage = () => {
             <div className="flex items-start justify-between">
               <div>
                 <h1 className="text-2xl font-bold">
-                  {`${mentorData.mentorDetails.first_name} ${mentorData.mentorDetails.last_name}`}
+                  {`${mentor.mentorDetails.first_name} ${mentor.mentorDetails.last_name}`}
                 </h1>
                 <p className="opacity-70">
-                  {mentorData.mentorDetails.profession}
+                  {mentor.mentorDetails.profession}
                 </p>
               </div>
             </div>
@@ -91,7 +99,7 @@ const ProfessionalDetailsPage = () => {
             <div className="mt-5">
               <h2 className="text-lg font-semibold">Specializations</h2>
               <div className="mt-2 flex flex-wrap gap-2">
-                {mentorData.mentorDetails.skills.map(
+                {mentor.mentorDetails.skills.map(
                   (content: string, key: number) => (
                     <Badge content={content} key={key} />
                   )
@@ -115,16 +123,16 @@ const ProfessionalDetailsPage = () => {
         <div className="w-full block sm:flex flex-row-reverse">
           <div className="w-full sm:w-[80%] p-5">
             <h2 className="text-lg font-semibold">
-              About {`${mentorData.mentorDetails.first_name} ${mentorData.mentorDetails.last_name}`}
+              About {`${mentor.mentorDetails.first_name} ${mentor.mentorDetails.last_name}`}
             </h2>
             {/* <p className="mt-2 opacity-70">{professionalData.about}</p> */}
-            <p className="mt-2 opacity-70">{mentorData.mentorDetails.about}</p>
+            <p className="mt-2 opacity-70">{mentor.mentorDetails.about}</p>
 
             <hr className="border-t my-5" />
 
             <h2 className="text-lg font-semibold">Languages</h2>
             <div className="mt-2 flex flex-wrap gap-2">
-              {mentorData.mentorDetails.languages.map(
+              {mentor.mentorDetails.languages.map(
                 (content: string, key: number) => (
                   <Badge content={content} key={key} />
                 )
@@ -135,7 +143,7 @@ const ProfessionalDetailsPage = () => {
 
             <h2 className="text-lg font-semibold">Skills & Expertise</h2>
             <div className="mt-2 flex flex-wrap gap-2">
-              {mentorData.mentorDetails.skills.map(
+              {mentor.mentorDetails.skills.map(
                 (content: string, key: number) => (
                   <Badge content={content} key={key} />
                 )
