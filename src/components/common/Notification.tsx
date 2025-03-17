@@ -23,7 +23,7 @@ const Notification: FC<INotificationProps> = ({ notifications, loading }) => {
           <div>
             <CustomTooltip
               content="Notification"
-              trigger={<Bell strokeWidth={1.5} width={18} />}
+              trigger={<Bell strokeWidth={1.5} width={18} height={18} />}
             />
           </div>
         </PopoverTrigger>

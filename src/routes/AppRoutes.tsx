@@ -7,7 +7,7 @@ import ForgotPasswordPage from "@/pages/ForgotPasswordPage";
 import Bookings from "@/pages/user/Bookings";
 import MentorBookings from "@/pages/mentor/Bookings";
 import ProfessionalDetailsPage from "@/pages/ProfessionalDetailsPage";
-import AllProfessionalsPage from "@/pages/AllProfessionalsPage";
+import AllProfessionalsPage from "@/pages/user/AllProfessionalsPage";
 import MainLayout from "@/layouts/MainLayout";
 import AccountSettings from "@/pages/AccountSettings";
 import ChangePasswordPage from "@/pages/ChangePasswordPage";

@@ -1,8 +1,15 @@
-import { Mentor } from "./AllProfessionalsPage";
+import { Mentor } from "./user/AllProfessionalsPage";
 import sampleProfessionalImage from "../assets/sampleProfessionalImage.jpg";
 import { Badge } from "@/components/ui/Badge";
 import { FC, JSX } from "react";
-import { Drawer, DrawerContent, DrawerDescription, DrawerHeader, DrawerTitle, DrawerTrigger } from "@/components/ui/drawer";
+import {
+  Drawer,
+  DrawerContent,
+  DrawerDescription,
+  DrawerHeader,
+  DrawerTitle,
+  DrawerTrigger,
+} from "@/components/ui/drawer";
 import BookingCalendar from "@/components/BookingCalendar";
 import { Button } from "@/components/ui/button";
 
@@ -27,7 +34,6 @@ const mentorData: Mentor = {
   },
 };
 const ProfessionalDetailsPage = () => {
-
   interface ITriggerSlots {
     trigger: JSX.Element;
   }
@@ -102,9 +108,7 @@ const ProfessionalDetailsPage = () => {
               <TriggerSlots
                 trigger={
                   <div className="mt-6 flex flex-wrap gap-3 ">
-                    <Button className="cursor-pointer">
-                      Book a Session
-                    </Button>
+                    <Button className="cursor-pointer">Book a Session</Button>
                   </div>
                 }
               />
@@ -115,7 +119,8 @@ const ProfessionalDetailsPage = () => {
         <div className="w-full block sm:flex flex-row-reverse">
           <div className="w-full sm:w-[80%] p-5">
             <h2 className="text-lg font-semibold">
-              About {`${mentorData.mentorDetails.first_name} ${mentorData.mentorDetails.last_name}`}
+              About{" "}
+              {`${mentorData.mentorDetails.first_name} ${mentorData.mentorDetails.last_name}`}
             </h2>
             {/* <p className="mt-2 opacity-70">{professionalData.about}</p> */}
             <p className="mt-2 opacity-70">{mentorData.mentorDetails.about}</p>
@@ -148,15 +153,13 @@ const ProfessionalDetailsPage = () => {
         <TriggerSlots
           trigger={
             <div className="flex py-3 w-full flex-wrap gap-3 not-sm:fixed not-sm:bottom-0 not-sm:z-10 not-sm:w-screen not-sm:bg-background not-sm:pt-3 not-sm:border-t-1 not-sm:px-4">
-              <Button className="cursor-pointer w-full">
-                Book a Session
-              </Button>
+              <Button className="cursor-pointer w-full">Book a Session</Button>
             </div>
           }
         />
       </div>
     </>
-  )
-}
+  );
+};
 
 export default ProfessionalDetailsPage;

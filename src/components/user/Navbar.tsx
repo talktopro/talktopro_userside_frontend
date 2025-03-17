@@ -120,7 +120,7 @@ const Navbar = () => {
         <Input
           type="text"
           placeholder="Search..."
-          className="w-full max-w-md sm:max-w-sm not-sm:hidden"
+          className="w-full max-w-md sm:max-w-sm not-md:hidden"
         />
 
         <div className="flex items-center">
@@ -193,7 +193,7 @@ const Navbar = () => {
               </Select>
             </div>
           ) : (
-            <Button asChild size="sm">
+            <Button asChild size="sm" className="ml-1">
               <Link to={ROUTES.AUTH.LOGIN}>Login</Link>
             </Button>
           )}
