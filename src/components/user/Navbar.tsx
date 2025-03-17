@@ -1,6 +1,6 @@
-import { JSX } from "react";
+import { JSX, useEffect, useState } from "react";
 import { Input } from "@/components/ui/input";
-import logo from "../assets/logo.svg";
+import logo from "@/assets/logo.svg";
 import {
   Heart,
   LayoutTemplate,
@@ -17,7 +17,7 @@ import {
   SelectItem,
   SelectTrigger,
 } from "@/components/ui/select";
-import { ROUTES } from "../routes/routes";
+import { ROUTES } from "../../routes/routes";
 import { Link, useNavigate } from "react-router-dom";
 import useTheme from "@/hooks/useTheme";
 import {
@@ -25,18 +25,39 @@ import {
   TooltipContent,
   TooltipProvider,
   TooltipTrigger,
-} from "./ui/tooltip";
-import Notification from "./Notification";
+} from "../ui/tooltip";
+import Notification from "../common/Notification";
 import { useDispatch, useSelector } from "react-redux";
 import { logout, selectAuth } from "@/redux/slices/authSlice";
-import { Button } from "./ui/button";
+import { Button } from "../ui/button";
+import { INotification } from "@/interfaces/user";
+import apiClient from "@/api/axiosInstance";
+import { toast } from "sonner";
 
 const Navbar = () => {
   const dispatch = useDispatch();
   const { accessToken } = useSelector(selectAuth);
   const { theme, toggleTheme } = useTheme();
-  1;
   const navigate = useNavigate();
+  const [notifications, setNotifications] = useState<INotification[]>([]);
+  const [isLoading, setIsLoading] = useState(false);
+
+  const fetchNotification = async () => {
+    try {
+      setIsLoading(true);
+      const { data } = await apiClient.get<INotification[]>(`url`);
+      setNotifications(Array.isArray(data) ? data : []);
+    } catch (error) {
+      console.error("Error occurred while fetching Notifications!", error);
+      toast.error("Failed to collect Notifications.");
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  useEffect(() => {
+    fetchNotification();
+  }, []);
 
   interface MenuItem {
     label: string;
@@ -103,7 +124,7 @@ const Navbar = () => {
         />
 
         <div className="flex items-center">
-          <Notification />
+          <Notification notifications={notifications} loading={isLoading} />
 
           <TooltipProvider>
             <Tooltip>

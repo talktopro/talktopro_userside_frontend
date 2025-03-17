@@ -12,10 +12,16 @@ import { Input } from "../ui/input";
 interface TableHeadingProps {
   heading: string;
   searchPlaceholder: string;
+  handleSort: (sort: "ascending" | "descending") => void;
+  handleSearch: (search: string) => void;
+  showSelect: boolean;
 }
 const AdminTableHeader: React.FC<TableHeadingProps> = ({
   heading,
   searchPlaceholder,
+  handleSearch,
+  handleSort,
+  showSelect = false,
 }) => {
   return (
     <div className="pb-7">
@@ -25,28 +31,35 @@ const AdminTableHeader: React.FC<TableHeadingProps> = ({
           type="text"
           placeholder={searchPlaceholder}
           className="w-full max-w-md sm:max-w-sm"
+          onChange={(e) => handleSearch(e.target.value)}
         />
-        <Select>
-          <SelectTrigger className="w-[180px] not-sm:w-[120px] focus:ring-0 focus:outline-none cursor-pointer">
-            <SelectValue placeholder="Sort by Date" />
-          </SelectTrigger>
-          <SelectContent>
-            <SelectGroup>
-              <SelectItem
-                value="asc"
-                className="flex items-center cursor-pointer px-2 py-1 focus:ring-0 focus:outline-none hover:bg-muted"
-              >
-                Date Ascending
-              </SelectItem>
-              <SelectItem
-                value="desc"
-                className="flex items-center cursor-pointer px-2 py-1 focus:ring-0 focus:outline-none hover:bg-muted"
-              >
-                Date Descending
-              </SelectItem>
-            </SelectGroup>
-          </SelectContent>
-        </Select>
+        {showSelect && (
+          <Select
+            onValueChange={(value: "ascending" | "descending") =>
+              handleSort(value)
+            }
+          >
+            <SelectTrigger className="w-[180px] not-sm:w-[120px] focus:ring-0 focus:outline-none cursor-pointer">
+              <SelectValue placeholder="Sort by Date" />
+            </SelectTrigger>
+            <SelectContent>
+              <SelectGroup>
+                <SelectItem
+                  value="asc"
+                  className="flex items-center cursor-pointer px-2 py-1 focus:ring-0 focus:outline-none hover:bg-muted"
+                >
+                  Date Ascending
+                </SelectItem>
+                <SelectItem
+                  value="desc"
+                  className="flex items-center cursor-pointer px-2 py-1 focus:ring-0 focus:outline-none hover:bg-muted"
+                >
+                  Date Descending
+                </SelectItem>
+              </SelectGroup>
+            </SelectContent>
+          </Select>
+        )}
       </div>
     </div>
   );

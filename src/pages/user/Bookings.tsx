@@ -1,11 +1,13 @@
 import React, { useEffect, useState } from "react";
+import Navbar from "@/components/user/Navbar";
+import Footer from "@/components/common/Footer";
 import BookingsTable from "@/components/Booking-History/Table";
 import BookingsHeader from "@/components/Booking-History/Header";
-import { IBookingQueryDetails, IBooking } from "@/interfaces/mentor";
-import apiClient from "@/api/axiosInstance";
-import { toast } from "sonner";
 import SkeletonTable from "@/components/common/skeletons/Table";
 import { NotebookText } from "lucide-react";
+import { toast } from "sonner";
+import apiClient from "@/api/axiosInstance";
+import { IBooking, IBookingQueryDetails } from "@/interfaces/user";
 
 const Bookings: React.FC = () => {
   const [bookingHistory, setBookingHistory] = useState<IBooking[]>([]);
@@ -39,23 +41,28 @@ const Bookings: React.FC = () => {
   useEffect(() => {
     fetchBookingHistory();
   }, [queryDetails]);
+
   return (
-    <div className="p-4 max-w-screen">
-      <BookingsHeader
-        onSortChange={handleSortChange}
-        showSelect={!isLoading && bookingHistory.length > 0}
-      />
-      {isLoading ? (
-        <SkeletonTable />
-      ) : bookingHistory.length > 0 ? (
-        <BookingsTable bookingDetails={bookingHistory} />
-      ) : (
-        <div className="flex flex-col justify-center items-center h-96">
-          <NotebookText strokeWidth={1} size={50} className="opacity-60" />
-          <p className="opacity-60 mt-3">No Result Found!</p>
-        </div>
-      )}
-    </div>
+    <>
+      <Navbar />
+      <div className="pt-28 sm:px-12 not-sm:px-4">
+        <BookingsHeader
+          showSelect={!isLoading && bookingHistory.length > 0}
+          onSortChange={handleSortChange}
+        />
+        {isLoading ? (
+          <SkeletonTable />
+        ) : bookingHistory.length > 0 ? (
+          <BookingsTable bookingDetails={bookingHistory} />
+        ) : (
+          <div className="flex flex-col justify-center items-center h-96">
+            <NotebookText strokeWidth={1} size={50} className="opacity-60" />
+            <p className="opacity-60 mt-3">No Result Found!</p>
+          </div>
+        )}
+      </div>
+      <Footer />
+    </>
   );
 };
 

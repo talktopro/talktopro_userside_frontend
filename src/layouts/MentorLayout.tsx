@@ -1,4 +1,4 @@
-import Footer from "@/components/Footer";
+import Footer from "@/components/common/Footer";
 import MentorHeader from "@/components/mentor/Header";
 import { AppSidebar } from "@/components/mentor/sidebar/SidebarMain";
 import { SidebarInset, SidebarProvider } from "@/components/ui/sidebar";

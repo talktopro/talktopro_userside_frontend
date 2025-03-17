@@ -1,5 +1,5 @@
 import AdminHeader from "@/components/admin/sidebar/Header";
-import Footer from "@/components/Footer";
+import Footer from "@/components/common/Footer";
 import { AppSidebar } from "@/components/admin/sidebar/SidebarMain";
 import { SidebarInset, SidebarProvider } from "@/components/ui/sidebar";
 import { Outlet } from "react-router-dom";

@@ -17,8 +17,8 @@ const Footer = () => {
           <div className="space-y-4 sm:mx-10 not-sm:mx-4 mt-10">
             <h3 className="font-medium">Product</h3>
             <ul className="space-y-3">
-              {Products.map((item: string) => (
-                <li>
+              {Products.map((item: string, index: number) => (
+                <li key={index}>
                   <a className="text-muted-foreground hover:text-foreground text-sm">
                     {item}
                   </a>
@@ -30,8 +30,8 @@ const Footer = () => {
           <div className="space-y-4 sm:mx-10 not-sm:mx-4 mt-10">
             <h3 className="font-medium">Learning</h3>
             <ul className="space-y-3">
-              {Learning.map((item: string) => (
-                <li>
+              {Learning.map((item: string, index: number) => (
+                <li key={index}>
                   <a className="text-muted-foreground hover:text-foreground text-sm">
                     {item}
                   </a>
@@ -43,8 +43,8 @@ const Footer = () => {
           <div className="space-y-4 sm:mx-10 not-sm:mx-4 mt-10">
             <h3 className="font-medium">About</h3>
             <ul className="space-y-3 flex flex-col items-start">
-              {About.map((item: string) => (
-                <li>
+              {About.map((item: string, index: number) => (
+                <li key={index}>
                   <a className="text-muted-foreground hover:text-foreground text-sm">
                     {item}
                   </a>

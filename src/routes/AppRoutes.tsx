@@ -4,7 +4,7 @@ import { ROUTES } from "./routes";
 import HomePage from "@/pages/HomePage";
 import SignupPage from "@/pages/SignupPage";
 import ForgotPasswordPage from "@/pages/ForgotPasswordPage";
-import Bookings from "@/pages/Bookings";
+import Bookings from "@/pages/user/Bookings";
 import MentorBookings from "@/pages/mentor/Bookings";
 import ProfessionalDetailsPage from "@/pages/ProfessionalDetailsPage";
 import AllProfessionalsPage from "@/pages/AllProfessionalsPage";

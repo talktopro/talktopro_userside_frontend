@@ -16,3 +16,15 @@ export interface IBooking {
    status: "Time Scheduled" | "Complete" | "Cancelled";
    amount: string;
 }
+
+export interface IBookingQueryDetails {
+   page: number;
+   sort: "ascending" | "descending";
+};
+
+export interface INotification {
+   id: number;
+   message: string;
+   date: string;
+   isRead: boolean;
+}

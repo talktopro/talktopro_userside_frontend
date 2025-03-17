@@ -1,6 +1,6 @@
 import { Mail, Phone, MoreVertical } from "lucide-react";
-import Navbar from "@/components/Navbar";
-import Footer from "@/components/Footer";
+import Navbar from "@/components/user/Navbar";
+import Footer from "@/components/common/Footer";
 import img from "../assets/sampleProfessionalImage.jpg";
 import {
   Tooltip,
