@@ -38,13 +38,12 @@ const AllProfessionalsPage = () => {
         setData(response.data?.data);
       } catch (error: unknown) {
         if (error instanceof AxiosError) {
-          setError(error.response?.data?.errors[0]);
-          toast.error(error.response?.data?.errors[0]);
+          const errorMessage = error.response?.data?.errors[0] || "Something went wrong. Please try again.";
+          setError(errorMessage);
+          toast.error(errorMessage);
         }
       } finally {
-        setTimeout(() => {
-          setLoading(false);
-        }, 2000)
+        setLoading(false);
       }
     };
     fetchData();
@@ -52,31 +51,35 @@ const AllProfessionalsPage = () => {
 
   if (error) {
     return (
-      <div className="flex items-center justify-center h-screen">
-        <p className="text-red-500">{error}</p>
+      <div className="flex items-center justify-center min-h-screen px-5 text-center">
+        <p className="text-red-500 text-lg">{error}</p>
       </div>
     );
   }
 
   return (
-    <div className="px-5 sm:px-10 py-10">
+    <div className="px-4 sm:px-6 lg:px-10 py-10">
       {loading ? (
-        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-7">
-          {Array.from({ length: 5 }).map((_, index) => (
-            <div
-              key={index}
-              className="h-72 w-full bg-gray-200 animate-pulse rounded-lg"
-            />
-          ))}
+        <div className="flex justify-center">
+          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-6 place-items-center">
+            {Array.from({ length: 5 }).map((_, index) => (
+              <div
+                key={index}
+                className="h-72 w-full bg-gray-200 dark:bg-gray-700 animate-pulse rounded-lg"
+              />
+            ))}
+          </div>
         </div>
       ) : data.length > 0 ? (
-        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-7">
-          {data.map((mentor) => (
-            <MentorCard key={mentor._id} mentor={mentor} />
-          ))}
+        <div className="flex justify-center">
+          <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-6 place-items-center">
+            {data.map((mentor) => (
+              <MentorCard key={mentor._id} mentor={mentor} />
+            ))}
+          </div>
         </div>
       ) : (
-        <div className="flex items-center justify-center h-64">
+        <div className="flex items-center justify-center min-h-64 text-center">
           <p className="text-gray-500 text-lg">No mentors available at the moment.</p>
         </div>
       )}
