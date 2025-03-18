@@ -82,14 +82,14 @@ const ProfessionalDetailsPage = () => {
     <>
       <div className="w-full min-h-screen p-5">
         <div className="w-full block sm:flex">
-          <div className="sm:w-[20%] p-5">
+          <div className="sm:min-w-[20%] p-5">
             <img
               src={sampleProfessionalImage}
               alt="Mentor profile"
               className="h-full w-full sm:w-auto object-cover rounded-lg"
             />
           </div>
-          <div className="w-full sm:w-[80%] p-5">
+          <div className="w-full sm:w-[80%] sm:p-5 not-sm:py-5">
             <div className="flex items-start justify-between">
               <div>
                 <h1 className="text-2xl font-bold">
@@ -128,7 +128,7 @@ const ProfessionalDetailsPage = () => {
         </div>
         <hr className="h-2 px-5" />
         <div className="w-full block sm:flex flex-row-reverse">
-          <div className="w-full sm:w-[80%] p-5">
+          <div className="w-full sm:w-[80%] sm:p-5 sm:px-15 not-sm:pt-4">
             <h2 className="text-lg font-semibold">
               About{" "}
               {`${mentor.mentorDetails.first_name} ${mentor.mentorDetails.last_name}`}
