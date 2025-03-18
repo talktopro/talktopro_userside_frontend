@@ -43,6 +43,8 @@ const AppRoutes = () => {
           path={ROUTES.PROFESSIONALS.DETAILS()}
           element={<ProfessionalDetailsPage />}
         />
+        {/* User account details page */}
+        <Route path={ROUTES.ACCOUNT_SETTINGS} element={<AccountSettings />} />
       </Route>
       {/* Authentication Routes */}
       <Route path={ROUTES.AUTH.LOGIN} element={<LoginPage />} />
@@ -59,8 +61,6 @@ const AppRoutes = () => {
 
       {/* User booking table with details */}
       <Route path={ROUTES.BOOKINGS} element={<Bookings />} />
-      {/* User account details page */}
-      <Route path={ROUTES.ACCOUNT_SETTINGS} element={<AccountSettings />} />
 
       {/* All mentor routes */}
       <Route path={ROUTES.MENTOR.REGISTER} element={<MentorResiterPage />} />

@@ -32,7 +32,7 @@ import { logout, selectAuth } from "@/redux/slices/authSlice";
 import { Button } from "../ui/button";
 import { INotification } from "@/interfaces/user";
 import apiClient from "@/api/axiosInstance";
-import { toast } from "sonner";
+// import { toast } from "sonner";
 
 const Navbar = () => {
   const dispatch = useDispatch();
@@ -49,7 +49,7 @@ const Navbar = () => {
       setNotifications(Array.isArray(data) ? data : []);
     } catch (error) {
       console.error("Error occurred while fetching Notifications!", error);
-      toast.error("Failed to collect Notifications.");
+      // toast.error("Failed to collect Notifications.");
     } finally {
       setIsLoading(false);
     }
@@ -103,9 +103,8 @@ const Navbar = () => {
   };
   return (
     <nav
-      className={`fixed w-full z-10 border-b-1 ${
-        theme === "light" ? "bg-white" : "bg-black"
-      }`}
+      className={`fixed w-full z-10 border-b-1 ${theme === "light" ? "bg-white" : "bg-black"
+        }`}
     >
       <div className="container mx-auto sm:px-8 not-sm:px-4  flex items-center justify-between h-18">
         <Link to={ROUTES.HOME}>
@@ -162,11 +161,13 @@ const Navbar = () => {
                   }
                 }}
               >
-                <SelectTrigger className="shadow-none border-none focus:ring-0 focus:outline-none p-0 h-auto">
+                <SelectTrigger className="shadow-none border-none focus:ring-0 focus:outline-none p-0 h-auto hover:cursor-pointer">
                   <TooltipProvider>
                     <Tooltip>
-                      <TooltipTrigger>
-                        <User strokeWidth={1.5} width={18} />
+                      <TooltipTrigger asChild>
+                        <span>
+                          <User strokeWidth={1.5} width={18} />
+                        </span>
                       </TooltipTrigger>
                       <TooltipContent className="bg-white border-1 border-gray-200 text-black mt-1.5">
                         <p>Profile & More</p>
@@ -179,9 +180,8 @@ const Navbar = () => {
                     <SelectItem
                       key={item.value}
                       value={item.value}
-                      className={`flex items-center transition duration-300 cursor-pointer hover:bg-muted ${
-                        item.value === "logout" ? "text-red-600" : ""
-                      }`}
+                      className={`flex items-center transition duration-300 cursor-pointer hover:bg-muted ${item.value === "logout" ? "text-red-600" : ""
+                        }`}
                     >
                       <div className="flex items-center gap-2">
                         <span>{item.icon}</span>

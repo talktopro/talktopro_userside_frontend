@@ -1,8 +1,8 @@
 import { createSlice, createAsyncThunk, PayloadAction } from "@reduxjs/toolkit";
 import { RootState } from "../store";
 import { resendOtpAPI } from "@/api/authService";
-import { handleApiError } from "@/utils/errorHandler";
 import { toast } from "sonner";
+import { extractErrorMessage } from "@/utils/errorHandler";
 
 interface OtpState {
     timer: number;
@@ -23,7 +23,7 @@ export const resendOtpUser = createAsyncThunk<void, { id: string; email: string 
             toast.success("OTP Resent Successfully");
         } catch (error) {
             toast.error("Failed to Resend OTP");
-            return rejectWithValue(handleApiError(error));
+            return rejectWithValue(extractErrorMessage(error));
         }
     }
 );
