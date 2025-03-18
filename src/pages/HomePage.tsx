@@ -8,8 +8,8 @@ import MentorCard from "@/components/MentorCard";
 import Banner from "@/components/Banner";
 import apiClient from "@/api/axiosInstance";
 import { ROUTES } from "@/routes/routes";
-import { Mentor } from "./AllProfessionalsPage";
-import Skeleton from 'react-loading-skeleton';
+import { Mentor } from "./user/AllProfessionalsPage";
+import Skeleton from "react-loading-skeleton";
 
 const HomePage = () => {
   const [mentors, setMentors] = useState<Mentor[]>([]);
@@ -25,7 +25,9 @@ const HomePage = () => {
       setMentors(response.data?.data || []);
     } catch (err) {
       if (err instanceof AxiosError) {
-        const errorMessage = err.response?.data?.errors?.[0] || "Something went wrong. Please try again.";
+        const errorMessage =
+          err.response?.data?.errors?.[0] ||
+          "Something went wrong. Please try again.";
         setError(errorMessage);
         toast.error(errorMessage);
       } else {
@@ -67,12 +69,23 @@ const HomePage = () => {
 
 export default HomePage;
 
-const MentorSection = ({ mentors, loading, error }: { mentors: Mentor[]; loading: boolean; error: string | null }) => {
+const MentorSection = ({
+  mentors,
+  loading,
+  error,
+}: {
+  mentors: Mentor[];
+  loading: boolean;
+  error: string | null;
+}) => {
   return (
     <section className="mt-8">
       <div className="flex justify-between items-center mb-5">
         <span className="text-lg font-semibold">Top Mentors for You</span>
-        <Link to={ROUTES.PROFESSIONALS.LIST} className="flex items-center cursor-pointer">
+        <Link
+          to={ROUTES.PROFESSIONALS.LIST}
+          className="flex items-center cursor-pointer"
+        >
           See all
           <ChevronRight className="w-6 h-6 transition-opacity duration-200" />
         </Link>
@@ -98,4 +111,3 @@ const MentorSection = ({ mentors, loading, error }: { mentors: Mentor[]; loading
     </section>
   );
 };
-

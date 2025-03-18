@@ -50,14 +50,14 @@ const AllProfessionalsPage = () => {
   }, []);
 
   return (
-    <div className="pb-0 sm:p-10 p-4 h-[85vh]">
+    <div className="pb-0 sm:p-10 p-4 h-[85vh] sm:overflow-y-auto overflow-x-hidden sm:custom-scrollbar">
       <div className="flex gap-5 h-full">
         <FilterSession />
-        <div className="flex flex-col">
+        <div className="flex flex-col flex-1">
           <div className="flex justify-end md:hidden">
             <MobileFilterSession />
           </div>
-          <div className="flex-1 flex justify-center overflow-y-auto overflow-x-hidden custom-scrollbar">
+          <div className="flex-1 flex justify-center">
             {loading ? (
               <SkeletonCards />
             ) : mentorsList.length > 0 ? (
@@ -67,7 +67,7 @@ const AllProfessionalsPage = () => {
                 ))}
               </div>
             ) : (
-              <div className="flex flex-col justify-center items-center">
+              <div className="flex flex-col justify-center items-center w-full">
                 <GraduationCap
                   strokeWidth={1}
                   size={50}
