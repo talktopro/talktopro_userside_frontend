@@ -40,10 +40,8 @@ const LoginPage = () => {
     })
 
     const submitFn = useCallback(async (values: z.infer<typeof formSchema>) => {
-        console.log(values)
         try {
             const result = await dispatch(loginUser(values)).unwrap();
-            console.log(result);
             if (result.accessToken) {
                 navigate(ROUTES.HOME);
                 toast.success("Logged in successfully");

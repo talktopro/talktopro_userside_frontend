@@ -5,7 +5,7 @@ import SkeletonTable from "@/components/common/skeletons/Table";
 import { IQueryDetails, IUser } from "@/interfaces/admin";
 import { Users } from "lucide-react";
 import { useEffect, useState } from "react";
-import { toast } from "sonner";
+// import { toast } from "sonner";
 
 const UsersTable = () => {
   const [users, setUsers] = useState<IUser[]>([]);
@@ -25,7 +25,7 @@ const UsersTable = () => {
       setUsers(Array.isArray(data) ? data : []);
     } catch (error) {
       console.error("Error occurred while fetching booking history!", error);
-      toast.error("Failed to collect booking history. Please try again later.");
+      // toast.error("Failed to collect booking history. Please try again later.");
     } finally {
       setIsLoading(false);
     }

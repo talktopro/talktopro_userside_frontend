@@ -7,7 +7,7 @@ import SkeletonTable from "@/components/common/skeletons/Table";
 import { IMentor, IMentorQueryDetails } from "@/interfaces/admin";
 import { CircleAlert, GraduationCap } from "lucide-react";
 import { useEffect, useState } from "react";
-import { toast } from "sonner";
+// import { toast } from "sonner";
 
 const MentorsTable = () => {
   const [activeTab, setActiveTab] = useState<"approved" | "requests">(
@@ -31,7 +31,7 @@ const MentorsTable = () => {
       setMentors(Array.isArray(data) ? data : []);
     } catch (error) {
       console.error("Error occurred while fetching Mentors details!", error);
-      toast.error("Failed to collect Mentors list. Please try again later.");
+      // toast.error("Failed to collect Mentors list. Please try again later.");
     } finally {
       setIsLoading(false);
     }

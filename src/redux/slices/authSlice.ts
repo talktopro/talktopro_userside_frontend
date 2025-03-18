@@ -1,7 +1,7 @@
 import { createSlice, createAsyncThunk, PayloadAction } from "@reduxjs/toolkit";
 import { RootState } from "../store";
 import { loginUserAPI, verifyOtpAPI } from "@/api/authService";
-import { handleApiError } from "@/utils/errorHandler";
+import { extractErrorMessage } from "@/utils/errorHandler";
 
 interface AuthState {
     id: string | null;
@@ -24,7 +24,7 @@ export const verifyOtp = createAsyncThunk<{ id: string; accessToken: string }, {
             const response = await verifyOtpAPI(otpData);
             return response;
         } catch (error) {
-            return rejectWithValue(handleApiError(error));
+            return rejectWithValue(extractErrorMessage(error));
         }
     }
 );
@@ -35,8 +35,7 @@ export const loginUser = createAsyncThunk<{ id: string; accessToken: string }, {
         try {
             return await loginUserAPI(userData);
         } catch (error) {
-            console.log(handleApiError(error));
-            return rejectWithValue(handleApiError(error));
+            return rejectWithValue(extractErrorMessage(error));
         }
     }
 )
