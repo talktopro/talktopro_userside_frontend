@@ -5,7 +5,7 @@ import BookingsTable from "@/components/Booking-History/Table";
 import BookingsHeader from "@/components/Booking-History/Header";
 import SkeletonTable from "@/components/common/skeletons/Table";
 import { NotebookText } from "lucide-react";
-import { toast } from "sonner";
+// import { toast } from "sonner";
 import apiClient from "@/api/axiosInstance";
 import { IBooking, IBookingQueryDetails } from "@/interfaces/user";
 
@@ -32,7 +32,7 @@ const Bookings: React.FC = () => {
       setBookingHistory(Array.isArray(data) ? data : []);
     } catch (error) {
       console.error("Error occurred while fetching booking history!", error);
-      toast.error("Failed to collect booking history. Please try again later.");
+      // toast.error("Failed to collect booking history. Please try again later.");
     } finally {
       setIsLoading(false);
     }

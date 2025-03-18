@@ -10,8 +10,6 @@ export interface Mentor {
   phone: number
   isMentor: boolean
   mentor_application_status: string
-  __v: number
-  refreshToken: string
   mentorDetails: MentorDetails
 }
 

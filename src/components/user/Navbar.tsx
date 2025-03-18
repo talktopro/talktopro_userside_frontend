@@ -32,7 +32,7 @@ import { logout, selectAuth } from "@/redux/slices/authSlice";
 import { Button } from "../ui/button";
 import { INotification } from "@/interfaces/user";
 import apiClient from "@/api/axiosInstance";
-import { toast } from "sonner";
+// import { toast } from "sonner";
 
 const Navbar = () => {
   const dispatch = useDispatch();
@@ -49,7 +49,7 @@ const Navbar = () => {
       setNotifications(Array.isArray(data) ? data : []);
     } catch (error) {
       console.error("Error occurred while fetching Notifications!", error);
-      toast.error("Failed to collect Notifications.");
+      // toast.error("Failed to collect Notifications.");
     } finally {
       setIsLoading(false);
     }
