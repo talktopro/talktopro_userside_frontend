@@ -46,7 +46,6 @@ const ForgotPasswordPage: React.FC = () => {
           </p>
         </div>
 
-        {/* Add noValidate to prevent browser validation */}
         <form onSubmit={handleSubmit(onSubmit)} noValidate className="space-y-4">
           <div className="space-y-2">
             <Input
