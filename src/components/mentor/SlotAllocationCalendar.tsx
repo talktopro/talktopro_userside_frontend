@@ -1,3 +1,4 @@
+import { useState } from "react";
 import useSlotAllocation from "@/hooks/useSlotAllocation";
 import { Calendar } from "../ui/calendar";
 import { Popover, PopoverContent, PopoverTrigger } from "../ui/popover";
@@ -8,6 +9,7 @@ interface TimeSlotsProps {
   title: Date;
   updateTimeSlots: (date: Date, time: string) => void;
   selectedDateAndTime: Record<string, Record<string, boolean>>;
+  keepOpen: () => void; 
 }
 
 const SlotAllocationCalendar = () => {
@@ -17,6 +19,12 @@ const SlotAllocationCalendar = () => {
     updateTimeSlots,
     selectedDateAndTime,
   } = useSlotAllocation();
+
+  const [openPopover, setOpenPopover] = useState<Record<string, boolean>>({});
+
+  const togglePopover = (dateStr: string, isOpen: boolean) => {
+    setOpenPopover((prev) => ({ ...prev, [dateStr]: isOpen }));
+  };
 
   return (
     <div className="flex not-sm:justify-center sm:justify-evenly flex-wrap border-1 rounded-md pt-2 pb-4">
@@ -57,7 +65,10 @@ const SlotAllocationCalendar = () => {
 
                 return (
                   <div className="relative">
-                    <Popover>
+                    <Popover
+                      open={openPopover[dateStr] || false}
+                      onOpenChange={(isOpen) => togglePopover(dateStr, isOpen)}
+                    >
                       <PopoverTrigger asChild>
                         <button
                           className={cn(
@@ -79,6 +90,7 @@ const SlotAllocationCalendar = () => {
                           title={date}
                           selectedDateAndTime={selectedDateAndTime}
                           updateTimeSlots={updateTimeSlots}
+                          keepOpen={() => togglePopover(dateStr, true)} 
                         />
                       </PopoverContent>
                     </Popover>
@@ -99,6 +111,7 @@ const TimeSlots: React.FC<TimeSlotsProps> = ({
   title,
   selectedDateAndTime,
   updateTimeSlots,
+  keepOpen,
 }) => {
   const { generateTimeSlots } = useSlotAllocation();
 
@@ -121,7 +134,10 @@ const TimeSlots: React.FC<TimeSlotsProps> = ({
                   ? "border-purple-500 bg-purple-50 text-purple-700"
                   : "hover:border-gray-300"
               }`}
-            onClick={() => updateTimeSlots(title, slot)}
+            onClick={() => {
+              updateTimeSlots(title, slot);
+              keepOpen();
+            }}
           >
             {slot}
           </div>
