@@ -45,9 +45,9 @@ const HomePage = () => {
       <Banner
         bg="firstframe.svg"
         image="Clip path group.png"
-        title="Unlock Your Potential with Expert Mentorship!"
-        description="Connect with professionals to receive tailored guidance for your growth."
-        buttonText="Get Started"
+        title="Unlock Your Skills, Earn with Every Booking! 🚀"
+        description="Turn Your Talent into Income—Join as a Professional Today!"
+        buttonText="Get Started Now →"
       />
 
       <MentorSection mentors={mentors} loading={loading} error={error} />

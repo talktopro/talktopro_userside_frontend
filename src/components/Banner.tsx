@@ -1,5 +1,6 @@
 import React from "react";
-import { Button } from "./ui/button";
+import { buttonVariants } from "./ui/button";
+import { Link } from "react-router-dom";
 
 interface BannerProps {
   bg: string;
@@ -43,7 +44,8 @@ const Banner: React.FC<BannerProps> = ({
         <p className="text-2xl md:text-xl sm:text-lg">{description}</p>
 
         <div className="flex lg:justify-start md:justify-center sm:justify-center">
-          <Button>{buttonText}</Button>
+          <Link to={"/mentor/register"} className={buttonVariants({ variant: "default" })}>{buttonText}</Link>
+          {/* <Button>{buttonText}</Button> */}
         </div>
       </div>
     </div>
