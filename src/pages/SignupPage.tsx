@@ -179,12 +179,11 @@ const SignupPage = () => {
                     </Form>
 
                     <p className="text-center text-sm mt-1">
-                        Already have an account? <Link className="font-semibold" to={ROUTES.AUTH.LOGIN}>Login here</Link>
+                        Already have an account? <Link className="font-semibold hover:underline" to={ROUTES.AUTH.LOGIN}>Login</Link>
+                        {" "}here
                     </p>
-                    <div className="flex flex-col text-center items-center justify-center">
-                        <div className="my-1 text-center font-medium text-sm text-foreground/50">Or</div>
-                        <GoogleLoginButton />
-                    </div>
+                    <p className="mt-1 mb-2 text-center font-medium text-sm text-foreground/50">or</p>
+                    <GoogleLoginButton />
                 </div>
             </div>
         </div>

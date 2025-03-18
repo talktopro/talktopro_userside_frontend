@@ -47,7 +47,7 @@ const AccountSettings = () => {
   };
 
   return (
-    <div className="w-full mx-auto sm:px-10 not-sm:px-4">
+    <div className="w-full mx-auto sm:px-10 not-sm:px-4 mt-5">
       <div className="relative">
         <div className="w-full h-32 bg-muted rounded-lg" />
         <div className="px-10 pb-4">
@@ -63,7 +63,7 @@ const AccountSettings = () => {
 
           <div className="mt-20">
             <div className="flex justify-center items-center gap-1 ml-4">
-              <h1 className="text-2xl font-semibold whitespace-nowrap">
+              <h1 className="text-2xl font-semibold whitespace-nowrap capitalize">
                 {user?.uname}
               </h1>
 
@@ -114,6 +114,7 @@ const AccountSettings = () => {
                         <Input
                           type="text"
                           id="name"
+                          value={user?.uname}
                           className="mt-1 block w-full px-3 py-2 sm:text-sm"
                           placeholder="Enter your name"
                         />
@@ -131,6 +132,7 @@ const AccountSettings = () => {
                         <Input
                           type="email"
                           id="email"
+                          value={user?.email}
                           readOnly
                           className="mt-1 block w-full px-3 py-2 sm:text-sm cursor-not-allowed"
                           placeholder="Enter your email"
@@ -146,6 +148,7 @@ const AccountSettings = () => {
                         <Input
                           type="tel"
                           id="phone"
+                          value={user?.phone}
                           className="mt-1 block w-full px-3 py-2 sm:text-sm"
                           placeholder="Enter your phone number"
                         />
