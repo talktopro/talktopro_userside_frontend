@@ -95,12 +95,18 @@ importers:
       react-dom:
         specifier: ^19.0.0
         version: 19.0.0(react@19.0.0)
+      react-easy-crop:
+        specifier: ^5.4.1
+        version: 5.4.1(react-dom@19.0.0(react@19.0.0))(react@19.0.0)
       react-hook-form:
         specifier: ^7.54.2
         version: 7.54.2(react@19.0.0)
       react-icons:
         specifier: ^5.4.0
         version: 5.4.0(react@19.0.0)
+      react-loading-skeleton:
+        specifier: ^3.5.0
+        version: 3.5.0(react@19.0.0)
       react-redux:
         specifier: ^9.2.0
         version: 9.2.0(@types/react@19.0.8)(react@19.0.0)(redux@5.0.1)
@@ -1802,6 +1808,9 @@ packages:
   node-releases@2.0.19:
     resolution: {integrity: sha512-xxOWJsBKtzAq7DY0J+DTzuz58K8e7sJbdgwkbMWQe8UYB6ekmsQ45q0M/tJDsGaZmbC+l7n57UV8Hl5tHxO9uw==}
 
+  normalize-wheel@1.0.1:
+    resolution: {integrity: sha512-1OnlAPZ3zgrk8B91HyRj+eVv+kS5u+Z0SCsak6Xil/kmgEia50ga7zfkumayonZrImffAxPU/5WcyGhzetHNPA==}
+
   optionator@0.9.4:
     resolution: {integrity: sha512-6IpQ7mKUxRcZNLIObR0hz7lxsapSSIYNZJwXPGeF0mTVqGKFIXj1DQcMoT22S3ROcLyY/rz0PWaWZ9ayWmad9g==}
     engines: {node: '>= 0.8.0'}
@@ -1865,6 +1874,12 @@ packages:
     peerDependencies:
       react: ^19.0.0
 
+  react-easy-crop@5.4.1:
+    resolution: {integrity: sha512-Djtsi7bWO75vkKYkVxNRrJWY69pXLahIAkUN0mmt9cXNnaq2tpG59ctSY6P7ipJgBc7COJDRMRuwb2lYwtACNQ==}
+    peerDependencies:
+      react: '>=16.4.0'
+      react-dom: '>=16.4.0'
+
   react-fast-compare@2.0.4:
     resolution: {integrity: sha512-suNP+J1VU1MWFKcyt7RtjiSWUjvidmQSlqu+eHslq+342xCbGTYmC0mEhPCOHxlW0CywylOC1u2DFAT+bv4dBw==}
 
@@ -1881,6 +1896,11 @@ packages:
 
   react-is@16.13.1:
     resolution: {integrity: sha512-24e6ynE2H+OKt4kqsOvNd8kBpV65zoxbA4BVsEOB3ARVWQki/DHzaUoC5KuON/BiccDaCCTZBuOcfZs70kR8bQ==}
+
+  react-loading-skeleton@3.5.0:
+    resolution: {integrity: sha512-gxxSyLbrEAdXTKgfbpBEFZCO/P153DnqSCQau2+o6lNy1jgMRr2MmRmOzMmyrwSaSYLRB8g7b0waYPmUjz7IhQ==}
+    peerDependencies:
+      react: '>=16.8.0'
 
   react-redux@9.2.0:
     resolution: {integrity: sha512-ROY9fvHhwOD9ySfrF0wmvu//bKCQ6AeZZq1nJNtbDC+kk5DuSuNX/n6YWYF/SYy7bSba4D4FSz8DJeKY/S/r+g==}
@@ -3751,6 +3771,8 @@ snapshots:
 
   node-releases@2.0.19: {}
 
+  normalize-wheel@1.0.1: {}
+
   optionator@0.9.4:
     dependencies:
       deep-is: 0.1.4
@@ -3806,6 +3828,13 @@ snapshots:
       react: 19.0.0
       scheduler: 0.25.0
 
+  react-easy-crop@5.4.1(react-dom@19.0.0(react@19.0.0))(react@19.0.0):
+    dependencies:
+      normalize-wheel: 1.0.1
+      react: 19.0.0
+      react-dom: 19.0.0(react@19.0.0)
+      tslib: 2.8.1
+
   react-fast-compare@2.0.4: {}
 
   react-hook-form@7.54.2(react@19.0.0):
@@ -3817,6 +3846,10 @@ snapshots:
       react: 19.0.0
 
   react-is@16.13.1: {}
+
+  react-loading-skeleton@3.5.0(react@19.0.0):
+    dependencies:
+      react: 19.0.0
 
   react-redux@9.2.0(@types/react@19.0.8)(react@19.0.0)(redux@5.0.1):
     dependencies:

@@ -27,7 +27,7 @@ const Notification: FC<INotificationProps> = ({ notifications, loading }) => {
             />
           </div>
         </PopoverTrigger>
-        <PopoverContent className="p-1 w-100 not-sm:w-80 mr-10">
+        <PopoverContent className="p-1 w-100 not-sm:w-80 sm:mr-10 not-sm:mr-4">
           <div className="grid gap-4">
             <div className="space-y-2 max-h-96 overflow-auto custom-scrollbar">
               {loading ? (
