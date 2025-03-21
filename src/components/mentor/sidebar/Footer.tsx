@@ -1,4 +1,5 @@
-import { ChevronsUpDown, LogOut, Undo2, UserRound } from "lucide-react";
+import { ChevronsUpDown, LogOut, Undo2 } from "lucide-react";
+import avatar from "@/assets/avatar/user.png";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -32,8 +33,12 @@ const Sidebar_Footer: React.FC<SidebarFooterProps> = ({ mentor }) => {
               size="lg"
               className="data-[state=open]:bg-sidebar-accent data-[state=open]:text-sidebar-accent-foreground cursor-pointer focus:ring-0 focus:outline-none focus-visible:ring-0 focus-visible:outline-none "
             >
-              <div className="flex aspect-square size-8 items-center justify-center rounded-lg bg-primary text-sidebar-primary-foreground">
-                <UserRound strokeWidth={1.5} size={18} />
+              <div className="flex aspect-square size-8 items-center justify-center rounded-lg bg-primary text-sidebar-primary-foreground p-1.5">
+                <img
+                  src={avatar}
+                  alt="Profile picture"
+                  className="w-full h-full object-cover cursor-pointer"
+                />
               </div>
               <div className="grid flex-1 text-left text-sm leading-tight">
                 <span className="truncate font-semibold">{mentor.name}</span>

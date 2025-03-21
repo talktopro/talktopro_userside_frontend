@@ -25,6 +25,7 @@ const ImageCropper = ({
     height: 125, // Adjusted for 4:5 aspect ratio (width:height = 4:5)
   });
   const [imageRef, setImageRef] = useState<HTMLImageElement | null>(null);
+  const [isLoading, setIsLoading] = useState(false);
   const isImageLoaded = useRef(false);
 
   // Reset the crop state and image loaded state when the dialog is opened or closed
@@ -88,6 +89,53 @@ const ImageCropper = ({
     }
   };
 
+  const handleSave = () => {
+    setIsLoading(true);
+
+    setTimeout(() => {
+      setIsLoading(false);
+      onSave();
+      console.log("Image saved");
+    }, 5000);
+  };
+
+  const ScannerLoader = ({ crop }: { crop: Crop }) => {
+    return (
+      <div
+        className="absolute overflow-hidden"
+        style={{
+          position: "absolute",
+          top: `${crop.y}px`,
+          left: `${crop.x}px`,
+          width: `${crop.width}px`,
+          height: `${crop.height}px`,
+          overflow: "hidden",
+        }}
+      >
+        <div
+          style={{
+            position: "absolute",
+            top: "0",
+            left: "0",
+            width: "100%",
+            height: "2px",
+            background: "rgba(255, 255, 255, 0.8)",
+            animation: "scan 2s infinite",
+          }}
+        />
+        <style>
+          {`
+            @keyframes scan {
+              0% { top: 0; }
+              50% { top: 100%; }
+              100% { top: 0; }
+            }
+          `}
+        </style>
+      </div>
+    );
+  };
+
   return (
     <Dialog open={isOpen} onOpenChange={onClose}>
       <DialogContent>
@@ -108,9 +156,10 @@ const ImageCropper = ({
               onLoad={handleImageLoad}
               style={{ maxHeight: "50vh", maxWidth: "100%" }}
             />
+            {isLoading && <ScannerLoader crop={crop} />}
           </ReactCrop>
         </div>
-        <div className="flex justify-end gap-2 mt-4">
+        <div className="flex justify-end gap-2 mt-2">
           <Button
             variant="ghost"
             onClick={onClose}
@@ -120,7 +169,7 @@ const ImageCropper = ({
           </Button>
           <Button
             className="px-4 py-2 text-sm font-medium bg-primary min-w-20"
-            onClick={onSave}
+            onClick={handleSave}
           >
             Save
           </Button>

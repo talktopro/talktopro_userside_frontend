@@ -1,4 +1,3 @@
-import { useRef, useState } from "react";
 import avatar from "@/assets/avatar/user.png";
 import { User } from "@/types/user";
 import {
@@ -16,43 +15,23 @@ import { TooltipProvider } from "@/components/ui/tooltip";
 import CustomTooltip from "@/components/common/CustomTooltip";
 import { MoreVertical } from "lucide-react";
 import ImageCropper from "@/components/common/ImageCropper";
+import useImageCropper from "@/hooks/useImageCropper";
 
 interface EditAccountDetailsProps {
   user: User | null;
 }
 
 const EditAccountDetails = ({ user }: EditAccountDetailsProps) => {
-  const inputRef = useRef<HTMLInputElement | null>(null);
-  const [selectedImage, setSelectedImage] = useState<File | null>(null);
-  const [isCropperOpen, setIsCropperOpen] = useState(false);
-
-  const handleInputTrigger = (): void => {
-    if (inputRef.current) {
-      inputRef.current.click();
-    }
-  };
-
-  const handleImageChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    const file: File | undefined = event.target.files?.[0];
-    if (file) {
-      setSelectedImage(file);
-      setIsCropperOpen(true);
-    }
-  };
-
-  const handleCropComplete = (croppedAreaPixels: {
-    width: number;
-    height: number;
-    x: number;
-    y: number;
-  }) => {
-    console.log("Cropped Area Pixels:", croppedAreaPixels);
-  };
-
-  const handleSave = () => {
-    setIsCropperOpen(false);
-    console.log("Image saved");
-  };
+  const {
+    inputRef,
+    handleImageChange,
+    handleInputTrigger,
+    handleClose,
+    handleCropComplete,
+    handleSave,
+    isCropperOpen,
+    selectedImage,
+  } = useImageCropper();
 
   return (
     <>
@@ -93,6 +72,7 @@ const EditAccountDetails = ({ user }: EditAccountDetailsProps) => {
                   type="file"
                   hidden
                   ref={inputRef}
+                  accept=".jpg, .jpeg"
                   onChange={handleImageChange}
                 />
               </div>
@@ -171,7 +151,7 @@ const EditAccountDetails = ({ user }: EditAccountDetailsProps) => {
           image={selectedImage}
           onCropComplete={handleCropComplete}
           onSave={handleSave}
-          onClose={() => setIsCropperOpen(false)}
+          onClose={handleClose}
           isOpen={isCropperOpen}
         />
       )}
