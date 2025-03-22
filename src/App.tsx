@@ -11,6 +11,7 @@ import 'react-loading-skeleton/dist/skeleton.css';
 
 
 const clientId = import.meta.env.VITE_GOOGLE_CLIENT_ID;
+
 if (!clientId) {
   console.error('Google Client ID is not defined. Please set VITE_GOOGLE_CLIENT_ID in your environment variables.');
 }
