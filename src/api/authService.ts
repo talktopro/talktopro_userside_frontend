@@ -22,6 +22,10 @@ interface ResendOtpResponse {
     id: string;
 }
 
+interface ResetEmailResponse {
+    message: string;
+}
+
 // ✅ Verify OTP API
 export const verifyOtpAPI = async (otpData: { id: string; otp: string }): Promise<Response["data"]> => {
     const response: AxiosResponse<Response> = await axios.post(`${backendUrl}/auth/verify-otp`, otpData);
@@ -38,3 +42,8 @@ export const resendOtpAPI = async (userData: { id: string; email: string }): Pro
     return response.data;
 
 }
+
+export const resetEmailAPI = async (email: string): Promise<ResetEmailResponse> => {
+    const response: AxiosResponse<ResetEmailResponse> = await axios.post(`${backendUrl}/auth/reset-email`, { email });
+    return response.data;
+};

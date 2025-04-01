@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useCallback } from "react";
 import { useForm } from "react-hook-form";
 import * as z from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -9,29 +9,43 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Link } from "react-router-dom";
 import { ROUTES } from "@/routes/routes";
+import { toast } from "sonner";
+import { resetEmail } from "@/redux/slices/authSlice";
+import { useDispatch } from "react-redux";
+import { AppDispatch } from "@/redux/store";
 
 const forgotPasswordSchema = z.object({
   email: z.string().email("Invalid email address"),
 });
 
-type ForgotPasswordFormData = z.infer<typeof forgotPasswordSchema>;
-
 const ForgotPasswordPage: React.FC = () => {
+  const dispatch = useDispatch<AppDispatch>();
   const {
     register,
     handleSubmit,
     watch,
     formState: { errors, isSubmitting },
-  } = useForm<ForgotPasswordFormData>({
+  } = useForm<z.infer<typeof forgotPasswordSchema>>({
     resolver: zodResolver(forgotPasswordSchema),
+    defaultValues: {
+      email: "",
+    },
   });
 
-  const emailValue = watch("email", ""); 
+  const emailValue = watch("email", "");
 
-  const onSubmit = (data: ForgotPasswordFormData) => {
-    console.log("Form Submitted:", data);
-  };
-
+  const onSubmit = useCallback(async (values: z.infer<typeof forgotPasswordSchema>) => {
+    try {
+      const result = await dispatch(resetEmail(values)).unwrap();
+      if (result) {
+        console.log(result);
+        toast.success("Reset email sent successfully");
+      }
+    } catch (error: unknown) {
+      toast.error(error as string);
+    }
+  }, [dispatch]);
+  
   return (
     <div className="mx-auto flex min-h-screen w-full flex-col items-center justify-center px-4">
       <div className="w-full max-w-sm space-y-6">
@@ -42,11 +56,16 @@ const ForgotPasswordPage: React.FC = () => {
 
           <h1 className="text-2xl font-semibold">Forgot password?</h1>
           <p className="text-sm text-gray-500">
-            Enter your email address and we'll send you a link to reset your password.
+            Enter your email address and we'll send you a link to reset your
+            password.
           </p>
         </div>
 
-        <form onSubmit={handleSubmit(onSubmit)} noValidate className="space-y-4">
+        <form
+          onSubmit={handleSubmit(onSubmit)}
+          noValidate
+          className="space-y-4"
+        >
           <div className="space-y-2">
             <Input
               id="email"
@@ -70,7 +89,7 @@ const ForgotPasswordPage: React.FC = () => {
 
           <Link
             to={ROUTES.AUTH.LOGIN}
-            className="inline-flex w-full items-center justify-center gap-2 text-sm text-gray-500 hover:text-gray-800 transition"
+            className="flex items-center cursor-pointer gap-2 text-sm text-gray-500 hover:text-gray-800 transition"
           >
             <ArrowLeft className="h-4 w-4" />
             Back to login

@@ -1,6 +1,6 @@
 import { createSlice, createAsyncThunk, PayloadAction } from "@reduxjs/toolkit";
 import { RootState } from "../store";
-import { loginUserAPI, verifyOtpAPI } from "@/api/authService";
+import { loginUserAPI, resetEmailAPI, verifyOtpAPI } from "@/api/authService";
 import { extractErrorMessage } from "@/utils/errorHandler";
 
 interface AuthState {
@@ -39,6 +39,19 @@ export const loginUser = createAsyncThunk<{ id: string; accessToken: string }, {
         }
     }
 )
+
+export const resetEmail = createAsyncThunk<{ message: string }, { email: string }, { rejectValue: string }>(
+    "auth/resetEmail",
+    async ({ email }, { rejectWithValue }) => {
+        try {
+            console.log("first", email)
+            return await resetEmailAPI(email);
+        } catch (error) {
+            return rejectWithValue(extractErrorMessage(error));
+        }
+    }
+);
+
 
 
 // ✅ Auth Slice
@@ -88,6 +101,18 @@ const authSlice = createSlice({
                 state.loading = false;
                 state.error = action.payload || "Login failed";
             })
+            .addCase(resetEmail.pending, (state) => {
+                state.loading = true;
+                state.error = null;
+            })
+            .addCase(resetEmail.fulfilled, (state) => {
+                state.loading = false;
+            })
+            .addCase(resetEmail.rejected, (state, action) => {
+                state.loading = false;
+                state.error = action.payload || "Reset email failed";
+            })
+            
     },
 });
 
