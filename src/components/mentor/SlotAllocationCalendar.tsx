@@ -9,7 +9,7 @@ interface TimeSlotsProps {
   title: Date;
   updateTimeSlots: (date: Date, time: string) => void;
   selectedDateAndTime: Record<string, Record<string, boolean>>;
-  keepOpen: () => void; 
+  keepOpen: () => void;
 }
 
 const SlotAllocationCalendar = () => {
@@ -90,7 +90,7 @@ const SlotAllocationCalendar = () => {
                           title={date}
                           selectedDateAndTime={selectedDateAndTime}
                           updateTimeSlots={updateTimeSlots}
-                          keepOpen={() => togglePopover(dateStr, true)} 
+                          keepOpen={() => togglePopover(dateStr, true)}
                         />
                       </PopoverContent>
                     </Popover>

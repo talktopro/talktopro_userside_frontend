@@ -16,20 +16,23 @@ const MobileFilterSession = () => {
     <div className="mb-5 flex justify-center items-center gap-3">
       <Popover>
         <PopoverTrigger asChild>
-          <div className="flex justify-between items-center w-28 border-1 h-full px-3 rounded-sm shadow-sm cursor-pointer">
+          <div className="flex justify-between items-center w-32 border-1 h-full px-3 rounded-sm shadow-sm cursor-pointer">
             Filter <ListFilter strokeWidth={1.5} size={18} color="gray" />
           </div>
         </PopoverTrigger>
-        <PopoverContent className="p-1 w-100 not-sm:w-80 h-fit">
+        <PopoverContent
+          align="start"
+          className="p-1 w-100 not-sm:w-85 h-fit not-sm:mr-4"
+        >
           <div className="flex flex-col w-full h-fit">
             <div className="flex justify-around w-full">
               <div className="w-full p-4 pb-5">
-                <h3 className="text-md font-semibold mb-2">Profession</h3>
+                <h3 className="text-md font-semibold mb-2">Professions</h3>
                 <div className="space-y-2 max-h-[25vh] overflow-y-auto custom-scrollbar">
                   {[1, 2, 3, 4, 5, 6, 7, 8, 9, 10].map((item) => (
                     <label key={item} className="flex items-center space-x-2">
                       <Checkbox className="cursor-pointer" />
-                      <Label className="text-sm font-normal">
+                      <Label className="text-sm font-normal line-clamp-1">
                         Option {item}
                       </Label>
                     </label>
@@ -46,7 +49,9 @@ const MobileFilterSession = () => {
                         className="flex items-center space-x-2"
                       >
                         <Checkbox className="cursor-pointer" />
-                        <span className="text-sm font-normal">{rating}</span>
+                        <span className="text-sm font-normal line-clamp-1">
+                          {rating}
+                        </span>
                       </label>
                     )
                   )}

@@ -20,16 +20,31 @@ import {
   SidebarMenuSub,
   SidebarMenuSubButton,
   SidebarMenuSubItem,
+  useSidebar,
 } from "@/components/ui/sidebar";
 import { ROUTES } from "@/routes/routes";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useLocation } from "react-router-dom";
 
 const SidebarList = () => {
   const navigate = useNavigate();
+  const location = useLocation();
+  const { isMobile, setOpenMobile } = useSidebar();
+
+  const isActive = (route: string) => {
+    return location.pathname === route;
+  };
+
+  const handleNavigation = (route: string) => {
+    navigate(route);
+    if (isMobile) {
+      setOpenMobile(false);
+    }
+  };
+
   return (
     <SidebarGroup>
       <div className="flex items-center gap-2">
-        <img src={logo} width={35} />
+        <img src={logo} width={35} alt="TalkToPro Logo" />
         <h3 className="text-2xl font-bold flex items-center gap-1">
           Talk<span>To</span> <span className="text-purple-500">Pro</span>
         </h3>
@@ -38,8 +53,12 @@ const SidebarList = () => {
       <SidebarMenu className="mt-5">
         <SidebarMenuButton
           tooltip="Dashboard"
-          className="cursor-pointer"
-          onClick={() => navigate(ROUTES.MENTOR.DASHBOARD)}
+          className={`cursor-pointer ${
+            isActive(ROUTES.MENTOR.DASHBOARD)
+              ? "bg-primary/20 transition-colors duration-100"
+              : ""
+          }`}
+          onClick={() => handleNavigation(ROUTES.MENTOR.DASHBOARD)}
         >
           <House strokeWidth={1.5} size={18} />
           <span>Dashboard</span>
@@ -47,8 +66,12 @@ const SidebarList = () => {
 
         <SidebarMenuButton
           tooltip="Bookings"
-          className="cursor-pointer"
-          onClick={() => navigate(ROUTES.MENTOR.BOOKINGS)}
+          className={`cursor-pointer ${
+            isActive(ROUTES.MENTOR.BOOKINGS)
+              ? "bg-primary/20 transition-colors duration-100"
+              : ""
+          }`}
+          onClick={() => handleNavigation(ROUTES.MENTOR.BOOKINGS)}
         >
           <NotebookText strokeWidth={1.5} size={18} />
           <span>Bookings</span>
@@ -56,8 +79,12 @@ const SidebarList = () => {
 
         <SidebarMenuButton
           tooltip="Slot Management"
-          className="cursor-pointer"
-          onClick={() => navigate(ROUTES.MENTOR.SLOT_MANAGEMENT)}
+          className={`cursor-pointer ${
+            isActive(ROUTES.MENTOR.SLOT_MANAGEMENT)
+              ? "bg-primary/20 transition-colors duration-100"
+              : ""
+          }`}
+          onClick={() => handleNavigation(ROUTES.MENTOR.SLOT_MANAGEMENT)}
         >
           <CalendarDays strokeWidth={1.5} size={18} />
           <span>Slot Management</span>
@@ -65,7 +92,11 @@ const SidebarList = () => {
 
         {/* <SidebarMenuButton
           tooltip="Analytics"
-          className="cursor-pointer"
+          className={`cursor-pointer ${
+            isActive(ROUTES.MENTOR.ANALYTICS)
+              ? "bg-primary/20 transition-colors duration-100"
+              : ""
+          }`}
           onClick={() => navigate(ROUTES.MENTOR.ANALYTICS)}
         >
           <ChartGantt strokeWidth={1.5} size={18} />
@@ -85,18 +116,28 @@ const SidebarList = () => {
               <SidebarMenuSub>
                 <SidebarMenuSubItem>
                   <SidebarMenuSubButton
-                    onClick={() => navigate(ROUTES.MENTOR.ACCOUNT_SETTINGS)}
+                    className={`cursor-pointer ${
+                      isActive(ROUTES.MENTOR.ACCOUNT_SETTINGS)
+                        ? "bg-primary/20 transition-colors duration-100"
+                        : ""
+                    }`}
+                    onClick={() =>
+                      handleNavigation(ROUTES.MENTOR.ACCOUNT_SETTINGS)
+                    }
                   >
-                    <span className="cursor-pointer">Account settings</span>
+                    <span>Account settings</span>
                   </SidebarMenuSubButton>
                   {/* <SidebarMenuSubButton
+                    className={`cursor-pointer ${
+                      isActive(ROUTES.MENTOR.NOTIFICATION_SETTINGS)
+                        ? "bg-primary/20 transition-colors duration-100"
+                        : ""
+                    }`}
                     onClick={() =>
                       navigate(ROUTES.MENTOR.NOTIFICATION_SETTINGS)
                     }
                   >
-                    <span className="cursor-pointer">
-                      Notification settings
-                    </span>
+                    <span>Notification settings</span>
                   </SidebarMenuSubButton> */}
                 </SidebarMenuSubItem>
               </SidebarMenuSub>

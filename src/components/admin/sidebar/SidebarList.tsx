@@ -4,9 +4,10 @@ import {
   SidebarGroup,
   SidebarMenu,
   SidebarMenuButton,
+  useSidebar,
 } from "@/components/ui/sidebar";
 import { ROUTES } from "@/routes/routes";
-import { useNavigate } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import { JSX } from "react";
 
 interface ISideBarList {
@@ -14,34 +15,53 @@ interface ISideBarList {
   onclick: () => void;
   icon: JSX.Element;
   label: string;
+  path: string;
 }
 
 const SidebarList = () => {
   const navigate = useNavigate();
+  const location = useLocation();
+  const { isMobile, setOpenMobile } = useSidebar();
+
+  const isActive = (route: string) => {
+    return location.pathname === route;
+  };
+
+  const handleNavigation = (route: string) => {
+    navigate(route);
+    if (isMobile) {
+      setOpenMobile(false);
+    }
+  };
+
   const sideBarItems: ISideBarList[] = [
     {
       tooltip: "Dashboard",
       label: "Dashboard",
       icon: <House strokeWidth={1.5} size={18} />,
-      onclick: () => navigate(ROUTES.ADMIN.DASHBOARD),
+      onclick: () => handleNavigation(ROUTES.ADMIN.DASHBOARD),
+      path: ROUTES.ADMIN.DASHBOARD,
     },
     {
       tooltip: "Mentors",
       label: "Mentors",
       icon: <GraduationCap strokeWidth={1.5} size={18} />,
-      onclick: () => navigate(ROUTES.ADMIN.MENTORS),
+      onclick: () => handleNavigation(ROUTES.ADMIN.MENTORS),
+      path: ROUTES.ADMIN.MENTORS,
     },
     {
       tooltip: "Users",
       label: "Users",
       icon: <Users strokeWidth={1.5} size={18} />,
-      onclick: () => navigate(ROUTES.ADMIN.USERS),
+      onclick: () => handleNavigation(ROUTES.ADMIN.USERS),
+      path: ROUTES.ADMIN.USERS,
     },
     {
       tooltip: "Bookings",
       label: "Bookings",
       icon: <NotebookText strokeWidth={1.5} size={18} />,
-      onclick: () => navigate(ROUTES.ADMIN.BOOKINGS),
+      onclick: () => handleNavigation(ROUTES.ADMIN.BOOKINGS),
+      path: ROUTES.ADMIN.BOOKINGS,
     },
   ];
   return (
@@ -58,7 +78,11 @@ const SidebarList = () => {
           return (
             <SidebarMenuButton
               tooltip={item.tooltip}
-              className="cursor-pointer"
+              className={`cursor-pointer ${
+                isActive(item.path)
+                  ? "bg-primary/20 transition-colors duration-100"
+                  : ""
+              }`}
               onClick={item.onclick}
             >
               {item.icon}

@@ -9,10 +9,12 @@ import MentorBookings from "@/pages/mentor/Bookings";
 import ProfessionalDetailsPage from "@/pages/ProfessionalDetailsPage";
 import AllProfessionalsPage from "@/pages/user/AllProfessionalsPage";
 import MainLayout from "@/layouts/MainLayout";
-import AccountSettings from "@/pages/AccountSettings";
+import AccountSettings from "@/pages/user/AccountSettings";
 import ChangePasswordPage from "@/pages/ChangePasswordPage";
 import SignupOtpPage from "@/pages/SignupOtpPage";
 import MentorLayout from "@/layouts/MentorLayout";
+
+//! Mentor pages
 import Dashboard from "@/pages/mentor/Dashboard";
 import MentorResiterPage from "@/pages/mentor/MentorRegister";
 import MentorAccountDetails from "@/pages/mentor/AccountDetails";

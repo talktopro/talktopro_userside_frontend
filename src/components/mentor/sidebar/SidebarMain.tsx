@@ -9,8 +9,8 @@ import Sidebar_Footer from "./Footer";
 import { SidebarFooterMentorDetails } from "@/interfaces/mentor";
 
 const mentorDetails: SidebarFooterMentorDetails = {
-  name: "Ronaldo",
-  email: "suuuuiiiii@gmail.com",
+  name: "User name",
+  email: "user@gmail.com",
 };
 
 export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
