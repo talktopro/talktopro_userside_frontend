@@ -1,30 +1,19 @@
 import { JSX, useEffect, useState } from "react";
 import logo from "@/assets/logo.svg";
 import {
-  Heart,
+  // Heart,
   LayoutTemplate,
   LogOut,
   NotebookText,
-  User,
   UserRound,
   Moon,
   Sun,
+  ChevronDown,
 } from "lucide-react";
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-} from "@/components/ui/select";
 import { ROUTES } from "../../routes/routes";
 import { Link, useNavigate } from "react-router-dom";
 import useTheme from "@/hooks/useTheme";
-import {
-  Tooltip,
-  TooltipContent,
-  TooltipProvider,
-  TooltipTrigger,
-} from "../ui/tooltip";
+import { TooltipProvider } from "../ui/tooltip";
 import Notification from "../common/Notification";
 import { useDispatch, useSelector } from "react-redux";
 import { logout, selectAuth } from "@/redux/slices/authSlice";
@@ -34,10 +23,18 @@ import apiClient from "@/api/axiosInstance";
 import Searchbar from "./Searchbar";
 import CustomTooltip from "../common/CustomTooltip";
 import { toast } from "sonner";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from "../ui/dropdown-menu";
+import { Avatar, AvatarImage } from "../ui/avatar";
 
 const Navbar = () => {
   const dispatch = useDispatch();
-  const { accessToken } = useSelector(selectAuth);
+  const bucketName = import.meta.env.VITE_S3BUCKET_NAME;
+  const { user } = useSelector(selectAuth);
   const { theme, toggleTheme } = useTheme();
   const navigate = useNavigate();
   const [notifications, setNotifications] = useState<INotification[]>([]);
@@ -86,12 +83,12 @@ const Navbar = () => {
       value: "service_provider_console",
       icon: <LayoutTemplate strokeWidth={1.5} size={18} />,
     },
-    {
-      label: "Favourites",
-      pathLocation: "",
-      value: "favourites",
-      icon: <Heart strokeWidth={1.5} size={18} />,
-    },
+    // {
+    //   label: "Favourites",
+    //   pathLocation: "",
+    //   value: "favourites",
+    //   icon: <Heart strokeWidth={1.5} size={18} />,
+    // },
     {
       label: "Logout",
       pathLocation: "",
@@ -100,8 +97,8 @@ const Navbar = () => {
     },
   ];
 
-  const handleLogout = async () => {
-    await dispatch(logout());
+  const handleLogout = () => {
+    dispatch(logout());
   };
 
   return (
@@ -136,54 +133,46 @@ const Navbar = () => {
             </div>
           </TooltipProvider>
 
-          {accessToken ? (
-            <div className="bg-transparent px-2 py-1 flex justify-center items-center rounded-sm hover:bg-muted transition duration-300 cursor-pointer">
-              <Select
-                onValueChange={(value) => {
-                  const selectedItem = menuItems.find(
-                    (item) => item.value === value
-                  );
-                  if (selectedItem) {
-                    if (selectedItem.value === "logout") {
-                      handleLogout();
-                    } else {
-                      navigate(selectedItem.pathLocation);
-                    }
-                  }
-                }}
-              >
-                <SelectTrigger className="shadow-none border-none focus:ring-0 focus:outline-none p-0 h-auto hover:cursor-pointer">
-                  <TooltipProvider>
-                    <Tooltip>
-                      <TooltipTrigger asChild>
-                        <span>
-                          <User strokeWidth={1.5} width={18} />
-                        </span>
-                      </TooltipTrigger>
-                      <TooltipContent className="bg-white border-1 border-gray-200 text-black mt-1.5">
-                        <p>Profile & More</p>
-                      </TooltipContent>
-                    </Tooltip>
-                  </TooltipProvider>
-                </SelectTrigger>
-                <SelectContent>
-                  {menuItems.map((item: MenuItem) => (
-                    <SelectItem
-                      key={item.value}
-                      value={item.value}
-                      className={`flex items-center transition duration-300 cursor-pointer hover:bg-muted ${
-                        item.value === "logout" ? "text-red-600" : ""
-                      }`}
-                    >
-                      <div className="flex items-center gap-2">
-                        <span>{item.icon}</span>
-                        <span>{item.label}</span>
-                      </div>
-                    </SelectItem>
-                  ))}
-                </SelectContent>
-              </Select>
-            </div>
+          {user?.id ? (
+            <DropdownMenu>
+              <DropdownMenuTrigger asChild>
+                <div className="flex items-center cursor-pointer">
+                  <Avatar className="w-7 h-7 ml-1">
+                    <AvatarImage
+                      src={
+                        user.profileImg
+                          ? `https://${bucketName}.s3.amazonaws.com/${user.profileImg}`
+                          : logo
+                      }
+                    />
+                  </Avatar>
+                  <ChevronDown width={18} strokeWidth={1.5} />
+                </div>
+              </DropdownMenuTrigger>
+              <DropdownMenuContent className="mr-4">
+                {menuItems.map((item: MenuItem) => (
+                  <DropdownMenuItem
+                    key={item.value}
+                    className={`flex items-center transition duration-300 pr-10 cursor-pointer hover:bg-muted ${
+                      item.value === "logout" ? "text-red-600" : ""
+                    }`}
+                    onSelect={(e) => {
+                      e.preventDefault();
+                      if (item.value === "logout") {
+                        handleLogout();
+                      } else {
+                        navigate(item.pathLocation);
+                      }
+                    }}
+                  >
+                    <div className="flex items-center gap-2">
+                      <span>{item.icon}</span>
+                      <span>{item.label}</span>
+                    </div>
+                  </DropdownMenuItem>
+                ))}
+              </DropdownMenuContent>
+            </DropdownMenu>
           ) : (
             <Button asChild size="sm" className="ml-1">
               <Link to={ROUTES.AUTH.LOGIN}>Login</Link>
