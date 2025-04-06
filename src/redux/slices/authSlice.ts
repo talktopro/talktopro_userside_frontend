@@ -2,19 +2,38 @@ import { createSlice, createAsyncThunk, PayloadAction } from "@reduxjs/toolkit";
 import { RootState } from "../store";
 import { loginUserAPI, resetEmailAPI, verifyOtpAPI } from "@/api/authService";
 import { extractErrorMessage } from "@/utils/errorHandler";
+import guestApi from "@/api/guestApi";
+
+interface User {
+    id: string;
+    uname: string;
+    email: string;
+    phone: number;
+    isMentor: boolean;
+    profileImg: string | null;
+}
 
 interface AuthState {
-    id: string | null;
+    user: User | null;
     accessToken: string | null;
+    refreshToken: string | null;
+    id: string | null;
     loading: boolean;
-    error: string | null;
+}
+
+interface AuthResponse {
+    user: User;
+    accessToken: string | null;
+    refreshToken: string | null;
+    message: string;
 }
 
 const initialState: AuthState = {
+    user: null,
     id: null,
     accessToken: null,
+    refreshToken: null,
     loading: false,
-    error: null,
 };
 
 export const verifyOtp = createAsyncThunk<{ id: string; accessToken: string }, { id: string; otp: string }, { rejectValue: string }>(
@@ -29,12 +48,16 @@ export const verifyOtp = createAsyncThunk<{ id: string; accessToken: string }, {
     }
 );
 
-export const loginUser = createAsyncThunk<{ id: string; accessToken: string }, { email: string; password: string }, { rejectValue: string }>(
+export const loginUser = createAsyncThunk<AuthResponse, { email: string; password: string }, { rejectValue: string }>(
     "auth/loginUser",
     async (userData, { rejectWithValue }) => {
         try {
-            return await loginUserAPI(userData);
+            const response = await guestApi.post("/auth/login", userData);
+            console.log("response", response);
+            return response.data;
+
         } catch (error) {
+            console.log("error", error);
             return rejectWithValue(extractErrorMessage(error));
         }
     }
@@ -62,7 +85,6 @@ const authSlice = createSlice({
         logout: (state) => {
             state.id = null;
             state.accessToken = null;
-            state.error = null;
         },
         setUser: (state, action) => {
             state.accessToken = action.payload;
@@ -74,32 +96,26 @@ const authSlice = createSlice({
             // ✅ Verify OTP Reducers
             .addCase(verifyOtp.pending, (state) => {
                 state.loading = true;
-                state.error = null;
             })
             .addCase(verifyOtp.fulfilled, (state, action: PayloadAction<{ id: string; accessToken: string }>) => {
-                console.log("ppppp", action.payload);
-                console.log("ppppp", action.payload);
-
                 state.loading = false;
                 state.id = action.payload.id;
                 state.accessToken = action.payload.accessToken;
             })
-            .addCase(verifyOtp.rejected, (state, action) => {
+            .addCase(verifyOtp.rejected, (state) => {
                 state.loading = false;
-                state.error = action.payload || "OTP verification failed";
             })
             .addCase(loginUser.pending, (state) => {
                 state.loading = true;
-                state.error = null;
             })
-            .addCase(loginUser.fulfilled, (state, action: PayloadAction<{ id: string; accessToken: string }>) => {
+            .addCase(loginUser.fulfilled, (state, action: PayloadAction<AuthResponse>) => {
                 state.loading = false;
-                state.id = action.payload.id;
+                state.user = action.payload.user;
+                state.id = action.payload.user.id;
                 state.accessToken = action.payload.accessToken;
             })
-            .addCase(loginUser.rejected, (state, action) => {
+            .addCase(loginUser.rejected, (state) => {
                 state.loading = false;
-                state.error = action.payload || "Login failed";
             })
             .addCase(resetEmail.pending, (state) => {
                 state.loading = true;
