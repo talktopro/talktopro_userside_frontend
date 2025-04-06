@@ -41,13 +41,17 @@ const LoginPage = () => {
 
     const submitFn = useCallback(async (values: z.infer<typeof formSchema>) => {
         try {
+            await dispatch(loginUser(values));
             const result = await dispatch(loginUser(values)).unwrap();
-            if (result.accessToken) {
-                navigate(ROUTES.HOME);
-                toast.success("Logged in successfully");
-            }
+            navigate(ROUTES.HOME);
+            toast.success(result.message || "Logged in successfully");
+            // if (result.accessToken) {
+            //     navigate(ROUTES.HOME);
+            //     toast.success("Logged in successfully");
+            // }
         } catch (error: unknown) {
-            toast.error(error as string);
+            // toast.error(error as string);
+            toast.error("Invalid email or password. Please try again.");
         }
     }, [dispatch]);
 
