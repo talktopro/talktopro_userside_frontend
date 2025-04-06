@@ -1,6 +1,6 @@
 import { createSlice, createAsyncThunk, PayloadAction } from "@reduxjs/toolkit";
 import { RootState } from "../store";
-import { loginUserAPI, verifyOtpAPI } from "@/api/authService";
+import { verifyOtpAPI } from "@/api/authService";
 import { extractErrorMessage } from "@/utils/errorHandler";
 import guestApi from "@/api/guestApi";
 
@@ -55,7 +55,6 @@ export const loginUser = createAsyncThunk<AuthResponse, { email: string; passwor
             const response = await guestApi.post("/auth/login", userData);
             console.log("response", response);
             return response.data;
-
         } catch (error) {
             console.log("error", error);
             return rejectWithValue(extractErrorMessage(error));
