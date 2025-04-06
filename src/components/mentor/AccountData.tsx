@@ -4,7 +4,7 @@ import background from "@/assets/backgrounds/grainy.jpg";
 import { BadgeButton, InputBox } from "./InputBadge";
 import { Input } from "../ui/input";
 import { Checkbox } from "../ui/checkbox";
-import { Badge } from "../ui/Badge";
+import { Badge } from "../common/Badge";
 import { Button } from "../ui/button";
 import * as z from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";

@@ -24,6 +24,7 @@ body::-webkit-scrollbar {
 
 .custom-scrollbar::-webkit-scrollbar {
     width: 5px;
+    height: 5px;
 }
 
 .custom-scrollbar::-webkit-scrollbar-thumb {
@@ -149,4 +150,25 @@ body::-webkit-scrollbar {
     body {
         @apply bg-background text-foreground;
     }
+}
+
+.homepage_firstlook_bg {
+    background-color: hsla(240, 0%, 100%, 0);
+    background-image:
+        radial-gradient(at 72% 46%, hsla(266, 100%, 50%, 0.14) 0px, transparent 50%),
+        radial-gradient(at 0% 100%, hsla(266, 100%, 50%, 0.05) 0px, transparent 50%);
+}
+
+.homepage_secondlook_bg {
+    background-color: hsla(0, 100%, 50%, 0);
+    background-image:
+        radial-gradient(at 80% 100%, hsla(240, 100%, 70%, 0.103) 0px, transparent 50%),
+        radial-gradient(at 0% 0%, hsla(281, 100%, 50%, 0.09) 0px, transparent 50%);
+}
+
+.homepage_keyFeatures_bg {
+    background-color: hsla(0, 100%, 50%, 0);
+    background-image:
+        radial-gradient(at 100% 46%, hsla(275, 100%, 70%, 0) 0px, transparent 50%),
+        radial-gradient(at 0% 42%, hsla(279, 100%, 50%, 0.096) 0px, transparent 50%);
 }

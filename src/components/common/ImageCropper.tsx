@@ -89,14 +89,15 @@ const ImageCropper = ({
     }
   };
 
-  const handleSave = () => {
-    setIsLoading(true);
-
-    setTimeout(() => {
+  const handleSave = async () => {
+    try {
+      setIsLoading(true);
+      await onSave();
+    } catch (error) {
+      console.log(error);
+    } finally {
       setIsLoading(false);
-      onSave();
-      console.log("Image saved");
-    }, 5000);
+    }
   };
 
   const ScannerLoader = ({ crop }: { crop: Crop }) => {

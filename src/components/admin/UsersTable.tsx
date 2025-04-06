@@ -6,7 +6,7 @@ import {
   TableHeader,
   TableRow,
 } from "../ui/table";
-import { Badge } from "../ui/Badge";
+import { Badge } from "../common/Badge";
 import CustomTooltip from "../common/CustomTooltip";
 import { AlignJustify } from "lucide-react";
 import { FC } from "react";

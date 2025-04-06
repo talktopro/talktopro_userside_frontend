@@ -1,11 +1,11 @@
 export interface User {
-    _id: string;
+    id: string;
     uname: string;
     email: string;
     phone: number;
     isMentor: boolean;
-    mentor_application_status: string;
-    profileImage: string;
+    mentor_application_status?: string;
+    profileImg: string | null;
 }
 
 export interface ImageCropperProps {
@@ -19,4 +19,26 @@ export interface ImageCropperProps {
     onSave: () => void;
     onClose: () => void;
     isOpen: boolean;
+}
+
+export interface Mentor {
+    _id: string;
+    uname: string;
+    email: string;
+    phone: number;
+    isMentor: boolean;
+    profileImg: string | null;
+    mentor_application_status: string;
+    mentorDetails: MentorDetails;
+}
+
+export interface MentorDetails {
+    first_name: string;
+    last_name: string;
+    profession: string;
+    rating: number;
+    about: string;
+    skills: string[];
+    languages: string[];
+    _id: string;
 }

@@ -1,12 +1,12 @@
 import { Route, Routes } from "react-router-dom";
 import LoginPage from "../pages/LoginPage";
 import { ROUTES } from "./routes";
-import HomePage from "@/pages/HomePage";
+import HomePage from "@/pages/user/HomePage";
 import SignupPage from "@/pages/SignupPage";
 import ForgotPasswordPage from "@/pages/ForgotPasswordPage";
 import Bookings from "@/pages/user/Bookings";
 import MentorBookings from "@/pages/mentor/Bookings";
-import ProfessionalDetailsPage from "@/pages/ProfessionalDetailsPage";
+import ProfessionalDetailsPage from "@/pages/user/ProfessionalDetailsPage";
 import AllProfessionalsPage from "@/pages/user/AllProfessionalsPage";
 import MainLayout from "@/layouts/MainLayout";
 import AccountSettings from "@/pages/user/AccountSettings";

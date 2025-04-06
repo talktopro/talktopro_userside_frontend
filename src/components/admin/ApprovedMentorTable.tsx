@@ -7,7 +7,7 @@ import {
   TableHeader,
   TableRow,
 } from "../ui/table";
-import { Badge } from "../ui/Badge";
+import { Badge } from "../common/Badge";
 import {
   DropdownMenu,
   DropdownMenuContent,

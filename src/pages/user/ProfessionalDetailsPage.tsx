@@ -1,6 +1,5 @@
-import { Mentor } from "./user/AllProfessionalsPage";
-import sampleProfessionalImage from "../assets/sampleProfessionalImage.jpg";
-import { Badge } from "@/components/ui/Badge";
+import dummy from "@/assets/avatar/user.png";
+import { Badge } from "@/components/common/Badge";
 import { FC, JSX, useEffect, useState } from "react";
 import {
   Drawer,
@@ -12,16 +11,17 @@ import {
 } from "@/components/ui/drawer";
 import BookingCalendar from "@/components/BookingCalendar";
 import { Button } from "@/components/ui/button";
-import { useLocation, useParams } from "react-router-dom";
+import { useParams } from "react-router-dom";
 import apiClient from "@/api/axiosInstance";
+import { Mentor } from "@/types/user";
+import { Star } from "lucide-react";
 
 const ProfessionalDetailsPage = () => {
   const { id } = useParams<{ id: string }>();
-  const location = useLocation();
-  const initialMentor = location.state?.mentor as Mentor | null;
-  const [mentor, setMentor] = useState<Mentor | null>(initialMentor);
+  const [mentor, setMentor] = useState<Mentor | null>();
   const [loading, setLoading] = useState<boolean>(!mentor);
   const [error, setError] = useState<string | null>(null);
+  const bucketName = import.meta.env.VITE_S3BUCKET_NAME;
 
   useEffect(() => {
     if (!mentor) {
@@ -82,11 +82,15 @@ const ProfessionalDetailsPage = () => {
     <>
       <div className="w-full min-h-screen p-5">
         <div className="w-full block sm:flex">
-          <div className="sm:min-w-[20%] p-5">
+          <div className="sm:min-w-[20%] max-w-[21rem] p-5 aspect-[3.5/4]">
             <img
-              src={sampleProfessionalImage}
+              src={
+                mentor.profileImg
+                  ? `https://${bucketName}.s3.amazonaws.com/${mentor.profileImg}`
+                  : dummy
+              }
               alt="Mentor profile"
-              className="h-full w-full sm:w-auto object-cover rounded-lg"
+              className="h-full w-full object-cover rounded-lg"
             />
           </div>
           <div className="w-full sm:w-[80%] sm:p-5 not-sm:py-5">
@@ -99,10 +103,18 @@ const ProfessionalDetailsPage = () => {
               </div>
             </div>
             <div className="mt-5 flex items-center">
-              <span className="text-xl font-semibold">
-                {/* {professionalData.rating} */}4.5
-              </span>
-              <span className="text-yellow-400">★</span>
+              <div className="flex items-center mt-1">
+                {Array(mentor.mentorDetails.rating)
+                  .fill(0)
+                  .map((_, index) => (
+                    <Star
+                      className="text-yellow-400"
+                      fill="#f6e05e"
+                      size={18}
+                      key={index}
+                    />
+                  ))}
+              </div>
               <span className="text-sm opacity-70 ml-2">5k Reviews</span>
             </div>
             <div className="mt-5">

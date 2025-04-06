@@ -1,58 +1,48 @@
-import { ChevronRight } from "lucide-react";
-import sample from "../assets/sampleProfessionalImage.jpg";
+import { ChevronRight, Star } from "lucide-react";
+import sample from "../assets/avatar/user.png";
 import { Link } from "react-router-dom";
 import { ROUTES } from "@/routes/routes";
-
-export interface Mentor {
-  _id: string;
-  uname: string;
-  email: string;
-  phone: number;
-  isMentor: boolean;
-  mentor_application_status: string;
-  mentorDetails: MentorDetails;
-}
-
-export interface MentorDetails {
-  first_name: string;
-  last_name: string;
-  profession: string;
-  about: string;
-  skills: string[];
-  languages: string[];
-  _id: string;
-}
+import { Mentor } from "@/types/user";
 
 interface MentorCardProps {
   mentor: Mentor;
 }
 
 const MentorCard = ({ mentor }: MentorCardProps) => {
+  const bucketName = import.meta.env.VITE_S3BUCKET_NAME;
   return (
     <Link
       to={`${ROUTES.PROFESSIONALS.DETAILS(mentor._id)}`}
-      state={{ mentor }}
-      className="max-w-[280px] min-w-[280px] h-fit rounded-lg bg-white shadow-lg relative group cursor-pointer overflow-hidden transition-all duration-600 hover:drop-shadow-xl hover:bg-black/10"
+      className="h-fit bg-muted rounded-lg shadow-lg relative group cursor-pointer overflow-hidden transition-all duration-600 hover:drop-shadow-xl aspect-[3.5/4]"
     >
-      <img src={sample} alt="Profile" className="w-full object-cover" />
-      <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/50 to-transparent p-4 transition-all duration-300 group-hover:from-black/80 group-hover:via-black/40">
+      <img
+        src={
+          mentor.profileImg
+            ? `https://${bucketName}.s3.amazonaws.com/${mentor.profileImg}`
+            : sample
+        }
+        alt="Profile"
+        className="w-full h-full object-cover absolute inset-0"
+      />
+      <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/50 to-transparent p-4 not-sm:p-2 transition-all duration-300 group-hover:from-black/80 group-hover:via-black/40">
         <div className="flex items-center justify-between">
           <div>
-            <h2 className="text-xl font-semibold text-white line-clamp-1">{`${mentor.mentorDetails.first_name} ${mentor.mentorDetails.last_name}`}</h2>
-            <p className="text-gray-200 line-clamp-1">
+            <h2 className="text-xl not-md:text-sm capitalize font-semibold text-white line-clamp-1">{`${mentor.mentorDetails.first_name} ${mentor.mentorDetails.last_name}`}</h2>
+            <p className="text-gray-200 line-clamp-1 capitalize text-md not-md:text-xs">
               {mentor.mentorDetails.profession}
             </p>
-            <div className="flex items-center mt-1">
-              <svg
-                className="w-5 h-5 text-yellow-400 fill-current"
-                viewBox="0 0 24 24"
-              >
-                <path d="M12 2L14.8 8.5L22 9.3L17 14.2L18.5 21.4L12 18L5.5 21.4L7 14.2L2 9.3L9.2 8.5L12 2Z" />
-              </svg>
-              <span className="ml-1 text-white">4.5</span>
+            <div className="flex items-center gap-0.5 mt-1">
+              {Array(mentor.mentorDetails.rating)
+                .fill(0)
+                .map((_, index) => (
+                  <Star
+                    className="text-yellow-400 fill-yellow-400 w-[13px] h-[13px] not-sm:w-[10px] not-sm:h-[10px]"
+                    key={index}
+                  />
+                ))}
             </div>
           </div>
-          <ChevronRight className="w-6 h-6 text-white opacity-0 group-hover:opacity-100 transition-opacity duration-200" />
+          <ChevronRight className="w-6 h-6 text-white opacity-0 group-hover:opacity-100 transition-opacity duration-200 text-md not-md:text-xs" />
         </div>
       </div>
     </Link>

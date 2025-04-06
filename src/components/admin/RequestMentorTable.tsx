@@ -7,7 +7,7 @@ import {
   TableHeader,
   TableRow,
 } from "../ui/table";
-import { Badge } from "../ui/Badge";
+import { Badge } from "../common/Badge";
 import { FC } from "react";
 import { Drawer, DrawerContent, DrawerTrigger } from "../ui/drawer";
 import { Button } from "../ui/button";

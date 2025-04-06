@@ -1,28 +1,13 @@
 import { Mail, Phone } from "lucide-react";
 import avatar from "@/assets/avatar/user.png";
 import background from "@/assets/backgrounds/grainy.jpg";
-import { useEffect, useState } from "react";
-import { User } from "@/types/user";
-import apiClient from "@/api/axiosInstance";
-import { useSelector } from "react-redux";
-import { selectAuth } from "@/redux/slices/authSlice";
 import EditAccountDetails from "@/components/user/EditAccountDetails";
+import { selectAuth } from "@/redux/slices/authSlice";
+import { useSelector } from "react-redux";
 
 const AccountSettings = () => {
-  const { id } = useSelector(selectAuth);
-  const [user, setUser] = useState<User | null>(null);
-
-  useEffect(() => {
-    const fetchUser = async () => {
-      try {
-        const { data } = await apiClient.get<{ data: User }>(`/mentor/${id}`);
-        setUser(data.data);
-      } catch (error) {
-        console.error("An unexpected error occurred.");
-      }
-    };
-    fetchUser();
-  }, [id]);
+  const bucketName = import.meta.env.VITE_S3BUCKET_NAME;
+  const { user } = useSelector(selectAuth);
 
   return (
     <div className="w-full mx-auto px-4 sm:px-6 md:px-10 mt-5">
@@ -36,14 +21,15 @@ const AccountSettings = () => {
             opacity: "15%",
           }}
         />
-        <div className="px-4 sm:px-10 pb-4">
-          <div className="relative flex justify-center">
-            <div
-              className={`absolute -top-12 sm:-top-16 w-24 h-24 sm:w-32 sm:h-32 rounded-md overflow-hidden bg-background 
-              ${user?.profileImage ? "p-2" : "p-5"}`}
-            >
+        <div className="px-4 sm:px-10 pb-4 relative">
+          <div className="flex justify-center">
+            <div className="absolute -top-12 sm:-top-16 h-24 sm:h-32 rounded-md overflow-hidden bg-background aspect-[3.5/4]">
               <img
-                src={user?.profileImage ? user?.profileImage : avatar}
+                src={
+                  user?.profileImg
+                    ? `https://${bucketName}.s3.amazonaws.com/${user.profileImg}`
+                    : avatar
+                }
                 alt="Profile picture"
                 className="w-full h-full object-cover"
               />

@@ -8,7 +8,7 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import { ChevronDown } from "lucide-react";
-import { Badge } from "@/components/ui/Badge";
+import { Badge } from "@/components/common/Badge";
 import {
   Drawer,
   DrawerContent,
