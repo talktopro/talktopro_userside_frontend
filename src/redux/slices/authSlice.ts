@@ -17,7 +17,6 @@ interface AuthState {
     user: User | null;
     accessToken: string | null;
     refreshToken: string | null;
-    id: string | null;
     loading: boolean;
 }
 
@@ -30,7 +29,6 @@ interface AuthResponse {
 
 const initialState: AuthState = {
     user: null,
-    id: null,
     accessToken: null,
     refreshToken: null,
     loading: false,
@@ -69,14 +67,25 @@ const authSlice = createSlice({
     initialState,
     reducers: {
         logout: (state) => {
-            state.id = null;
+            state.user = null;
+            state.refreshToken = null;
             state.accessToken = null;
         },
-        setUser: (state, action: PayloadAction<Partial<User>>) => {
+        setUser: (state, action: PayloadAction<User>) => {
+            state.user = action.payload;
+        },
+        updateUser: (state, action: PayloadAction<Partial<User>>) => {
             if (state.user) {
                 state.user = { ...state.user, ...action.payload };
             }
-        }
+        },
+        setTokens: (
+            state,
+            action: PayloadAction<{ accessToken: string; refreshToken: string }>
+        ) => {
+            state.accessToken = action.payload.accessToken;
+            state.refreshToken = action.payload.refreshToken;
+        },
     },
     extraReducers: (builder) => {
         builder
@@ -86,7 +95,6 @@ const authSlice = createSlice({
             })
             .addCase(verifyOtp.fulfilled, (state, action: PayloadAction<{ id: string; accessToken: string }>) => {
                 state.loading = false;
-                state.id = action.payload.id;
                 state.accessToken = action.payload.accessToken;
             })
             .addCase(verifyOtp.rejected, (state) => {
@@ -98,7 +106,6 @@ const authSlice = createSlice({
             .addCase(loginUser.fulfilled, (state, action: PayloadAction<AuthResponse>) => {
                 state.loading = false;
                 state.user = action.payload.user;
-                state.id = action.payload.user.id;
                 state.accessToken = action.payload.accessToken;
             })
             .addCase(loginUser.rejected, (state) => {
@@ -108,6 +115,6 @@ const authSlice = createSlice({
 });
 
 // ✅ Export Actions & Selectors
-export const { logout, setUser } = authSlice.actions;
+export const { logout, setUser, updateUser, setTokens } = authSlice.actions;
 export const selectAuth = (state: RootState) => state.auth;
 export default authSlice.reducer;

@@ -1,5 +1,5 @@
 import apiClient from "@/api/axiosInstance";
-import { selectAuth, setUser } from "@/redux/slices/authSlice";
+import { selectAuth, updateUser } from "@/redux/slices/authSlice";
 import { AppDispatch } from "@/redux/store";
 import { useRef, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
@@ -135,7 +135,13 @@ const useImageCropper = () => {
         id: user?.id,
         profileImg: user?.id,
       });
-      dispatch(setUser({ profileImg: dbResponse?.data?.profileImg }));
+
+      // Add timestamp to bust cache
+      const updatedProfileImg = dbResponse.data.profileImg
+        ? `${dbResponse.data.profileImg}?${Date.now()}`
+        : null;
+
+      dispatch(updateUser({ profileImg: updatedProfileImg }));
       toast.success("Profile image updated successfully");
       console.log("dbResponse", dbResponse.data);
     } catch (error) {

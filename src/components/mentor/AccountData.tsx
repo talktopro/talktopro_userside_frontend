@@ -68,7 +68,8 @@ const createFormSchema = (fromRegisterPage: boolean) =>
   });
 
 const RegisterBody: FC<RegisterBodyProps> = ({ fromRegisterPage = true }) => {
-  const { id } = useSelector(selectAuth);
+  const { user } = useSelector(selectAuth);
+  const id = user?.id;
   const navigate = useNavigate();
   const {
     inputRef,

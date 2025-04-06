@@ -2,10 +2,18 @@ import { useGoogleLogin } from '@react-oauth/google';
 import { useDispatch } from 'react-redux';
 import axios from 'axios';
 import { FcGoogle } from "react-icons/fc";
-import { setUser } from '@/redux/slices/authSlice';
+import { setTokens, setUser } from '@/redux/slices/authSlice';
 import { useNavigate } from 'react-router-dom';
 import { ROUTES } from '@/routes/routes';
 import { Button } from './ui/button';
+import { User } from '@/types/user';
+
+interface GoogleLoginResponse {
+    message: string
+    user: User
+    accessToken: string
+    refreshToken: string
+}
 
 const GoogleLoginButton = () => {
     const dispatch = useDispatch();
@@ -14,10 +22,12 @@ const GoogleLoginButton = () => {
     const handleGoogleLogin = useGoogleLogin({
         onSuccess: async (tokenResponse) => {
             try {
-                const { data } = await axios.post(`${import.meta.env.VITE_BACKEND_URL}/auth/google`, {
+                const { data } = await axios.post<GoogleLoginResponse>(`${import.meta.env.VITE_BACKEND_URL}/auth/google`, {
                     token: tokenResponse.access_token,
                 });
-                dispatch(setUser({ id: data.data?.id, accessToken: data.data?.accessToken }))
+                console.log('Google login response:', data);
+                dispatch(setUser(data?.user));
+                dispatch(setTokens({ accessToken: data?.accessToken, refreshToken: data?.refreshToken }));
                 navigate(ROUTES.HOME);
 
             } catch (error) {

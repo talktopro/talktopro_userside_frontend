@@ -32,7 +32,7 @@ import {
 } from "@/components/ui/form";
 import { useDispatch } from "react-redux";
 import { AppDispatch } from "@/redux/store";
-import { setUser } from "@/redux/slices/authSlice";
+import { updateUser } from "@/redux/slices/authSlice";
 
 interface EditAccountDetailsProps {
   user: User | null;
@@ -82,8 +82,7 @@ const EditAccountDetails = ({ user }: EditAccountDetailsProps) => {
         name: values.name,
         phone: values.phone,
       });
-      dispatch(setUser({ uname: values.name, phone: Number(values.phone) }));
-      console.log("response is ", updateResponse);
+      dispatch(updateUser({ uname: updateResponse?.data?.uname, phone: updateResponse?.data?.phone }));
       toast.success("Account details updated successfully");
     } catch (error) {
       toast.error("Failed to update account details");
