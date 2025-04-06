@@ -1,7 +1,8 @@
 import apiClient from "@/api/axiosInstance";
-import { selectAuth } from "@/redux/slices/authSlice";
+import { selectAuth, setUser } from "@/redux/slices/authSlice";
+import { AppDispatch } from "@/redux/store";
 import { useRef, useState } from "react";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { toast } from "sonner";
 
 const useImageCropper = () => {
@@ -9,6 +10,7 @@ const useImageCropper = () => {
   const [selectedImage, setSelectedImage] = useState<File | null>(null);
   const [isCropperOpen, setIsCropperOpen] = useState(false);
   const { user } = useSelector(selectAuth);
+  const dispatch = useDispatch<AppDispatch>();
 
   const handleInputTrigger = (): void => {
     if (inputRef.current) {
@@ -133,6 +135,8 @@ const useImageCropper = () => {
         id: user?.id,
         profileImg: user?.id,
       });
+      dispatch(setUser({ profileImg: dbResponse?.data?.profileImg }));
+      toast.success("Profile image updated successfully");
       console.log("dbResponse", dbResponse.data);
     } catch (error) {
       console.error("Error in updateDatabase", error);

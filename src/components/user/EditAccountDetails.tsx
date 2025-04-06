@@ -30,6 +30,9 @@ import {
   FormLabel,
   FormMessage,
 } from "@/components/ui/form";
+import { useDispatch } from "react-redux";
+import { AppDispatch } from "@/redux/store";
+import { setUser } from "@/redux/slices/authSlice";
 
 interface EditAccountDetailsProps {
   user: User | null;
@@ -58,6 +61,7 @@ const EditAccountDetails = ({ user }: EditAccountDetailsProps) => {
     selectedImage,
   } = useImageCropper();
 
+  const dispatch = useDispatch<AppDispatch>();
   const bucketName = import.meta.env.VITE_S3BUCKET_NAME;
 
   const form = useForm<z.infer<typeof formSchema>>({
@@ -78,7 +82,7 @@ const EditAccountDetails = ({ user }: EditAccountDetailsProps) => {
         name: values.name,
         phone: values.phone,
       });
-
+      dispatch(setUser({ uname: values.name, phone: Number(values.phone) }));
       console.log("response is ", updateResponse);
       toast.success("Account details updated successfully");
     } catch (error) {

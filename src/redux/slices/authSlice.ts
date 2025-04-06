@@ -72,10 +72,11 @@ const authSlice = createSlice({
             state.id = null;
             state.accessToken = null;
         },
-        setUser: (state, action) => {
-            state.accessToken = action.payload;
-            state.id = action.payload;
-        },
+        setUser: (state, action: PayloadAction<Partial<User>>) => {
+            if (state.user) {
+                state.user = { ...state.user, ...action.payload };
+            }
+        }
     },
     extraReducers: (builder) => {
         builder
