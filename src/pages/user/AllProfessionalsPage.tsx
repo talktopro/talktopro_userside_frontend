@@ -20,12 +20,15 @@ const AllProfessionalsPage = () => {
   const [loading, setLoading] = useState<boolean>(false);
   const fetchDataFlag = useRef(true);
   const { getAllMentors } = useFetchMentorsList();
-
-  const [filterData, setFilterData] = useState<FilterDataType>({
+  const defaultFilterVal: FilterDataType = {
     sort: "NewestToOldest",
     selectedProfessions: [],
     selectedRating: 0,
-  });
+  };
+  const [filterData, setFilterData] =
+    useState<FilterDataType>(defaultFilterVal);
+  const [copyFilterData, setCopyFilterData] =
+    useState<FilterDataType>(defaultFilterVal);
 
   const fetchProfessions = async () => {
     try {
@@ -47,6 +50,7 @@ const AllProfessionalsPage = () => {
         rating: filterData.selectedRating,
       });
       setMentorsList(result || []);
+      setCopyFilterData(filterData);
     } finally {
       fetchDataFlag.current = false;
       setLoading(false);
@@ -72,7 +76,29 @@ const AllProfessionalsPage = () => {
       selectedRating: 0,
       sort: "NewestToOldest",
     });
+    setCopyFilterData({
+      selectedProfessions: [],
+      selectedRating: 0,
+      sort: "NewestToOldest",
+    });
     fetchDataFlag.current = true;
+  };
+
+  const disableClearFilter: () => boolean = () => {
+    return (
+      filterData.sort === defaultFilterVal.sort &&
+      filterData.selectedRating === defaultFilterVal.selectedRating &&
+      filterData.selectedProfessions.length === 0
+    );
+  };
+
+  const disableApplyFilter = () => {
+    return (
+      filterData.sort === copyFilterData.sort &&
+      filterData.selectedRating === copyFilterData.selectedRating &&
+      JSON.stringify(filterData.selectedProfessions.sort()) ===
+        JSON.stringify(copyFilterData.selectedProfessions.sort())
+    );
   };
 
   return (
@@ -84,6 +110,8 @@ const AllProfessionalsPage = () => {
           filterData={filterData}
           setFilterData={setFilterData}
           professions={professions}
+          disableClearFilter={disableClearFilter}
+          disableApplyFilter={disableApplyFilter}
         />
         <div className="flex flex-col flex-1">
           <div className="flex justify-end md:hidden mb-4">
@@ -94,6 +122,8 @@ const AllProfessionalsPage = () => {
               setFilterData={setFilterData}
               professions={professions}
               fetchDataFlag={fetchDataFlag}
+              disableClearFilter={disableClearFilter}
+              disableApplyFilter={disableApplyFilter}
             />
           </div>
           {loading ? (

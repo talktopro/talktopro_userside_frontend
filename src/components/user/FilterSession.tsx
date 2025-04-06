@@ -6,6 +6,8 @@ import { CheckCheck, X } from "lucide-react";
 interface FilterSessionProps {
   applyFilter: () => void;
   clearFilter: () => void;
+  disableClearFilter: () => boolean;
+  disableApplyFilter: () => boolean;
   filterData: {
     sort: "NewestToOldest" | "OldestToNewest";
     selectedProfessions: string[];
@@ -27,6 +29,8 @@ const FilterSession = ({
   filterData,
   setFilterData,
   professions,
+  disableClearFilter,
+  disableApplyFilter,
 }: FilterSessionProps) => {
   const handleSortChange = (value: "NewestToOldest" | "OldestToNewest") => {
     setFilterData((prev) => ({ ...prev, sort: value }));
@@ -113,17 +117,19 @@ const FilterSession = ({
         </div>
       </div>
 
-      <div className="absolute bottom-0 left-0 right-0 border-t bg-background rounded-b-lg">
+      <div className="absolute bottom-0 left-0 right-0 border-t bg-muted rounded-b-lg">
         <div className="flex justify-center gap-6 py-4">
           <button
             onClick={clearFilter}
-            className="flex items-center gap-1 text-sm text-gray-500 hover:text-red-600"
+            className="flex items-center gap-1 text-sm font-semibold text-red-500"
+            disabled={disableClearFilter()}
           >
             <X strokeWidth={1.5} size={17} /> Clear Filter
           </button>
           <button
             onClick={applyFilter}
-            className="flex items-center gap-1 text-sm text-gray-500 hover:text-purple-700"
+            className="flex items-center gap-1 text-sm font-semibold hover:text-purple-700"
+            disabled={disableApplyFilter()}
           >
             <CheckCheck strokeWidth={1.5} size={17} /> Apply Filter
           </button>

@@ -15,6 +15,8 @@ import { RefObject } from "react";
 interface MobileFilterSessionProps {
   applyFilter: () => void;
   clearFilter: () => void;
+  disableClearFilter: () => boolean;
+  disableApplyFilter: () => boolean;
   filterData: {
     sort: "NewestToOldest" | "OldestToNewest";
     selectedProfessions: string[];
@@ -38,6 +40,8 @@ const MobileFilterSession = ({
   setFilterData,
   professions,
   fetchDataFlag,
+  disableClearFilter,
+  disableApplyFilter,
 }: MobileFilterSessionProps) => {
   const handleSortChange = (value: "NewestToOldest" | "OldestToNewest") => {
     setFilterData((prev) => ({ ...prev, sort: value }));
@@ -128,17 +132,19 @@ const MobileFilterSession = ({
               </div>
             </div>
 
-            <div className="sticky bottom-0 left-0 right-0 border-t bg-background">
+            <div className="sticky bottom-0 left-0 right-0 border-t bg-muted">
               <div className="flex justify-center gap-6 py-3">
                 <button
                   onClick={clearFilter}
-                  className="flex items-center gap-1 text-sm text-gray-500 hover:text-red-600"
+                  className="flex items-center gap-1 text-sm font-semibold text-red-600"
+                  disabled={disableClearFilter()}
                 >
                   <X strokeWidth={1.5} size={17} /> Clear Filters
                 </button>
                 <button
                   onClick={applyFilter}
-                  className="flex items-center gap-1 text-sm text-gray-500 hover:text-purple-700"
+                  className="flex items-center gap-1 text-sm font-semibold hover:text-purple-700"
+                  disabled={disableApplyFilter()}
                 >
                   <CheckCheck strokeWidth={1.5} size={17} /> Apply Filters
                 </button>

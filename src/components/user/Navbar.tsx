@@ -136,8 +136,8 @@ const Navbar = () => {
           {user?.id ? (
             <DropdownMenu>
               <DropdownMenuTrigger asChild>
-                <div className="flex items-center cursor-pointer">
-                  <Avatar className="w-7 h-7 ml-1">
+                <div className="flex items-center cursor-pointer border rounded-full pr-2">
+                  <Avatar className="w-6 h-6">
                     <AvatarImage
                       src={
                         user.profileImg
