@@ -82,7 +82,12 @@ const EditAccountDetails = ({ user }: EditAccountDetailsProps) => {
         name: values.name,
         phone: values.phone,
       });
-      dispatch(updateUser({ uname: updateResponse?.data?.uname, phone: updateResponse?.data?.phone }));
+      dispatch(
+        updateUser({
+          uname: updateResponse?.data?.uname,
+          phone: updateResponse?.data?.phone,
+        })
+      );
       toast.success("Account details updated successfully");
     } catch (error) {
       toast.error("Failed to update account details");
@@ -90,6 +95,14 @@ const EditAccountDetails = ({ user }: EditAccountDetailsProps) => {
     } finally {
       setLoading(false);
     }
+  };
+
+  const disableButton: () => boolean = () => {
+    const currentValue = form.getValues();
+    return (
+      currentValue.name.trim() === user?.uname.trim() &&
+      currentValue.phone.trim() === user?.phone?.toString().trim()
+    );
   };
 
   return (
@@ -209,7 +222,7 @@ const EditAccountDetails = ({ user }: EditAccountDetailsProps) => {
                   <Button
                     className="px-4 py-2 w-full text-sm font-medium bg-primary"
                     type="submit"
-                    disabled={loading}
+                    disabled={loading || disableButton()}
                   >
                     {loading ? "Saving..." : "Save Changes"}
                   </Button>

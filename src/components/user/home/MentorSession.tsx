@@ -16,7 +16,7 @@ const MentorSection = ({
     <section className="flex flex-col py-15 px-4 sm:px-8">
       <div className="flex justify-between items-center mb-5">
         <h1 className="text-2xl lg:text-3xl not-sm:text-xl font-bold">
-          Top <span className="text-purple-500">Mentors</span> for You
+          Top Mentors for You
         </h1>
         <Link to={ROUTES.PROFESSIONALS.LIST}>
           <button className="px-4 py-2 rounded-full flex items-center gap-2 cursor-pointer hover:bg-muted transition-colors">

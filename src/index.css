@@ -172,3 +172,10 @@ body::-webkit-scrollbar {
         radial-gradient(at 100% 46%, hsla(275, 100%, 70%, 0) 0px, transparent 50%),
         radial-gradient(at 0% 42%, hsla(279, 100%, 50%, 0.096) 0px, transparent 50%);
 }
+
+.faq_bg {
+    background-color: hsla(0, 0%, 100%, 0);
+    background-image:
+        radial-gradient(at 31% 61%, hsla(281, 0%, 100%, 0) 0px, transparent 50%),
+        radial-gradient(at 99% 23%, hsla(285, 100%, 47%, 0.14) 0px, transparent 50%);
+}

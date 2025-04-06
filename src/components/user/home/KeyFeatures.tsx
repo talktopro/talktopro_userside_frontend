@@ -2,7 +2,7 @@ import { ShieldCheck, UserPlus, ClipboardList } from "lucide-react";
 
 const KeyFeatures = () => {
   return (
-    <section className="flex justify-center py-10 homepage_keyFeatures_bg">
+    <section className="flex justify-center py-10 pb-25 homepage_keyFeatures_bg">
       <div className="max-w-6xl px-8 not-sm:px-4">
         <div className="text-center mb-12">
           <h1 className="text-2xl lg:text-3xl not-sm:text-xl font-bold">
