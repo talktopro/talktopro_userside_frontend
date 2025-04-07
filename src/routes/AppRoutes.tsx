@@ -86,7 +86,6 @@ const AppRoutes = () => {
 
       {/* All admin routes */}
       <Route path={ROUTES.ADMIN.LOGIN} element={<AdminLoginPage />} />
-      <Route path={ROUTES.ADMIN.SETTINGS} element={<AdminLoginPage />} />
       <Route element={<AdminLayout />}>
         <Route path={ROUTES.ADMIN.DASHBOARD} element={<AdminDashboard />} />
         <Route path={ROUTES.ADMIN.BOOKINGS} element={<AdminBookings />} />

@@ -17,12 +17,15 @@ import { useEffect, useState } from "react";
 import { INotification } from "@/interfaces/admin";
 import apiClient from "@/api/axiosInstance";
 import { toast } from "sonner";
+import { useDispatch } from "react-redux";
+import { adminLogout } from "@/redux/slices/adminSlice";
 
 const AdminHeader = () => {
   const { theme, toggleTheme } = useTheme();
   const navigate = useNavigate();
   const [notifications, setNotifications] = useState<INotification[]>([]);
   const [isLoading, setIsLoading] = useState(false);
+  const dispatch = useDispatch();
 
   const fetchNotification = async () => {
     try {
@@ -40,6 +43,11 @@ const AdminHeader = () => {
   useEffect(() => {
     fetchNotification();
   }, []);
+
+  const handleLogout = () => {
+    dispatch(adminLogout());
+    navigate(ROUTES.ADMIN.LOGIN);
+  };
 
   return (
     <header className="flex h-16 shrink-0 justify-between items-center gap-2 transition-[width,height] ease-linear group-has-[[data-collapsible=icon]]/sidebar-wrapper:h-12">
@@ -74,7 +82,7 @@ const AdminHeader = () => {
             <DropdownMenuItem className="gap-2 p-2">
               <div
                 className="flex items-center transition duration-300 cursor-pointer hover:bg-muted text-red-500"
-                onClick={() => navigate(ROUTES.ADMIN.LOGIN)}
+                onClick={handleLogout}
               >
                 <LogOut strokeWidth={1.5} size={18} className="text-red-500" />
                 <span className="ml-2">Logout</span>

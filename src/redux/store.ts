@@ -1,6 +1,7 @@
 import { configureStore } from "@reduxjs/toolkit";
 import authReducer from "./slices/authSlice";
 import otpReducer from "./slices/otpSlice";
+import adminReducer from "./slices/adminSlice";
 import { persistStore, persistReducer } from "redux-persist";
 import storage from "redux-persist/lib/storage";
 import { combineReducers } from "redux";
@@ -10,12 +11,13 @@ import { combineReducers } from "redux";
 const persistConfig = {
     key: "root",
     storage,
-    whitelist: ["auth", "otp"], // Persist only auth
+    whitelist: ["auth", "otp", "admin"], // Persist only auth
 };
 
 const rootReducer = combineReducers({
     auth: authReducer,
     otp: otpReducer,
+    admin: adminReducer,
 });
 
 const persistedReducer = persistReducer(persistConfig, rootReducer);

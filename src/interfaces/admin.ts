@@ -1,3 +1,9 @@
+export interface ILoginResponse {
+   message: string,
+   accessToken: string,
+   refreshToken: string
+}
+
 export interface ITableHeadings {
    label: string;
    className: string;

@@ -1,42 +1,155 @@
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
 import img from "../../assets/auth-image.png";
+import { useState } from "react";
+import { toast } from "sonner";
+import { useForm } from "react-hook-form";
+import * as z from "zod";
+import { zodResolver } from "@hookform/resolvers/zod";
+import {
+  Form,
+  FormControl,
+  FormField,
+  FormItem,
+  FormLabel,
+  FormMessage,
+} from "@/components/ui/form";
+import { Eye, EyeOff } from "lucide-react";
+import guestApi from "@/api/guestApi";
+import { ILoginResponse } from "@/interfaces/admin";
+import { useNavigate } from "react-router-dom";
+import { ROUTES } from "@/routes/routes";
+import axios from "axios";
+import { adminLogin } from "@/redux/slices/adminSlice";
+import { useDispatch } from "react-redux";
+
+const formSchema = z.object({
+  email: z.string().email({
+    message: "Please enter your valid email address.",
+  }),
+  password: z.string().min(1, {
+    message: "Please enter your password.",
+  }),
+});
 
 const AdminLoginPage = () => {
+  const [showPassword, setShowPassword] = useState<boolean>(false);
+  const [isLoading, setIsLoading] = useState<boolean>(false);
+  const navigate = useNavigate();
+  const dispatch = useDispatch();
+
+  const form = useForm<z.infer<typeof formSchema>>({
+    resolver: zodResolver(formSchema),
+    defaultValues: {
+      email: "",
+      password: "",
+    },
+  });
+
+  const handleLogin = async (values: z.infer<typeof formSchema>) => {
+    try {
+      setIsLoading(true);
+      const loginReponse: ILoginResponse = await guestApi.post(
+        `/admin/auth/login`,
+        {
+          email: values.email,
+          password: values.password,
+        }
+      );
+      dispatch(adminLogin());
+      console.log("login response is", loginReponse);
+      toast.success("Logged in successfully");
+      navigate(ROUTES.ADMIN.DASHBOARD);
+    } catch (error: unknown) {
+      if (axios.isAxiosError(error)) {
+        if (error.response?.data?.errors?.[0]) {
+          toast.error(error.response.data.errors[0]);
+        } else {
+          toast.error("Something went wrong. Please try again later.");
+        }
+      } else {
+        toast.error("Something went wrong. Please try again later.");
+      }
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
   return (
     <div className="grid min-h-svh lg:grid-cols-2">
       <div className="flex flex-col gap-4 p-6 md:p-10">
         <div className="flex flex-1 items-center justify-center">
           <div className="w-full max-w-xs">
-            <div className="flex flex-col items-center gap-2 text-center">
-              <h1 className="text-2xl font-bold">Login to your account</h1>
+            <div className="flex flex-col gap-2">
+              <h1 className="text-4xl font-semibold">Welcome</h1>
               <p className="text-balance text-sm text-muted-foreground">
-                Enter your email below to login to your account
+                Login to Admin Dashboard
               </p>
             </div>
-            <div className="grid gap-3 mt-7">
-              <div className="grid gap-2">
-                <Label htmlFor="email">Email</Label>
-                <Input id="email" type="email" placeholder="Enter your email" />
-              </div>
-              <div className="grid gap-2">
-                <div className="flex items-center">
-                  <Label htmlFor="password">Password</Label>
-                </div>
-                <Input
-                  id="password"
-                  type="password"
-                  placeholder="Enter your password"
+
+            <Form {...form}>
+              <form
+                onSubmit={form.handleSubmit(handleLogin)}
+                className="grid gap-3 mt-7"
+              >
+                <FormField
+                  control={form.control}
+                  name="email"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel>Email</FormLabel>
+                      <FormControl>
+                        <Input
+                          type="email"
+                          placeholder="Enter your email"
+                          {...field}
+                        />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
                 />
-              </div>
-              <Button type="submit" className="w-full">
-                Login
-              </Button>
-            </div>
+
+                <FormField
+                  control={form.control}
+                  name="password"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel>Password</FormLabel>
+                      <FormControl>
+                        <div className="relative">
+                          <Input
+                            type={showPassword ? "text" : "password"}
+                            placeholder="Enter your password"
+                            {...field}
+                          />
+                          <button
+                            type="button"
+                            className="absolute right-2 top-1/2 transform -translate-y-1/2"
+                            onClick={() => setShowPassword(!showPassword)}
+                          >
+                            {showPassword ? (
+                              <EyeOff className="h-4 w-4 text-muted-foreground" />
+                            ) : (
+                              <Eye className="h-4 w-4 text-muted-foreground" />
+                            )}
+                          </button>
+                        </div>
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+
+                <Button type="submit" className="w-full" disabled={isLoading}>
+                  {isLoading ? "Logging in..." : "Login"}
+                </Button>
+              </form>
+            </Form>
           </div>
         </div>
       </div>
+
       <div className="relative hidden bg-muted lg:block">
         <img
           src={img}
