@@ -1,4 +1,4 @@
-import { IMentor } from "@/interfaces/admin";
+import { ITableListMentor } from "@/interfaces/admin";
 import {
   Table,
   TableBody,
@@ -17,18 +17,27 @@ import {
 import CustomTooltip from "../common/CustomTooltip";
 import { AlignJustify } from "lucide-react";
 import { FC } from "react";
+import { Drawer, DrawerContent, DrawerTrigger } from "../ui/drawer";
+import MentorProfileDrawer from "./MentorProfileDrawer";
 
 interface IApprovedMentorTableProps {
-  mentors: IMentor[];
+  mentors: ITableListMentor[];
+  currentPage: number;
+  limit: number;
 }
 
-const ApprovedMentorTable: FC<IApprovedMentorTableProps> = ({ mentors }) => {
+const ApprovedMentorTable: FC<IApprovedMentorTableProps> = ({
+  mentors,
+  currentPage,
+  limit,
+}) => {
   const actionDropDownItems: string[] = [
+    "View Profile",
     "Draft Mail",
     "Show Ananlytics",
-    "View Slots",
     "Block",
   ];
+  const bucketName = import.meta.env.VITE_S3BUCKET_NAME;
 
   return (
     <Table>
@@ -49,31 +58,31 @@ const ApprovedMentorTable: FC<IApprovedMentorTableProps> = ({ mentors }) => {
         </TableRow>
       </TableHeader>
       <TableBody className="divide-y-0">
-        {mentors.map((mentor: IMentor, index: number) => (
+        {mentors.map((mentor: ITableListMentor, index: number) => (
           <TableRow key={index}>
             <TableCell className="py-3 w-24 whitespace-nowrap text-center">
-              {mentor.SL}
+              {(currentPage - 1) * limit + index + 1}
             </TableCell>
             <TableCell className="py-3 lg:pl-10 xl:pl:10 flex-grow min-w-sm whitespace-nowrap">
               <div className="flex items-center">
-                <div className="w-auto h-12 rounded-md overflow-hidden">
+                <div className="w-auto h-12 rounded-md overflow-hidden aspect-[3.5/4]">
                   <img
-                    src={mentor.profileImage}
+                    src={`https://${bucketName}.s3.amazonaws.com/${mentor.profileImg}`}
                     alt="Profile picture"
                     className="w-full h-full object-cover"
                   />
                 </div>
                 <div className="ml-3">
-                  <p className="font-semibold">{mentor.name}</p>
+                  <p className="font-semibold">{`${mentor.mentorDetails.first_name} ${mentor.mentorDetails.last_name}`}</p>
                   <p className="opacity-70">{mentor.email}</p>
                 </div>
               </div>
             </TableCell>
             <TableCell className="py-3 w-48 text-center whitespace-nowrap">
-              {mentor.phoneNumber}
+              {mentor.phone}
             </TableCell>
             <TableCell className="py-3 w-48 text-center whitespace-nowrap">
-              {mentor.createdAt}
+              {mentor.mentorDetails.profession}
             </TableCell>
             <TableCell className="py-3 w-48 flex justify-center pt-5 whitespace-nowrap">
               <Badge
@@ -92,21 +101,32 @@ const ApprovedMentorTable: FC<IApprovedMentorTableProps> = ({ mentors }) => {
                   </div>
                 </DropdownMenuTrigger>
                 <DropdownMenuContent className="w-fit" align="end">
-                  {actionDropDownItems?.map((item) => {
-                    return (
-                      <DropdownMenuItem className="cursor-pointer">
-                        {item === "Block" ? (
-                          mentor.status === "Active" ? (
-                            <p className="text-red-500">Block</p>
-                          ) : (
-                            "Un-Block"
-                          )
+                  {actionDropDownItems?.map((item, itemIndex) => (
+                    <DropdownMenuItem
+                      key={itemIndex}
+                      className="cursor-pointer"
+                      onSelect={(e) => e.preventDefault()}
+                    >
+                      {item === "View Profile" ? (
+                        <Drawer>
+                          <DrawerTrigger asChild>
+                            <span>{item}</span>
+                          </DrawerTrigger>
+                          <DrawerContent>
+                            <MentorProfileDrawer mentor={mentor} />
+                          </DrawerContent>
+                        </Drawer>
+                      ) : item === "Block" ? (
+                        mentor.status === "Active" ? (
+                          <p className="text-red-500">Block</p>
                         ) : (
-                          item
-                        )}
-                      </DropdownMenuItem>
-                    );
-                  })}
+                          "Un-Block"
+                        )
+                      ) : (
+                        item
+                      )}
+                    </DropdownMenuItem>
+                  ))}
                 </DropdownMenuContent>
               </DropdownMenu>
             </TableCell>

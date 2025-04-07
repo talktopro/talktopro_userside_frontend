@@ -3,35 +3,46 @@ import ApprovedMentorTable from "@/components/admin/ApprovedMentorTable";
 import MentorTab from "@/components/admin/MentorTab";
 import RequestMentorTable from "@/components/admin/RequestMentorTable";
 import AdminTableHeader from "@/components/admin/TableHeading";
+import CustomPagination from "@/components/common/CustomPagination";
 import SkeletonTable from "@/components/common/skeletons/Table";
-import { IMentor, IMentorQueryDetails } from "@/interfaces/admin";
+import {
+  IMentorQueryDetails,
+  IMentorsListResponse,
+  ITableListMentor,
+} from "@/interfaces/admin";
 import { CircleAlert, GraduationCap } from "lucide-react";
 import { useEffect, useState } from "react";
-// import { toast } from "sonner";
+import { toast } from "sonner";
 
 const MentorsTable = () => {
   const [activeTab, setActiveTab] = useState<"approved" | "requests">(
     "approved"
   );
-  const [mentors, setMentors] = useState<IMentor[]>([]);
+  const [mentors, setMentors] = useState<ITableListMentor[]>([]);
   const [isLoading, setIsLoading] = useState(false);
+  const [totalPage, setTotalPage] = useState<number>(0);
   const [queryDetails, setQueryDetails] = useState<IMentorQueryDetails>({
     page: 1,
-    sort: "ascending",
+    sort: "NewestToOldest",
     search: "",
-    tab: activeTab,
+    type: activeTab,
+    limit: 10,
   });
 
   const fetchMentors = async () => {
     try {
       setIsLoading(true);
-      const { data } = await apiClient.get<IMentor[]>(`url`, {
-        params: queryDetails,
-      });
-      setMentors(Array.isArray(data) ? data : []);
+      const { data } = await apiClient.get<IMentorsListResponse>(
+        `/admin/mentors`,
+        {
+          params: queryDetails,
+        }
+      );
+      setMentors(Array.isArray(data.mentors) ? data.mentors : []);
+      setTotalPage(data.totalPage);
     } catch (error) {
       console.error("Error occurred while fetching Mentors details!", error);
-      // toast.error("Failed to collect Mentors list. Please try again later.");
+      toast.error("Failed to collect Mentors list. Please try again later.");
     } finally {
       setIsLoading(false);
     }
@@ -41,17 +52,21 @@ const MentorsTable = () => {
     fetchMentors();
   }, [queryDetails]);
 
-  const handleSortChange = (sort: "ascending" | "descending") => {
+  const handleSortChange = (sort: "NewestToOldest" | "OldestToNewest") => {
     setQueryDetails((prev) => ({ ...prev, sort }));
   };
 
   const handleSearch = (search: string) => {
-    setQueryDetails((prev) => ({ ...prev, search }));
+    setQueryDetails((prev) => ({ ...prev, search, page: 1 }));
   };
 
   const handleChangeMentorTab = (value: "approved" | "requests") => {
     setActiveTab(value);
     setQueryDetails((prev) => ({ ...prev, tab: value }));
+  };
+
+  const handleChangeCurrentPage = (page: number): void => {
+    setQueryDetails((prev: IMentorQueryDetails) => ({ ...prev, page: page }));
   };
 
   return (
@@ -62,6 +77,7 @@ const MentorsTable = () => {
         handleSearch={handleSearch}
         handleSort={handleSortChange}
         showSelect={!isLoading && mentors.length > 0}
+        queryDetails={queryDetails}
       />
       <MentorTab
         activeTab={activeTab}
@@ -75,7 +91,20 @@ const MentorsTable = () => {
         </div>
       ) : activeTab === "approved" ? (
         mentors.length > 0 ? (
-          <ApprovedMentorTable mentors={mentors} />
+          <div className="min-h-96 flex flex-col justify-between items-end">
+            <ApprovedMentorTable
+              mentors={mentors}
+              currentPage={queryDetails.page}
+              limit={queryDetails.limit}
+            />
+            {totalPage > 1 && (
+              <CustomPagination
+                currentPage={queryDetails.page}
+                onChange={handleChangeCurrentPage}
+                totalPage={totalPage}
+              />
+            )}
+          </div>
         ) : (
           <div className="flex flex-col justify-center items-center h-96">
             <GraduationCap strokeWidth={1} size={50} className="opacity-60" />

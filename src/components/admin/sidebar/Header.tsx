@@ -1,5 +1,5 @@
 import { SidebarTrigger } from "../../ui/sidebar";
-import { LogOut, Moon, Settings, Sun } from "lucide-react";
+import { LogOut, Moon, Sun } from "lucide-react";
 import Notification from "../../common/Notification";
 import useTheme from "@/hooks/useTheme";
 import CustomTooltip from "@/components/common/CustomTooltip";
@@ -67,16 +67,10 @@ const AdminHeader = () => {
               <AvatarImage src={logo} />
             </Avatar>
           </DropdownMenuTrigger>
-          <DropdownMenuContent className="min-w-40 rounded-lg" side="bottom">
-            <DropdownMenuItem className="gap-2 p-2">
-              <div
-                className="flex items-center transition duration-300 cursor-pointer hover:bg-muted"
-                onClick={() => navigate(ROUTES.ADMIN.SETTINGS)}
-              >
-                <Settings strokeWidth={1.5} size={18} />
-                <span className="ml-2">Settings</span>
-              </div>
-            </DropdownMenuItem>
+          <DropdownMenuContent
+            className="min-w-40 rounded-lg mr-4"
+            side="bottom"
+          >
             <DropdownMenuItem className="gap-2 p-2">
               <div
                 className="flex items-center transition duration-300 cursor-pointer hover:bg-muted text-red-500"

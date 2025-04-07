@@ -12,8 +12,9 @@ const MentorsTable = () => {
   const [isLoading, setIsLoading] = useState(false);
   const [queryDetails, setQueryDetails] = useState<IQueryDetails>({
     page: 1,
-    sort: "ascending",
+    sort: "NewestToOldest",
     search: "",
+    limit: 10,
   });
 
   const fetchBookingHistory = async () => {
@@ -35,9 +36,9 @@ const MentorsTable = () => {
     fetchBookingHistory();
   }, [queryDetails]);
 
-  const handleSortChange: (sort: "ascending" | "descending") => void = (
-    sort
-  ) => {
+  const handleSortChange: (
+    sort: "NewestToOldest" | "OldestToNewest"
+  ) => void = (sort) => {
     setQueryDetails((prev) => ({ ...prev, sort }));
   };
 
@@ -53,6 +54,7 @@ const MentorsTable = () => {
         handleSort={handleSortChange}
         handleSearch={handleSearch}
         showSelect={!isLoading && bookingHistory.length > 0}
+        queryDetails={queryDetails}
       />
       {isLoading ? (
         <SkeletonTable />

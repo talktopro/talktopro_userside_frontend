@@ -23,6 +23,29 @@ export interface IMentor {
    status: "Active" | "Blocked";
 }
 
+export interface IMentorsListResponse {
+   message: string;
+   mentors: ITableListMentor[];
+   totalPage: number;
+}
+
+export interface ITableListMentor {
+   id: string;
+   email: string;
+   phone: number;
+   mentorDetails: {
+      first_name: string;
+      last_name: string;
+      profession: string;
+      rating: number;
+      about: string;
+      skills: string[];
+      languages: string[]
+   };
+   profileImg: string;
+   status: "Active" | "Block"
+}
+
 export interface IBooking {
    bookingNo: number;
    mentorName: string;
@@ -33,12 +56,13 @@ export interface IBooking {
 
 export interface IQueryDetails {
    page: number;
-   sort: "ascending" | "descending";
+   sort: "NewestToOldest" | "OldestToNewest";
    search?: string;
+   limit: number;
 };
 
 export interface IMentorQueryDetails extends IQueryDetails {
-   tab: "approved" | "requests"
+   type: "approved" | "requests"
 };
 
 export interface INotification {
@@ -46,4 +70,19 @@ export interface INotification {
    message: string;
    date: string;
    isRead: boolean;
+}
+
+export interface IUserListResponse {
+   message: string;
+   users: ITableUser[];
+   totalPage: number;
+}
+
+export interface ITableUser {
+   id: string;
+   uname: string;
+   phone: number;
+   email: string;
+   profileImg: string | null;
+   status: "Active" | "Block"
 }

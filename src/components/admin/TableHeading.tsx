@@ -8,13 +8,15 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { Input } from "../ui/input";
+import { IQueryDetails } from "@/interfaces/admin";
 
 interface TableHeadingProps {
   heading: string;
   searchPlaceholder: string;
-  handleSort: (sort: "ascending" | "descending") => void;
+  handleSort: (sort: "NewestToOldest" | "OldestToNewest") => void;
   handleSearch: (search: string) => void;
   showSelect: boolean;
+  queryDetails: IQueryDetails;
 }
 const AdminTableHeader: React.FC<TableHeadingProps> = ({
   heading,
@@ -22,6 +24,7 @@ const AdminTableHeader: React.FC<TableHeadingProps> = ({
   handleSearch,
   handleSort,
   showSelect = false,
+  queryDetails,
 }) => {
   return (
     <div className="pb-7">
@@ -35,7 +38,8 @@ const AdminTableHeader: React.FC<TableHeadingProps> = ({
         />
         {showSelect && (
           <Select
-            onValueChange={(value: "ascending" | "descending") =>
+            value={queryDetails.sort}
+            onValueChange={(value: "NewestToOldest" | "OldestToNewest") =>
               handleSort(value)
             }
           >
@@ -45,16 +49,16 @@ const AdminTableHeader: React.FC<TableHeadingProps> = ({
             <SelectContent>
               <SelectGroup>
                 <SelectItem
-                  value="asc"
+                  value="NewestToOldest"
                   className="flex items-center cursor-pointer px-2 py-1 focus:ring-0 focus:outline-none hover:bg-muted"
                 >
-                  Date Ascending
+                  Newest to oldest
                 </SelectItem>
                 <SelectItem
-                  value="desc"
+                  value="OldestToNewest"
                   className="flex items-center cursor-pointer px-2 py-1 focus:ring-0 focus:outline-none hover:bg-muted"
                 >
-                  Date Descending
+                  Oldest to newest
                 </SelectItem>
               </SelectGroup>
             </SelectContent>

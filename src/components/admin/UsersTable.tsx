@@ -7,23 +7,31 @@ import {
   TableRow,
 } from "../ui/table";
 import { Badge } from "../common/Badge";
+import dummyProfile from "@/assets/avatar/user.png";
 import CustomTooltip from "../common/CustomTooltip";
 import { AlignJustify } from "lucide-react";
 import { FC } from "react";
-import { IUser } from "@/interfaces/admin";
 import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from "../ui/dropdown-menu";
+import { ITableUser } from "@/interfaces/admin";
 
 interface IAdminUsersProps {
-  users: IUser[];
+  users: ITableUser[];
+  currentPage: number;
+  limit: number;
 }
 
-const AdminUsersTable: FC<IAdminUsersProps> = ({ users }) => {
+const AdminUsersTable: FC<IAdminUsersProps> = ({
+  users,
+  currentPage,
+  limit,
+}) => {
   const actionDropDownItems: string[] = ["Draft Mail", "Block"];
+  const bucketName = import.meta.env.VITE_S3BUCKET_NAME;
 
   return (
     <Table>
@@ -34,9 +42,6 @@ const AdminUsersTable: FC<IAdminUsersProps> = ({ users }) => {
           <TableHead className="whitespace-nowrap w-48 text-center">
             Phone
           </TableHead>
-          <TableHead className="whitespace-nowrap w-48 text-center">
-            Create-At
-          </TableHead>
           <TableHead className="whitespace-nowrap w-24 text-center">
             Status
           </TableHead>
@@ -44,31 +49,32 @@ const AdminUsersTable: FC<IAdminUsersProps> = ({ users }) => {
         </TableRow>
       </TableHeader>
       <TableBody className="divide-y-0">
-        {users.map((user: IUser, index: number) => (
+        {users.map((user: ITableUser, index: number) => (
           <TableRow key={index}>
             <TableCell className="py-3 w-24 whitespace-nowrap text-center">
-              {user.SL}
+              {(currentPage - 1) * limit + index + 1}
             </TableCell>
             <TableCell className="py-3 lg:pl-10 xl:pl:10 flex-grow min-w-sm whitespace-nowrap">
               <div className="flex items-center">
-                <div className="w-auto h-12 rounded-md overflow-hidden">
+                <div className="w-auto h-12 rounded-md overflow-hidden aspect-[3.5/4]">
                   <img
-                    src={user.profileImage}
+                    src={
+                      user.profileImg
+                        ? `https://${bucketName}.s3.amazonaws.com/${user.profileImg}`
+                        : dummyProfile
+                    }
                     alt="Profile picture"
                     className="w-full h-full object-cover"
                   />
                 </div>
                 <div className="ml-3">
-                  <p className="font-semibold">{user.name}</p>
+                  <p className="font-semibold">{user.uname}</p>
                   <p className="opacity-70">{user.email}</p>
                 </div>
               </div>
             </TableCell>
             <TableCell className="py-3 w-48 text-center whitespace-nowrap">
-              {user.phoneNumber}
-            </TableCell>
-            <TableCell className="py-3 w-48 text-center whitespace-nowrap">
-              {user.createdAt}
+              {user.phone}
             </TableCell>
             <TableCell className="py-3 w-48 flex justify-center pt-5 whitespace-nowrap">
               <Badge
@@ -90,7 +96,7 @@ const AdminUsersTable: FC<IAdminUsersProps> = ({ users }) => {
                   {actionDropDownItems?.map((item) => {
                     return (
                       <DropdownMenuItem className="cursor-pointer">
-                        {item === "Block" ? (
+                        {/* {item === "Block" ? (
                           user.status === "Active" ? (
                             <p className="text-red-500">Block</p>
                           ) : (
@@ -98,7 +104,8 @@ const AdminUsersTable: FC<IAdminUsersProps> = ({ users }) => {
                           )
                         ) : (
                           item
-                        )}
+                        )} */}
+                        {item}
                       </DropdownMenuItem>
                     );
                   })}
