@@ -28,6 +28,8 @@ const MentorsTable = () => {
     type: activeTab,
     limit: 10,
   });
+  const [isChangeStatusLoading, setIsChangeStatusLoading] =
+    useState<boolean>(false);
 
   const fetchMentors = async () => {
     try {
@@ -45,6 +47,34 @@ const MentorsTable = () => {
       toast.error("Failed to collect Mentors list. Please try again later.");
     } finally {
       setIsLoading(false);
+    }
+  };
+
+  const handleAcceptReject = async (
+    id: string,
+    status: "accept" | "reject"
+  ) => {
+    try {
+      setIsChangeStatusLoading(true);
+      await apiClient.patch(`/admin/change-application-status`, {
+        id,
+        status,
+      });
+      await fetchMentors();
+      toast.success(
+        status === "accept"
+          ? "Application accepted successfully."
+          : "Application rejected successfully."
+      );
+    } catch (error) {
+      console.log("Error occur while update status", error);
+      toast.error(
+        status === "accept"
+          ? "Failed to accept the application."
+          : "Failed to reject the application."
+      );
+    } finally {
+      setIsChangeStatusLoading(false);
     }
   };
 
@@ -112,7 +142,11 @@ const MentorsTable = () => {
           </div>
         )
       ) : mentors.length > 0 ? (
-        <RequestMentorTable mentors={mentors} />
+        <RequestMentorTable
+          mentors={mentors}
+          isChangeStatusLoading={isChangeStatusLoading}
+          handleAcceptReject={handleAcceptReject}
+        />
       ) : (
         <div className="flex flex-col justify-center items-center h-96">
           <CircleAlert strokeWidth={1} size={50} className="opacity-60" />
