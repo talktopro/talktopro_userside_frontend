@@ -17,11 +17,11 @@ import {
   FormLabel,
   FormMessage,
 } from "@/components/ui/form";
-import { FC, useState } from "react";
+import { FC, useEffect, useState } from "react";
 import { AxiosError } from "axios";
 import { toast } from "sonner";
-import { useSelector } from "react-redux";
-import { selectAuth } from "@/redux/slices/authSlice";
+import { useDispatch, useSelector } from "react-redux";
+import { selectAuth, updateUser } from "@/redux/slices/authSlice";
 import { useNavigate } from "react-router-dom";
 import { ROUTES } from "@/routes/routes";
 import apiClient from "@/api/axiosInstance";
@@ -33,6 +33,7 @@ import {
 } from "@/constants/MentorRegister";
 import useImageCropper from "@/hooks/useImageCropper";
 import ImageCropper from "../common/ImageCropper";
+import { Camera } from "lucide-react";
 
 interface RegisterBodyProps {
   fromRegisterPage: boolean;
@@ -49,6 +50,7 @@ const createFormSchema = (fromRegisterPage: boolean) =>
     phone_number: z
       .string()
       .regex(/^\d{10,15}$/, "Enter a valid phone number."),
+    profileImg: z.string().min(1, "Profile image is required"),
     profession: z.string().nonempty("Profession is required."),
     about: z.string().max(500, "About section must not exceed 500 characters."),
     skills: z.string().array().min(1, "At least one skill is required."),
@@ -69,8 +71,10 @@ const createFormSchema = (fromRegisterPage: boolean) =>
 
 const RegisterBody: FC<RegisterBodyProps> = ({ fromRegisterPage = true }) => {
   const { user } = useSelector(selectAuth);
+  const bucketName = import.meta.env.VITE_S3BUCKET_NAME;
   const id = user?.id;
   const navigate = useNavigate();
+  const dispatch = useDispatch();
   const {
     inputRef,
     handleImageChange,
@@ -86,7 +90,8 @@ const RegisterBody: FC<RegisterBodyProps> = ({ fromRegisterPage = true }) => {
     defaultValues: {
       first_name: "",
       last_name: "",
-      phone_number: "",
+      phone_number: user?.phone.toString(),
+      profileImg: user?.profileImg || "",
       profession: "",
       about: "",
       skills: [],
@@ -95,6 +100,12 @@ const RegisterBody: FC<RegisterBodyProps> = ({ fromRegisterPage = true }) => {
       privacyAndPolicy: false,
     },
   });
+
+  useEffect(() => {
+    if (user?.profileImg) {
+      form.setValue("profileImg", user.profileImg, { shouldValidate: true });
+    }
+  }, [user?.profileImg, form]);
 
   const [isBadgeInputVisible, setIsBadgeInputVisible] = useState({
     forSkill: false,
@@ -140,27 +151,19 @@ const RegisterBody: FC<RegisterBodyProps> = ({ fromRegisterPage = true }) => {
     }
     setIsSubmitting(true);
     try {
-      const response = await apiClient.post(
-        "/mentor/signup",
-        {
-          id,
-          first_name: values.first_name,
-          last_name: values.last_name,
-          profession: values.profession,
-          about: values.about,
-          skills: values.skills,
-          languages: values.languages,
-        },
-        {
-          headers: {
-            "Content-Type": "application/json",
-          },
-        }
-      );
+      const response = await apiClient.post("/mentor/signup", {
+        id,
+        first_name: values.first_name,
+        last_name: values.last_name,
+        profession: values.profession,
+        about: values.about,
+        skills: values.skills,
+        languages: values.languages,
+      });
 
-      console.log("Backend response:", response.data);
       toast.success(response.data?.message);
       form.reset();
+      dispatch(updateUser(response.data.data));
     } catch (error) {
       if (error instanceof AxiosError) {
         console.log(error.response?.data?.errors[0]);
@@ -178,7 +181,7 @@ const RegisterBody: FC<RegisterBodyProps> = ({ fromRegisterPage = true }) => {
         <form
           onSubmit={form.handleSubmit(onSubmit)}
           className={`w-full ${
-            fromRegisterPage ? "mx-auto pt-25 px-10 not-sm:px-3" : "px-4"
+            fromRegisterPage ? "mx-auto pt-8 px-10 not-sm:px-3" : "px-4"
           }`}
         >
           <div className="relative">
@@ -193,33 +196,42 @@ const RegisterBody: FC<RegisterBodyProps> = ({ fromRegisterPage = true }) => {
             />
             <div className="px-10">
               <div className="relative flex items-end not-sm:items-center not-sm:flex-col not-sm:text-center -top-12">
-                <div className="w-auto h-32 rounded-md overflow-hidden mr-4 not-sm:mr-0 bg-background p-4">
+                <div className="w-auto h-32 rounded-md overflow-hidden aspect-[3.5/4] relative mr-4 not-sm:mr-0 bg-background">
                   <img
-                    src={avatar}
+                    src={
+                      user?.profileImg
+                        ? `https://${bucketName}.s3.amazonaws.com/${user.profileImg}`
+                        : avatar
+                    }
                     alt="Profile picture"
-                    className="w-full h-full object-cover cursor-pointer"
-                    onClick={handleInputTrigger}
+                    className="w-full h-full object-cover"
                   />
-                  <input
-                    type="file"
-                    hidden
-                    ref={inputRef}
-                    accept=".jpg, .jpeg"
-                    onChange={handleImageChange}
-                  />
+                  <div className="absolute bottom-1 right-1">
+                    <Camera
+                      strokeWidth={1.5}
+                      className="bg-background rounded-full p-1 w-6 h-6 cursor-pointer"
+                      onClick={handleInputTrigger}
+                    />
+                  </div>
                 </div>
+                <input
+                  type="file"
+                  hidden
+                  ref={inputRef}
+                  accept=".jpg, .jpeg"
+                  onChange={handleImageChange}
+                />
+                {form.formState.errors.profileImg && (
+                  <p className="text-red-500 text-xs absolute -bottom-5 left-0">
+                    {form.formState.errors.profileImg.message}
+                  </p>
+                )}
                 <div className="not-sm:mt-4">
                   <h1 className="text-2xl font-semibold whitespace-nowrap">
-                    User Name
+                    {user?.uname}
                   </h1>
                   <div className="opacity-70">
-                    <span className="text-sm break-all">user@gmail.com</span>
-                  </div>
-                  <div className="space-y-1 mb-4">
-                    <div className="flex justify-start not-sm:justify-center items-center opacity-70 gap-1.5">
-                      {/* <Mail className="w-4 h-4" /> */}
-                      {/* <span className="text-sm">{form.watch("email") || "Not provided"}</span> */}
-                    </div>
+                    <span className="text-sm break-all">{user?.email}</span>
                   </div>
                 </div>
               </div>

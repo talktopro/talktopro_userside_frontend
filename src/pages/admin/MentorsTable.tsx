@@ -62,7 +62,7 @@ const MentorsTable = () => {
 
   const handleChangeMentorTab = (value: "approved" | "requests") => {
     setActiveTab(value);
-    setQueryDetails((prev) => ({ ...prev, tab: value }));
+    setQueryDetails((prev) => ({ ...prev, type: value }));
   };
 
   const handleChangeCurrentPage = (page: number): void => {

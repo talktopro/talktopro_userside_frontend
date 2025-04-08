@@ -47,6 +47,8 @@ const AppRoutes = () => {
         />
         {/* User account details page */}
         <Route path={ROUTES.ACCOUNT_SETTINGS} element={<AccountSettings />} />
+        {/* mentor account register and waiting period page */}
+        <Route path={ROUTES.MENTOR.REGISTER} element={<MentorResiterPage />} />
       </Route>
       {/* Authentication Routes */}
       <Route path={ROUTES.AUTH.LOGIN} element={<LoginPage />} />
@@ -65,7 +67,6 @@ const AppRoutes = () => {
       <Route path={ROUTES.BOOKINGS} element={<Bookings />} />
 
       {/* All mentor routes */}
-      <Route path={ROUTES.MENTOR.REGISTER} element={<MentorResiterPage />} />
       <Route element={<MentorLayout />}>
         <Route path={ROUTES.MENTOR.DASHBOARD} element={<Dashboard />} />
         <Route path={ROUTES.MENTOR.BOOKINGS} element={<MentorBookings />} />

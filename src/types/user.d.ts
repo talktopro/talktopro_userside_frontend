@@ -41,4 +41,5 @@ export interface MentorDetails {
     skills: string[];
     languages: string[];
     _id: string;
+    createdAt: Date;
 }

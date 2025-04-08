@@ -34,6 +34,12 @@ const RequestMentorTable: FC<IRequestMentorTableProps> = ({ mentors }) => {
         <TableRow className="border-b">
           <TableHead className="whitespace-nowrap w-24 text-center" />
           <TableHead className="whitespace-nowrap flex-grow lg:pl-20 xl:pl:20" />
+          <TableHead className="whitespace-nowrap w-48 text-center">
+            Phone
+          </TableHead>
+          <TableHead className="whitespace-nowrap w-48 text-center">
+            Profession
+          </TableHead>
           <TableHead className="whitespace-nowrap w-24 text-center">
             Status
           </TableHead>
@@ -60,6 +66,12 @@ const RequestMentorTable: FC<IRequestMentorTableProps> = ({ mentors }) => {
                   <p className="opacity-70">{mentor.email}</p>
                 </div>
               </div>
+            </TableCell>
+            <TableCell className="py-3 w-48 text-center whitespace-nowrap">
+              {mentor.phone}
+            </TableCell>
+            <TableCell className="py-3 w-48 text-center whitespace-nowrap">
+              {mentor.mentorDetails.profession}
             </TableCell>
             <TableCell className="py-3 w-48 flex justify-center pt-5 whitespace-nowrap">
               <Badge
