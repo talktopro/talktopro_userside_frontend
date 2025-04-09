@@ -1,5 +1,5 @@
 import { ChevronRight, Star } from "lucide-react";
-import sample from "../assets/avatar/user.png";
+import sample from "@/assets/avatar/user.png";
 import { Link } from "react-router-dom";
 import { ROUTES } from "@/routes/routes";
 import { Mentor } from "@/types/user";

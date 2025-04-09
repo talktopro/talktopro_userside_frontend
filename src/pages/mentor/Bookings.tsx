@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
-import BookingsTable from "@/components/Booking-History/Table";
-import BookingsHeader from "@/components/Booking-History/Header";
+import BookingsTable from "@/components/common/Table";
+import BookingsHeader from "@/components/common/Header";
 import { IBookingQueryDetails, IBooking } from "@/interfaces/mentor";
 import apiClient from "@/api/axiosInstance";
 // import { toast } from "sonner";

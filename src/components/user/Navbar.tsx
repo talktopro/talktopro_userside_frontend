@@ -42,6 +42,9 @@ const Navbar = () => {
 
   const fetchNotification = async () => {
     try {
+      if (!user?.id) {
+        return;
+      }
       setIsLoading(true);
       const { data } = await apiClient.get<INotification[]>(`url`);
       setNotifications(Array.isArray(data) ? data : []);

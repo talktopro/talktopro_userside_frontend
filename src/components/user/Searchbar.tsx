@@ -3,7 +3,7 @@ import { useState, useEffect, useRef } from "react";
 import { Input } from "../ui/input";
 import { Skeleton } from "../ui/skeleton";
 import { GraduationCap, X } from "lucide-react";
-import MentorCard from "../MentorCard";
+import MentorCard from "./MentorCard";
 import useFetchMentorsList from "@/hooks/useFetchMentorsList";
 
 const Searchbar = () => {

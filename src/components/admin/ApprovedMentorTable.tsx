@@ -49,7 +49,7 @@ const ApprovedMentorTable: FC<IApprovedMentorTableProps> = ({
             Phone
           </TableHead>
           <TableHead className="whitespace-nowrap w-48 text-center">
-            Create-At
+            Profession
           </TableHead>
           <TableHead className="whitespace-nowrap w-24 text-center">
             Status

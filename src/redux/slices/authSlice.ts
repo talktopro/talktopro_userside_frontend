@@ -3,6 +3,7 @@ import { RootState } from "../store";
 import { verifyOtpAPI } from "@/api/authService";
 import { extractErrorMessage } from "@/utils/errorHandler";
 import guestApi from "@/api/guestApi";
+import { MentorDetails } from "@/types/user";
 
 interface User {
     id: string;
@@ -11,6 +12,8 @@ interface User {
     phone: number;
     isMentor: boolean;
     profileImg: string | null;
+    mentor_application_status?: string;
+    mentorDetails?: MentorDetails
 }
 
 interface AuthState {

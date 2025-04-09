@@ -1,8 +1,6 @@
 import React, { useEffect, useState } from "react";
-import Navbar from "@/components/user/Navbar";
-import Footer from "@/components/common/Footer";
-import BookingsTable from "@/components/Booking-History/Table";
-import BookingsHeader from "@/components/Booking-History/Header";
+import BookingsTable from "@/components/common/Table";
+import BookingsHeader from "@/components/common/Header";
 import SkeletonTable from "@/components/common/skeletons/Table";
 import { NotebookText } from "lucide-react";
 // import { toast } from "sonner";
@@ -44,8 +42,7 @@ const Bookings: React.FC = () => {
 
   return (
     <>
-      <Navbar />
-      <div className="pt-28 sm:px-12 not-sm:px-4">
+      <div className="pt-8 sm:px-12 not-sm:px-4">
         <BookingsHeader
           showSelect={!isLoading && bookingHistory.length > 0}
           onSortChange={handleSortChange}
@@ -61,7 +58,6 @@ const Bookings: React.FC = () => {
           </div>
         )}
       </div>
-      <Footer />
     </>
   );
 };
