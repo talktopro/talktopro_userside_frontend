@@ -23,7 +23,10 @@ const AccountSettings = () => {
         />
         <div className="px-4 sm:px-10 pb-4 relative">
           <div className="flex justify-center">
-            <div className="absolute -top-12 sm:-top-16 h-24 sm:h-32 rounded-md overflow-hidden bg-background aspect-[3.5/4]">
+            <div
+              className="absolute transform -translate-y-1/2 left-1/2 -translate-x-1/2 h-24 sm:h-32 w-24 sm:w-28 rounded-md overflow-hidden bg-background"
+              style={{ top: "0" }}
+            >
               <img
                 src={
                   user?.profileImg
@@ -36,21 +39,22 @@ const AccountSettings = () => {
             </div>
           </div>
 
-          <div className="mt-16 sm:mt-20">
+          <div className="mt-20 sm:mt-24">
             <div className="flex sm:flex-row justify-center items-center gap-2 sm:gap-1">
               <h1 className="text-xl sm:text-2xl font-semibold whitespace-nowrap capitalize text-center">
-                {user?.uname}
+                {user?.uname || "User Name"}
               </h1>
               <EditAccountDetails user={user} />
             </div>
-            <div className="mt-2 space-y-2 flex flex-col">
+
+            <div className="mt-4 space-y-3 flex flex-col">
               <div className="flex justify-center items-center opacity-70">
-                <Mail className="w-4 h-4 mr-2" />
-                <span className="text-sm break-all">{user?.email}</span>
+                <Mail className="w-4 h-4 mr-2 flex-shrink-0" />
+                <span className="text-sm break-all text-center">{user?.email}</span>
               </div>
               <div className="flex justify-center items-center opacity-70">
-                <Phone className="w-4 h-4 mr-2" />
-                <span className="text-sm">{user?.phone}</span>
+                <Phone className="w-4 h-4 mr-2 flex-shrink-0" />
+                <span className="text-sm">{user?.phone || "9562718577"}</span>
               </div>
             </div>
           </div>

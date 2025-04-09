@@ -2,6 +2,7 @@ import { RadioGroup, RadioGroupItem } from "../ui/radio-group";
 import { Label } from "../ui/label";
 import { Checkbox } from "../ui/checkbox";
 import { CheckCheck, X } from "lucide-react";
+import { cn } from "@/lib/utils";
 
 interface FilterSessionProps {
   applyFilter: () => void;
@@ -121,14 +122,20 @@ const FilterSession = ({
         <div className="flex justify-center gap-6 py-4">
           <button
             onClick={clearFilter}
-            className="flex items-center gap-1 text-sm font-semibold text-red-500"
+            className={cn(
+              "flex items-center gap-1 text-sm font-semibold text-red-600",
+              disableClearFilter() && "opacity-50 cursor-not-allowed"
+            )}
             disabled={disableClearFilter()}
           >
             <X strokeWidth={1.5} size={17} /> Clear Filter
           </button>
           <button
             onClick={applyFilter}
-            className="flex items-center gap-1 text-sm font-semibold hover:text-purple-700"
+            className={cn(
+              "flex items-center gap-1 text-sm font-semibold hover:text-purple-700",
+              disableApplyFilter() && "opacity-50 cursor-not-allowed"
+            )}
             disabled={disableApplyFilter()}
           >
             <CheckCheck strokeWidth={1.5} size={17} /> Apply Filter

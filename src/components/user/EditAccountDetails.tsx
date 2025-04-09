@@ -116,8 +116,8 @@ const EditAccountDetails = ({ user }: EditAccountDetailsProps) => {
             />
           </TooltipProvider>
         </DrawerTrigger>
-        <DrawerContent className="max-h-[90vh] flex items-center justify-center">
-          <div className="w-full lg:max-w-lg">
+        <DrawerContent className="flex items-center justify-center">
+          <div className="max-h-[90vh] overflow-scroll custom-scrollbar w-full lg:max-w-lg">
             <DrawerHeader>
               <DrawerTitle className="text-center mt-5">
                 Edit Profile Details

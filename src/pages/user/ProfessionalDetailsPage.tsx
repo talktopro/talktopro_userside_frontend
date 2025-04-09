@@ -15,12 +15,13 @@ import { useParams } from "react-router-dom";
 import apiClient from "@/api/axiosInstance";
 import { Mentor } from "@/types/user";
 import { Star } from "lucide-react";
+import MentorProfileSkeleton from "@/components/common/skeletons/MentorProfile";
+import { toast } from "sonner";
 
 const ProfessionalDetailsPage = () => {
   const { id } = useParams<{ id: string }>();
   const [mentor, setMentor] = useState<Mentor | null>();
   const [loading, setLoading] = useState<boolean>(!mentor);
-  const [error, setError] = useState<string | null>(null);
   const bucketName = import.meta.env.VITE_S3BUCKET_NAME;
 
   useEffect(() => {
@@ -31,21 +32,15 @@ const ProfessionalDetailsPage = () => {
           const { data } = await apiClient.get(`/mentor/${id}`);
           setMentor(data.data);
         } catch (error) {
-          setError("An unexpected error occurred.");
+          toast.error("Failed to collect mentor details");
+          console.error(error);
         } finally {
           setLoading(false);
         }
       };
       fetchMentor();
     }
-  }, [mentor, id]);
-  if (loading)
-    return (
-      <p className="text-gray-500 text-center">Loading mentor details...</p>
-    );
-  if (error) return <p className="text-red-500 text-center">{error}</p>;
-  if (!mentor)
-    return <p className="text-red-500 text-center">Mentor data is missing.</p>;
+  }, [id]);
 
   interface ITriggerSlots {
     trigger: JSX.Element;
@@ -79,46 +74,91 @@ const ProfessionalDetailsPage = () => {
     );
   };
   return (
-    <>
-      <div className="w-full min-h-screen p-5">
-        <div className="w-full block sm:flex">
-          <div className="sm:min-w-[20%] max-w-[21rem] p-5 aspect-[3.5/4]">
-            <img
-              src={
-                mentor.profileImg
-                  ? `https://${bucketName}.s3.amazonaws.com/${mentor.profileImg}`
-                  : dummy
-              }
-              alt="Mentor profile"
-              className="h-full w-full object-cover rounded-lg"
-            />
+    loading || !mentor ? (
+      <MentorProfileSkeleton />
+    ) : (
+      <>
+        <div className="w-full min-h-screen p-5">
+          <div className="w-full block sm:flex">
+            <div className="sm:min-w-[22%] max-w-[21rem] p-5 aspect-[3.5/4]">
+              <img
+                src={
+                  mentor.profileImg
+                    ? `https://${bucketName}.s3.amazonaws.com/${mentor.profileImg}`
+                    : dummy
+                }
+                alt="Mentor profile"
+                className="h-full w-full object-cover rounded-lg"
+              />
+            </div>
+            <div className="w-full sm:w-[80%] sm:p-5 not-sm:py-5">
+              <div className="flex items-start justify-between">
+                <div>
+                  <h1 className="text-2xl font-bold">
+                    {`${mentor.mentorDetails.first_name} ${mentor.mentorDetails.last_name}`}
+                  </h1>
+                  <p className="opacity-70">{mentor.mentorDetails.profession}</p>
+                </div>
+              </div>
+              <div className="mt-5 flex items-center">
+                <div className="flex items-center mt-1">
+                  {Array(mentor.mentorDetails.rating)
+                    .fill(0)
+                    .map((_, index) => (
+                      <Star
+                        className="text-yellow-400"
+                        fill="#f6e05e"
+                        size={18}
+                        key={index}
+                      />
+                    ))}
+                </div>
+                <span className="text-sm opacity-70 ml-2">5k Reviews</span>
+              </div>
+              <div className="mt-5">
+                <h2 className="text-lg font-semibold">Specializations</h2>
+                <div className="mt-2 flex flex-wrap gap-2">
+                  {mentor.mentorDetails.skills.map(
+                    (content: string, key: number) => (
+                      <Badge content={content} key={key} />
+                    )
+                  )}
+                </div>
+              </div>
+              <div className="not-sm:hidden">
+                <TriggerSlots
+                  trigger={
+                    <div className="mt-6 flex flex-wrap gap-3 ">
+                      <Button className="cursor-pointer">Book a Session</Button>
+                    </div>
+                  }
+                />
+              </div>
+            </div>
           </div>
-          <div className="w-full sm:w-[80%] sm:p-5 not-sm:py-5">
-            <div className="flex items-start justify-between">
-              <div>
-                <h1 className="text-2xl font-bold">
-                  {`${mentor.mentorDetails.first_name} ${mentor.mentorDetails.last_name}`}
-                </h1>
-                <p className="opacity-70">{mentor.mentorDetails.profession}</p>
+          <hr className="h-2 px-5" />
+          <div className="w-full block sm:flex flex-row-reverse">
+            <div className="w-full sm:w-[80%] sm:p-5 sm:px-15 not-sm:pt-4">
+              <h2 className="text-lg font-semibold">
+                About{" "}
+                {`${mentor.mentorDetails.first_name} ${mentor.mentorDetails.last_name}`}
+              </h2>
+              <p className="mt-2 opacity-70">{mentor.mentorDetails.about}</p>
+
+              <hr className="border-t my-5" />
+
+              <h2 className="text-lg font-semibold">Languages</h2>
+              <div className="mt-2 flex flex-wrap gap-2">
+                {mentor.mentorDetails.languages.map(
+                  (content: string, key: number) => (
+                    <Badge content={content} key={key} />
+                  )
+                )}
               </div>
-            </div>
-            <div className="mt-5 flex items-center">
-              <div className="flex items-center mt-1">
-                {Array(mentor.mentorDetails.rating)
-                  .fill(0)
-                  .map((_, index) => (
-                    <Star
-                      className="text-yellow-400"
-                      fill="#f6e05e"
-                      size={18}
-                      key={index}
-                    />
-                  ))}
-              </div>
-              <span className="text-sm opacity-70 ml-2">5k Reviews</span>
-            </div>
-            <div className="mt-5">
-              <h2 className="text-lg font-semibold">Specializations</h2>
+
+              <hr className="border-t my-5" />
+
+              <h2 className="text-lg font-semibold">Skills & Expertise</h2>
               <div className="mt-2 flex flex-wrap gap-2">
                 {mentor.mentorDetails.skills.map(
                   (content: string, key: number) => (
@@ -127,61 +167,19 @@ const ProfessionalDetailsPage = () => {
                 )}
               </div>
             </div>
-            <div className="not-sm:hidden">
-              <TriggerSlots
-                trigger={
-                  <div className="mt-6 flex flex-wrap gap-3 ">
-                    <Button className="cursor-pointer">Book a Session</Button>
-                  </div>
-                }
-              />
-            </div>
           </div>
         </div>
-        <hr className="h-2 px-5" />
-        <div className="w-full block sm:flex flex-row-reverse">
-          <div className="w-full sm:w-[80%] sm:p-5 sm:px-15 not-sm:pt-4">
-            <h2 className="text-lg font-semibold">
-              About{" "}
-              {`${mentor.mentorDetails.first_name} ${mentor.mentorDetails.last_name}`}
-            </h2>
-            {/* <p className="mt-2 opacity-70">{professionalData.about}</p> */}
-            <p className="mt-2 opacity-70">{mentor.mentorDetails.about}</p>
-
-            <hr className="border-t my-5" />
-
-            <h2 className="text-lg font-semibold">Languages</h2>
-            <div className="mt-2 flex flex-wrap gap-2">
-              {mentor.mentorDetails.languages.map(
-                (content: string, key: number) => (
-                  <Badge content={content} key={key} />
-                )
-              )}
-            </div>
-
-            <hr className="border-t my-5" />
-
-            <h2 className="text-lg font-semibold">Skills & Expertise</h2>
-            <div className="mt-2 flex flex-wrap gap-2">
-              {mentor.mentorDetails.skills.map(
-                (content: string, key: number) => (
-                  <Badge content={content} key={key} />
-                )
-              )}
-            </div>
-          </div>
+        <div className="sm:hidden">
+          <TriggerSlots
+            trigger={
+              <div className="flex py-3 w-full flex-wrap gap-3 not-sm:fixed not-sm:bottom-0 not-sm:z-10 not-sm:w-screen not-sm:bg-background not-sm:pt-3 not-sm:border-t-1 not-sm:px-4">
+                <Button className="cursor-pointer w-full">Book a Session</Button>
+              </div>
+            }
+          />
         </div>
-      </div>
-      <div className="sm:hidden">
-        <TriggerSlots
-          trigger={
-            <div className="flex py-3 w-full flex-wrap gap-3 not-sm:fixed not-sm:bottom-0 not-sm:z-10 not-sm:w-screen not-sm:bg-background not-sm:pt-3 not-sm:border-t-1 not-sm:px-4">
-              <Button className="cursor-pointer w-full">Book a Session</Button>
-            </div>
-          }
-        />
-      </div>
-    </>
+      </>
+    )
   );
 };
 

@@ -11,6 +11,8 @@ import {
 import { Checkbox } from "../ui/checkbox";
 import { Label } from "../ui/label";
 import { RefObject } from "react";
+import { PopoverClose } from "@radix-ui/react-popover";
+import { cn } from "@/lib/utils";
 
 interface MobileFilterSessionProps {
   applyFilter: () => void;
@@ -134,20 +136,30 @@ const MobileFilterSession = ({
 
             <div className="sticky bottom-0 left-0 right-0 border-t bg-muted">
               <div className="flex justify-center gap-6 py-3">
-                <button
-                  onClick={clearFilter}
-                  className="flex items-center gap-1 text-sm font-semibold text-red-600"
-                  disabled={disableClearFilter()}
-                >
-                  <X strokeWidth={1.5} size={17} /> Clear Filters
-                </button>
-                <button
-                  onClick={applyFilter}
-                  className="flex items-center gap-1 text-sm font-semibold hover:text-purple-700"
-                  disabled={disableApplyFilter()}
-                >
-                  <CheckCheck strokeWidth={1.5} size={17} /> Apply Filters
-                </button>
+                <PopoverClose asChild>
+                  <button
+                    onClick={clearFilter}
+                    className={cn(
+                      "flex items-center gap-1 text-sm font-semibold text-red-600",
+                      disableClearFilter() && "opacity-50 cursor-not-allowed"
+                    )}
+                    disabled={disableClearFilter()}
+                  >
+                    <X strokeWidth={1.5} size={17} /> Clear Filters
+                  </button>
+                </PopoverClose>
+                <PopoverClose asChild>
+                  <button
+                    onClick={applyFilter}
+                    className={cn(
+                      "flex items-center gap-1 text-sm font-semibold hover:text-purple-700",
+                      disableApplyFilter() && "opacity-50 cursor-not-allowed"
+                    )}
+                    disabled={disableApplyFilter()}
+                  >
+                    <CheckCheck strokeWidth={1.5} size={17} /> Apply Filters
+                  </button>
+                </PopoverClose>
               </div>
             </div>
           </div>
