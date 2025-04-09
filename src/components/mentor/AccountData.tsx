@@ -25,10 +25,8 @@ import { selectAuth, updateUser } from "@/redux/slices/authSlice";
 import { useNavigate } from "react-router-dom";
 import { ROUTES } from "@/routes/routes";
 import apiClient from "@/api/axiosInstance";
-import { AutocompleteInput } from "../ui/autocomplete-input";
 import {
   languageSuggestions,
-  professionSuggestions,
   skillSuggestions,
 } from "@/constants/MentorRegister";
 import useImageCropper from "@/hooks/useImageCropper";
@@ -88,14 +86,14 @@ const RegisterBody: FC<RegisterBodyProps> = ({ fromRegisterPage = true }) => {
   const form = useForm<z.infer<ReturnType<typeof createFormSchema>>>({
     resolver: zodResolver(createFormSchema(fromRegisterPage)),
     defaultValues: {
-      first_name: "",
-      last_name: "",
+      first_name: user?.mentorDetails?.first_name || "",
+      last_name: user?.mentorDetails?.last_name || "",
       phone_number: user?.phone.toString(),
       profileImg: user?.profileImg || "",
-      profession: "",
-      about: "",
-      skills: [],
-      languages: [],
+      profession: user?.mentorDetails?.profession || "",
+      about: user?.mentorDetails?.about || "",
+      skills: user?.mentorDetails?.skills || [],
+      languages: user?.mentorDetails?.languages || [],
       termsAndConditions: false,
       privacyAndPolicy: false,
     },
@@ -151,18 +149,21 @@ const RegisterBody: FC<RegisterBodyProps> = ({ fromRegisterPage = true }) => {
     }
     setIsSubmitting(true);
     try {
-      const response = await apiClient.post("/mentor/signup", {
-        id,
-        first_name: values.first_name,
-        last_name: values.last_name,
-        profession: values.profession,
-        about: values.about,
-        skills: values.skills,
-        languages: values.languages,
-      });
+      const response = await apiClient.post(
+        fromRegisterPage ? "/mentor/signup" : "/mentor/edit-account-details",
+        {
+          id,
+          first_name: values.first_name,
+          last_name: values.last_name,
+          profession: values.profession,
+          about: values.about,
+          skills: values.skills,
+          languages: values.languages,
+          phone: values.phone_number,
+        }
+      );
 
       toast.success(response.data?.message);
-      form.reset();
       dispatch(updateUser(response.data.data));
     } catch (error) {
       if (error instanceof AxiosError) {
@@ -174,6 +175,23 @@ const RegisterBody: FC<RegisterBodyProps> = ({ fromRegisterPage = true }) => {
       setIsSubmitting(false);
     }
   };
+
+  useEffect(() => {
+    if (user) {
+      form.reset({
+        first_name: user.mentorDetails?.first_name || "",
+        last_name: user.mentorDetails?.last_name || "",
+        phone_number: user.phone.toString(),
+        profileImg: user.profileImg || "",
+        profession: user.mentorDetails?.profession || "",
+        about: user.mentorDetails?.about || "",
+        skills: user.mentorDetails?.skills || [],
+        languages: user.mentorDetails?.languages || [],
+        termsAndConditions: form.getValues("termsAndConditions"),
+        privacyAndPolicy: form.getValues("privacyAndPolicy"),
+      });
+    }
+  }, [user, form]);
 
   return (
     <>
@@ -311,11 +329,10 @@ const RegisterBody: FC<RegisterBodyProps> = ({ fromRegisterPage = true }) => {
                           Profession
                         </FormLabel>
                         <FormControl>
-                          <AutocompleteInput
+                          <Input
                             type="text"
                             placeholder="Enter profession"
                             className="hover:bg-muted transition-colors duration-300 mt-1"
-                            suggestions={professionSuggestions}
                             {...field}
                           />
                         </FormControl>
@@ -486,14 +503,14 @@ const RegisterBody: FC<RegisterBodyProps> = ({ fromRegisterPage = true }) => {
                   variant="outline"
                   type="button"
                   className="border-red-500 text-red-500 hover:text-red-600 min-w-28"
-                  disabled={isSubmitting}
+                  disabled={isSubmitting || !form.formState.isDirty}
                 >
                   {fromRegisterPage ? "Discard and Cancel" : "Discard"}
                 </Button>
                 <Button
                   type="submit"
                   className="bg-primary min-w-28"
-                  disabled={isSubmitting}
+                  disabled={isSubmitting || !form.formState.isDirty}
                 >
                   {isSubmitting
                     ? fromRegisterPage
@@ -501,7 +518,7 @@ const RegisterBody: FC<RegisterBodyProps> = ({ fromRegisterPage = true }) => {
                       : "Saving..."
                     : fromRegisterPage
                     ? "Save and Verify"
-                    : "Save"}
+                    : "Save changes"}
                 </Button>
               </div>
             </div>
@@ -513,14 +530,14 @@ const RegisterBody: FC<RegisterBodyProps> = ({ fromRegisterPage = true }) => {
             variant="outline"
             type="button"
             className="border-red-500 text-red-500 hover:text-red-600 w-full"
-            disabled={isSubmitting}
+            disabled={isSubmitting || !form.formState.isDirty}
           >
             {fromRegisterPage ? "Discard and Cancel" : "Discard"}
           </Button>
           <Button
             type="submit"
             className="bg-primary w-full"
-            disabled={isSubmitting}
+            disabled={isSubmitting || !form.formState.isDirty}
           >
             {isSubmitting
               ? fromRegisterPage
@@ -528,7 +545,7 @@ const RegisterBody: FC<RegisterBodyProps> = ({ fromRegisterPage = true }) => {
                 : "Saving..."
               : fromRegisterPage
               ? "Save and Verify"
-              : "Save"}
+              : "Save changes"}
           </Button>
         </div>
       </Form>

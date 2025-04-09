@@ -9,7 +9,7 @@ import {
   DrawerTitle,
   DrawerTrigger,
 } from "@/components/ui/drawer";
-import BookingCalendar from "@/components/BookingCalendar";
+import BookingCalendar from "@/components/user/BookingCalendar";
 import { Button } from "@/components/ui/button";
 import { useParams } from "react-router-dom";
 import apiClient from "@/api/axiosInstance";

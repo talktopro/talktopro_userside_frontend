@@ -1,4 +1,4 @@
-import MentorCard from "@/components/MentorCard";
+import MentorCard from "@/components/user/MentorCard";
 import { Skeleton } from "@/components/ui/skeleton";
 import { ROUTES } from "@/routes/routes";
 import { Mentor } from "@/types/user";

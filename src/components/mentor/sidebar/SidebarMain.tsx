@@ -6,12 +6,6 @@ import {
   SidebarRail,
 } from "@/components/ui/sidebar";
 import Sidebar_Footer from "./Footer";
-import { SidebarFooterMentorDetails } from "@/interfaces/mentor";
-
-const mentorDetails: SidebarFooterMentorDetails = {
-  name: "User name",
-  email: "user@gmail.com",
-};
 
 export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
   return (
@@ -21,7 +15,7 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
           <SidebarList />
         </SidebarContent>
         <SidebarFooter>
-          <Sidebar_Footer mentor={mentorDetails} />
+          <Sidebar_Footer />
         </SidebarFooter>
         <SidebarRail />
       </Sidebar>

@@ -3,7 +3,7 @@ import { useForm } from "react-hook-form";
 import * as z from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { ArrowLeft } from "lucide-react";
-import logo from "../assets/logo.svg";
+import logo from "@/assets/logo.svg";
 
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -26,7 +26,7 @@ const ForgotPasswordPage: React.FC = () => {
     resolver: zodResolver(forgotPasswordSchema),
   });
 
-  const emailValue = watch("email", ""); 
+  const emailValue = watch("email", "");
 
   const onSubmit = (data: ForgotPasswordFormData) => {
     console.log("Form Submitted:", data);
@@ -42,11 +42,16 @@ const ForgotPasswordPage: React.FC = () => {
 
           <h1 className="text-2xl font-semibold">Forgot password?</h1>
           <p className="text-sm text-gray-500">
-            Enter your email address and we'll send you a link to reset your password.
+            Enter your email address and we'll send you a link to reset your
+            password.
           </p>
         </div>
 
-        <form onSubmit={handleSubmit(onSubmit)} noValidate className="space-y-4">
+        <form
+          onSubmit={handleSubmit(onSubmit)}
+          noValidate
+          className="space-y-4"
+        >
           <div className="space-y-2">
             <Input
               id="email"

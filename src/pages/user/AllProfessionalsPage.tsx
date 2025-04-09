@@ -1,6 +1,6 @@
 import apiClient from "@/api/axiosInstance";
 import SkeletonCards from "@/components/common/skeletons/Cards";
-import MentorCard from "@/components/MentorCard";
+import MentorCard from "@/components/user/MentorCard";
 import FilterSession from "@/components/user/FilterSession";
 import MobileFilterSession from "@/components/user/MobileFilterSession";
 import useFetchMentorsList from "@/hooks/useFetchMentorsList";
