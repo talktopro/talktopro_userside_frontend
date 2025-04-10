@@ -80,10 +80,8 @@ const SignupOtpPage = () => {
     }
 
     try {
-      const result = await dispatch(verifyOtp({ id, otp: data.pin })).unwrap();
-      if (result.accessToken) {
-        navigate(ROUTES.HOME);
-      }
+      await dispatch(verifyOtp({ id, otp: data.pin })).unwrap();
+      navigate(ROUTES.HOME)
     } catch (err: unknown) {
       toast.error(err as string);
     }
