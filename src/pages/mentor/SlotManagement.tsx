@@ -15,13 +15,23 @@ const SlotManagement: React.FC = () => {
           <p className="text-center m-0">
             Choose your appointment date and time from the calendar.
           </p>
-          <div className="flex justify-center items-center gap-2">
-            <div className="w-3 h-3 bg-background border border-gray-300 rounded" />
-            <span className="text-sm">Available</span>
-            <div className="w-3 h-3 bg-primary rounded ml-3" />
-            <span className="text-sm">Selected</span>
-            <div className="w-3 h-3 bg-gray-400 border border-gray-700 rounded ml-3" />
-            <span className="text-sm">Not Available</span>
+          <div className="flex flex-wrap justify-center items-center gap-2">
+            <div className="flex items-center gap-2">
+              <div className="w-3 h-3 bg-background border border-gray-300 rounded" />
+              <span className="text-sm">Available</span>
+            </div>
+            <div className="flex items-center gap-2">
+              <div className="w-3 h-3 bg-primary rounded ml-3" />
+              <span className="text-sm">Selected</span>
+            </div>
+            <div className="flex items-center gap-2">
+              <div className="w-3 h-3 bg-teal-400 border border-teal-700 rounded ml-3" />
+              <span className="text-sm">Booked</span>
+            </div>
+            <div className="flex items-center gap-2">
+              <div className="w-3 h-3 bg-gray-400 border border-gray-700 rounded ml-3" />
+              <span className="text-sm whitespace-nowrap">Not Available</span>
+            </div>
           </div>
         </div>
         <div className="not-sm:hidden flex justify-end">

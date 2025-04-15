@@ -2,13 +2,15 @@ import { Skeleton } from "@/components/ui/skeleton";
 
 const SkeletonCards = () => {
   return (
-    <div className="flex flex-wrap not-sm:justify-center sm:justify-start gap-3">
-      {[...Array(8)].map((_, index) => (
-        <Skeleton
-          className="w-[280px] min-w-[280px] h-80 rounded-lg bg-muted"
-          key={index}
-        />
-      ))}
+    <div className="max-h-[80dvh] overflow-auto custom-scrollbar">
+      <div className="grid gap-3 grid-cols-[repeat(auto-fill,minmax(160px,1fr))] md:grid-cols-[repeat(auto-fill,minmax(200px,1fr))]">
+        {[...Array(10)].map((_, index) => (
+          <Skeleton
+            className="h-70 not-sm:h-50 rounded-lg bg-muted animate-pulse"
+            key={index}
+          />
+        ))}
+      </div>
     </div>
   );
 };
