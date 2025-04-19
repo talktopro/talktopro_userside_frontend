@@ -12,28 +12,28 @@ const BookingCalendar = () => {
   const maxDate = addDays(today, 50);
 
   const dummyAllocatedDateTime: any = {
-    "09/04/2025": {
+    "21/04/2025": {
       "11:00 AM - 12:00 PM": true,
       "2:00 PM - 3:00 PM": true,
       "3:00 PM - 4:00 PM": true,
     },
-    "13/04/2025": {
+    "22/04/2025": {
       "10:00 AM - 11:00 AM": true,
       "2:00 PM - 3:00 PM": true,
       "3:00 PM - 4:00 PM": true,
     },
-    "15/04/2025": {
+    "23/04/2025": {
       "11:00 AM - 12:00 PM": true,
       "2:00 PM - 3:00 PM": true,
       "5:00 PM - 6:00 PM": true,
       "6:00 PM - 7:00 PM": true,
     },
-    "16/04/2025": {
+    "25/04/2025": {
       "10:00 AM - 11:00 AM": true,
       "11:00 AM - 12:00 PM": true,
       "1:00 PM - 2:00 PM": true,
     },
-    "18/04/2025": {
+    "26/04/2025": {
       "2:00 PM - 3:00 PM": true,
     },
   };
