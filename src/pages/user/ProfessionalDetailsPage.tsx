@@ -94,7 +94,7 @@ const ProfessionalDetailsPage = () => {
             <div className="w-full sm:w-[80%] sm:p-5 not-sm:py-5">
               <div className="flex items-start justify-between">
                 <div>
-                  <h1 className="text-2xl font-bold">
+                  <h1 className="text-2xl font-bold not-sm:mt-5">
                     {`${mentor.mentorDetails.first_name} ${mentor.mentorDetails.last_name}`}
                   </h1>
                   <p className="opacity-70">{mentor.mentorDetails.profession}</p>

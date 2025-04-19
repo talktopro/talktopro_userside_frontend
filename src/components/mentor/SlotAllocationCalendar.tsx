@@ -8,7 +8,7 @@ import { format } from "date-fns";
 interface TimeSlotsProps {
   title: Date;
   updateTimeSlots: (date: Date, time: string) => void;
-  selectedDateAndTime: Record<string, Record<string, boolean>>;
+  selectedDateAndTime: Record<string, Record<string, "available" | "booked">>;
   keepOpen: () => void;
 }
 
@@ -27,7 +27,7 @@ const SlotAllocationCalendar = () => {
   };
 
   return (
-    <div className="flex not-sm:justify-center sm:justify-evenly flex-wrap border-1 rounded-md pt-2 pb-4">
+    <div className="flex not-sm:justify-center sm:justify-center gap-5 flex-wrap border-1 rounded-md pt-2 pb-4">
       {displayMonths.map((month, index) => (
         <div key={index} className="w-80 flex justify-center">
           <Calendar
@@ -55,6 +55,10 @@ const SlotAllocationCalendar = () => {
                 const isSelected = selectedDateAndTime[dateStr];
                 const isOutsideDay = date.getMonth() !== month.getMonth();
 
+                const hasBookedSlots = selectedDateAndTime[dateStr]
+                  ? Object.values(selectedDateAndTime[dateStr]).some(status => status === "booked")
+                  : false;
+
                 if (isOutsideDay) {
                   return (
                     <div className="h-8 w-8 p-0 font-normal rounded-sm mx-1 text-muted-foreground opacity-50 hover:bg-transparent hover:text-muted-foreground cursor-not-allowed flex justify-center items-center">
@@ -65,7 +69,7 @@ const SlotAllocationCalendar = () => {
 
                 return (
                   <div className="relative">
-                    <Popover
+                    <div className="absolute -top-1 -right-0 w-3 h-3 rounded-full bg-teal-500 border-3 border-background" hidden={!hasBookedSlots} />                    <Popover
                       open={openPopover[dateStr] || false}
                       onOpenChange={(isOpen) => togglePopover(dateStr, isOpen)}
                     >
@@ -76,9 +80,9 @@ const SlotAllocationCalendar = () => {
                             "hover:bg-accent hover:text-accent-foreground",
                             "focus-visible:bg-accent focus-visible:text-accent-foreground focus-visible:ring-2",
                             isSelected &&
-                              "bg-primary text-primary-foreground hover:bg-primary hover:text-primary-foreground focus:bg-primary focus:text-primary-foreground",
+                            "bg-primary text-primary-foreground hover:bg-primary hover:text-primary-foreground focus:bg-primary focus:text-primary-foreground",
                             isDisabled &&
-                              "text-muted-foreground opacity-50 hover:bg-transparent hover:text-muted-foreground cursor-not-allowed"
+                            "text-muted-foreground opacity-50 hover:bg-transparent hover:text-muted-foreground cursor-not-allowed"
                           )}
                           disabled={isDisabled}
                         >
@@ -123,15 +127,16 @@ const TimeSlots: React.FC<TimeSlotsProps> = ({
       <div className="flex justify-center">
         <span>{title.toDateString()}</span>
       </div>
-      <hr className="mb-3" />
+      <hr className="mb-3 mt-2" />
       <div className="grid grid-cols-2 mt-auto gap-3 h-fit">
         {generateTimeSlots().map((slot, index) => (
           <div
             key={index}
             className={`py-2 px-3 text-center text-xs rounded-md border cursor-pointer transition-colors
-              ${
-                selectedTimes[slot]
-                  ? "border-purple-500 bg-purple-50 text-purple-700"
+              ${selectedTimes[slot] === "available"
+                ? "border-purple-500 bg-purple-500/10 text-purple-500 font-semibold"
+                : selectedTimes[slot] === "booked"
+                  ? "border-teal-500 bg-teal-500/10 text-teal-500 font-semibold"
                   : "hover:border-gray-300"
               }`}
             onClick={() => {

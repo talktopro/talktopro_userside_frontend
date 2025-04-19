@@ -156,11 +156,8 @@ const Navbar = () => {
                 {menuItems.map((item: MenuItem) => (
                   <DropdownMenuItem
                     key={item.value}
-                    className={`flex items-center transition duration-300 pr-10 cursor-pointer hover:bg-muted ${
-                      item.value === "logout" ? "text-red-600" : ""
-                    }`}
-                    onSelect={(e) => {
-                      e.preventDefault();
+                    className={`flex items-center transition duration-300 pr-10 cursor-pointer hover:bg-muted ${item.value === "logout" ? "text-red-600 hover:text-red-600" : ""}`}
+                    onSelect={() => {
                       if (item.value === "logout") {
                         handleLogout();
                       } else {
