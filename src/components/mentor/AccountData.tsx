@@ -35,6 +35,7 @@ import { Camera } from "lucide-react";
 
 interface RegisterBodyProps {
   fromRegisterPage: boolean;
+  fromApplicationRejectedPage?: boolean;
 }
 
 const createFormSchema = (fromRegisterPage: boolean) =>
@@ -55,19 +56,19 @@ const createFormSchema = (fromRegisterPage: boolean) =>
     languages: z.string().array().min(1, "At least one language is required."),
     termsAndConditions: fromRegisterPage
       ? z.literal(true, {
-          errorMap: () => ({
-            message: "You must agree to the Terms and Conditions",
-          }),
-        })
+        errorMap: () => ({
+          message: "You must agree to the Terms and Conditions",
+        }),
+      })
       : z.boolean(),
     privacyAndPolicy: fromRegisterPage
       ? z.literal(true, {
-          errorMap: () => ({ message: "You must agree to the Privacy Policy" }),
-        })
+        errorMap: () => ({ message: "You must agree to the Privacy Policy" }),
+      })
       : z.boolean(),
   });
 
-const RegisterBody: FC<RegisterBodyProps> = ({ fromRegisterPage = true }) => {
+const RegisterBody: FC<RegisterBodyProps> = ({ fromRegisterPage, fromApplicationRejectedPage = false }) => {
   const { user } = useSelector(selectAuth);
   const bucketName = import.meta.env.VITE_S3BUCKET_NAME;
   const id = user?.id;
@@ -198,9 +199,7 @@ const RegisterBody: FC<RegisterBodyProps> = ({ fromRegisterPage = true }) => {
       <Form {...form}>
         <form
           onSubmit={form.handleSubmit(onSubmit)}
-          className={`w-full ${
-            fromRegisterPage ? "mx-auto pt-8 px-10 not-sm:px-3" : "px-4"
-          }`}
+          className={`w-full ${fromRegisterPage ? "mx-auto pt-8 px-10 not-sm:px-3" : fromApplicationRejectedPage ? "px-0" : "px-4"}`}
         >
           <div className="relative">
             <div
@@ -211,8 +210,9 @@ const RegisterBody: FC<RegisterBodyProps> = ({ fromRegisterPage = true }) => {
                 backgroundPosition: "center",
                 opacity: "15%",
               }}
+              hidden={fromApplicationRejectedPage}
             />
-            <div className="px-10">
+            <div className={`${fromApplicationRejectedPage ? "mt-20" : "px-10"}`}>
               <div className="relative flex items-end not-sm:items-center not-sm:flex-col not-sm:text-center -top-12">
                 <div className="w-auto h-32 rounded-md overflow-hidden aspect-[3.5/4] relative mr-4 not-sm:mr-0 bg-background">
                   <img
@@ -255,7 +255,7 @@ const RegisterBody: FC<RegisterBodyProps> = ({ fromRegisterPage = true }) => {
               </div>
             </div>
             <div className="space-y-3">
-              <div className="sm:mx-10 not-sm:mx-0 pt-2 pb-4 px-4 rounded-md border-1">
+              <div className={`pt-2 pb-4 px-4 rounded-md border-1 ${!fromApplicationRejectedPage && "sm:mx-10 not-sm:mx-0"}`}>
                 <h2 className="text-md font-semibold mb-2">
                   Personal Information
                 </h2>
@@ -346,7 +346,7 @@ const RegisterBody: FC<RegisterBodyProps> = ({ fromRegisterPage = true }) => {
                 control={form.control}
                 name="about"
                 render={({ field }) => (
-                  <FormItem className="mx-10 not-sm:mx-0 pt-2 pb-4 px-4 rounded-md hover:bg-muted border-1 transition-colors duration-300">
+                  <FormItem className={`pt-2 pb-4 px-4 rounded-md hover:bg-muted border-1 transition-colors duration-300 ${!fromApplicationRejectedPage && "mx-10 not-sm:mx-0"}`}>
                     <FormLabel className="text-md font-semibold mb-2">
                       About
                     </FormLabel>
@@ -362,7 +362,7 @@ const RegisterBody: FC<RegisterBodyProps> = ({ fromRegisterPage = true }) => {
                 )}
               />
               <div className="flex not-sm:flex-wrap w-full space-y-3 space-x-3 h-full items-stretch">
-                <div className="ml-10 not-sm:ml-0 pt-2 pb-4 px-4 rounded-md border sm:w-1/2 not-sm:w-full h-full">
+                <div className={`pt-2 pb-4 px-4 rounded-md border sm:w-1/2 not-sm:w-full h-full ${!fromApplicationRejectedPage && "ml-10 not-sm:ml-0 "}`}>
                   <h2 className="text-md font-semibold mb-2">
                     Skills & Expertise
                   </h2>
@@ -399,7 +399,7 @@ const RegisterBody: FC<RegisterBodyProps> = ({ fromRegisterPage = true }) => {
                     </p>
                   )}
                 </div>
-                <div className="mr-10 not-sm:mr-0 pt-2 pb-4 px-4 rounded-md border sm:w-1/2 not-sm:w-full h-full">
+                <div className={`${!fromApplicationRejectedPage && "mr-10 not-sm:mr-0"} pt-2 pb-4 px-4 rounded-md border sm:w-1/2 not-sm:w-full h-full`}>
                   <h2 className="text-md font-semibold mb-2">Languages</h2>
                   <div className="mt-2 flex flex-wrap gap-2">
                     {form
@@ -505,7 +505,8 @@ const RegisterBody: FC<RegisterBodyProps> = ({ fromRegisterPage = true }) => {
                   className="border-red-500 text-red-500 hover:text-red-600 min-w-28"
                   disabled={isSubmitting || !form.formState.isDirty}
                 >
-                  {fromRegisterPage ? "Discard and Cancel" : "Discard"}
+                  {fromRegisterPage
+                    ? "Discard and Cancel" : "Discard"}
                 </Button>
                 <Button
                   type="submit"
@@ -515,10 +516,14 @@ const RegisterBody: FC<RegisterBodyProps> = ({ fromRegisterPage = true }) => {
                   {isSubmitting
                     ? fromRegisterPage
                       ? "Saving and Verifying..."
-                      : "Saving..."
+                      : fromApplicationRejectedPage
+                        ? "Re-Submitting..."
+                        : "Saving..."
                     : fromRegisterPage
-                    ? "Save and Verify"
-                    : "Save changes"}
+                      ? "Save and Verify"
+                      : fromApplicationRejectedPage
+                        ? "Save and Re-Submit"
+                        : "Save changes"}
                 </Button>
               </div>
             </div>
@@ -542,10 +547,14 @@ const RegisterBody: FC<RegisterBodyProps> = ({ fromRegisterPage = true }) => {
             {isSubmitting
               ? fromRegisterPage
                 ? "Saving and Verifying..."
-                : "Saving..."
+                : fromApplicationRejectedPage
+                  ? "Re-Submitting..."
+                  : "Saving..."
               : fromRegisterPage
-              ? "Save and Verify"
-              : "Save changes"}
+                ? "Save and Verify"
+                : fromApplicationRejectedPage
+                  ? "Save and Re-Submit"
+                  : "Save changes"}
           </Button>
         </div>
       </Form>
