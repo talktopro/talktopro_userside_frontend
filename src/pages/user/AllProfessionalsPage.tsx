@@ -132,7 +132,7 @@ const AllProfessionalsPage = () => {
             <div className="max-h-[80dvh] overflow-auto custom-scrollbar">
               <div className="grid gap-3 grid-cols-[repeat(auto-fill,minmax(160px,1fr))] md:grid-cols-[repeat(auto-fill,minmax(200px,1fr))]">
                 {mentorsList.map((mentor) => (
-                  <MentorCard key={mentor.id} mentor={mentor} />
+                  <MentorCard key={mentor._id} mentor={mentor} />
                 ))}
               </div>
             </div>

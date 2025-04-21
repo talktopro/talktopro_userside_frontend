@@ -12,7 +12,7 @@ const MentorCard = ({ mentor }: MentorCardProps) => {
   const bucketName = import.meta.env.VITE_S3BUCKET_NAME;
   return (
     <Link
-      to={`${ROUTES.PROFESSIONALS.DETAILS(mentor.id)}`}
+      to={`${ROUTES.PROFESSIONALS.DETAILS(mentor._id)}`}
       className="h-fit bg-muted rounded-lg shadow-lg relative group cursor-pointer overflow-hidden transition-all duration-600 hover:drop-shadow-xl aspect-[3.5/4]"
     >
       <img

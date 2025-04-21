@@ -23,7 +23,14 @@ export interface ImageCropperProps {
     isOpen: boolean;
 }
 
-export interface Mentor extends User {
+export interface Mentor {
+    _id: string;
+    uname: string;
+    email: string;
+    phone: number;
+    isMentor: boolean;
+    mentor_application_status?: string;
+    profileImg: string | null;
     mentorDetails: MentorDetails;
 }
 
