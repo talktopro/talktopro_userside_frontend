@@ -68,7 +68,7 @@ export interface IQueryDetails {
 };
 
 export interface IMentorQueryDetails extends IQueryDetails {
-   type: "approved" | "requests"
+   type: "approved" | "requests" | "reject"
 };
 
 export interface INotification {

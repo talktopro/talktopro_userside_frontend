@@ -1,6 +1,7 @@
 import apiClient from "@/api/axiosInstance";
 import ApprovedMentorTable from "@/components/admin/ApprovedMentorTable";
 import MentorTab from "@/components/admin/MentorTab";
+import RejectedMentorTable from "@/components/admin/RejectedMentorTable";
 import RequestMentorTable from "@/components/admin/RequestMentorTable";
 import AdminTableHeader from "@/components/admin/TableHeading";
 import CustomPagination from "@/components/common/CustomPagination";
@@ -10,12 +11,12 @@ import {
   IMentorsListResponse,
   ITableListMentor,
 } from "@/interfaces/admin";
-import { CircleAlert, GraduationCap } from "lucide-react";
+import { Ban, CircleAlert, GraduationCap } from "lucide-react";
 import { useEffect, useState } from "react";
 import { toast } from "sonner";
 
 const MentorsTable = () => {
-  const [activeTab, setActiveTab] = useState<"approved" | "requests">(
+  const [activeTab, setActiveTab] = useState<"approved" | "requests" | "reject">(
     "approved"
   );
   const [mentors, setMentors] = useState<ITableListMentor[]>([]);
@@ -90,7 +91,7 @@ const MentorsTable = () => {
     setQueryDetails((prev) => ({ ...prev, search, page: 1 }));
   };
 
-  const handleChangeMentorTab = (value: "approved" | "requests") => {
+  const handleChangeMentorTab = (value: "approved" | "requests" | "reject") => {
     setActiveTab(value);
     setQueryDetails((prev) => ({ ...prev, type: value }));
   };
@@ -141,17 +142,50 @@ const MentorsTable = () => {
             <p className="opacity-60 mt-3">No Mentors Found!</p>
           </div>
         )
-      ) : mentors.length > 0 ? (
-        <RequestMentorTable
-          mentors={mentors}
-          isChangeStatusLoading={isChangeStatusLoading}
-          handleAcceptReject={handleAcceptReject}
-        />
-      ) : (
-        <div className="flex flex-col justify-center items-center h-96">
-          <CircleAlert strokeWidth={1} size={50} className="opacity-60" />
-          <p className="opacity-60 mt-3">No More Requests Found!</p>
-        </div>
+      ) : activeTab === "requests" ? (
+        mentors.length > 0 ? (
+          <div className="min-h-96 flex flex-col justify-between items-end">
+            <RequestMentorTable
+              mentors={mentors}
+              isChangeStatusLoading={isChangeStatusLoading}
+              handleAcceptReject={handleAcceptReject}
+            />
+            {totalPage > 1 && (
+              <CustomPagination
+                currentPage={queryDetails.page}
+                onChange={handleChangeCurrentPage}
+                totalPage={totalPage}
+              />
+            )}
+          </div>
+        ) : (
+          <div className="flex flex-col justify-center items-center h-96">
+            <CircleAlert strokeWidth={1} size={50} className="opacity-60" />
+            <p className="opacity-60 mt-3">No More Requests Found!</p>
+          </div>
+        )
+      ) : activeTab === "reject" && (
+        mentors.length > 0 ? (
+          <div className="min-h-96 flex flex-col justify-between items-end">
+            <RejectedMentorTable
+              mentors={mentors}
+              currentPage={queryDetails.page}
+              limit={queryDetails.limit}
+            />
+            {totalPage > 1 && (
+              <CustomPagination
+                currentPage={queryDetails.page}
+                onChange={handleChangeCurrentPage}
+                totalPage={totalPage}
+              />
+            )}
+          </div>
+        ) : (
+          <div className="flex flex-col justify-center items-center h-96">
+            <Ban strokeWidth={1} size={50} className="opacity-60" />
+            <p className="opacity-60 mt-3">No Rejected application Found!</p>
+          </div>
+        )
       )}
     </div>
   );

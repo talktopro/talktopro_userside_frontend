@@ -74,7 +74,7 @@ const AdminUsersTable: FC<IAdminUsersProps> = ({
               </div>
             </TableCell>
             <TableCell className="py-3 w-48 text-center whitespace-nowrap">
-              {user.phone}
+              {user.phone == 0 ? <span className="text-red-500">Not provided</span> : user.phone}
             </TableCell>
             <TableCell className="py-3 w-48 flex justify-center pt-5 whitespace-nowrap">
               <Badge
