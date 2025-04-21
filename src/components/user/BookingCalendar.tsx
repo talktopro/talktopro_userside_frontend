@@ -1,68 +1,32 @@
-import { useState } from "react";
+import { FC, useMemo, useState } from "react";
 import { Calendar } from "@/components/ui/calendar";
 import { Button } from "../ui/button";
 import { DrawerClose } from "../ui/drawer";
 import { cn } from "@/lib/utils";
-import { addDays, format, isAfter, isBefore, startOfToday } from "date-fns";
+import { addDays, format, startOfToday } from "date-fns";
+import { IBookingSchedule } from "@/types/mentor";
+import generateTimeSlots from "@/utils/generateTimeSlots";
 
-const BookingCalendar = () => {
+interface IBookingCalendarProps {
+  mentorAllocatedSlots: IBookingSchedule | undefined
+};
+
+const BookingCalendar: FC<IBookingCalendarProps> = ({ mentorAllocatedSlots }) => {
   const [date, setDate] = useState<Date | undefined>(new Date());
   const [selectedTimeSlot, setSelectedTimeSlot] = useState<string | null>(null);
   const today = startOfToday();
-  const maxDate = addDays(today, 50);
-
-  const dummyAllocatedDateTime: any = {
-    "21/04/2025": {
-      "11:00 AM - 12:00 PM": true,
-      "2:00 PM - 3:00 PM": true,
-      "3:00 PM - 4:00 PM": true,
-    },
-    "22/04/2025": {
-      "10:00 AM - 11:00 AM": true,
-      "2:00 PM - 3:00 PM": true,
-      "3:00 PM - 4:00 PM": true,
-    },
-    "23/04/2025": {
-      "11:00 AM - 12:00 PM": true,
-      "2:00 PM - 3:00 PM": true,
-      "5:00 PM - 6:00 PM": true,
-      "6:00 PM - 7:00 PM": true,
-    },
-    "25/04/2025": {
-      "10:00 AM - 11:00 AM": true,
-      "11:00 AM - 12:00 PM": true,
-      "1:00 PM - 2:00 PM": true,
-    },
-    "26/04/2025": {
-      "2:00 PM - 3:00 PM": true,
-    },
-  };
-
-  const generateTimeSlots = () => {
-    const slots = [];
-    for (let hour = 10; hour <= 21; hour++) {
-      const startHour = hour;
-      const endHour = hour + 1;
-      const startPeriod = startHour >= 12 ? "PM" : "AM";
-      const endPeriod = endHour >= 12 ? "PM" : "AM";
-      const formattedStartHour = startHour > 12 ? startHour - 12 : startHour;
-      const formattedEndHour = endHour > 12 ? endHour - 12 : endHour;
-      slots.push(
-        `${formattedStartHour}:00 ${startPeriod} - ${formattedEndHour}:00 ${endPeriod}`
-      );
-    }
-    return slots;
-  };
+  const predefinedTimeSlots: string[] = useMemo(generateTimeSlots, []);
 
   const isDateAvailable = (date: Date) => {
-    const dateKey = format(date, "dd/MM/yyyy");
-    return dummyAllocatedDateTime.hasOwnProperty(dateKey);
+    if (!mentorAllocatedSlots) return;
+    const dateKey = format(date, "dd-MM-yyyy");
+    return mentorAllocatedSlots[dateKey];
   };
 
   const isTimeSlotAvailable = (timeSlot: string) => {
-    if (!date) return false;
-    const dateKey = format(date, "dd/MM/yyyy");
-    return dummyAllocatedDateTime[dateKey]?.[timeSlot] || false;
+    if (!date || !mentorAllocatedSlots) return false;
+    const dateKey = format(date, "dd-MM-yyyy");
+    return mentorAllocatedSlots[dateKey]?.[timeSlot] || false;
   };
 
   return (
@@ -73,6 +37,8 @@ const BookingCalendar = () => {
             <Calendar
               mode="single"
               className="border-1 rounded-md p-5 not-sm:w-full"
+              fromMonth={today}
+              toMonth={addDays(today, 30)}
               components={{
                 Head: () => (
                   <div className="grid grid-cols-7">
@@ -93,10 +59,7 @@ const BookingCalendar = () => {
                   const currentMonth = props.displayMonth;
                   const isOutsideDay =
                     currentDate.getMonth() !== currentMonth?.getMonth();
-                  const isDisabled =
-                    !isDateAvailable(currentDate) ||
-                    isBefore(currentDate, today) ||
-                    isAfter(currentDate, maxDate);
+                  const isDisabled = !isDateAvailable(currentDate)
                   const isSelected =
                     date &&
                     format(date, "yyyy-MM-dd") ===
@@ -115,9 +78,9 @@ const BookingCalendar = () => {
                       <button
                         className={cn(
                           "h-8 w-8 p-0 font-normal rounded-sm mx-1",
-                          !isDisabled && "cursor-pointer hover:bg-accent hover:text-accent-foreground",
+                          !isDisabled && "cursor-pointer font-semibold hover:bg-accent hover:text-accent-foreground",
                           "focus-visible:bg-accent focus-visible:text-accent-foreground focus-visible:ring-2",
-                          isSelected &&
+                          isSelected && !isDisabled &&
                           "bg-primary text-primary-foreground hover:bg-primary hover:text-primary-foreground focus:bg-primary focus:text-primary-foreground",
                           isDisabled &&
                           "text-muted-foreground opacity-50 hover:bg-transparent hover:text-muted-foreground cursor-not-allowed"
@@ -138,16 +101,16 @@ const BookingCalendar = () => {
 
             <div className="border-1 rounded-md p-5 not-sm:mb-5 not-sm:w-full">
               <div className="grid grid-cols-2 gap-3">
-                {generateTimeSlots().map((slot, index) => {
+                {predefinedTimeSlots.map((slot, index) => {
                   const isAvailable = date ? isTimeSlotAvailable(slot) : false;
                   return (
                     <div
                       key={index}
                       className={`py-2 px-3 text-center text-xs rounded-md border transition-colors
                       ${selectedTimeSlot === slot
-                          ? "border-purple-500 bg-purple-50 text-purple-700"
+                          ? "border-purple-500 bg-purple-500/10 text-purple-700 font-semibold"
                           : isAvailable
-                            ? "hover:border-gray-300 cursor-pointer"
+                            ? "hover:border-gray-300 font-semibold cursor-pointer"
                             : "opacity-50 cursor-not-allowed"
                         }`}
                       onClick={() => isAvailable && setSelectedTimeSlot(slot)}

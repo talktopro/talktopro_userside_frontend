@@ -105,7 +105,7 @@ const Searchbar = () => {
                   onClick={closeSearch}
                 >
                   {mentorsList.map((mentor) => (
-                    <MentorCard key={mentor._id} mentor={mentor} />
+                    <MentorCard key={mentor.id} mentor={mentor} />
                   ))}
                 </div>
               </div>

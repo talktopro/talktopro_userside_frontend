@@ -29,9 +29,12 @@ const MentorSection = ({
       </div>
 
       {loading ? (
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
-          {Array.from({ length: 4 }).map((_, index) => (
-            <Skeleton key={index} className="h-[200px]" />
+        <div className="grid gap-3 grid-cols-[repeat(auto-fill,minmax(160px,1fr))] md:grid-cols-[repeat(auto-fill,minmax(250px,1fr))]">
+          {[...Array(5)].map((_, index) => (
+            <Skeleton
+              className="h-80 not-sm:h-50 rounded-lg bg-muted animate-pulse"
+              key={index}
+            />
           ))}
         </div>
       ) : mentors.length === 0 ? (
@@ -42,7 +45,7 @@ const MentorSection = ({
       ) : (
         <div className="grid gap-3 grid-cols-[repeat(auto-fill,minmax(160px,1fr))] md:grid-cols-[repeat(auto-fill,minmax(240px,1fr))]">
           {mentors.map((mentor) => (
-            <MentorCard key={mentor._id} mentor={mentor} />
+            <MentorCard key={mentor.id} mentor={mentor} />
           ))}
         </div>
       )}

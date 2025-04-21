@@ -1,33 +1,23 @@
-import { useState } from "react";
-import useSlotAllocation from "@/hooks/useSlotAllocation";
+import { FC, useState } from "react";
 import { Calendar } from "../ui/calendar";
 import { Popover, PopoverContent, PopoverTrigger } from "../ui/popover";
 import { cn } from "@/lib/utils";
 import { format } from "date-fns";
+import TimeSlots from "./TimeSlot";
+import useSlotAllocation from "@/hooks/useSlotAllocation";
+import { SlotAllocationCalendarProps } from "@/types/mentor";
 
-interface TimeSlotsProps {
-  title: Date;
-  updateTimeSlots: (date: Date, time: string) => void;
-  selectedDateAndTime: Record<string, Record<string, "available" | "booked">>;
-  keepOpen: () => void;
-}
-
-const SlotAllocationCalendar = () => {
-  const {
-    displayMonths,
-    availableDates,
-    updateTimeSlots,
-    selectedDateAndTime,
-  } = useSlotAllocation();
+const SlotAllocationCalendar: FC<SlotAllocationCalendarProps> = ({ allocatedSlots, setAllocatedSlots }) => {
 
   const [openPopover, setOpenPopover] = useState<Record<string, boolean>>({});
+  const { displayMonths, availableDates, addNewTimeSlotToState, handleDeleteSlot } = useSlotAllocation();
 
   const togglePopover = (dateStr: string, isOpen: boolean) => {
     setOpenPopover((prev) => ({ ...prev, [dateStr]: isOpen }));
   };
 
   return (
-    <div className="flex not-sm:justify-center sm:justify-center gap-5 flex-wrap border-1 rounded-md pt-2 pb-4">
+    <div className="flex not-sm:justify-center sm:justify-center gap-5 flex-wrap not-sm:border-1 rounded-md pt-2 pb-4">
       {displayMonths.map((month, index) => (
         <div key={index} className="w-80 flex justify-center">
           <Calendar
@@ -50,13 +40,13 @@ const SlotAllocationCalendar = () => {
               ),
               Day: (props) => {
                 const date = props.date;
-                const dateStr = format(date, "yyyy-MM-dd");
-                const isDisabled = !availableDates[dateStr];
-                const isSelected = selectedDateAndTime[dateStr];
+                const dateStr: string = format(date, "dd-MM-yyyy");
+                const isDisabled = !availableDates()[dateStr];
+                const isSelected = allocatedSlots[dateStr];
                 const isOutsideDay = date.getMonth() !== month.getMonth();
 
-                const hasBookedSlots = selectedDateAndTime[dateStr]
-                  ? Object.values(selectedDateAndTime[dateStr]).some(status => status === "booked")
+                const hasBookedSlots = allocatedSlots[dateStr]
+                  ? Object.values(allocatedSlots[dateStr]).some(status => typeof status === "object" && status.isBooked)
                   : false;
 
                 if (isOutsideDay) {
@@ -69,7 +59,8 @@ const SlotAllocationCalendar = () => {
 
                 return (
                   <div className="relative">
-                    <div className="absolute -top-1 -right-0 w-3 h-3 rounded-full bg-teal-500 border-3 border-background" hidden={!hasBookedSlots} />                    <Popover
+                    <div className="absolute -top-1 -right-0 w-3 h-3 rounded-full bg-teal-500 border-3 border-background" hidden={!hasBookedSlots || isDisabled} />
+                    <Popover
                       open={openPopover[dateStr] || false}
                       onOpenChange={(isOpen) => togglePopover(dateStr, isOpen)}
                     >
@@ -79,7 +70,7 @@ const SlotAllocationCalendar = () => {
                             "h-8 w-8 p-0 font-normal rounded-sm mx-1 cursor-pointer",
                             "hover:bg-accent hover:text-accent-foreground",
                             "focus-visible:bg-accent focus-visible:text-accent-foreground focus-visible:ring-2",
-                            isSelected &&
+                            isSelected && !isDisabled &&
                             "bg-primary text-primary-foreground hover:bg-primary hover:text-primary-foreground focus:bg-primary focus:text-primary-foreground",
                             isDisabled &&
                             "text-muted-foreground opacity-50 hover:bg-transparent hover:text-muted-foreground cursor-not-allowed"
@@ -92,9 +83,10 @@ const SlotAllocationCalendar = () => {
                       <PopoverContent className="w-fit">
                         <TimeSlots
                           title={date}
-                          selectedDateAndTime={selectedDateAndTime}
-                          updateTimeSlots={updateTimeSlots}
-                          keepOpen={() => togglePopover(dateStr, true)}
+                          allocatedSlots={allocatedSlots}
+                          addNewTimeSlotToState={addNewTimeSlotToState}
+                          handleDeleteSlot={handleDeleteSlot}
+                          setAllocatedSlots={setAllocatedSlots}
                         />
                       </PopoverContent>
                     </Popover>
@@ -110,44 +102,3 @@ const SlotAllocationCalendar = () => {
 };
 
 export default SlotAllocationCalendar;
-
-const TimeSlots: React.FC<TimeSlotsProps> = ({
-  title,
-  selectedDateAndTime,
-  updateTimeSlots,
-  keepOpen,
-}) => {
-  const { generateTimeSlots } = useSlotAllocation();
-
-  const dateStr = format(title, "yyyy-MM-dd");
-  const selectedTimes = selectedDateAndTime[dateStr] || {};
-
-  return (
-    <>
-      <div className="flex justify-center">
-        <span>{title.toDateString()}</span>
-      </div>
-      <hr className="mb-3 mt-2" />
-      <div className="grid grid-cols-2 mt-auto gap-3 h-fit">
-        {generateTimeSlots().map((slot, index) => (
-          <div
-            key={index}
-            className={`py-2 px-3 text-center text-xs rounded-md border cursor-pointer transition-colors
-              ${selectedTimes[slot] === "available"
-                ? "border-purple-500 bg-purple-500/10 text-purple-500 font-semibold"
-                : selectedTimes[slot] === "booked"
-                  ? "border-teal-500 bg-teal-500/10 text-teal-500 font-semibold"
-                  : "hover:border-gray-300"
-              }`}
-            onClick={() => {
-              updateTimeSlots(title, slot);
-              keepOpen();
-            }}
-          >
-            {slot}
-          </div>
-        ))}
-      </div>
-    </>
-  );
-};

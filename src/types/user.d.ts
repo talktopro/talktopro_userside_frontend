@@ -1,3 +1,5 @@
+import { ApiReponseAllocatedSlotsSchema, IBookingSchedule } from "./mentor";
+
 export interface User {
     id: string;
     uname: string;
@@ -21,14 +23,7 @@ export interface ImageCropperProps {
     isOpen: boolean;
 }
 
-export interface Mentor {
-    _id: string;
-    uname: string;
-    email: string;
-    phone: number;
-    isMentor: boolean;
-    profileImg: string | null;
-    mentor_application_status: string;
+export interface Mentor extends User {
     mentorDetails: MentorDetails;
 }
 
@@ -42,4 +37,21 @@ export interface MentorDetails {
     languages: string[];
     _id: string;
     createdAt: Date;
+}
+
+export interface IMentorProfileDetailsApiResponse {
+    message: string;
+    data: {
+        _id: string;
+        profileImg: string;
+        mentorDetails: MentorDetails;
+        slots: ApiReponseAllocatedSlotsSchema[];
+    }
+}
+
+export interface IMentorDetailsWithSlots {
+    _id: string;
+    profileImg: string;
+    mentorDetails: MentorDetails;
+    slots: IBookingSchedule;
 }

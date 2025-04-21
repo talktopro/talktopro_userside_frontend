@@ -13,14 +13,15 @@ import BookingCalendar from "@/components/user/BookingCalendar";
 import { Button } from "@/components/ui/button";
 import { useParams } from "react-router-dom";
 import apiClient from "@/api/axiosInstance";
-import { Mentor } from "@/types/user";
+import { IMentorDetailsWithSlots, IMentorProfileDetailsApiResponse } from "@/types/user";
 import { Star } from "lucide-react";
 import MentorProfileSkeleton from "@/components/common/skeletons/MentorProfile";
 import { toast } from "sonner";
+import SlotResponseConverter from "@/utils/slotResponseConverter";
 
 const ProfessionalDetailsPage = () => {
   const { id } = useParams<{ id: string }>();
-  const [mentor, setMentor] = useState<Mentor | null>();
+  const [mentor, setMentor] = useState<IMentorDetailsWithSlots | null>();
   const [loading, setLoading] = useState<boolean>(!mentor);
   const bucketName = import.meta.env.VITE_S3BUCKET_NAME;
 
@@ -29,8 +30,9 @@ const ProfessionalDetailsPage = () => {
       const fetchMentor = async () => {
         try {
           setLoading(true);
-          const { data } = await apiClient.get(`/mentor/${id}`);
-          setMentor(data.data);
+          const { data } = await apiClient.get<IMentorProfileDetailsApiResponse>(`/mentor/${id}`);
+          const convertedSlots = SlotResponseConverter(data.data.slots);
+          setMentor({ ...data.data, slots: convertedSlots });
         } catch (error) {
           toast.error("Failed to collect mentor details");
           console.error(error);
@@ -41,6 +43,8 @@ const ProfessionalDetailsPage = () => {
       fetchMentor();
     }
   }, [id]);
+
+  useEffect(() => console.log("mentor details is", mentor), [mentor])
 
   interface ITriggerSlots {
     trigger: JSX.Element;
@@ -61,12 +65,12 @@ const ProfessionalDetailsPage = () => {
               <div className="flex justify-center items-center gap-2">
                 <div className="w-3 h-3 bg-white border border-gray-300 rounded" />
                 <span className="text-sm">Available</span>
-                <div className="w-3 h-3 bg-purple-50 border border-purple-500 rounded ml-3" />
+                <div className="w-3 h-3 bg-purple-500 border border-purple-500 rounded ml-3" />
                 <span className="text-sm">Selected</span>
                 <div className="w-3 h-3 bg-gray-400 border border-gray-700 rounded ml-3" />
                 <span className="text-sm">Not Available</span>
               </div>
-              <BookingCalendar />
+              <BookingCalendar mentorAllocatedSlots={mentor?.slots} />
             </DrawerHeader>
           </div>
         </DrawerContent>
