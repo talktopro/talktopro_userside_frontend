@@ -1,19 +1,46 @@
 import useSlotAllocation from "@/hooks/useSlotAllocation";
-import { TimeSlotsProps } from "@/types/mentor";
+import { SlotStatus, TimeSlotsProps } from "@/types/mentor";
 import { format } from "date-fns";
 import { Minus } from "lucide-react";
+import { useEffect, useRef, useState } from "react";
 
 const TimeSlots: React.FC<TimeSlotsProps> = ({
   title,
   addNewTimeSlotToState,
-  allocatedSlots,
-  handleDeleteSlot,
+  selectedSlots,
+  triggerHandleDeleteSlot,
   setAllocatedSlots,
 }) => {
   const { predefinedTimeSlots } = useSlotAllocation();
 
   const dateStr = format(title, "dd-MM-yyyy");
-  const selectedTimes = allocatedSlots[dateStr] || {};
+  const [selectedTimes, setSelectedTimes] = useState<Record<string, SlotStatus>>(selectedSlots || {});
+  const newSlotsRef = useRef<string[]>([]);
+
+  const handleAddNewSlot = (slot: string) => {
+    setSelectedTimes((prev) => ({ ...prev, [slot]: "newAllocation" }));
+    newSlotsRef.current = [...newSlotsRef.current, slot];
+  }
+
+  const handleRemoveSlot = (slot: string) => {
+    triggerHandleDeleteSlot(dateStr, slot);
+    setSelectedTimes((prev) => {
+      const newSlots = { ...prev };
+      delete newSlots[slot];
+      return newSlots;
+    });
+    newSlotsRef.current = newSlotsRef.current.filter((s: string) => s !== slot);
+  }
+
+  useEffect(() => {
+    return () => {
+      if (newSlotsRef.current.length > 0) {
+        for (const time of newSlotsRef.current) {
+          addNewTimeSlotToState(dateStr, time, setAllocatedSlots);
+        }
+      }
+    };
+  }, []);
 
   return (
     <>
@@ -34,7 +61,7 @@ const TimeSlots: React.FC<TimeSlotsProps> = ({
               }`}
             onClick={() => {
               if (!selectedTimes[slot]) {
-                addNewTimeSlotToState(dateStr, slot, setAllocatedSlots);
+                handleAddNewSlot(slot);
               }
             }}
           >
@@ -44,7 +71,7 @@ const TimeSlots: React.FC<TimeSlotsProps> = ({
                 className="absolute -top-1 -right-1 bg-red-500 hover:bg-red-600 transition-colors duration-300 flex justify-center items-center rounded-full p-0.5 text-background"
                 onClick={(e) => {
                   e.stopPropagation();
-                  handleDeleteSlot(dateStr, slot, allocatedSlots, setAllocatedSlots)
+                  handleRemoveSlot(slot)
                 }}
               >
                 <Minus size={10} strokeWidth={4} className="cursor-pointer" />

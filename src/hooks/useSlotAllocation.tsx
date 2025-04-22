@@ -44,14 +44,21 @@ const useSlotAllocation = () => {
     const time24 = convertTo24HourFormat(time);
 
     try {
-      // isBooking indicate this time slot already updated in database, if the slot contains isBooking false then only we need update backend 
-      if (typeof allocatedSlots[date][time] === "object" && allocatedSlots[date][time].isBooked === false) {
-        await apiClient.delete(`/mentor/slots`, {
-          data: { date: date, slots: [time24] }
-        });
+      if (allocatedSlots[date] && allocatedSlots[date][time]) {
+
+        // isBooking indicate this time slot already updated in database, if the slot contains isBooking false then only we need update backend 
+        if (allocatedSlots[date] &&
+          allocatedSlots[date][time] &&
+          typeof allocatedSlots[date][time] === "object" &&
+          allocatedSlots[date][time].isBooked === false
+        ) {
+          await apiClient.delete(`/mentor/slots`, {
+            data: { date: date, slots: [time24] }
+          });
+        }
+        // after api response or if the slot value is "newAllocation", then we need to update the frontend state
+        deleteTimeSlot(date, time, setAllocatedSlots)
       }
-      // after api response or if the slot value is "newAllocation", then we need to update the frontend state
-      deleteTimeSlot(date, time, setAllocatedSlots)
     } catch (error) {
       console.error("Failed to remove slots.", error);
       toast.error("Oops! Failed to remove slots.");

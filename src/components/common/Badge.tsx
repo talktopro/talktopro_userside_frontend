@@ -1,11 +1,9 @@
 import { FC } from "react";
 import { X } from "lucide-react";
 import {
-  Tooltip,
-  TooltipContent,
   TooltipProvider,
-  TooltipTrigger,
 } from "../ui/tooltip";
+import CustomTooltip from "./CustomTooltip";
 
 type BadgeProps = {
   content: string;
@@ -43,19 +41,9 @@ export const Badge: FC<BadgeProps> = ({
 
       {showCrossIcon && (
         <TooltipProvider>
-          <Tooltip>
-            <TooltipTrigger>
-              <button
-                onClick={onCrossClick}
-                className="flex items-center justify-center p-0.5 cursor-pointer"
-              >
-                <X size={14} strokeWidth={2} />
-              </button>
-            </TooltipTrigger>
-            <TooltipContent className="bg-white border-1 border-gray-200 text-black">
-              <p>Remove</p>
-            </TooltipContent>
-          </Tooltip>
+          <div onClick={onCrossClick}>
+            <CustomTooltip content="Remove" trigger={<X size={14} strokeWidth={2} />} />
+          </div>
         </TooltipProvider>
       )}
     </span>

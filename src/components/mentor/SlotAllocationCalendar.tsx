@@ -14,7 +14,17 @@ const SlotAllocationCalendar: FC<SlotAllocationCalendarProps> = ({ allocatedSlot
 
   const togglePopover = (dateStr: string, isOpen: boolean) => {
     setOpenPopover((prev) => ({ ...prev, [dateStr]: isOpen }));
+
+    if (isOpen) {
+      document.documentElement.classList.add('popover-open');
+    } else {
+      document.documentElement.classList.remove('popover-open');
+    }
   };
+
+  const triggerHandleDeleteSlot = (date: string, time: string) => {
+    handleDeleteSlot(date, time, allocatedSlots, setAllocatedSlots);
+  }
 
   return (
     <div className="flex not-sm:justify-center sm:justify-center gap-5 flex-wrap not-sm:border-1 rounded-md pt-2 pb-4">
@@ -25,18 +35,21 @@ const SlotAllocationCalendar: FC<SlotAllocationCalendarProps> = ({ allocatedSlot
             toMonth={month}
             components={{
               Head: () => (
-                <div className="grid grid-cols-7">
-                  {["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"].map(
-                    (day) => (
-                      <div
-                        key={day}
-                        className="mx-1 text-center text-xs cursor-default"
-                      >
-                        {day}
-                      </div>
-                    )
-                  )}
-                </div>
+                <thead>
+                  <tr className="grid grid-cols-7">
+                    {["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"].map(
+                      (day) => (
+                        <th
+                          key={day}
+                          scope="col"
+                          className="mx-1 font-medium text-center text-xs cursor-default"
+                        >
+                          {day}
+                        </th>
+                      )
+                    )}
+                  </tr>
+                </thead>
               ),
               Day: (props) => {
                 const date = props.date;
@@ -83,9 +96,9 @@ const SlotAllocationCalendar: FC<SlotAllocationCalendarProps> = ({ allocatedSlot
                       <PopoverContent className="w-fit">
                         <TimeSlots
                           title={date}
-                          allocatedSlots={allocatedSlots}
+                          selectedSlots={allocatedSlots[dateStr]}
                           addNewTimeSlotToState={addNewTimeSlotToState}
-                          handleDeleteSlot={handleDeleteSlot}
+                          triggerHandleDeleteSlot={triggerHandleDeleteSlot}
                           setAllocatedSlots={setAllocatedSlots}
                         />
                       </PopoverContent>

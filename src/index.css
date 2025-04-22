@@ -179,3 +179,27 @@ body::-webkit-scrollbar {
         radial-gradient(at 31% 61%, hsla(281, 0%, 100%, 0) 0px, transparent 50%),
         radial-gradient(at 99% 23%, hsla(285, 100%, 47%, 0.14) 0px, transparent 50%);
 }
+
+/* add background blur if the popover is open in mentor slot allocation page */
+.popover-open::after {
+    content: "";
+    position: fixed;
+    top: 0px;
+    left: 0px;
+    width: 100vw;
+    height: 100vh;
+    backdrop-filter: blur(1px);
+    z-index: 10;
+}
+
+/* Light mode */
+.popover-open::after {
+    background-color: rgba(122, 122, 122, 0.251);
+}
+
+/* Dark mode */
+@media (prefers-color-scheme: dark) {
+    .popover-open::after {
+        background-color: rgba(0, 0, 0, 0.193);
+    }
+}
