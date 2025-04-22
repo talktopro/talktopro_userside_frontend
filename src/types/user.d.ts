@@ -44,6 +44,7 @@ export interface MentorDetails {
     languages: string[];
     _id: string;
     createdAt: Date;
+    price: number;
 }
 
 export interface IMentorProfileDetailsApiResponse {

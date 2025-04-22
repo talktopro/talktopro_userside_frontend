@@ -2,6 +2,7 @@ import {
   CalendarDays,
   // ChartGantt,
   ChevronRight,
+  CircleDollarSign,
   House,
   NotebookText,
   Settings,
@@ -53,11 +54,10 @@ const SidebarList = () => {
       <SidebarMenu className="mt-5">
         <SidebarMenuButton
           tooltip="Dashboard"
-          className={`cursor-pointer ${
-            isActive(ROUTES.MENTOR.DASHBOARD)
-              ? "bg-primary/20 transition-colors duration-100"
-              : ""
-          }`}
+          className={`cursor-pointer ${isActive(ROUTES.MENTOR.DASHBOARD)
+            ? "bg-primary/20 transition-colors duration-100"
+            : ""
+            }`}
           onClick={() => handleNavigation(ROUTES.MENTOR.DASHBOARD)}
         >
           <House strokeWidth={1.5} size={18} />
@@ -66,11 +66,10 @@ const SidebarList = () => {
 
         <SidebarMenuButton
           tooltip="Bookings"
-          className={`cursor-pointer ${
-            isActive(ROUTES.MENTOR.BOOKINGS)
-              ? "bg-primary/20 transition-colors duration-100"
-              : ""
-          }`}
+          className={`cursor-pointer ${isActive(ROUTES.MENTOR.BOOKINGS)
+            ? "bg-primary/20 transition-colors duration-100"
+            : ""
+            }`}
           onClick={() => handleNavigation(ROUTES.MENTOR.BOOKINGS)}
         >
           <NotebookText strokeWidth={1.5} size={18} />
@@ -79,15 +78,26 @@ const SidebarList = () => {
 
         <SidebarMenuButton
           tooltip="Slot Management"
-          className={`cursor-pointer ${
-            isActive(ROUTES.MENTOR.SLOT_MANAGEMENT)
-              ? "bg-primary/20 transition-colors duration-100"
-              : ""
-          }`}
+          className={`cursor-pointer ${isActive(ROUTES.MENTOR.SLOT_MANAGEMENT)
+            ? "bg-primary/20 transition-colors duration-100"
+            : ""
+            }`}
           onClick={() => handleNavigation(ROUTES.MENTOR.SLOT_MANAGEMENT)}
         >
           <CalendarDays strokeWidth={1.5} size={18} />
           <span>Slot Management</span>
+        </SidebarMenuButton>
+
+        <SidebarMenuButton
+          tooltip="Slot Management"
+          className={`cursor-pointer ${isActive(ROUTES.MENTOR.PRICING)
+            ? "bg-primary/20 transition-colors duration-100"
+            : ""
+            }`}
+          onClick={() => handleNavigation(ROUTES.MENTOR.PRICING)}
+        >
+          <CircleDollarSign strokeWidth={1.5} size={18} />
+          <span>Pricing</span>
         </SidebarMenuButton>
 
         {/* <SidebarMenuButton
@@ -116,11 +126,10 @@ const SidebarList = () => {
               <SidebarMenuSub>
                 <SidebarMenuSubItem>
                   <SidebarMenuSubButton
-                    className={`cursor-pointer ${
-                      isActive(ROUTES.MENTOR.ACCOUNT_SETTINGS)
-                        ? "bg-primary/20 transition-colors duration-100"
-                        : ""
-                    }`}
+                    className={`cursor-pointer ${isActive(ROUTES.MENTOR.ACCOUNT_SETTINGS)
+                      ? "bg-primary/20 transition-colors duration-100"
+                      : ""
+                      }`}
                     onClick={() =>
                       handleNavigation(ROUTES.MENTOR.ACCOUNT_SETTINGS)
                     }

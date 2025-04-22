@@ -4,29 +4,29 @@ import { Button } from "../ui/button";
 import { DrawerClose } from "../ui/drawer";
 import { cn } from "@/lib/utils";
 import { addDays, format, startOfToday } from "date-fns";
-import { IBookingSchedule } from "@/types/mentor";
 import generateTimeSlots from "@/utils/generateTimeSlots";
+import { IMentorDetailsWithSlots } from "@/types/user";
 
 interface IBookingCalendarProps {
-  mentorAllocatedSlots: IBookingSchedule | undefined
+  mentor: IMentorDetailsWithSlots
 };
 
-const BookingCalendar: FC<IBookingCalendarProps> = ({ mentorAllocatedSlots }) => {
+const BookingCalendar: FC<IBookingCalendarProps> = ({ mentor }) => {
   const [date, setDate] = useState<Date | undefined>(new Date());
   const [selectedTimeSlot, setSelectedTimeSlot] = useState<string | null>(null);
   const today = startOfToday();
   const predefinedTimeSlots: string[] = useMemo(generateTimeSlots, []);
 
   const isDateAvailable = (date: Date) => {
-    if (!mentorAllocatedSlots) return;
+    if (!mentor.slots) return;
     const dateKey = format(date, "dd-MM-yyyy");
-    return mentorAllocatedSlots[dateKey];
+    return mentor.slots[dateKey];
   };
 
   const isTimeSlotAvailable = (timeSlot: string) => {
-    if (!date || !mentorAllocatedSlots) return false;
+    if (!date || !mentor.slots) return false;
     const dateKey = format(date, "dd-MM-yyyy");
-    return mentorAllocatedSlots[dateKey]?.[timeSlot] || false;
+    return mentor.slots[dateKey]?.[timeSlot] || false;
   };
 
   return (
@@ -134,7 +134,7 @@ const BookingCalendar: FC<IBookingCalendarProps> = ({ mentorAllocatedSlots }) =>
               className="w-full cursor-pointer"
               disabled={!date || !selectedTimeSlot}
             >
-              Pay now
+              {selectedTimeSlot ? `Pay now ${mentor.mentorDetails.price}₹/-` : "Pay now"}
             </Button>
           </div>
         </div>
@@ -149,7 +149,7 @@ const BookingCalendar: FC<IBookingCalendarProps> = ({ mentorAllocatedSlots }) =>
             className="w-full cursor-pointer"
             disabled={!date || !selectedTimeSlot}
           >
-            Pay now
+            {selectedTimeSlot ? `Pay now ${mentor.mentorDetails.price}₹/-` : "Pay now"}
           </Button>
         </div>
       </div>

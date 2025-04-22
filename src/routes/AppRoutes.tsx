@@ -19,7 +19,7 @@ import Dashboard from "@/pages/mentor/Dashboard";
 import MentorResiterPage from "@/pages/mentor/MentorRegister";
 import MentorAccountDetails from "@/pages/mentor/AccountDetails";
 import SlotManagement from "@/pages/mentor/SlotManagement";
-import Analytics from "@/pages/mentor/Analytics";
+import Pricing from "@/pages/mentor/Pricing";
 
 //! Admin pages
 import AdminLoginPage from "@/pages/admin/Login";
@@ -94,7 +94,7 @@ const AppRoutes = () => {
             path={ROUTES.MENTOR.SLOT_MANAGEMENT}
             element={<SlotManagement />}
           />
-          <Route path={ROUTES.MENTOR.ANALYTICS} element={<Analytics />} />
+          <Route path={ROUTES.MENTOR.PRICING} element={<Pricing />} />
           <Route
             path={ROUTES.MENTOR.ACCOUNT_SETTINGS}
             element={<MentorAccountDetails />}

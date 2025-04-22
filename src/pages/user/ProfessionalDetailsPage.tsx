@@ -44,8 +44,6 @@ const ProfessionalDetailsPage = () => {
     }
   }, [id]);
 
-  useEffect(() => console.log("mentor details is", mentor), [mentor])
-
   interface ITriggerSlots {
     trigger: JSX.Element;
   }
@@ -70,7 +68,9 @@ const ProfessionalDetailsPage = () => {
                 <div className="w-3 h-3 bg-gray-400 border border-gray-700 rounded ml-3" />
                 <span className="text-sm">Not Available</span>
               </div>
-              <BookingCalendar mentorAllocatedSlots={mentor?.slots} />
+              {mentor && (
+                <BookingCalendar mentor={mentor} />
+              )}
             </DrawerHeader>
           </div>
         </DrawerContent>

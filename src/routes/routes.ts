@@ -20,6 +20,7 @@ export const ROUTES = {
         DASHBOARD: "/mentor/dashboard",
         BOOKINGS: "/mentor/bookings",
         SLOT_MANAGEMENT: "/mentor/slot-management",
+        PRICING: "/mentor/pricing",
         ANALYTICS: "/mentor/analytics",
         ACCOUNT_SETTINGS: "/mentor/account-settings",
         NOTIFICATION_SETTINGS: "/mentor/notification-settings",

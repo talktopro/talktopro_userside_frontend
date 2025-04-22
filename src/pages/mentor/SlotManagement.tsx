@@ -3,9 +3,14 @@ import { Button } from "@/components/ui/button";
 import useSlotAllocation from "@/hooks/useSlotAllocation";
 import { IBookingSchedule } from "@/types/mentor";
 import { useEffect, useState } from "react";
+import { selectAuth } from "@/redux/slices/authSlice";
+import { ROUTES } from "@/routes/routes";
+import { useSelector } from "react-redux";
+import { useNavigate } from "react-router-dom";
 
 const SlotManagement: React.FC = () => {
-
+  const navigate = useNavigate();
+  const { user } = useSelector(selectAuth);
   const [allocatedSlots, setAllocatedSlots] = useState<IBookingSchedule>({});
   const [isSaving, setIsSaving] = useState(false)
   const [hasUnsavedChanges, setHasUnsavedChanges] = useState(false);
@@ -21,6 +26,9 @@ const SlotManagement: React.FC = () => {
   };
 
   useEffect(() => {
+    if (!user?.mentorDetails?.price) {
+      return;
+    }
     handleFetchSlotDetails(setAllocatedSlots);
   }, []);
 
@@ -30,6 +38,35 @@ const SlotManagement: React.FC = () => {
     );
     setHasUnsavedChanges(hasNewSlots);
   }, [allocatedSlots]);
+
+  if (!user?.mentorDetails?.price) {
+    return (
+      <div className="p-4 space-y-3">
+        <h2 className="text-2xl not-sm:text-lg font-bold pb-10">
+          Slot Management
+        </h2>
+        <div className="flex flex-col justify-center min-h-96">
+          <div className="flex flex-col items-center justify-center gap-6 max-w-2xl mx-auto text-center">
+            <div className="space-y-2">
+              <h3 className="text-xl font-semibold">
+                Set Your Session Price First
+              </h3>
+              <p className="text-gray-600 dark:text-gray-400">
+                Before you can allocate time slots for mentoring sessions, you need
+                to set your session price.
+              </p>
+            </div>
+            <Button
+              onClick={() => navigate(`${ROUTES.MENTOR.PRICING}`)}
+              className="w-fit"
+            >
+              Go to Pricing Page
+            </Button>
+          </div>
+        </div>
+      </div>
+    );
+  };
 
   return (
     <>
