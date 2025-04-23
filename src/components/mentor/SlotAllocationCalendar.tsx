@@ -1,4 +1,4 @@
-import { FC, useState } from "react";
+import { FC } from "react";
 import { Calendar } from "../ui/calendar";
 import { Popover, PopoverContent, PopoverTrigger } from "../ui/popover";
 import { cn } from "@/lib/utils";
@@ -9,22 +9,15 @@ import { SlotAllocationCalendarProps } from "@/types/mentor";
 
 const SlotAllocationCalendar: FC<SlotAllocationCalendarProps> = ({ allocatedSlots, setAllocatedSlots }) => {
 
-  const [openPopover, setOpenPopover] = useState<Record<string, boolean>>({});
-  const { displayMonths, availableDates, addNewTimeSlotToState, handleDeleteSlot } = useSlotAllocation();
+  const { displayMonths, availableDates, addNewTimeSlotToState, handleDeleteSlot, deleteFrontendTimeSlot } = useSlotAllocation();
 
-  const togglePopover = (dateStr: string, isOpen: boolean) => {
-    setOpenPopover((prev) => ({ ...prev, [dateStr]: isOpen }));
-
+  const togglePopover = (isOpen: boolean) => {
     if (isOpen) {
       document.documentElement.classList.add('popover-open');
     } else {
       document.documentElement.classList.remove('popover-open');
     }
   };
-
-  const triggerHandleDeleteSlot = (date: string, time: string) => {
-    handleDeleteSlot(date, time, allocatedSlots, setAllocatedSlots);
-  }
 
   return (
     <div className="flex not-sm:justify-center sm:justify-center gap-5 flex-wrap not-sm:border-1 rounded-md pt-2 pb-4">
@@ -74,8 +67,7 @@ const SlotAllocationCalendar: FC<SlotAllocationCalendarProps> = ({ allocatedSlot
                   <div className="relative">
                     <div className="absolute -top-1 -right-0 w-3 h-3 rounded-full bg-teal-500 border-3 border-background" hidden={!hasBookedSlots || isDisabled} />
                     <Popover
-                      open={openPopover[dateStr] || false}
-                      onOpenChange={(isOpen) => togglePopover(dateStr, isOpen)}
+                      onOpenChange={(isOpen) => togglePopover(isOpen)}
                     >
                       <PopoverTrigger asChild>
                         <button
@@ -96,10 +88,11 @@ const SlotAllocationCalendar: FC<SlotAllocationCalendarProps> = ({ allocatedSlot
                       <PopoverContent className="w-fit">
                         <TimeSlots
                           title={date}
-                          selectedSlots={allocatedSlots[dateStr]}
-                          addNewTimeSlotToState={addNewTimeSlotToState}
-                          triggerHandleDeleteSlot={triggerHandleDeleteSlot}
+                          allocatedSlots={allocatedSlots}
                           setAllocatedSlots={setAllocatedSlots}
+                          addNewTimeSlotToState={addNewTimeSlotToState}
+                          handleDeleteSlot={handleDeleteSlot}
+                          deleteFrontendTimeSlot={deleteFrontendTimeSlot}
                         />
                       </PopoverContent>
                     </Popover>

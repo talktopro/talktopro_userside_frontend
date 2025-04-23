@@ -32,10 +32,11 @@ export interface ISlotAllocationApiReponse {
 
 export interface TimeSlotsProps {
    title: Date;
-   selectedSlots: Record<string, SlotStatus>;
-   addNewTimeSlotToState: (date: string, time: string, setAllocatedSlots: React.Dispatch<React.SetStateAction<IBookingSchedule>>) => void;
-   triggerHandleDeleteSlot: (date: string, time: string) => void;
+   allocatedSlots: IBookingSchedule;
    setAllocatedSlots: React.Dispatch<React.SetStateAction<IBookingSchedule>>;
+   addNewTimeSlotToState: (date: string, time: string, setAllocatedSlots: React.Dispatch<React.SetStateAction<IBookingSchedule>>) => void;
+   handleDeleteSlot: (date: string, time: string, allocatedSlots: IBookingSchedule) => Promise<void>;
+   deleteFrontendTimeSlot: (date: string, time: string, setAllocatedSlots: React.Dispatch<React.SetStateAction<IBookingSchedule>>) => void
 }
 
 export interface SlotAllocationCalendarProps {

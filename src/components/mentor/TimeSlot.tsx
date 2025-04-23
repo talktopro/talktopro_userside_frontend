@@ -6,16 +6,18 @@ import { useEffect, useRef, useState } from "react";
 
 const TimeSlots: React.FC<TimeSlotsProps> = ({
   title,
-  addNewTimeSlotToState,
-  selectedSlots,
-  triggerHandleDeleteSlot,
+  allocatedSlots,
   setAllocatedSlots,
+  addNewTimeSlotToState,
+  handleDeleteSlot,
+  deleteFrontendTimeSlot,
 }) => {
   const { predefinedTimeSlots } = useSlotAllocation();
 
   const dateStr = format(title, "dd-MM-yyyy");
-  const [selectedTimes, setSelectedTimes] = useState<Record<string, SlotStatus>>(selectedSlots || {});
+  const [selectedTimes, setSelectedTimes] = useState<Record<string, SlotStatus>>(allocatedSlots[dateStr] || {});
   const newSlotsRef = useRef<string[]>([]);
+  const deletedSlotsRef = useRef<string[]>([]);
 
   const handleAddNewSlot = (slot: string) => {
     setSelectedTimes((prev) => ({ ...prev, [slot]: "newAllocation" }));
@@ -23,17 +25,23 @@ const TimeSlots: React.FC<TimeSlotsProps> = ({
   }
 
   const handleRemoveSlot = (slot: string) => {
-    triggerHandleDeleteSlot(dateStr, slot);
-    setSelectedTimes((prev) => {
+    handleDeleteSlot(dateStr, slot, allocatedSlots); // api for remove from db
+    setSelectedTimes((prev) => { // remove from component local state
       const newSlots = { ...prev };
       delete newSlots[slot];
       return newSlots;
     });
-    newSlotsRef.current = newSlotsRef.current.filter((s: string) => s !== slot);
+    newSlotsRef.current = newSlotsRef.current.filter((s: string) => s !== slot); // tracking new slots for add to parent component once the popover is closed
+    deletedSlotsRef.current.push(slot); // tracking deleted slots to remove from parent state once the popover is closed
   }
 
   useEffect(() => {
     return () => {
+      if (deletedSlotsRef.current.length > 0) {
+        for (const time of deletedSlotsRef.current) {
+          deleteFrontendTimeSlot(dateStr, time, setAllocatedSlots);
+        }
+      }
       if (newSlotsRef.current.length > 0) {
         for (const time of newSlotsRef.current) {
           addNewTimeSlotToState(dateStr, time, setAllocatedSlots);

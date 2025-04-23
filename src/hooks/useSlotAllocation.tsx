@@ -38,31 +38,41 @@ const useSlotAllocation = () => {
     }
   };
 
-  //!================================================================= remove slot funtion ===================================================================================
+  //!======================================================= remove slot funtion API for update DB ===================================================================================
 
-  async function handleDeleteSlot(date: string, time: string, allocatedSlots: IBookingSchedule, setAllocatedSlots: React.Dispatch<React.SetStateAction<IBookingSchedule>>): Promise<void> {
+  async function handleDeleteSlot(date: string, time: string, allocatedSlots: IBookingSchedule): Promise<void> {
     const time24 = convertTo24HourFormat(time);
 
     try {
       if (allocatedSlots[date] && allocatedSlots[date][time]) {
 
         // isBooking indicate this time slot already updated in database, if the slot contains isBooking false then only we need update backend 
-        if (allocatedSlots[date] &&
-          allocatedSlots[date][time] &&
-          typeof allocatedSlots[date][time] === "object" &&
-          allocatedSlots[date][time].isBooked === false
-        ) {
+        if (typeof allocatedSlots[date][time] === "object" && allocatedSlots[date][time].isBooked === false) {
           await apiClient.delete(`/mentor/slots`, {
             data: { date: date, slots: [time24] }
           });
         }
-        // after api response or if the slot value is "newAllocation", then we need to update the frontend state
-        deleteTimeSlot(date, time, setAllocatedSlots)
       }
     } catch (error) {
       console.error("Failed to remove slots.", error);
       toast.error("Oops! Failed to remove slots.");
     }
+  };
+
+  //!======================================================= Delete time slot from frontend state ===================================================================================
+
+  function deleteFrontendTimeSlot(date: string, time: string, setAllocatedSlots: React.Dispatch<React.SetStateAction<IBookingSchedule>>): void {
+    setAllocatedSlots((prev) => {
+      const newState = { ...prev };
+      if (!newState[date]) {
+        return newState;
+      };
+      delete newState[date][time];
+      if (Object.keys(newState[date]).length === 0) { // if the date object not contains any timeslots (object is empty), remove the date from the object
+        delete newState[date];
+      }
+      return newState;
+    });
   };
 
   //!========================================== only update frontend state to highlight the user selected slots for allocation/allocated =====================================
@@ -101,6 +111,7 @@ const useSlotAllocation = () => {
     handleFetchSlotDetails,
     handleSaveSlots,
     handleDeleteSlot,
+    deleteFrontendTimeSlot,
     addNewTimeSlotToState,
     availableDates,
     displayMonths,
@@ -142,18 +153,3 @@ function convertTo24HourFormat(timeRange: string): string {
   const endDate: Date = parse(end, 'h:mm a', new Date());
   return `${format(startDate, 'HH:mm')}-${format(endDate, 'HH:mm')}`;
 }
-
-//! Delete time slot from frontend state
-function deleteTimeSlot(date: string, time: string, setAllocatedSlots: React.Dispatch<React.SetStateAction<IBookingSchedule>>): void {
-  setAllocatedSlots((prev) => {
-    const newState = { ...prev };
-    if (!newState[date]) {
-      return newState;
-    };
-    delete newState[date][time];
-    if (Object.keys(newState[date]).length === 0) { // if the date object not contains any timeslots (object is empty), remove the date from the object
-      delete newState[date];
-    }
-    return newState;
-  });
-};
