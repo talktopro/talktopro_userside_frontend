@@ -84,6 +84,7 @@ const RegisterBody: FC<RegisterBodyProps> = ({ fromRegisterPage, fromApplication
     isCropperOpen,
     selectedImage,
   } = useImageCropper();
+
   const form = useForm<z.infer<ReturnType<typeof createFormSchema>>>({
     resolver: zodResolver(createFormSchema(fromRegisterPage)),
     defaultValues: {
@@ -98,6 +99,7 @@ const RegisterBody: FC<RegisterBodyProps> = ({ fromRegisterPage, fromApplication
       termsAndConditions: false,
       privacyAndPolicy: false,
     },
+    criteriaMode: "all" // Add this to properly track array changes
   });
 
   useEffect(() => {
@@ -130,14 +132,14 @@ const RegisterBody: FC<RegisterBodyProps> = ({ fromRegisterPage, fromApplication
         : content;
     const currentArray = form.getValues(field);
     const updatedArray = [...currentArray, formattedContent];
-    form.setValue(field, updatedArray, { shouldValidate: true });
+    form.setValue(field, updatedArray, { shouldValidate: true, shouldDirty: true });
     handleCloseBadgeInput();
   };
 
   const handleRemoveBadge = (index: number, field: "skills" | "languages") => {
     const currentArray = form.getValues(field);
     const updatedArray = currentArray.filter((_, i) => i !== index);
-    form.setValue(field, updatedArray, { shouldValidate: true });
+    form.setValue(field, updatedArray, { shouldValidate: true, shouldDirty: true });
   };
 
   const onSubmit = async (
@@ -174,6 +176,23 @@ const RegisterBody: FC<RegisterBodyProps> = ({ fromRegisterPage, fromApplication
       }
     } finally {
       setIsSubmitting(false);
+    }
+  };
+
+  const handleDiscard = () => {
+    if (user) {
+      form.reset({
+        first_name: user.mentorDetails?.first_name || "",
+        last_name: user.mentorDetails?.last_name || "",
+        phone_number: user.phone.toString(),
+        profileImg: user.profileImg || "",
+        profession: user.mentorDetails?.profession || "",
+        about: user.mentorDetails?.about || "",
+        skills: [...(user.mentorDetails?.skills || [])],
+        languages: [...(user.mentorDetails?.languages || [])],
+        termsAndConditions: form.getValues("termsAndConditions"),
+        privacyAndPolicy: form.getValues("privacyAndPolicy"),
+      });
     }
   };
 
@@ -504,6 +523,7 @@ const RegisterBody: FC<RegisterBodyProps> = ({ fromRegisterPage, fromApplication
                   type="button"
                   className="border-red-500 text-red-500 hover:text-red-600 min-w-28"
                   disabled={isSubmitting || !form.formState.isDirty}
+                  onClick={handleDiscard}
                 >
                   {fromRegisterPage
                     ? "Discard and Cancel" : "Discard"}
@@ -536,6 +556,7 @@ const RegisterBody: FC<RegisterBodyProps> = ({ fromRegisterPage, fromApplication
             type="button"
             className="border-red-500 text-red-500 hover:text-red-600 w-full"
             disabled={isSubmitting || !form.formState.isDirty}
+            onClick={handleDiscard}
           >
             {fromRegisterPage ? "Discard and Cancel" : "Discard"}
           </Button>
