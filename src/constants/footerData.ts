@@ -4,6 +4,7 @@ import abhirajTR from "@/assets/team/abhiraj.jpg";
 import ashin from "@/assets/team/ashin.jpg";
 import abhinav from "@/assets/team/abhinav.jpg";
 import sameen from "@/assets/team/sameen.jpg";
+import { ROUTES } from "@/routes/routes";
 
 export const teamMembers = [
    {
@@ -62,4 +63,9 @@ export const Learning: string[] = [
    "Tutorials",
    "Communities",
 ];
-export const About: string[] = ["Company", "Careers", "Help"];
+export const About: { field: string, path: string }[] = [
+   { field: "Company", path: ROUTES.HOME },
+   { field: "Careers", path: ROUTES.HOME },
+   { field: "Help", path: ROUTES.HOME },
+   { field: "About Us", path: ROUTES.ABOUT },
+];

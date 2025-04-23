@@ -13,6 +13,7 @@ import AccountSettings from "@/pages/user/AccountSettings";
 import ChangePasswordPage from "@/pages/user/ChangePasswordPage";
 import SignupOtpPage from "@/pages/user/SignupOtpPage";
 import MentorLayout from "@/layouts/MentorLayout";
+import AboutUs from "@/pages/common/aboutUs";
 
 //! Mentor pages
 import Dashboard from "@/pages/mentor/Dashboard";
@@ -36,6 +37,7 @@ import MentorRouteProtector from "@/auth/mentorProtector";
 import UserRouteProtector from "@/auth/userProtector";
 import GuestUserProtector from "@/auth/guestUserProtector";
 import MentorRegisterProtector from "@/auth/mentorRegisterProtector";
+import NotFoundPage from "@/pages/common/404";
 
 const AppRoutes = () => {
   return (
@@ -62,6 +64,8 @@ const AppRoutes = () => {
         {/* common routes */}
 
         <Route path={ROUTES.HOME} element={<HomePage />} />
+        <Route path={ROUTES.ABOUT} element={<AboutUs />} />
+        <Route path="*" element={<NotFoundPage />} />
         <Route
           path={ROUTES.PROFESSIONALS.LIST}
           element={<AllProfessionalsPage />}
