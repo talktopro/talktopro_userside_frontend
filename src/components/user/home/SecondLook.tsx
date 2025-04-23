@@ -3,8 +3,13 @@ import { Link } from "react-router-dom";
 import { ROUTES } from "@/routes/routes";
 import startSvg from "@/assets/svg/start.svg";
 import newImage from "@/assets/backgrounds/manager-secretary-discussing-working-thumb-up-white-background.png";
+import { useSelector } from "react-redux";
+import { selectAuth } from "@/redux/slices/authSlice";
 
 const MentorPromotion = () => {
+
+  const { user } = useSelector(selectAuth);
+
   return (
     <div className="h-[90dvh] w-screen overflow-hidden relative homepage_secondlook_bg">
       <div className="w-full h-full flex flex-col md:flex-row">
@@ -72,9 +77,9 @@ const MentorPromotion = () => {
           </div>
 
           <div className="flex gap-4">
-            <Link to={ROUTES.MENTOR.REGISTER}>
+            <Link to={user && user.isMentor ? ROUTES.MENTOR.DASHBOARD : ROUTES.MENTOR.REGISTER}>
               <button className="bg-purple-500 text-white px-6 py-3 rounded-full flex items-center gap-2 cursor-pointer hover:bg-purple-600 transition-colors">
-                Register as Mentor
+                {user && user.isMentor ? "Go to Dashboard" : "Register as Mentor"}
                 <span className="bg-white rounded-full p-1">
                   <ArrowRight size={16} className="text-purple-500" />
                 </span>
