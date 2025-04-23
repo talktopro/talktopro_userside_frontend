@@ -61,7 +61,7 @@ const SidebarList = () => {
       </div>
 
       <button
-        className="text-xs border border-dashed py-1.5 border-primary rounded-lg mt-10 flex items-center justify-center cursor-pointer hover:bg-muted transition-colors duration-100"
+        className="text-xs border border-dashed py-1.5 border-primary rounded-lg mt-6 w-fit px-3 flex items-center justify-start cursor-pointer hover:bg-muted transition-colors duration-100"
         onClick={() => handleNavigation(ROUTES.HOME)}
       >
         <ChevronLeft strokeWidth={1} size={15} />
