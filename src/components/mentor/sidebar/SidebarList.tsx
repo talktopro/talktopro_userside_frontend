@@ -1,11 +1,13 @@
 import {
   CalendarDays,
-  // ChartGantt,
+  ChevronLeft,
   ChevronRight,
   CircleDollarSign,
   House,
+  LogOut,
   NotebookText,
   Settings,
+  UserRoundCog,
 } from "lucide-react";
 import logo from "@/assets/logo.svg";
 import {
@@ -25,9 +27,12 @@ import {
 } from "@/components/ui/sidebar";
 import { ROUTES } from "@/routes/routes";
 import { useNavigate, useLocation } from "react-router-dom";
+import { useDispatch } from "react-redux";
+import { logout } from "@/redux/slices/authSlice";
 
 const SidebarList = () => {
   const navigate = useNavigate();
+  const dispatch = useDispatch();
   const location = useLocation();
   const { isMobile, setOpenMobile } = useSidebar();
 
@@ -42,6 +47,10 @@ const SidebarList = () => {
     }
   };
 
+  const handleLogout = () => {
+    dispatch(logout());
+  };
+
   return (
     <SidebarGroup>
       <div className="flex items-center gap-2">
@@ -50,6 +59,14 @@ const SidebarList = () => {
           Talk<span>To</span> <span className="text-purple-500">Pro</span>
         </h3>
       </div>
+
+      <button
+        className="text-xs border border-dashed py-1.5 border-primary rounded-lg mt-10 flex items-center justify-center cursor-pointer hover:bg-muted transition-colors duration-100"
+        onClick={() => handleNavigation(ROUTES.HOME)}
+      >
+        <ChevronLeft strokeWidth={1} size={15} />
+        Go back to user dashboard
+      </button>
 
       <SidebarMenu className="mt-5">
         <SidebarMenuButton
@@ -100,19 +117,6 @@ const SidebarList = () => {
           <span>Pricing</span>
         </SidebarMenuButton>
 
-        {/* <SidebarMenuButton
-          tooltip="Analytics"
-          className={`cursor-pointer ${
-            isActive(ROUTES.MENTOR.ANALYTICS)
-              ? "bg-primary/20 transition-colors duration-100"
-              : ""
-          }`}
-          onClick={() => navigate(ROUTES.MENTOR.ANALYTICS)}
-        >
-          <ChartGantt strokeWidth={1.5} size={18} />
-          <span>Analytics</span>
-        </SidebarMenuButton> */}
-
         <Collapsible>
           <SidebarMenuItem>
             <CollapsibleTrigger asChild>
@@ -124,7 +128,7 @@ const SidebarList = () => {
             </CollapsibleTrigger>
             <CollapsibleContent>
               <SidebarMenuSub>
-                <SidebarMenuSubItem>
+                <SidebarMenuSubItem className="flex flex-col gap-1.5">
                   <SidebarMenuSubButton
                     className={`cursor-pointer ${isActive(ROUTES.MENTOR.ACCOUNT_SETTINGS)
                       ? "bg-primary/20 transition-colors duration-100"
@@ -134,20 +138,16 @@ const SidebarList = () => {
                       handleNavigation(ROUTES.MENTOR.ACCOUNT_SETTINGS)
                     }
                   >
+                    <UserRoundCog strokeWidth={1.5} size={15} />
                     <span>Account settings</span>
                   </SidebarMenuSubButton>
-                  {/* <SidebarMenuSubButton
-                    className={`cursor-pointer ${
-                      isActive(ROUTES.MENTOR.NOTIFICATION_SETTINGS)
-                        ? "bg-primary/20 transition-colors duration-100"
-                        : ""
-                    }`}
-                    onClick={() =>
-                      navigate(ROUTES.MENTOR.NOTIFICATION_SETTINGS)
-                    }
+                  <SidebarMenuSubButton
+                    className="cursor-pointer text-red-500 hover:bg-red-500/50 transition-colors duration-300"
+                    onClick={handleLogout}
                   >
-                    <span>Notification settings</span>
-                  </SidebarMenuSubButton> */}
+                    <LogOut strokeWidth={1.5} size={15} className="text-red-500" />
+                    <span>Logout</span>
+                  </SidebarMenuSubButton>
                 </SidebarMenuSubItem>
               </SidebarMenuSub>
             </CollapsibleContent>
