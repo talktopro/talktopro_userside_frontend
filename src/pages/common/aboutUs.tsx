@@ -21,7 +21,7 @@ const AboutUs: React.FC = () => {
                   <img
                      src={successTeam}
                      alt="Mentorship session"
-                     className="rounded-lg shadow-lg object-cover h-full"
+                     className="rounded-lg shadow-lg object-cover w-full h-auto"
                   />
                </div>
                <div className="lg:w-1/2 my-auto">

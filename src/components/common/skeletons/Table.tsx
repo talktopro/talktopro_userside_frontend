@@ -5,7 +5,7 @@ const SkeletonTable = () => {
     <>
       {[...Array(8)].map((_, index) => (
         <div key={index} className="mb-2">
-          <Skeleton className="h-10 w-full" />
+          <Skeleton className="h-10 w-full bg-muted pulse" />
         </div>
       ))}
     </>
