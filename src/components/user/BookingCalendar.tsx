@@ -6,6 +6,8 @@ import { cn } from "@/lib/utils";
 import { addDays, format, startOfToday } from "date-fns";
 import generateTimeSlots from "@/utils/generateTimeSlots";
 import { IMentorDetailsWithSlots } from "@/types/user";
+import usePayment from "@/hooks/usePayment";
+import { toast } from "sonner";
 
 interface IBookingCalendarProps {
   mentor: IMentorDetailsWithSlots
@@ -16,6 +18,8 @@ const BookingCalendar: FC<IBookingCalendarProps> = ({ mentor }) => {
   const [selectedTimeSlot, setSelectedTimeSlot] = useState<string | null>(null);
   const today = startOfToday();
   const predefinedTimeSlots: string[] = useMemo(generateTimeSlots, []);
+  const { getRazorpayOrder, loadRazorpay, createRazorpayOptions } = usePayment();
+  const [isRazorpayOrderLoading, setIsRazorpayOrderLoading] = useState(false);
 
   const isDateAvailable = (date: Date) => {
     if (!mentor.slots) return;
@@ -27,6 +31,41 @@ const BookingCalendar: FC<IBookingCalendarProps> = ({ mentor }) => {
     if (!date || !mentor.slots) return false;
     const dateKey = format(date, "dd-MM-yyyy");
     return mentor.slots[dateKey]?.[timeSlot] || false;
+  };
+
+  const handlePaymentButtonClick = async () => {
+    try {
+      setIsRazorpayOrderLoading(true);
+      const orderDetails = await getRazorpayOrder(mentor.mentorDetails.price);
+
+      // Step 2: Load Razorpay script
+      const isRazorpayLoaded = await loadRazorpay();
+      if (!isRazorpayLoaded) {
+        toast.error('Failed to load Razorpay');
+        return;
+      };
+
+      if (!orderDetails?.amount || !orderDetails?.currency || !orderDetails?.id) {
+        toast.error("Failed to collect order details.");
+        return;
+      };
+
+      if (!date || !selectedTimeSlot) {
+        toast.error("Choose your appoinment date and slot");
+        return;
+      }
+
+      const options = createRazorpayOptions(orderDetails?.amount, orderDetails?.currency, orderDetails?.id, mentor._id, date, selectedTimeSlot)
+
+      const razorpayInstance = new window.Razorpay(options);
+      razorpayInstance.open();
+
+    } catch (error) {
+      console.error('Payment failed:', error);
+      toast.error('Payment initialization failed');
+    } finally {
+      setIsRazorpayOrderLoading(false);
+    };
   };
 
   return (
@@ -130,12 +169,15 @@ const BookingCalendar: FC<IBookingCalendarProps> = ({ mentor }) => {
               </Button>
             </DrawerClose>
 
-            <Button
-              className="w-full cursor-pointer"
-              disabled={!date || !selectedTimeSlot}
-            >
-              {selectedTimeSlot ? `Pay now ${mentor.mentorDetails.price}₹/-` : "Pay now"}
-            </Button>
+            <DrawerClose asChild>
+              <Button
+                className="w-full cursor-pointer"
+                disabled={!date || !selectedTimeSlot || isRazorpayOrderLoading}
+                onClick={handlePaymentButtonClick}
+              >
+                {selectedTimeSlot ? `Pay now ${mentor.mentorDetails.price}₹/-` : "Pay now"}
+              </Button>
+            </DrawerClose>
           </div>
         </div>
         <div className="flex gap-3 mt-10 not-sm:fixed not-sm:bottom-0 not-sm:z-10 not-sm:w-screen not-sm:bg-background not-sm:py-3 not-sm:border-t-1 not-sm:px-4 sm:hidden">
@@ -145,12 +187,15 @@ const BookingCalendar: FC<IBookingCalendarProps> = ({ mentor }) => {
             </Button>
           </DrawerClose>
 
-          <Button
-            className="w-full cursor-pointer"
-            disabled={!date || !selectedTimeSlot}
-          >
-            {selectedTimeSlot ? `Pay now ${mentor.mentorDetails.price}₹/-` : "Pay now"}
-          </Button>
+          <DrawerClose asChild>
+            <Button
+              className="w-full cursor-pointer"
+              disabled={!date || !selectedTimeSlot || isRazorpayOrderLoading}
+              onClick={handlePaymentButtonClick}
+            >
+              {selectedTimeSlot ? `Pay now ${mentor.mentorDetails.price}₹/-` : "Pay now"}
+            </Button>
+          </DrawerClose>
         </div>
       </div>
     </>

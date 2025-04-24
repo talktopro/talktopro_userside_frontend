@@ -63,3 +63,53 @@ export interface IMentorDetailsWithSlots {
     mentorDetails: MentorDetails;
     slots: IBookingSchedule;
 }
+
+//Razorpay related types
+
+export interface IRazorpayOrder {
+    id: string;
+    entity: string;
+    amount: number;
+    amount_paid: number;
+    amount_due: number;
+    currency: string;
+    receipt: string;
+    status: "created" | "attempted" | "paid" | "failed";
+    attempts: number;
+    created_at: number;
+};
+
+export interface IRazorpayOptions {
+    key: string;
+    amount: number;
+    currency: string;
+    name: string;
+    description?: string;
+    order_id: string;
+    handler: (response: RazorpaySuccessResponse) => void;
+    prefill?: {
+        name?: string;
+        email?: string;
+        contact?: string;
+    };
+    image?: string;
+    theme?: {
+        color?: string;
+    };
+};
+
+export interface IRazorpaySuccessResponse {
+    razorpay_payment_id: string;
+    razorpay_order_id: string;
+    razorpay_signature: string;
+};
+
+declare global {
+    interface Window {
+        Razorpay: {
+            new(options: RazorpayOptions): {
+                open: () => void;
+            };
+        };
+    };
+};

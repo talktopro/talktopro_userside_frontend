@@ -1,8 +1,9 @@
 import apiClient from "@/api/axiosInstance";
 import { IBookingSchedule, INewSlotAllocationReqBody, ISlotAllocationApiReponse } from "@/types/mentor";
+import convertTo24HourFormat from "@/utils/convertTo24HourFormat";
 import generateTimeSlots from "@/utils/generateTimeSlots";
 import SlotResponseConverter from "@/utils/slotResponseConverter";
-import { addMonths, addDays, startOfToday, format, parse } from "date-fns";
+import { addMonths, addDays, startOfToday, format } from "date-fns";
 import { useMemo } from "react";
 import { toast } from "sonner";
 
@@ -145,11 +146,3 @@ function createRequestObject(allocatedSlots: IBookingSchedule): INewSlotAllocati
   }
   return requestObject
 };
-
-//! convert time range (02:00 PM - 03:00 PM (12hr base) to 14:00-15:00 (24hr base));
-function convertTo24HourFormat(timeRange: string): string {
-  const [start, end] = timeRange.split(' - ');
-  const startDate: Date = parse(start, 'h:mm a', new Date());
-  const endDate: Date = parse(end, 'h:mm a', new Date());
-  return `${format(startDate, 'HH:mm')}-${format(endDate, 'HH:mm')}`;
-}
