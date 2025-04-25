@@ -15,7 +15,7 @@ interface IPerDayBookingsProps {
 
 const PerDayBookings: FC<IPerDayBookingsProps> = ({ isPerDayBookingsLoading }) => {
    return (
-      <div className="rounded-lg border max-w-lg">
+      <div className="rounded-lg border">
          <Table>
             <TableHeader className="sticky top-0 hover:bg-transparent rounded-3xl">
                <TableRow>
@@ -25,7 +25,7 @@ const PerDayBookings: FC<IPerDayBookingsProps> = ({ isPerDayBookingsLoading }) =
                </TableRow>
             </TableHeader>
          </Table>
-         <div className="h-80 overflow-y-auto custom-scrollbar">
+         <div className="h-80 overflow-auto custom-scrollbar">
             {isPerDayBookingsLoading ? (
                <PerDayBookingsSkeleton />
             ) : (
