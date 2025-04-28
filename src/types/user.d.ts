@@ -1,3 +1,4 @@
+import { boolean, number, string } from "zod";
 import { ApiReponseAllocatedSlotsSchema, IBookingSchedule } from "./mentor";
 
 export interface User {
@@ -44,7 +45,7 @@ export interface MentorDetails {
     languages: string[];
     _id: string;
     createdAt: Date;
-    price: number;
+    fee: number;
 }
 
 export interface IMentorProfileDetailsApiResponse {
@@ -66,17 +67,26 @@ export interface IMentorDetailsWithSlots {
 
 //Razorpay related types
 
+export interface IRazorpayOrderResponse {
+    success: boolean,
+    body: IRazorpayOrder;
+    message: string
+};
 export interface IRazorpayOrder {
-    id: string;
-    entity: string;
+    _id: string;
+    order_id: string;
     amount: number;
-    amount_paid: number;
-    amount_due: number;
     currency: string;
-    receipt: string;
-    status: "created" | "attempted" | "paid" | "failed";
-    attempts: number;
-    created_at: number;
+};
+
+export interface IRazorpayError {
+    error: {
+        code: string;
+        description: string;
+        source: string;
+        step: string;
+        reason: string;
+    };
 };
 
 export interface IRazorpayOptions {
@@ -87,14 +97,17 @@ export interface IRazorpayOptions {
     description?: string;
     order_id: string;
     handler: (response: RazorpaySuccessResponse) => void;
-    prefill?: {
-        name?: string;
-        email?: string;
-        contact?: string;
+    prefill: {
+        name: string;
+        email: string;
+        contact: string;
     };
-    image?: string;
-    theme?: {
-        color?: string;
+    image: string;
+    theme: {
+        color: string;
+    };
+    modal: {
+        ondismiss?: () => void;
     };
 };
 

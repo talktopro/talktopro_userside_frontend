@@ -30,6 +30,7 @@ import {
   DropdownMenuTrigger,
 } from "../ui/dropdown-menu";
 import { Avatar, AvatarImage } from "../ui/avatar";
+import { Dialog, DialogClose, DialogContent, DialogDescription, DialogHeader, DialogTitle, DialogTrigger } from "../ui/dialog";
 
 const Navbar = () => {
   const dispatch = useDispatch();
@@ -80,24 +81,19 @@ const Navbar = () => {
       value: "bookings",
       icon: <NotebookText strokeWidth={1.5} size={18} />,
     },
-    {
-      label: "Professional Dashboard",
-      pathLocation: ROUTES.MENTOR.DASHBOARD,
-      value: "service_provider_console",
-      icon: <LayoutTemplate strokeWidth={1.5} size={18} />,
-    },
-    // {
-    //   label: "Favourites",
-    //   pathLocation: "",
-    //   value: "favourites",
-    //   icon: <Heart strokeWidth={1.5} size={18} />,
-    // },
-    {
-      label: "Logout",
-      pathLocation: "",
-      value: "logout",
-      icon: <LogOut strokeWidth={1.5} size={18} />,
-    },
+
+    !user?.isMentor ?
+      {
+        label: "Register as Mentor",
+        pathLocation: ROUTES.MENTOR.REGISTER,
+        value: "registerMentor",
+        icon: <LayoutTemplate strokeWidth={1.5} size={18} />,
+      } : {
+        label: "Professional Dashboard",
+        pathLocation: ROUTES.MENTOR.DASHBOARD,
+        value: "service_provider_console",
+        icon: <LayoutTemplate strokeWidth={1.5} size={18} />,
+      },
   ];
 
   const handleLogout = () => {
@@ -156,13 +152,9 @@ const Navbar = () => {
                 {menuItems.map((item: MenuItem) => (
                   <DropdownMenuItem
                     key={item.value}
-                    className={`flex items-center transition duration-300 pr-10 cursor-pointer hover:bg-muted ${item.value === "logout" ? "text-red-600 hover:text-red-600" : ""}`}
+                    className="flex items-center transition duration-300 pr-10 cursor-pointer hover:bg-muted"
                     onSelect={() => {
-                      if (item.value === "logout") {
-                        handleLogout();
-                      } else {
-                        navigate(item.pathLocation);
-                      }
+                      navigate(item.pathLocation);
                     }}
                   >
                     <div className="flex items-center gap-2">
@@ -171,6 +163,47 @@ const Navbar = () => {
                     </div>
                   </DropdownMenuItem>
                 ))}
+
+                <Dialog>
+                  <DialogTrigger asChild>
+                    <DropdownMenuItem
+                      className="flex items-center transition duration-300 pr-10 cursor-pointer hover:bg-muted text-red-600 hover:text-red-600"
+                      onSelect={(e) => e.preventDefault()}
+                    >
+                      <div className="flex items-center gap-2">
+                        <span><LogOut strokeWidth={1.5} size={18} /></span>
+                        <span>Logout</span>
+                      </div>
+                    </DropdownMenuItem>
+                  </DialogTrigger>
+                  <DialogContent className="w-sm p-6">
+                    <DialogHeader>
+                      <DialogTitle className="text-center mb-2">
+                        Confirm Logout
+                      </DialogTitle>
+                      <DialogDescription className="text-center">
+                        You will be logged out of your account. Are you sure you want to continue?
+                      </DialogDescription>
+                    </DialogHeader>
+                    <div className="flex justify-center gap-1">
+                      <DialogClose asChild>
+                        <Button
+                          variant="ghost"
+                          className="w-1/2 text-white bg-red-600 hover:bg-red-700"
+                        >
+                          Cancel
+                        </Button>
+                      </DialogClose>
+                      <Button
+                        className="w-1/2 border"
+                        variant="ghost"
+                        onClick={handleLogout}
+                      >
+                        Yes, Logout
+                      </Button>
+                    </div>
+                  </DialogContent>
+                </Dialog>
               </DropdownMenuContent>
             </DropdownMenu>
           ) : (

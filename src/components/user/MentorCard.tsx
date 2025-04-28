@@ -27,8 +27,16 @@ const MentorCard = ({ mentor }: MentorCardProps) => {
       <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/50 to-transparent p-4 not-sm:p-2 transition-all duration-300 group-hover:from-black/80 group-hover:via-black/40">
         <div className="flex items-center justify-between">
           <div>
-            <h2 className="text-xl not-md:text-sm capitalize font-semibold text-white line-clamp-1">{`${mentor.mentorDetails.first_name} ${mentor.mentorDetails.last_name}`}</h2>
-            <p className="text-gray-200 line-clamp-1 capitalize text-md not-md:text-xs">
+            <h2
+              className="text-xl not-md:text-sm capitalize font-semibold text-white line-clamp-1"
+              title={`${mentor.mentorDetails.first_name} ${mentor.mentorDetails.last_name}`}
+            >
+              {`${mentor.mentorDetails.first_name} ${mentor.mentorDetails.last_name}`}
+            </h2>
+            <p
+              className="text-gray-200 line-clamp-1 capitalize text-md not-md:text-xs"
+              title={mentor.mentorDetails.profession}
+            >
               {mentor.mentorDetails.profession}
             </p>
             <div className="flex items-center gap-0.5 mt-1">

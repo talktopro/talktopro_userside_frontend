@@ -113,6 +113,9 @@ const Footer = () => {
               className="cursor-pointer hover:text-purple-500 transition-colors duration-300"
             />
           </div>
+          <p className="text-xs text-center mt-2">
+            Version 1.0.0
+          </p>
         </div>
       </div>
     </footer>

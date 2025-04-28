@@ -18,7 +18,7 @@ const BookingCalendar: FC<IBookingCalendarProps> = ({ mentor }) => {
   const [selectedTimeSlot, setSelectedTimeSlot] = useState<string | null>(null);
   const today = startOfToday();
   const predefinedTimeSlots: string[] = useMemo(generateTimeSlots, []);
-  const { getRazorpayOrder, loadRazorpay, createRazorpayOptions } = usePayment();
+  const { handleTriggerPayment } = usePayment();
   const [isRazorpayOrderLoading, setIsRazorpayOrderLoading] = useState(false);
 
   const isDateAvailable = (date: Date) => {
@@ -30,39 +30,24 @@ const BookingCalendar: FC<IBookingCalendarProps> = ({ mentor }) => {
   const isTimeSlotAvailable = (timeSlot: string) => {
     if (!date || !mentor.slots) return false;
     const dateKey = format(date, "dd-MM-yyyy");
-    return mentor.slots[dateKey]?.[timeSlot] || false;
+    const slotStatus = mentor.slots[dateKey]?.[timeSlot] as { isBooked: "booked" | "free" | "on_hold" } | undefined;
+    if (slotStatus && slotStatus.isBooked === "free") {
+      return true;
+    } else {
+      return false;
+    };
   };
 
   const handlePaymentButtonClick = async () => {
     try {
       setIsRazorpayOrderLoading(true);
-      const orderDetails = await getRazorpayOrder(mentor.mentorDetails.price);
-
-      // Step 2: Load Razorpay script
-      const isRazorpayLoaded = await loadRazorpay();
-      if (!isRazorpayLoaded) {
-        toast.error('Failed to load Razorpay');
-        return;
-      };
-
-      if (!orderDetails?.amount || !orderDetails?.currency || !orderDetails?.id) {
-        toast.error("Failed to collect order details.");
-        return;
-      };
 
       if (!date || !selectedTimeSlot) {
         toast.error("Choose your appoinment date and slot");
         return;
       }
 
-      const options = createRazorpayOptions(orderDetails?.amount, orderDetails?.currency, orderDetails?.id, mentor._id, date, selectedTimeSlot)
-
-      const razorpayInstance = new window.Razorpay(options);
-      razorpayInstance.open();
-
-    } catch (error) {
-      console.error('Payment failed:', error);
-      toast.error('Payment initialization failed');
+      handleTriggerPayment(date, selectedTimeSlot, mentor)
     } finally {
       setIsRazorpayOrderLoading(false);
     };
@@ -175,7 +160,7 @@ const BookingCalendar: FC<IBookingCalendarProps> = ({ mentor }) => {
                 disabled={!date || !selectedTimeSlot || isRazorpayOrderLoading}
                 onClick={handlePaymentButtonClick}
               >
-                {selectedTimeSlot ? `Pay now ${mentor.mentorDetails.price}₹/-` : "Pay now"}
+                {selectedTimeSlot ? `Pay now ${mentor.mentorDetails.fee}₹/-` : "Pay now"}
               </Button>
             </DrawerClose>
           </div>
@@ -193,7 +178,7 @@ const BookingCalendar: FC<IBookingCalendarProps> = ({ mentor }) => {
               disabled={!date || !selectedTimeSlot || isRazorpayOrderLoading}
               onClick={handlePaymentButtonClick}
             >
-              {selectedTimeSlot ? `Pay now ${mentor.mentorDetails.price}₹/-` : "Pay now"}
+              {selectedTimeSlot ? `Pay now ${mentor.mentorDetails.fee}₹/-` : "Pay now"}
             </Button>
           </DrawerClose>
         </div>

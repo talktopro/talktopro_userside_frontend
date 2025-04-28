@@ -29,8 +29,8 @@ const UsersTable = () => {
       setUsers(Array.isArray(data.users) ? data.users : []);
       setTotalPage(data.totalPage);
     } catch (error) {
-      console.error("Error occurred while fetching booking history!", error);
-      toast.error("Failed to collect booking history. Please try again later.");
+      console.error("Error occurred while fetching user list!", error);
+      toast.error("Failed to collect user list. Please try again later.");
     } finally {
       setIsLoading(false);
     }

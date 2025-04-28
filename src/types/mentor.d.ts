@@ -1,7 +1,7 @@
 //! `isBooked` indicates that the slot is already confirmed in the backend and stored in the database.
 //! `"newAllocation"` indicates that the slot is newly selected on the frontend and not yet saved in the backend or database.
 
-type SlotStatus = { isBooked: boolean } | "newAllocation";
+type SlotStatus = { isBooked: "booked" | "free" | "on_hold" } | "newAllocation";
 
 export interface IBookingSchedule {
    [date: string]: {
@@ -10,7 +10,7 @@ export interface IBookingSchedule {
 }
 
 interface ApiReponseSlotSchema {
-   booked: boolean;
+   booked: "booked" | "free" | "on_hold";
    userId: string | null;
    bookingId: string | null;
    time: string;

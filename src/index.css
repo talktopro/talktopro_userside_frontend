@@ -191,6 +191,10 @@ input[type="number"] {
         radial-gradient(at 99% 23%, hsla(285, 100%, 47%, 0.14) 0px, transparent 50%);
 }
 
+.accountDetails_bg {
+    background: linear-gradient(90deg, rgba(184, 34, 253, 0.148) 0%, rgba(116, 116, 116, 0) 76%, rgba(166, 0, 255, 0.121) 100%);
+}
+
 /* add background blur if the popover is open in mentor slot allocation page */
 .popover-open::after {
     content: "";

@@ -19,6 +19,8 @@ import apiClient from "@/api/axiosInstance";
 import { toast } from "sonner";
 import { useDispatch } from "react-redux";
 import { adminLogout } from "@/redux/slices/adminSlice";
+import { Dialog, DialogClose, DialogContent, DialogDescription, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
+import { Button } from "@/components/ui/button";
 
 const AdminHeader = () => {
   const { theme, toggleTheme } = useTheme();
@@ -79,15 +81,46 @@ const AdminHeader = () => {
             className="min-w-40 rounded-lg mr-4"
             side="bottom"
           >
-            <DropdownMenuItem className="gap-2 p-2">
-              <div
-                className="flex items-center transition duration-300 cursor-pointer hover:bg-muted text-red-500"
-                onClick={handleLogout}
-              >
-                <LogOut strokeWidth={1.5} size={18} className="text-red-500" />
-                <span className="ml-2">Logout</span>
-              </div>
-            </DropdownMenuItem>
+
+            <Dialog>
+              <DialogTrigger asChild>
+                <DropdownMenuItem className="gap-2 p-2" onSelect={(e) => e.preventDefault()}>
+                  <div
+                    className="flex items-center transition duration-300 cursor-pointer hover:bg-muted text-red-500"
+                  >
+                    <LogOut strokeWidth={1.5} size={18} className="text-red-500" />
+                    <span className="ml-2">Logout</span>
+                  </div>
+                </DropdownMenuItem>
+              </DialogTrigger>
+              <DialogContent className="w-sm p-6">
+                <DialogHeader>
+                  <DialogTitle className="text-center mb-2">
+                    Confirm Logout
+                  </DialogTitle>
+                  <DialogDescription className="text-center">
+                    You will be logged out of your account. Are you sure you want to continue?
+                  </DialogDescription>
+                </DialogHeader>
+                <div className="flex justify-center gap-1">
+                  <DialogClose asChild>
+                    <Button
+                      variant="ghost"
+                      className="w-1/2 text-white bg-red-600 hover:bg-red-700"
+                    >
+                      Cancel
+                    </Button>
+                  </DialogClose>
+                  <Button
+                    className="w-1/2 border"
+                    variant="ghost"
+                    onClick={handleLogout}
+                  >
+                    Yes, Logout
+                  </Button>
+                </div>
+              </DialogContent>
+            </Dialog>
           </DropdownMenuContent>
         </DropdownMenu>
       </div>

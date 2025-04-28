@@ -52,7 +52,7 @@ const SlotAllocationCalendar: FC<SlotAllocationCalendarProps> = ({ allocatedSlot
                 const isOutsideDay = date.getMonth() !== month.getMonth();
 
                 const hasBookedSlots = allocatedSlots[dateStr]
-                  ? Object.values(allocatedSlots[dateStr]).some(status => typeof status === "object" && status.isBooked)
+                  ? Object.values(allocatedSlots[dateStr]).some(status => typeof status === "object" && status.isBooked === "booked")
                   : false;
 
                 if (isOutsideDay) {

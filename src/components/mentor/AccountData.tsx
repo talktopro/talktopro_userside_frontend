@@ -1,6 +1,5 @@
 import { Textarea } from "../ui/textarea";
 import avatar from "@/assets/avatar/user.png";
-import background from "@/assets/backgrounds/grainy.jpg";
 import { BadgeButton, InputBox } from "./InputBadge";
 import { Input } from "../ui/input";
 import { Checkbox } from "../ui/checkbox";
@@ -222,13 +221,7 @@ const RegisterBody: FC<RegisterBodyProps> = ({ fromRegisterPage, fromApplication
         >
           <div className="relative">
             <div
-              className="w-full h-24 sm:h-32 rounded-lg"
-              style={{
-                backgroundImage: `url('${background}')`,
-                backgroundSize: "cover",
-                backgroundPosition: "center",
-                opacity: "15%",
-              }}
+              className="w-full h-24 sm:h-32 rounded-lg accountDetails_bg"
               hidden={fromApplicationRejectedPage}
             />
             <div className={`${fromApplicationRejectedPage ? "mt-20" : "px-10"}`}>

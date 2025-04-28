@@ -48,7 +48,7 @@ const useSlotAllocation = () => {
       if (allocatedSlots[date] && allocatedSlots[date][time]) {
 
         // isBooking indicate this time slot already updated in database, if the slot contains isBooking false then only we need update backend 
-        if (typeof allocatedSlots[date][time] === "object" && allocatedSlots[date][time].isBooked === false) {
+        if (typeof allocatedSlots[date][time] === "object" && allocatedSlots[date][time].isBooked === "free") {
           await apiClient.delete(`/mentor/slots`, {
             data: { date: date, slots: [time24] }
           });

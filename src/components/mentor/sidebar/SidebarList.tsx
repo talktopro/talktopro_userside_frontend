@@ -29,6 +29,8 @@ import { ROUTES } from "@/routes/routes";
 import { useNavigate, useLocation } from "react-router-dom";
 import { useDispatch } from "react-redux";
 import { logout } from "@/redux/slices/authSlice";
+import { Dialog, DialogClose, DialogContent, DialogDescription, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
+import { Button } from "@/components/ui/button";
 
 const SidebarList = () => {
   const navigate = useNavigate();
@@ -116,7 +118,7 @@ const SidebarList = () => {
         </SidebarMenuButton>
 
         <SidebarMenuButton
-          tooltip="Slot Management"
+          tooltip="Pricing"
           className={`cursor-pointer ${isActive(ROUTES.MENTOR.PRICING)
             ? "bg-primary/20 transition-colors duration-100"
             : ""
@@ -151,13 +153,44 @@ const SidebarList = () => {
                     <UserRoundCog strokeWidth={1.5} size={15} />
                     <span>Account settings</span>
                   </SidebarMenuSubButton>
-                  <SidebarMenuSubButton
-                    className="cursor-pointer text-red-500 hover:bg-red-500/50 transition-colors duration-300"
-                    onClick={handleLogout}
-                  >
-                    <LogOut strokeWidth={1.5} size={15} className="text-red-500" />
-                    <span>Logout</span>
-                  </SidebarMenuSubButton>
+
+                  <Dialog>
+                    <DialogTrigger asChild>
+                      <SidebarMenuSubButton
+                        className="cursor-pointer text-red-500 hover:bg-red-500/50 transition-colors duration-300"
+                      >
+                        <LogOut strokeWidth={1.5} size={15} className="text-red-500" />
+                        <span>Logout</span>
+                      </SidebarMenuSubButton>
+                    </DialogTrigger>
+                    <DialogContent className="w-sm p-6">
+                      <DialogHeader>
+                        <DialogTitle className="text-center mb-2">
+                          Confirm Logout
+                        </DialogTitle>
+                        <DialogDescription className="text-center">
+                          You will be logged out of your account. Are you sure you want to continue?
+                        </DialogDescription>
+                      </DialogHeader>
+                      <div className="flex justify-center gap-1">
+                        <DialogClose asChild>
+                          <Button
+                            variant="ghost"
+                            className="w-1/2 text-white bg-red-600 hover:bg-red-700"
+                          >
+                            Cancel
+                          </Button>
+                        </DialogClose>
+                        <Button
+                          className="w-1/2 border"
+                          variant="ghost"
+                          onClick={handleLogout}
+                        >
+                          Yes, Logout
+                        </Button>
+                      </div>
+                    </DialogContent>
+                  </Dialog>
                 </SidebarMenuSubItem>
               </SidebarMenuSub>
             </CollapsibleContent>

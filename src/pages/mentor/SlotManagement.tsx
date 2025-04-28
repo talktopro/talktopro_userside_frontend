@@ -26,7 +26,7 @@ const SlotManagement: React.FC = () => {
   };
 
   useEffect(() => {
-    if (!user?.mentorDetails?.price) {
+    if (!user?.mentorDetails?.fee) {
       return;
     }
     handleFetchSlotDetails(setAllocatedSlots);
@@ -39,7 +39,7 @@ const SlotManagement: React.FC = () => {
     setHasUnsavedChanges(hasNewSlots);
   }, [allocatedSlots]);
 
-  if (!user?.mentorDetails?.price) {
+  if (!user?.mentorDetails?.fee) {
     return (
       <div className="p-4 space-y-3">
         <h2 className="text-2xl not-sm:text-lg font-bold pb-10">

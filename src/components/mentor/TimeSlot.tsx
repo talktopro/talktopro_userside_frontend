@@ -61,9 +61,9 @@ const TimeSlots: React.FC<TimeSlotsProps> = ({
           <div
             key={index}
             className={`py-2 px-3 text-center text-xs rounded-md border cursor-pointer transition-colors relative
-              ${(typeof selectedTimes[slot] === "object" && selectedTimes[slot].isBooked === false) || selectedTimes[slot] === "newAllocation"
+              ${(typeof selectedTimes[slot] === "object" && selectedTimes[slot].isBooked === "free") || selectedTimes[slot] === "newAllocation"
                 ? "border-purple-500 bg-purple-500/10 text-purple-500 font-semibold"
-                : typeof selectedTimes[slot] === "object" && selectedTimes[slot].isBooked
+                : typeof selectedTimes[slot] === "object" && selectedTimes[slot].isBooked === "booked"
                   ? "border-teal-500 bg-teal-500/10 text-teal-500 font-semibold"
                   : "hover:border-gray-300"
               }`}
@@ -74,7 +74,7 @@ const TimeSlots: React.FC<TimeSlotsProps> = ({
             }}
           >
             {slot}
-            {((typeof selectedTimes[slot] === "object" && selectedTimes[slot].isBooked === false) || selectedTimes[slot] === "newAllocation") && (
+            {((typeof selectedTimes[slot] === "object" && selectedTimes[slot].isBooked === "free") || selectedTimes[slot] === "newAllocation") && (
               <button
                 className="absolute -top-1 -right-1 bg-red-500 hover:bg-red-600 transition-colors duration-300 flex justify-center items-center rounded-full p-0.5 text-background"
                 onClick={(e) => {

@@ -1,6 +1,5 @@
 import { Mail, Phone } from "lucide-react";
 import avatar from "@/assets/avatar/user.png";
-import background from "@/assets/backgrounds/grainy.jpg";
 import EditAccountDetails from "@/components/user/EditAccountDetails";
 import { selectAuth } from "@/redux/slices/authSlice";
 import { useSelector } from "react-redux";
@@ -12,13 +11,7 @@ const AccountSettings = () => {
   return (
     <div className="w-full mx-auto px-4 sm:px-6 md:px-10 mt-5">
       <div
-        className="w-full h-24 sm:h-32 rounded-lg"
-        style={{
-          backgroundImage: `url('${background}')`,
-          backgroundSize: "cover",
-          backgroundPosition: "center",
-          opacity: "15%",
-        }}
+        className="w-full h-24 sm:h-32 rounded-lg accountDetails_bg"
       />
       <div className="px-4 sm:px-10 pb-4">
         <div className="flex justify-center relative">

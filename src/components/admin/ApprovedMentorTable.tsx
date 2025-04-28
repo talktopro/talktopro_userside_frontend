@@ -33,9 +33,9 @@ const ApprovedMentorTable: FC<IApprovedMentorTableProps> = ({
 }) => {
   const actionDropDownItems: string[] = [
     "View Profile",
-    "Draft Mail",
-    "Show Ananlytics",
-    "Block",
+    // "Draft Mail",
+    // "Show Ananlytics",
+    // "Block",
   ];
   const bucketName = import.meta.env.VITE_S3BUCKET_NAME;
 

@@ -5,6 +5,7 @@ import { Skeleton } from "../ui/skeleton";
 import { GraduationCap, X } from "lucide-react";
 import MentorCard from "./MentorCard";
 import useFetchMentorsList from "@/hooks/useFetchMentorsList";
+import useDebounce from "@/hooks/useDebounce";
 
 const Searchbar = () => {
   const [searchValue, setSearchValue] = useState<string>("");
@@ -13,20 +14,22 @@ const Searchbar = () => {
   const searchRef = useRef<HTMLDivElement>(null);
   const { getAllMentors } = useFetchMentorsList();
 
+  const debouncedSearchValue = useDebounce(searchValue, 500);
+
+  useEffect(() => {
+    if (debouncedSearchValue.trim().length > 0) {
+      handleSearch(debouncedSearchValue);
+    }
+  }, [debouncedSearchValue]);
+
   const handleSearch = async (value: string) => {
-    setSearchValue(value);
-    if (value.trim().length > 0) {
-      setIsSearching(true);
-      try {
-        const result = await getAllMentors({ search: value });
-        setMentorsList(result);
-      } catch (error) {
-        setMentorsList([]);
-      } finally {
-        setIsSearching(false);
-      }
-    } else {
+    setIsSearching(true);
+    try {
+      const result = await getAllMentors({ search: value });
+      setMentorsList(result);
+    } catch (error) {
       setMentorsList([]);
+    } finally {
       setIsSearching(false);
     }
   };
@@ -60,10 +63,10 @@ const Searchbar = () => {
       <div className="flex items-center relative">
         <Input
           type="text"
-          placeholder="Search..."
+          placeholder="Search Mentors..."
           className="w-full pr-8 not-md:hidden"
           value={searchValue}
-          onChange={(e) => handleSearch(e.target.value)}
+          onChange={(e) => setSearchValue(e.target.value)}
         />
         {searchValue.length > 0 && (
           <button

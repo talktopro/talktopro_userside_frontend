@@ -30,7 +30,7 @@ const AdminUsersTable: FC<IAdminUsersProps> = ({
   currentPage,
   limit,
 }) => {
-  const actionDropDownItems: string[] = ["Draft Mail", "Block"];
+  const actionDropDownItems: string[] = ["Block"];
   const bucketName = import.meta.env.VITE_S3BUCKET_NAME;
 
   return (

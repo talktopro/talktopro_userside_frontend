@@ -27,7 +27,7 @@ const Pricing = () => {
   const form = useForm<AmountFormValues>({
     resolver: zodResolver(amountFormSchema),
     defaultValues: {
-      amount: user?.mentorDetails?.price || 0
+      amount: user?.mentorDetails?.fee || 0
     }
   });
   const currentAmount = form.watch('amount');
@@ -42,12 +42,12 @@ const Pricing = () => {
       }
       await apiClient.patch(`/mentor/fee`, { fee: values.amount });
       if (user?.mentorDetails) {
-        dispatch(updateUser({ mentorDetails: { ...user?.mentorDetails, price: values.amount } }))
+        dispatch(updateUser({ mentorDetails: { ...user?.mentorDetails, fee: values.amount } }))
       }
       form.reset({ amount: values.amount });
     } catch (error) {
-      toast.error("Failed to save price.");
-      console.log("Error occured from handle price save", error);
+      toast.error("Failed to save fee.");
+      console.log("Error occured from handle fee save", error);
     }
   };
 
