@@ -27,13 +27,4 @@ export const ROUTES = {
         NOTIFICATION_SETTINGS: "/mentor/notification-settings",
         REGISTER: "/mentor/register",
     },
-
-    ADMIN: {
-        LOGIN: "/admin/login",
-        SETTINGS: "/admin/settings",
-        DASHBOARD: "/admin/dashboard",
-        BOOKINGS: "/admin/bookings",
-        USERS: "/admin/users",
-        MENTORS: "/admin/mentors",
-    }
 };

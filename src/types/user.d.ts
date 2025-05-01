@@ -106,9 +106,6 @@ export interface IRazorpayOptions {
     theme: {
         color: string;
     };
-    modal: {
-        ondismiss?: () => void;
-    };
 };
 
 export interface IRazorpaySuccessResponse {
@@ -124,5 +121,28 @@ declare global {
                 open: () => void;
             };
         };
+    };
+};
+
+// All booking api repone
+
+export interface IBookingHistoryApiResponse {
+    body: IBookingHistory[];
+    message: string;
+    success: boolean;
+};
+export interface IBookingHistory {
+    _id: string,
+    payment_status: "success" | "pending" | "failed",
+    slot: {
+        date: string,
+        time: string,
+        fee: number
+    },
+    status: "success" | "pending" | "failed",
+    mentor: {
+        _id: string,
+        mentorDetails: MentorDetails,
+        profileImg: string,
     };
 };

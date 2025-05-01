@@ -164,13 +164,15 @@ const ImageCropper = ({
           <Button
             variant="ghost"
             onClick={onClose}
-            className="px-4 py-2 text-sm font-medium text-red-500 rounded-md hover:text-red-700"
+            disabled={isLoading}
+            className="px-4 py-2 text-sm font-medium text-red-500 rounded-md hover:text-red-700 disabled:opacity-70 disabled:cursor-pointer"
           >
             Cancel
           </Button>
           <Button
-            className="px-4 py-2 text-sm font-medium bg-primary min-w-20"
+            className="px-4 py-2 text-sm font-medium bg-primary min-w-20 disabled:opacity-70 disabled:cursor-pointer"
             onClick={handleSave}
+            disabled={isLoading}
           >
             Save
           </Button>

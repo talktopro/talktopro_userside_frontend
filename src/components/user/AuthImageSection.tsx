@@ -1,4 +1,4 @@
-import loginImage from "@/assets/auth-image.png";
+import loginImage from "@/assets/backgrounds/auth-image.png";
 
 const AuthImageSection = () => {
   return (

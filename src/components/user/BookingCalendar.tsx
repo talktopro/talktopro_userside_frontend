@@ -11,9 +11,10 @@ import { toast } from "sonner";
 
 interface IBookingCalendarProps {
   mentor: IMentorDetailsWithSlots
+  setShowPaymentSuccess: React.Dispatch<React.SetStateAction<boolean>>
 };
 
-const BookingCalendar: FC<IBookingCalendarProps> = ({ mentor }) => {
+const BookingCalendar: FC<IBookingCalendarProps> = ({ mentor, setShowPaymentSuccess }) => {
   const [date, setDate] = useState<Date | undefined>(new Date());
   const [selectedTimeSlot, setSelectedTimeSlot] = useState<string | null>(null);
   const today = startOfToday();
@@ -47,7 +48,8 @@ const BookingCalendar: FC<IBookingCalendarProps> = ({ mentor }) => {
         return;
       }
 
-      handleTriggerPayment(date, selectedTimeSlot, mentor)
+      const result = await handleTriggerPayment(date, selectedTimeSlot, mentor, setShowPaymentSuccess)
+      console.log(result)
     } finally {
       setIsRazorpayOrderLoading(false);
     };
@@ -62,7 +64,7 @@ const BookingCalendar: FC<IBookingCalendarProps> = ({ mentor }) => {
               mode="single"
               className="border-1 rounded-md p-5 not-sm:w-full"
               fromMonth={today}
-              toMonth={addDays(today, 30)}
+              toMonth={addDays(today, 31)}
               components={{
                 Head: () => (
                   <div className="grid grid-cols-7">

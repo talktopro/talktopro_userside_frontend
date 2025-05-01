@@ -1,6 +1,6 @@
 import { Card } from "@/components/ui/card";
 import { LineChart, Line, YAxis, ResponsiveContainer } from "recharts";
-import logo from "@/assets/logo.svg";
+import logo from "@/assets/svg/logo.svg";
 
 export function CareerBoostGraph() {
   const data = [

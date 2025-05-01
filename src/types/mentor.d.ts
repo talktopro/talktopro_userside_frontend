@@ -1,6 +1,8 @@
 //! `isBooked` indicates that the slot is already confirmed in the backend and stored in the database.
 //! `"newAllocation"` indicates that the slot is newly selected on the frontend and not yet saved in the backend or database.
 
+import { User } from "./user";
+
 type SlotStatus = { isBooked: "booked" | "free" | "on_hold" } | "newAllocation";
 
 export interface IBookingSchedule {
@@ -49,4 +51,25 @@ export interface INewSlotAllocationReqObj {
    slots: string[];
 }
 
-export type INewSlotAllocationReqBody = INewSlotAllocationReqObj[]; 
+export type INewSlotAllocationReqBody = INewSlotAllocationReqObj[];
+
+// Booking page 
+export interface IMentorBookingHistoryApiResponse {
+   body: {
+      totalPage: number;
+      bookings: IMentorBookingHistory[]
+   };
+   message: string;
+   success: boolean;
+};
+export interface IMentorBookingHistory {
+   _id: string,
+   payment_status: "success" | "pending" | "failed",
+   slot: {
+      date: string,
+      time: string,
+      fee: number
+   },
+   status: "success" | "pending" | "failed",
+   user: User;
+};

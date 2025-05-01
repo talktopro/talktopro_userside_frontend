@@ -3,7 +3,7 @@ import { selectAuth } from "@/redux/slices/authSlice";
 import { IMentorDetailsWithSlots, IRazorpayOptions, IRazorpayOrderResponse, IRazorpaySuccessResponse, IRazorpayError } from "@/types/user";
 import { toast } from "sonner";
 import { format } from "date-fns";
-import logo from "@/assets/logo.svg";
+import logo from "@/assets/svg/logo.svg";
 import convertTo24HourFormat from "@/utils/convertTo24HourFormat";
 import apiClient from "@/api/axiosInstance";
 
@@ -59,7 +59,7 @@ const usePayment = () => {
    };
 
    //!======================================= Creates configuration options for Razorpay payment modal =============================================
-   const createRazorpayOptions = (amount: number, currency: string, order_id: string, booking_id: string): IRazorpayOptions => {
+   const createRazorpayOptions = (amount: number, currency: string, order_id: string, booking_id: string, setShowPaymentSuccess: React.Dispatch<React.SetStateAction<boolean>>): IRazorpayOptions => {
 
       return {
          key: import.meta.env.VITE_RAZORPAY_KEY!,
@@ -69,7 +69,7 @@ const usePayment = () => {
          description: 'Session Booking Payment',
          order_id,
          handler: async (response: IRazorpaySuccessResponse) => {
-            await handleSuccessfulPayment(response, booking_id);
+            await handleSuccessfulPayment(response, booking_id, setShowPaymentSuccess);
          },
          prefill: {
             name: user?.uname || "Your Name",
@@ -79,23 +79,19 @@ const usePayment = () => {
          image: logo,
          theme: {
             color: "#ad46ff",
-         },
-         modal: {
-            ondismiss: async () => {
-               await handleFailedPayment('Payment was cancelled by user', booking_id);
-            },
-         },
+         }
       };
    };
 
    //! ============================================ Handles successful payment confirmation ==========================================================
-   const handleSuccessfulPayment = async (successResponse: IRazorpaySuccessResponse, bookingId: string) => {
+   const handleSuccessfulPayment = async (successResponse: IRazorpaySuccessResponse, bookingId: string, setShowPaymentSuccess: React.Dispatch<React.SetStateAction<boolean>>) => {
       try {
          const { data } = await apiClient.patch(`/bookings/${bookingId}`, {
             ...successResponse,
             success: true,
          });
          console.log("Payment successful!", data);
+         setShowPaymentSuccess(true)
          //Handle success page
       } catch (error) {
          toast.error("Failed to confirm payment");
@@ -122,7 +118,7 @@ const usePayment = () => {
    };
 
    //! ============================= Main function to trigger razorpay payment after click the paynow button =====================================
-   const handleTriggerPayment = async (date: Date, slot: string, mentor: IMentorDetailsWithSlots) => {
+   const handleTriggerPayment = async (date: Date, slot: string, mentor: IMentorDetailsWithSlots, setShowPaymentSuccess: React.Dispatch<React.SetStateAction<boolean>>) => {
       try {
          // Step 1: Create razorpay order and get Booking id
          const { _id, amount, currency, order_id } = await getRazorpayOrder(mentor.mentorDetails.fee, mentor._id, date, slot);
@@ -136,7 +132,7 @@ const usePayment = () => {
          await loadRazorpay();
 
          // Step 3: Create razorpay config options
-         const options = createRazorpayOptions(amount, currency, order_id, _id);
+         const options = createRazorpayOptions(amount, currency, order_id, _id, setShowPaymentSuccess);
 
          // Step 4: Create razorpay instance
          const razorpayInstance = getRazorPayInstance(options);
@@ -144,16 +140,14 @@ const usePayment = () => {
          // Add payment failed handler
          razorpayInstance.on('payment.failed', async (response: IRazorpayError) => {
             const reason = response.error.description || 'Payment failed';
-            razorpayInstance.close();
+            // razorpayInstance.close();
             await handleFailedPayment(reason, _id);
          });
 
          // Step 5: Open razorpay modal for complete payment
          razorpayInstance.open();
-
       } catch (error) {
          console.error('Payment failed:', error);
-         toast.error('Payment initialization failed');
       }
    };
 

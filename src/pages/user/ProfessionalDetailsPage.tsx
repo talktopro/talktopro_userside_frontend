@@ -18,12 +18,14 @@ import { Star } from "lucide-react";
 import MentorProfileSkeleton from "@/components/common/skeletons/MentorProfile";
 import { toast } from "sonner";
 import SlotResponseConverter from "@/utils/slotResponseConverter";
+import PaymentSuccess from "@/components/common/PaymentSuccess";
 
 const ProfessionalDetailsPage = () => {
   const { id } = useParams<{ id: string }>();
   const [mentor, setMentor] = useState<IMentorDetailsWithSlots | null>();
   const [loading, setLoading] = useState<boolean>(!mentor);
   const bucketName = import.meta.env.VITE_S3BUCKET_NAME;
+  const [showPaymentSuccess, setShowPaymentSuccess] = useState<boolean>(false)
 
   useEffect(() => {
     if (!mentor) {
@@ -43,6 +45,12 @@ const ProfessionalDetailsPage = () => {
       fetchMentor();
     }
   }, [id]);
+
+  if (showPaymentSuccess) {
+    return (
+      <PaymentSuccess />
+    );
+  };
 
   interface ITriggerSlots {
     trigger: JSX.Element;
@@ -69,7 +77,7 @@ const ProfessionalDetailsPage = () => {
                 <span className="text-sm">Not Available</span>
               </div>
               {mentor && (
-                <BookingCalendar mentor={mentor} />
+                <BookingCalendar mentor={mentor} setShowPaymentSuccess={setShowPaymentSuccess} />
               )}
             </DrawerHeader>
           </div>

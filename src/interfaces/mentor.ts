@@ -27,7 +27,9 @@ export interface SidebarFooterMentorDetails {
 
 export interface IBookingQueryDetails {
    page: number;
-   sort: "ascending" | "descending";
+   limit: number;
+   sort: "NewestToOldest" | "OldestToNewest";
+   bookings?: "incoming"
 };
 
 export interface INotification {

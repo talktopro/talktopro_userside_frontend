@@ -22,17 +22,7 @@ import MentorAccountDetails from "@/pages/mentor/AccountDetails";
 import SlotManagement from "@/pages/mentor/SlotManagement";
 import Pricing from "@/pages/mentor/Pricing";
 
-//! Admin pages
-import AdminLoginPage from "@/pages/admin/Login";
-import AdminBookings from "@/pages/admin/Bookings";
-import MentorsTable from "@/pages/admin/MentorsTable";
-import UsersTable from "@/pages/admin/UsersTable";
-import AdminLayout from "@/layouts/AdminLayout";
-import AdminDashboard from "@/pages/admin/Dashboard";
-
 //! Protectors
-import AdminRouteProtector from "@/auth/adminProtector";
-import GuestAdminProtector from "@/auth/guestAdmin";
 import MentorRouteProtector from "@/auth/mentorProtector";
 import UserRouteProtector from "@/auth/userProtector";
 import GuestUserProtector from "@/auth/guestUserProtector";
@@ -103,20 +93,6 @@ const AppRoutes = () => {
             path={ROUTES.MENTOR.ACCOUNT_SETTINGS}
             element={<MentorAccountDetails />}
           />
-        </Route>
-      </Route>
-
-      {/* All admin routes */}
-
-      <Route element={<GuestAdminProtector />}>
-        <Route path={ROUTES.ADMIN.LOGIN} element={<AdminLoginPage />} />
-      </Route>
-      <Route element={<AdminRouteProtector />}>
-        <Route element={<AdminLayout />}>
-          <Route path={ROUTES.ADMIN.DASHBOARD} element={<AdminDashboard />} />
-          <Route path={ROUTES.ADMIN.BOOKINGS} element={<AdminBookings />} />
-          <Route path={ROUTES.ADMIN.USERS} element={<UsersTable />} />
-          <Route path={ROUTES.ADMIN.MENTORS} element={<MentorsTable />} />
         </Route>
       </Route>
     </Routes>

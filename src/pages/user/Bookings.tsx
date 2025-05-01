@@ -1,21 +1,25 @@
 import React, { useEffect, useState } from "react";
-import BookingsTable from "@/components/common/Table";
-import BookingsHeader from "@/components/common/Header";
+import BookingsTable from "@/components/user/booking/BookingsTable";
+import BookingsHeader from "@/components/common/BookingTableHeader";
 import SkeletonTable from "@/components/common/skeletons/Table";
 import { NotebookText } from "lucide-react";
-// import { toast } from "sonner";
+import { toast } from "sonner";
 import apiClient from "@/api/axiosInstance";
-import { IBooking, IBookingQueryDetails } from "@/interfaces/user";
+import { IBookingQueryDetails } from "@/interfaces/user";
+import { IBookingHistory, IBookingHistoryApiResponse } from "@/types/user";
+import CustomPagination from "@/components/common/CustomPagination";
 
 const Bookings: React.FC = () => {
-  const [bookingHistory, setBookingHistory] = useState<IBooking[]>([]);
+  const [bookingHistory, setBookingHistory] = useState<IBookingHistory[]>([]);
   const [isLoading, setIsLoading] = useState(false);
+  const [totalPage, setTotalPage] = useState<number>(0);
   const [queryDetails, setQueryDetails] = useState<IBookingQueryDetails>({
     page: 1,
-    sort: "ascending",
+    sort: "NewestToOldest",
+    limit: 10,
   });
 
-  const handleSortChange: (sort: "ascending" | "descending") => void = (
+  const handleSortChange: (sort: "NewestToOldest" | "OldestToNewest") => void = (
     sort
   ) => {
     setQueryDetails((prev) => ({ ...prev, sort }));
@@ -24,13 +28,14 @@ const Bookings: React.FC = () => {
   const fetchBookingHistory = async () => {
     try {
       setIsLoading(true);
-      const { data } = await apiClient.get<IBooking[]>(`url`, {
+      const { data } = await apiClient.get<IBookingHistoryApiResponse>(`/bookings`, {
         params: queryDetails,
       });
-      setBookingHistory(Array.isArray(data) ? data : []);
+      setBookingHistory(Array.isArray(data.body) ? data.body : []);
+      setTotalPage(0)
     } catch (error) {
       console.error("Error occurred while fetching booking history!", error);
-      // toast.error("Failed to collect booking history. Please try again later.");
+      toast.error("Failed to collect booking history. Please try again later.");
     } finally {
       setIsLoading(false);
     }
@@ -40,17 +45,37 @@ const Bookings: React.FC = () => {
     fetchBookingHistory();
   }, [queryDetails]);
 
+  const handleChangeCurrentPage = (page: number): void => {
+    setQueryDetails((prev: IBookingQueryDetails) => ({ ...prev, page: page }));
+  };
+
   return (
     <>
       <div className="pt-8 sm:px-12 not-sm:px-4">
         <BookingsHeader
           showSelect={!isLoading && bookingHistory.length > 0}
           onSortChange={handleSortChange}
+          sort={queryDetails.sort}
         />
         {isLoading ? (
           <SkeletonTable />
         ) : bookingHistory.length > 0 ? (
-          <BookingsTable bookingDetails={bookingHistory} />
+
+          <div className="min-h-96 flex flex-col justify-between items-end">
+            <BookingsTable
+              bookingDetails={bookingHistory}
+              currentPage={queryDetails.page}
+              limit={queryDetails.limit}
+            />
+            {totalPage > 1 && (
+              <CustomPagination
+                currentPage={queryDetails.page}
+                onChange={handleChangeCurrentPage}
+                totalPage={totalPage}
+              />
+            )}
+          </div>
+
         ) : (
           <div className="flex flex-col justify-center items-center h-96">
             <NotebookText strokeWidth={1} size={50} className="opacity-60" />

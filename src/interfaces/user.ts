@@ -19,7 +19,9 @@ export interface IBooking {
 
 export interface IBookingQueryDetails {
    page: number;
-   sort: "ascending" | "descending";
+   sort: "NewestToOldest" | "OldestToNewest";
+   search?: string;
+   limit: number;
 };
 
 export interface INotification {
