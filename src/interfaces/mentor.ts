@@ -29,7 +29,6 @@ export interface IBookingQueryDetails {
    page: number;
    limit: number;
    sort: "NewestToOldest" | "OldestToNewest";
-   bookings?: "incoming"
 };
 
 export interface INotification {

@@ -71,8 +71,8 @@ const BookingsTable: React.FC<BookingsTableProps> = ({ bookingDetails, currentPa
                     />
                   </div>
                   <div className="ml-3">
-                    <p className="font-semibold">{`${booking.mentor.mentorDetails.first_name} ${booking.mentor.mentorDetails.last_name}`}</p>
-                    <p className="text-muted-foreground">{booking.mentor.mentorDetails.profession}</p>
+                    <p className="font-semibold">{`${booking.mentor.first_name} ${booking.mentor.last_name}`}</p>
+                    <p className="text-muted-foreground">{booking.mentor.profession}</p>
                   </div>
                 </div>
               </TableCell>

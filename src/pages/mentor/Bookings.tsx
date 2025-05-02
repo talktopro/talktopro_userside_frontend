@@ -16,7 +16,6 @@ const Bookings: React.FC = () => {
   const [queryDetails, setQueryDetails] = useState<IBookingQueryDetails>({
     page: 1,
     sort: "NewestToOldest",
-    bookings: "incoming",
     limit: 10,
   });
 
@@ -29,11 +28,11 @@ const Bookings: React.FC = () => {
   const fetchBookingHistory = async () => {
     try {
       setIsLoading(true);
-      const { data } = await apiClient.get<IMentorBookingHistoryApiResponse>(`/bookings`, {
+      const { data } = await apiClient.get<IMentorBookingHistoryApiResponse>(`/mentor/bookings`, {
         params: queryDetails,
       });
       setBookingHistory(Array.isArray(data.body.bookings) ? data.body.bookings : []);
-      setTotalPage(data.body.totalPage || 0);
+      setTotalPage(data.body.total_pages || 0);
     } catch (error) {
       console.error("Error occurred while fetching booking history!", error);
       toast.error("Failed to collect booking history. Please try again later.");

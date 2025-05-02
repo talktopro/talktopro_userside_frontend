@@ -127,7 +127,10 @@ declare global {
 // All booking api repone
 
 export interface IBookingHistoryApiResponse {
-    body: IBookingHistory[];
+    body: {
+        bookings: IBookingHistory[];
+        total_page: number;
+    };
     message: string;
     success: boolean;
 };
@@ -142,7 +145,9 @@ export interface IBookingHistory {
     status: "success" | "pending" | "failed",
     mentor: {
         _id: string,
-        mentorDetails: MentorDetails,
-        profileImg: string,
+        first_name: string,
+        last_name: string,
+        profession: string
+        profileImg: string
     };
 };

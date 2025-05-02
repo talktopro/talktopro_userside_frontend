@@ -104,10 +104,10 @@ const BookingDetails: FC<IBookingDetailsDrawerProps> = ({ booking }) => {
                               <div className="flex flex-col justify-between flex-1">
                                  <div>
                                     <h4 className="font-semibold text-md m-0 p-0">
-                                       {`${booking.mentor.mentorDetails.first_name} ${booking.mentor.mentorDetails.last_name}`}
+                                       {`${booking.mentor.first_name} ${booking.mentor.last_name}`}
                                     </h4>
                                     <p className="text-muted-foreground text-xs m-0">
-                                       {booking.mentor.mentorDetails.profession}
+                                       {booking.mentor.profession}
                                     </p>
                                  </div>
                                  <Button

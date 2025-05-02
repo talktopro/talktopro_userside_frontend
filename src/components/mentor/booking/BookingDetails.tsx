@@ -89,25 +89,18 @@ const BookingDetails: FC<IBookingDetailsDrawerProps> = ({ booking }) => {
                            <GraduationCap className="h-5 w-5 text-purple-500" />
                         </div>
                         <div>
-                           <p className="text-sm text-muted-foreground mb-1">Mentor</p>
-                           <div className="flex items-start gap-4">
-                              <div className="w-auto h-20 rounded-md overflow-hidden aspect-[3.5/4] ">
+                           <p className="text-sm text-muted-foreground mb-1">Client</p>
+                           <div className="flex gap-4 items-center">
+                              <div className="w-auto h-15 rounded-md overflow-hidden aspect-[3.5/4] ">
                                  <img
                                     src={`https://${bucketName}.s3.amazonaws.com/${booking.user.profileImg}`}
                                     alt="Profile picture"
                                     className="w-full h-full object-cover"
                                  />
                               </div>
-                              <div className="flex flex-col justify-between flex-1">
-                                 <div>
-                                    <h4 className="font-semibold text-md m-0 p-0">
-                                       {booking.user.uname}
-                                    </h4>
-                                    <p className="text-muted-foreground text-xs m-0">
-                                       {booking.user.email}
-                                    </p>
-                                 </div>
-                              </div>
+                              <h4 className="font-semibold text-md m-0 p-0">
+                                 {booking.user.uname}
+                              </h4>
                            </div>
                         </div>
                      </div>
