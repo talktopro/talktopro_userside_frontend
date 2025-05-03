@@ -13,13 +13,8 @@ export interface User {
 
 export interface ImageCropperProps {
     image: File;
-    onCropComplete: (croppedAreaPixels: {
-        width: number;
-        height: number;
-        x: number;
-        y: number;
-    }) => void;
-    onSave: () => void;
+    createCroppedBlobImage: (crop: Crop, imageRef: HTMLImageElement | null) => Promise<Blob | null>;
+    onSave: (croppedImageBlob: Blob) => Promise<void>;
     onClose: () => void;
     isOpen: boolean;
 }

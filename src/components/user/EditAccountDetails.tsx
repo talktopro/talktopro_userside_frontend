@@ -55,7 +55,7 @@ const EditAccountDetails = ({ user }: EditAccountDetailsProps) => {
     handleImageChange,
     handleInputTrigger,
     handleClose,
-    handleCropComplete,
+    createCroppedBlobImage,
     handleSave,
     isCropperOpen,
     selectedImage,
@@ -236,7 +236,7 @@ const EditAccountDetails = ({ user }: EditAccountDetailsProps) => {
       {selectedImage && (
         <ImageCropper
           image={selectedImage}
-          onCropComplete={handleCropComplete}
+          createCroppedBlobImage={createCroppedBlobImage}
           onSave={handleSave}
           onClose={handleClose}
           isOpen={isCropperOpen}

@@ -2,6 +2,7 @@ import apiClient from "@/api/axiosInstance";
 import { selectAuth, updateUser } from "@/redux/slices/authSlice";
 import { AppDispatch } from "@/redux/store";
 import { useRef, useState } from "react";
+import { Crop } from "react-image-crop";
 import { useDispatch, useSelector } from "react-redux";
 import { toast } from "sonner";
 
@@ -30,16 +31,47 @@ const useImageCropper = () => {
     }
   };
 
-  const handleCropComplete = (croppedAreaPixels: {
-    width: number;
-    height: number;
-    x: number;
-    y: number;
-  }) => {
-    console.log("Cropped Area Pixels:", croppedAreaPixels);
+  const createCroppedBlobImage = async (crop: Crop, imageRef: HTMLImageElement | null): Promise<Blob | null> => {
+    if (!imageRef || !crop.width || !crop.height) return null;
+
+    return new Promise((resolve) => {
+      const canvas = document.createElement('canvas');
+      // Use natural dimensions for highest quality
+      canvas.width = crop.width * (imageRef.naturalWidth / imageRef.width);
+      canvas.height = crop.height * (imageRef.naturalHeight / imageRef.height);
+
+      const ctx = canvas.getContext('2d');
+      if (!ctx) {
+        resolve(null);
+        return;
+      }
+
+      // Set high-quality rendering
+      ctx.imageSmoothingQuality = 'high';
+      ctx.imageSmoothingEnabled = true;
+
+      ctx.drawImage(
+        imageRef,
+        crop.x * (imageRef.naturalWidth / imageRef.width),
+        crop.y * (imageRef.naturalHeight / imageRef.height),
+        crop.width * (imageRef.naturalWidth / imageRef.width),
+        crop.height * (imageRef.naturalHeight / imageRef.height),
+        0,
+        0,
+        canvas.width,
+        canvas.height
+      );
+
+      // Use maximum quality (1.0) and specify the exact MIME type
+      canvas.toBlob(
+        (blob) => resolve(blob),
+        'image/jpeg',
+        1.0 // Maximum quality
+      );
+    });
   };
 
-  const handleSave = async (): Promise<void> => {
+  const handleSave = async (croppedImageBlob: Blob): Promise<void> => {
     if (!selectedImage) {
       toast.error("No image selected");
       return;
@@ -50,16 +82,22 @@ const useImageCropper = () => {
       const presignedUrl: string | undefined = await getPresignedURL();
       if (!presignedUrl) return;
 
-      // 2. Upload to S3
+      // 2. Create a File from the Blob
+      const croppedImageFile = new File([croppedImageBlob], selectedImage.name, {
+        type: selectedImage.type,
+        lastModified: Date.now(),
+      });
+
+      // 3. Upload to S3
       const s3Response: Response = await uploadImageToS3(
         presignedUrl,
-        selectedImage
+        croppedImageFile
       );
       if (!s3Response.ok) {
         throw new Error("S3 upload failed");
       }
 
-      // 3. Update database
+      // 4. Update database
       await updateDatabase();
     } catch (error) {
       console.error("Error in handleSave:", error);
@@ -155,7 +193,7 @@ const useImageCropper = () => {
     handleInputTrigger,
     handleImageChange,
     selectedImage,
-    handleCropComplete,
+    createCroppedBlobImage,
     isCropperOpen,
     handleSave,
     handleClose,

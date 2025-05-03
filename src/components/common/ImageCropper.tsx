@@ -12,10 +12,10 @@ import { ImageCropperProps } from "@/types/user";
 
 const ImageCropper = ({
   image,
-  onCropComplete,
   onSave,
   onClose,
   isOpen,
+  createCroppedBlobImage,
 }: ImageCropperProps) => {
   const [crop, setCrop] = useState<Crop>({
     unit: "px",
@@ -77,22 +77,13 @@ const ImageCropper = ({
     isImageLoaded.current = true; // Mark the image as loaded
   };
 
-  const handleCropComplete = (crop: Crop) => {
-    if (imageRef && crop.width && crop.height) {
-      const croppedAreaPixels = {
-        x: crop.x || 0,
-        y: crop.y || 0,
-        width: crop.width,
-        height: crop.height,
-      };
-      onCropComplete(croppedAreaPixels);
-    }
-  };
-
   const handleSave = async () => {
     try {
       setIsLoading(true);
-      await onSave();
+      const croppedBlobImage = await createCroppedBlobImage(crop, imageRef)
+      if (croppedBlobImage) {
+        await onSave(croppedBlobImage);
+      }
     } catch (error) {
       console.log(error);
     } finally {
@@ -147,7 +138,6 @@ const ImageCropper = ({
           <ReactCrop
             crop={crop}
             onChange={(newCrop: Crop) => setCrop(newCrop)}
-            onComplete={handleCropComplete}
             aspect={4 / 5} // Enforce 4:5 aspect ratio
           >
             <img

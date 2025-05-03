@@ -81,7 +81,7 @@ const RegisterBody: FC<RegisterBodyProps> = ({ fromRegisterPage, fromApplication
     handleImageChange,
     handleInputTrigger,
     handleClose,
-    handleCropComplete,
+    createCroppedBlobImage,
     handleSave,
     isCropperOpen,
     selectedImage,
@@ -579,7 +579,7 @@ const RegisterBody: FC<RegisterBodyProps> = ({ fromRegisterPage, fromApplication
       {selectedImage && (
         <ImageCropper
           image={selectedImage}
-          onCropComplete={handleCropComplete}
+          createCroppedBlobImage={createCroppedBlobImage}
           onSave={handleSave}
           onClose={handleClose}
           isOpen={isCropperOpen}
