@@ -50,7 +50,10 @@ const createFormSchema = (fromRegisterPage: boolean) =>
       .regex(/^\d{10,15}$/, "Enter a valid phone number."),
     profileImg: z.string().min(1, "Profile image is required"),
     profession: z.string().nonempty("Profession is required."),
-    about: z.string().max(500, "About section must not exceed 500 characters."),
+    about: z
+      .string()
+      .min(50, "About section must need minimum 50 characters.")
+      .max(500, "About section must not exceed 500 characters."),
     skills: z.string().array().min(1, "At least one skill is required."),
     languages: z.string().array().min(1, "At least one language is required."),
     termsAndConditions: fromRegisterPage
@@ -98,7 +101,8 @@ const RegisterBody: FC<RegisterBodyProps> = ({ fromRegisterPage, fromApplication
       termsAndConditions: false,
       privacyAndPolicy: false,
     },
-    criteriaMode: "all" // Add this to properly track array changes
+    criteriaMode: "all", // Add this to properly track array changes
+    mode: "onChange"
   });
 
   useEffect(() => {
@@ -406,7 +410,7 @@ const RegisterBody: FC<RegisterBodyProps> = ({ fromRegisterPage, fromApplication
                     )}
                   </div>
                   {form.formState.errors.skills && (
-                    <p className="text-red-500 text-sm mt-2">
+                    <p className="text-[0.8rem] font-medium text-red-500 mt-2">
                       {form.formState.errors.skills.message}
                     </p>
                   )}
@@ -441,7 +445,7 @@ const RegisterBody: FC<RegisterBodyProps> = ({ fromRegisterPage, fromApplication
                     )}
                   </div>
                   {form.formState.errors.languages && (
-                    <p className="text-red-500 text-sm mt-2">
+                    <p className="text-[0.8rem] font-medium text-red-500 mt-2">
                       {form.formState.errors.languages.message}
                     </p>
                   )}
