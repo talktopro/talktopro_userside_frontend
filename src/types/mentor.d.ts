@@ -56,7 +56,7 @@ export type INewSlotAllocationReqBody = INewSlotAllocationReqObj[];
 // Booking page 
 export interface IMentorBookingHistoryApiResponse {
    body: {
-      total_pages: number;
+      total_page: number;
       bookings: IMentorBookingHistory[]
    };
    message: string;
