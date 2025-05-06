@@ -12,10 +12,10 @@ import { ImageCropperProps } from "@/types/user";
 
 const ImageCropper = ({
   image,
-  onCropComplete,
   onSave,
   onClose,
   isOpen,
+  createCroppedBlobImage,
 }: ImageCropperProps) => {
   const [crop, setCrop] = useState<Crop>({
     unit: "px",
@@ -77,26 +77,18 @@ const ImageCropper = ({
     isImageLoaded.current = true; // Mark the image as loaded
   };
 
-  const handleCropComplete = (crop: Crop) => {
-    if (imageRef && crop.width && crop.height) {
-      const croppedAreaPixels = {
-        x: crop.x || 0,
-        y: crop.y || 0,
-        width: crop.width,
-        height: crop.height,
-      };
-      onCropComplete(croppedAreaPixels);
-    }
-  };
-
-  const handleSave = () => {
-    setIsLoading(true);
-
-    setTimeout(() => {
+  const handleSave = async () => {
+    try {
+      setIsLoading(true);
+      const croppedBlobImage = await createCroppedBlobImage(crop, imageRef)
+      if (croppedBlobImage) {
+        await onSave(croppedBlobImage);
+      }
+    } catch (error) {
+      console.log(error);
+    } finally {
       setIsLoading(false);
-      onSave();
-      console.log("Image saved");
-    }, 5000);
+    }
   };
 
   const ScannerLoader = ({ crop }: { crop: Crop }) => {
@@ -146,7 +138,6 @@ const ImageCropper = ({
           <ReactCrop
             crop={crop}
             onChange={(newCrop: Crop) => setCrop(newCrop)}
-            onComplete={handleCropComplete}
             aspect={4 / 5} // Enforce 4:5 aspect ratio
           >
             <img
@@ -163,13 +154,15 @@ const ImageCropper = ({
           <Button
             variant="ghost"
             onClick={onClose}
-            className="px-4 py-2 text-sm font-medium text-red-500 rounded-md hover:text-red-700"
+            disabled={isLoading}
+            className="px-4 py-2 text-sm font-medium text-red-500 rounded-md hover:text-red-700 disabled:opacity-70 disabled:cursor-pointer"
           >
             Cancel
           </Button>
           <Button
-            className="px-4 py-2 text-sm font-medium bg-primary min-w-20"
+            className="px-4 py-2 text-sm font-medium bg-primary min-w-20 disabled:opacity-70 disabled:cursor-pointer"
             onClick={handleSave}
+            disabled={isLoading}
           >
             Save
           </Button>

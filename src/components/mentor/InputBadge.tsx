@@ -121,14 +121,13 @@ export const InputBox: FC<InputBoxProps> = ({ onSave, onClose, suggestions = [] 
       {isDropdownOpen && filteredSuggestions.length > 0 && (
         <div
           ref={dropdownRef}
-          className="absolute top-10 left-0 z-10 bg-white border border-gray-200 rounded-sm shadow-md max-h-40 overflow-y-auto w-30"
+          className="absolute top-10 left-0 z-10 bg-background border rounded-sm shadow-md max-h-40 overflow-y-auto w-30"
         >
           {filteredSuggestions.map((suggestion, index) => (
             <div
               key={suggestion}
-              className={`px-2 py-1 cursor-pointer ${
-                index === highlightedIndex ? "bg-gray-100" : "hover:bg-gray-50"
-              }`}
+              className={`px-2 py-1 cursor-pointer ${index === highlightedIndex ? "bg-muted/50" : "hover:bg-muted"
+                }`}
               onClick={() => handleSuggestionClick(suggestion)}
             >
               {suggestion}

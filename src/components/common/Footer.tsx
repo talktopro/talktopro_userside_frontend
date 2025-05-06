@@ -8,8 +8,11 @@ import {
   HoverCardTrigger,
 } from "@/components/ui/hover-card";
 import { teamMembers, About, Learning, Products } from "@/constants/footerData";
+import { useNavigate } from "react-router-dom";
 
 const Footer = () => {
+  const navigate = useNavigate();
+
   return (
     <footer className="border-t-1 mt-10 not-sm:mb-10">
       <div className="container max-w-screen-xl mx-auto">
@@ -43,10 +46,10 @@ const Footer = () => {
           <div className="space-y-4 sm:mx-10 not-sm:mx-4 mt-10">
             <h3 className="font-medium">About</h3>
             <ul className="space-y-3 flex flex-col items-start">
-              {About.map((item: string, index: number) => (
-                <li key={index}>
-                  <a className="text-muted-foreground hover:text-foreground text-sm">
-                    {item}
+              {About.map((item: { field: string, path: string }, index: number) => (
+                <li key={index} onClick={() => navigate(item.path)}>
+                  <a className="text-muted-foreground hover:text-foreground text-sm cursor-pointer">
+                    {item.field}
                   </a>
                 </li>
               ))}
@@ -110,6 +113,9 @@ const Footer = () => {
               className="cursor-pointer hover:text-purple-500 transition-colors duration-300"
             />
           </div>
+          <p className="text-xs text-center mt-2">
+            Version 1.0.0
+          </p>
         </div>
       </div>
     </footer>

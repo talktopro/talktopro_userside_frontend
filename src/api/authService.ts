@@ -9,15 +9,6 @@ if (!backendUrl) {
     throw new Error("VITE_BACKEND_URL environment variable is not provided.");
 }
 
-
-
-interface Response {
-    message: string;
-    data: {
-        id: string;
-        accessToken: string;
-    };
-}
 interface ResendOtpResponse {
     id: string;
 }

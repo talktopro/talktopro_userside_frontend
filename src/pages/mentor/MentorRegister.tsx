@@ -1,13 +1,35 @@
-import Navbar from "@/components/user/Navbar";
-import Footer from "@/components/common/Footer";
 import AccountData from "@/components/mentor/AccountData";
+import { useSelector } from "react-redux";
+import { selectAuth } from "@/redux/slices/authSlice";
+import WaitingPeriod from "@/components/mentor/WaitingList";
+import ApplicationRejected from "@/components/mentor/RejectedApplication";
 
 const MentorResiterPage = () => {
+  const { user } = useSelector(selectAuth);
   return (
     <>
-      <Navbar />
-      <AccountData fromRegisterPage={true} />
-      <Footer />
+      {user?.mentor_application_status === "Pending" &&
+        user.mentorDetails?._id && (
+          <WaitingPeriod
+            applicationId={user.mentorDetails?._id}
+            email={user.email}
+            submissionDate={user.mentorDetails.createdAt}
+            estimatedReviewTime={24}
+          />
+        )
+      }
+      {user?.mentor_application_status === "Rejected" &&
+        user.mentorDetails?._id && (
+          <ApplicationRejected
+            applicationId={user.mentorDetails?._id}
+            email={user.email}
+            submissionDate={user.mentorDetails.createdAt}
+          />
+        )
+      }
+      {!user?.mentor_application_status && (
+        <AccountData fromRegisterPage={true} />
+      )}
     </>
   );
 };

@@ -1,5 +1,6 @@
 export const ROUTES = {
     HOME: "/",
+    ABOUT: "/about",
 
     AUTH: {
         LOGIN: "/login",
@@ -20,18 +21,10 @@ export const ROUTES = {
         DASHBOARD: "/mentor/dashboard",
         BOOKINGS: "/mentor/bookings",
         SLOT_MANAGEMENT: "/mentor/slot-management",
+        PRICING: "/mentor/pricing",
         ANALYTICS: "/mentor/analytics",
         ACCOUNT_SETTINGS: "/mentor/account-settings",
         NOTIFICATION_SETTINGS: "/mentor/notification-settings",
         REGISTER: "/mentor/register",
     },
-
-    ADMIN: {
-        LOGIN: "/admin/login",
-        SETTINGS: "/admin/settings",
-        DASHBOARD: "/admin/dashboard",
-        BOOKINGS: "/admin/bookings",
-        USERS: "/admin/users",
-        MENTORS: "/admin/mentors",
-    }
 };

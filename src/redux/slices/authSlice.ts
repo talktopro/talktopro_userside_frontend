@@ -3,6 +3,7 @@ import { RootState } from "../store";
 import { loginUserAPI, resetEmailAPI, verifyOtpAPI } from "@/api/authService";
 import { extractErrorMessage } from "@/utils/errorHandler";
 import guestApi from "@/api/guestApi";
+import { MentorDetails } from "@/types/user";
 
 interface User {
     id: string;
@@ -11,13 +12,14 @@ interface User {
     phone: number;
     isMentor: boolean;
     profileImg: string | null;
+    mentor_application_status?: string;
+    mentorDetails?: MentorDetails
 }
 
 interface AuthState {
     user: User | null;
     accessToken: string | null;
     refreshToken: string | null;
-    id: string | null;
     loading: boolean;
 }
 
@@ -30,19 +32,20 @@ interface AuthResponse {
 
 const initialState: AuthState = {
     user: null,
-    id: null,
     accessToken: null,
     refreshToken: null,
     loading: false,
 };
 
-export const verifyOtp = createAsyncThunk<{ id: string; accessToken: string }, { id: string; otp: string }, { rejectValue: string }>(
+export const verifyOtp = createAsyncThunk<AuthResponse, { id: string; otp: string }, { rejectValue: string }>(
     "auth/verifyOtp",
     async (otpData, { rejectWithValue }) => {
+        console.log("otpData", otpData);
         try {
-            const response = await verifyOtpAPI(otpData);
-            return response;
+            const response = await guestApi.post("/auth/verify-otp", otpData);
+            return response.data;
         } catch (error) {
+            console.log("error", error);
             return rejectWithValue(extractErrorMessage(error));
         }
     }
@@ -53,11 +56,8 @@ export const loginUser = createAsyncThunk<AuthResponse, { email: string; passwor
     async (userData, { rejectWithValue }) => {
         try {
             const response = await guestApi.post("/auth/login", userData);
-            console.log("response", response);
             return response.data;
-
         } catch (error) {
-            console.log("error", error);
             return rejectWithValue(extractErrorMessage(error));
         }
     }
@@ -83,12 +83,25 @@ const authSlice = createSlice({
     initialState,
     reducers: {
         logout: (state) => {
-            state.id = null;
+            state.user = null;
+            state.refreshToken = null;
             state.accessToken = null;
+            state.loading = false;
         },
-        setUser: (state, action) => {
-            state.accessToken = action.payload;
-            state.id = action.payload;
+        setUser: (state, action: PayloadAction<User>) => {
+            state.user = action.payload;
+        },
+        updateUser: (state, action: PayloadAction<Partial<User>>) => {
+            if (state.user) {
+                state.user = { ...state.user, ...action.payload };
+            }
+        },
+        setTokens: (
+            state,
+            action: PayloadAction<{ accessToken: string; refreshToken: string }>
+        ) => {
+            state.accessToken = action.payload.accessToken;
+            state.refreshToken = action.payload.refreshToken;
         },
     },
     extraReducers: (builder) => {
@@ -97,10 +110,11 @@ const authSlice = createSlice({
             .addCase(verifyOtp.pending, (state) => {
                 state.loading = true;
             })
-            .addCase(verifyOtp.fulfilled, (state, action: PayloadAction<{ id: string; accessToken: string }>) => {
-                state.loading = false;
-                state.id = action.payload.id;
+            .addCase(verifyOtp.fulfilled, (state, action: PayloadAction<AuthResponse>) => {
+                state.user = action.payload.user;
                 state.accessToken = action.payload.accessToken;
+                state.refreshToken = action.payload.refreshToken;
+                state.loading = false;
             })
             .addCase(verifyOtp.rejected, (state) => {
                 state.loading = false;
@@ -109,10 +123,10 @@ const authSlice = createSlice({
                 state.loading = true;
             })
             .addCase(loginUser.fulfilled, (state, action: PayloadAction<AuthResponse>) => {
-                state.loading = false;
                 state.user = action.payload.user;
-                state.id = action.payload.user.id;
                 state.accessToken = action.payload.accessToken;
+                state.refreshToken = action.payload.refreshToken;
+                state.loading = false;
             })
             .addCase(loginUser.rejected, (state) => {
                 state.loading = false;
@@ -133,6 +147,6 @@ const authSlice = createSlice({
 });
 
 // ✅ Export Actions & Selectors
-export const { logout, setUser } = authSlice.actions;
+export const { logout, setUser, updateUser, setTokens } = authSlice.actions;
 export const selectAuth = (state: RootState) => state.auth;
 export default authSlice.reducer;

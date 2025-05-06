@@ -1,68 +1,60 @@
-import React, { useEffect, useState } from "react";
-import Navbar from "@/components/user/Navbar";
-import Footer from "@/components/common/Footer";
-import BookingsTable from "@/components/Booking-History/Table";
-import BookingsHeader from "@/components/Booking-History/Header";
+import React, { useEffect } from "react";
+import BookingsTable from "@/components/user/booking/BookingsTable";
+import BookingsHeader from "@/components/common/BookingTableHeader";
 import SkeletonTable from "@/components/common/skeletons/Table";
 import { NotebookText } from "lucide-react";
-// import { toast } from "sonner";
-import apiClient from "@/api/axiosInstance";
-import { IBooking, IBookingQueryDetails } from "@/interfaces/user";
+import CustomPagination from "@/components/common/CustomPagination";
+import useBookings from "@/hooks/useBookings";
 
 const Bookings: React.FC = () => {
-  const [bookingHistory, setBookingHistory] = useState<IBooking[]>([]);
-  const [isLoading, setIsLoading] = useState(false);
-  const [queryDetails, setQueryDetails] = useState<IBookingQueryDetails>({
-    page: 1,
-    sort: "ascending",
-  });
 
-  const handleSortChange: (sort: "ascending" | "descending") => void = (
-    sort
-  ) => {
-    setQueryDetails((prev) => ({ ...prev, sort }));
-  };
-
-  const fetchBookingHistory = async () => {
-    try {
-      setIsLoading(true);
-      const { data } = await apiClient.get<IBooking[]>(`url`, {
-        params: queryDetails,
-      });
-      setBookingHistory(Array.isArray(data) ? data : []);
-    } catch (error) {
-      console.error("Error occurred while fetching booking history!", error);
-      // toast.error("Failed to collect booking history. Please try again later.");
-    } finally {
-      setIsLoading(false);
-    }
-  };
+  const {
+    bookingHistory,
+    isLoading,
+    totalPage,
+    queryDetails,
+    handleSortChange,
+    handleChangeCurrentPage,
+    fetchBookingHistory,
+  } = useBookings({ from: "user" });
 
   useEffect(() => {
     fetchBookingHistory();
   }, [queryDetails]);
 
+
   return (
-    <>
-      <Navbar />
-      <div className="pt-28 sm:px-12 not-sm:px-4">
-        <BookingsHeader
-          showSelect={!isLoading && bookingHistory.length > 0}
-          onSortChange={handleSortChange}
-        />
-        {isLoading ? (
-          <SkeletonTable />
-        ) : bookingHistory.length > 0 ? (
-          <BookingsTable bookingDetails={bookingHistory} />
-        ) : (
-          <div className="flex flex-col justify-center items-center h-96">
-            <NotebookText strokeWidth={1} size={50} className="opacity-60" />
-            <p className="opacity-60 mt-3">No Result Found!</p>
-          </div>
-        )}
-      </div>
-      <Footer />
-    </>
+    <div className="pt-8 sm:px-12 not-sm:px-4">
+      <BookingsHeader
+        showSelect={!isLoading && bookingHistory.length > 0}
+        onSortChange={handleSortChange}
+        sort={queryDetails.sort}
+      />
+      {isLoading ? (
+        <SkeletonTable />
+      ) : bookingHistory.length > 0 ? (
+
+        <div className="min-h-96 flex flex-col justify-between items-end">
+          <BookingsTable
+            bookingDetails={bookingHistory}
+            currentPage={queryDetails.page}
+            limit={queryDetails.limit}
+          />
+          {totalPage > 1 && (
+            <CustomPagination
+              currentPage={queryDetails.page}
+              onChange={handleChangeCurrentPage}
+              totalPage={totalPage}
+            />
+          )}
+        </div>
+      ) : (
+        <div className="flex flex-col justify-center items-center h-96">
+          <NotebookText strokeWidth={1} size={50} className="text-muted-foreground" />
+          <p className="text-muted-foreground mt-3">No Result Found!</p>
+        </div>
+      )}
+    </div>
   );
 };
 
