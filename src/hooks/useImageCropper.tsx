@@ -121,7 +121,7 @@ const useImageCropper = () => {
         `/get-presigned-url`,
         {
           params: {
-            imageName: user?.id,
+            imageName: `${import.meta.env.VITE_PROFILE_IMAGE_FOLDER}/${user?.id}`,
             imageType: selectedImage.type,
           },
         }

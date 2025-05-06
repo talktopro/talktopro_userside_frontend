@@ -93,7 +93,7 @@ const BookingDetails: FC<IBookingDetailsDrawerProps> = ({ booking }) => {
                            <div className="flex gap-4 items-center">
                               <div className="w-auto h-15 rounded-md overflow-hidden aspect-[3.5/4] ">
                                  <img
-                                    src={`https://${bucketName}.s3.amazonaws.com/${booking.user.profileImg}`}
+                                    src={`https://${bucketName}.s3.amazonaws.com/${import.meta.env.VITE_PROFILE_IMAGE_FOLDER}/${booking.user.profileImg}`}
                                     alt="Profile picture"
                                     className="w-full h-full object-cover"
                                  />

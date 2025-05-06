@@ -137,7 +137,7 @@ const EditAccountDetails = ({ user }: EditAccountDetailsProps) => {
                     <img
                       src={
                         user?.profileImg
-                          ? `https://${bucketName}.s3.amazonaws.com/${user.profileImg}`
+                          ? `https://${bucketName}.s3.amazonaws.com/${import.meta.env.VITE_PROFILE_IMAGE_FOLDER}/${user.profileImg}`
                           : avatar
                       }
                       alt="Profile picture"
