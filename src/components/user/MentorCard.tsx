@@ -18,7 +18,7 @@ const MentorCard = ({ mentor }: MentorCardProps) => {
       <img
         src={
           mentor.profileImg
-            ? `https://${bucketName}.s3.amazonaws.com/${mentor.profileImg}`
+            ? `https://${bucketName}.s3.amazonaws.com/${import.meta.env.VITE_PROFILE_IMAGE_FOLDER}/${mentor.profileImg}`
             : sample
         }
         alt="Profile"

@@ -65,7 +65,7 @@ const BookingsTable: React.FC<BookingsTableProps> = ({ bookingDetails, currentPa
                 <div className="flex items-center">
                   <div className="w-auto h-12 rounded-md overflow-hidden aspect-[3.5/4]">
                     <img
-                      src={`https://${bucketName}.s3.amazonaws.com/${booking.mentor.profileImg}`}
+                      src={`https://${bucketName}.s3.amazonaws.com/${import.meta.env.VITE_PROFILE_IMAGE_FOLDER}/${booking.mentor.profileImg}`}
                       alt="Profile picture"
                       className="w-full h-full object-cover"
                     />
