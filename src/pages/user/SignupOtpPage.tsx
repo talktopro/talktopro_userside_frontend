@@ -151,7 +151,7 @@ const SignupOtpPage = () => {
               Didn’t receive the code?{" "}
               <button
                 type="button"
-                className="text-primary hover:underline"
+                className="text-primary hover:underline cursor-pointer"
                 onClick={handleResend}
                 disabled={isDisabled}
               >

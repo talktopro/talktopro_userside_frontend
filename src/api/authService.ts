@@ -34,7 +34,12 @@ export const resendOtpAPI = async (userData: { id: string; email: string }): Pro
 
 }
 
-export const resetEmailAPI = async (email: string): Promise<ResetEmailResponse> => {
-    const response: AxiosResponse<ResetEmailResponse> = await axios.post(`${backendUrl}/auth/reset-email`, { email });
+export const forgotPasswordAPI = async (email: string): Promise<ResetEmailResponse> => {
+    const response: AxiosResponse<ResetEmailResponse> = await axios.post(`${backendUrl}/auth/forgot-password`, { email });
+    return response.data;
+};
+
+export const changePasswordAPI = async (password: string, token: string): Promise<ResetEmailResponse> => {
+    const response: AxiosResponse<ResetEmailResponse> = await axios.patch(`${backendUrl}/auth/change-password/${token}`, { password });
     return response.data;
 };

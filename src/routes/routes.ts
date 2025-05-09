@@ -6,7 +6,7 @@ export const ROUTES = {
         LOGIN: "/login",
         SIGNUP: "/signup",
         FORGOT_PASSWORD: "/forgot-password",
-        CHANGE_PASSWORD: "/change-password",
+        CHANGE_PASSWORD: "/reset-password/:token",
         SIGNUP_OTP_VERIFY: "/signup/verify-otp",
     },
 
