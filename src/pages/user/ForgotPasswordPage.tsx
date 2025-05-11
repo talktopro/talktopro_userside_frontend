@@ -69,19 +69,19 @@ const ForgotPasswordPage: React.FC = () => {
         </div>
 
         {emailSent ? (
-          <div className="text-center">
-            <MailCheck className="mx-auto my-4 h-12 w-12 text-[#7C3AED]" />
-            <p className="text-sm text-gray-600">
-              Didn’t receive the email? Check your spam or{" "}
-              <button
-                onClick={() => setEmailSent(false)}
-                className="text-[#7C3AED] underline hover:text-[#6D28D9] cursor-pointer"
-              >
-                try again
-              </button>
-              .
-            </p>
-          </div>
+          <div className="bg-muted/50 rounded-lg p-4">
+          <MailCheck strokeWidth={1.5} className="text-purple-500 mx-auto mb-3" />
+          <p className="text-sm">
+            Didn’t receive the email? Check your spam or{" "}
+            <span
+              onClick={() => setEmailSent(false)}
+              className="text-purple-500 hover:underline cursor-pointer hover:text-purple-600 font-semibold"
+            >
+              try again
+            </span>
+            .
+          </p>
+        </div>
         ) : (
           <form
             onSubmit={handleSubmit(onSubmit)}
@@ -104,14 +104,14 @@ const ForgotPasswordPage: React.FC = () => {
             <Button
               type="submit"
               disabled={!emailValue || isSubmitting}
-              className="w-full bg-[#7C3AED] hover:bg-[#6D28D9] disabled:bg-gray-300 disabled:cursor-not-allowed"
+              className="w-full bg-[#7C3AED] hover:bg-[#6D28D9] disabled:opacity-70 disabled:cursor-not-allowed"
             >
               {isSubmitting ? "Sending..." : "Send reset link"}
             </Button>
 
             <Link
               to={ROUTES.AUTH.LOGIN}
-              className="flex items-center cursor-pointer gap-2 text-sm text-gray-500 hover:text-gray-800 transition"
+              className="flex items-center cursor-pointer gap-2 text-sm hover:text-gray-800 transition absolute top-10 left-10 border rounded-xl px-3 py-2"
             >
               <ArrowLeft className="h-4 w-4" />
               Back to login

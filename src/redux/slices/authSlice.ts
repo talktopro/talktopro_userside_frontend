@@ -1,10 +1,9 @@
 import { createSlice, createAsyncThunk, PayloadAction } from "@reduxjs/toolkit";
 import { RootState } from "../store";
-import { changePasswordAPI, forgotPasswordAPI, loginUserAPI, verifyOtpAPI } from "@/api/authService";
+import { changePasswordAPI, forgotPasswordAPI } from "@/api/authService";
 import { extractErrorMessage } from "@/utils/errorHandler";
 import guestApi from "@/api/guestApi";
 import { MentorDetails } from "@/types/user";
-import { response } from "express";
 
 interface User {
     id: string;
@@ -22,9 +21,10 @@ interface AuthState {
     accessToken: string | null;
     refreshToken: string | null;
     loading: boolean;
+    error: string | null;
 }
 
-interface AuthResponse {
+export interface AuthResponse {
     user: User;
     accessToken: string | null;
     refreshToken: string | null;
@@ -36,6 +36,7 @@ const initialState: AuthState = {
     accessToken: null,
     refreshToken: null,
     loading: false,
+    error: null,
 };
 
 export const verifyOtp = createAsyncThunk<AuthResponse, { id: string; otp: string }, { rejectValue: string }>(

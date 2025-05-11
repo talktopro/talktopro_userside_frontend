@@ -1,4 +1,5 @@
 import axios, { AxiosResponse } from "axios";
+import { AuthResponse } from "@/redux/slices/authSlice"; // adjust path if needed
 
 const backendUrl = import.meta.env.VITE_BACKEND_URL;
 
@@ -18,21 +19,20 @@ interface ResetEmailResponse {
 }
 
 // ✅ Verify OTP API
-export const verifyOtpAPI = async (otpData: { id: string; otp: string }): Promise<Response["data"]> => {
-    const response: AxiosResponse<Response> = await axios.post(`${backendUrl}/auth/verify-otp`, otpData);
-    return response.data.data;
+export const verifyOtpAPI = async (otpData: { id: string; otp: string }): Promise<AuthResponse> => {
+    const response: AxiosResponse<AuthResponse> = await axios.post(`${backendUrl}/auth/verify-otp`, otpData);
+    return response.data;
 };
 
-export const loginUserAPI = async (userData: { email: string; password: string }): Promise<Response["data"]> => {
-    const response: AxiosResponse<Response> = await axios.post(`${backendUrl}/auth/login`, userData);
-    return response.data.data;
-}
+export const loginUserAPI = async (userData: { email: string; password: string }): Promise<AuthResponse> => {
+    const response: AxiosResponse<AuthResponse> = await axios.post(`${backendUrl}/auth/login`, userData);
+    return response.data;
+};
 
 export const resendOtpAPI = async (userData: { id: string; email: string }): Promise<ResendOtpResponse> => {
     const response: AxiosResponse<ResendOtpResponse> = await axios.post(`${backendUrl}/auth/resend-otp`, userData);
     return response.data;
-
-}
+};
 
 export const forgotPasswordAPI = async (email: string): Promise<ResetEmailResponse> => {
     const response: AxiosResponse<ResetEmailResponse> = await axios.post(`${backendUrl}/auth/forgot-password`, { email });
