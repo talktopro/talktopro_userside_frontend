@@ -11,7 +11,8 @@ import convert24To12HourRange from "@/utils/convertTo12HourFormat"
 import useBookings from "@/hooks/useBookings"
 
 interface IBookingCancellationProps {
-  booking: IBookingHistory
+  booking: IBookingHistory;
+  onClose: () => void
 }
 
 const cancellationReasons = [
@@ -33,13 +34,13 @@ const dialogDescriptions = [
   "Your booking has been successfully cancelled.",
 ];
 
-const BookingCancellation: React.FC<IBookingCancellationProps> = ({ booking }) => {
+const BookingCancellation: React.FC<IBookingCancellationProps> = ({ booking, onClose }) => {
   const [isOpen, setIsOpen] = useState<boolean>(false)
   const [step, setStep] = useState<number>(1)
   const [selectedReason, setSelectedReason] = useState<string>("")
   const [customReason, setCustomReason] = useState<string>("")
   const [cancellationLoading, setCancellationLoading] = useState<boolean>(false)
-  const { handleCancelBooking, fetchBookingHistory } = useBookings({ from: "user" });
+  const { handleCancelBooking } = useBookings({ from: "user" });
 
   const isCancellationAllowed = () => {
 
@@ -106,7 +107,13 @@ const BookingCancellation: React.FC<IBookingCancellationProps> = ({ booking }) =
         Cancel Booking
       </Button>
 
-      <Dialog open={isOpen} onOpenChange={() => setIsOpen(false)}>
+      <Dialog open={isOpen} onOpenChange={(open) => {
+        if (!open && step === 3) {
+          onClose();
+        } else {
+          setIsOpen(open);
+        }
+      }}>
         <DialogContent className="sm:max-w-lg p-0 overflow-hidden">
 
 
@@ -249,11 +256,13 @@ const BookingCancellation: React.FC<IBookingCancellationProps> = ({ booking }) =
                 <div className="flex justify-center">
                   <Button
                     onClick={() => {
+                      onClose()
                       setIsOpen(false);
-                      fetchBookingHistory();
                     }}
                     className="border w-1/3"
-                  >Close</Button>
+                  >
+                    Close
+                  </Button>
                 </div>
               </div>
             )}

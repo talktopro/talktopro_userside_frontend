@@ -138,6 +138,7 @@ export interface IBookingHistory {
         fee: number
     },
     status: "success" | "pending" | "failed",
+    session_status: "pending" | "complete" | "incomplete";
     mentor: {
         _id: string,
         first_name: string,

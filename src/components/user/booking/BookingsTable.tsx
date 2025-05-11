@@ -8,7 +8,6 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import { ChevronDown } from "lucide-react";
-import { Badge } from "@/components/common/Badge";
 import {
   Drawer,
   DrawerContent,
@@ -22,15 +21,19 @@ import { format } from "date-fns";
 import convert24To12HourRange from "@/utils/convertTo12HourFormat";
 import CustomTooltip from "@/components/common/CustomTooltip";
 import BookingDetails from "./BookingDetails";
+import useBookings from "@/hooks/useBookings";
+import StatusBadge from "@/components/common/StatusBadge";
 
 interface BookingsTableProps {
   bookingDetails: IBookingHistory[];
   currentPage: number;
   limit: number;
+  handleCancellationComplete: () => void
 }
 
-const BookingsTable: React.FC<BookingsTableProps> = ({ bookingDetails, currentPage, limit }) => {
+const BookingsTable: React.FC<BookingsTableProps> = ({ bookingDetails, currentPage, limit, handleCancellationComplete }) => {
   const bucketName = import.meta.env.VITE_S3BUCKET_NAME;
+  const { openBookingDetailsId, setOpenBookingDetailsId } = useBookings({ from: "user" });
 
   return (
     <Table>
@@ -81,22 +84,22 @@ const BookingsTable: React.FC<BookingsTableProps> = ({ bookingDetails, currentPa
                 <p className="text-muted-foreground">{format(booking.slot.date, "dd-MM-yyyy")}</p>
               </TableCell>
               <TableCell className="pt-5 w-48 flex justify-center items-center whitespace-nowrap">
-                <Badge
-                  content={booking.status}
-                  background={
-                    booking.status === "pending"
-                      ? "Yellow"
-                      : booking.status === "success"
-                        ? "Green"
-                        : "Red"
-                  }
-                />
+                <StatusBadge status={booking.status} />
               </TableCell>
               <TableCell className="py-3 w-48 text-center whitespace-nowrap">
                 {booking.slot.fee}
               </TableCell>
               <TableCell className="py-3 w-12 whitespace-nowrap">
-                <Drawer>
+                <Drawer
+                  open={openBookingDetailsId === booking._id}
+                  onOpenChange={(open) => {
+                    if (open) {
+                      setOpenBookingDetailsId(booking._id);
+                    } else {
+                      setOpenBookingDetailsId(null);
+                    }
+                  }}
+                >
                   <DrawerTrigger>
                     <TooltipProvider>
                       <CustomTooltip
@@ -106,7 +109,7 @@ const BookingsTable: React.FC<BookingsTableProps> = ({ bookingDetails, currentPa
                     </TooltipProvider>
                   </DrawerTrigger>
                   <DrawerContent>
-                    <BookingDetails booking={booking} />
+                    <BookingDetails booking={booking} handleCancellationComplete={handleCancellationComplete} />
                   </DrawerContent>
                 </Drawer>
               </TableCell>

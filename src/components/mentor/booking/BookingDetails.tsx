@@ -1,11 +1,12 @@
 import { FC } from 'react'
 import { DrawerHeader, DrawerTitle } from '../../ui/drawer'
 import { Card, CardContent } from '../../ui/card'
-import { Calendar, CircleDollarSign, Clock, CreditCard, GraduationCap, Hash, NotebookText } from 'lucide-react'
-import { Badge } from '../../common/Badge'
+import { Calendar, CircleDollarSign, Clock, CreditCard, GraduationCap, Hash, NotebookText } from 'lucide-react';
 import { format } from 'date-fns'
 import convert24To12HourRange from '@/utils/convertTo12HourFormat'
 import { IMentorBookingHistory } from '@/types/mentor'
+import StatusBadge from '@/components/common/StatusBadge'
+import { SiGoogleclassroom } from 'react-icons/si'
 
 
 interface IBookingDetailsDrawerProps {
@@ -52,16 +53,7 @@ const BookingDetails: FC<IBookingDetailsDrawerProps> = ({ booking }) => {
                         </div>
                         <div>
                            <p className="text-sm text-muted-foreground mb-1">Booking status</p>
-                           <Badge
-                              content={booking.status}
-                              background={
-                                 booking.status === "pending"
-                                    ? "Yellow"
-                                    : booking.status === "success"
-                                       ? "Green"
-                                       : "Red"
-                              }
-                           />
+                           <StatusBadge status={booking.status} />
                         </div>
                      </div>
 
@@ -71,16 +63,7 @@ const BookingDetails: FC<IBookingDetailsDrawerProps> = ({ booking }) => {
                         </div>
                         <div>
                            <p className="text-sm text-muted-foreground mb-1">Payment status</p>
-                           <Badge
-                              content={booking.payment_status}
-                              background={
-                                 booking.status === "pending"
-                                    ? "Yellow"
-                                    : booking.status === "success"
-                                       ? "Green"
-                                       : "Red"
-                              }
-                           />
+                           <StatusBadge status={booking.payment_status} />
                         </div>
                      </div>
 
@@ -143,6 +126,16 @@ const BookingDetails: FC<IBookingDetailsDrawerProps> = ({ booking }) => {
                         <div>
                            <p className="text-sm text-muted-foreground">Session Fee</p>
                            <p className="text-sm">₹{booking.slot.fee.toFixed(2)}</p>
+                        </div>
+                     </div>
+
+                     <div className="flex items-center gap-3">
+                        <div className="bg-muted p-2 rounded-full">
+                           <SiGoogleclassroom size={20} fill='oklch(55.8% 0.288 302.321)' />
+                        </div>
+                        <div>
+                           <p className="text-sm text-muted-foreground">Session status</p>
+                           <StatusBadge status={booking.session_status} />
                         </div>
                      </div>
                   </div>

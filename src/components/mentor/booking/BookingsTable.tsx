@@ -8,20 +8,17 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import { ChevronDown } from "lucide-react";
-import { Badge } from "@/components/common/Badge";
 import {
   Drawer,
   DrawerContent,
   DrawerTrigger,
 } from "@/components/ui/drawer";
-import {
-  TooltipProvider,
-} from "@/components/ui/tooltip";
 import { format } from "date-fns";
 import convert24To12HourRange from "@/utils/convertTo12HourFormat";
 import CustomTooltip from "@/components/common/CustomTooltip";
 import BookingDetails from "./BookingDetails";
 import { IMentorBookingHistory } from "@/types/mentor";
+import StatusBadge from "@/components/common/StatusBadge";
 
 interface BookingsTableProps {
   bookingDetails: IMentorBookingHistory[];
@@ -81,29 +78,18 @@ const BookingsTable: React.FC<BookingsTableProps> = ({ bookingDetails, currentPa
                 <p className="text-muted-foreground">{format(booking.slot.date, "dd-MM-yyyy")}</p>
               </TableCell>
               <TableCell className="pt-5 w-48 flex justify-center items-center whitespace-nowrap">
-                <Badge
-                  content={booking.status}
-                  background={
-                    booking.status === "pending"
-                      ? "Yellow"
-                      : booking.status === "success"
-                        ? "Green"
-                        : "Red"
-                  }
-                />
+                <StatusBadge status={booking.status} />
               </TableCell>
               <TableCell className="py-3 w-48 text-center whitespace-nowrap">
-                {booking.slot.fee}
+                ₹{booking.slot.fee.toFixed(2)}
               </TableCell>
               <TableCell className="py-3 w-12 whitespace-nowrap">
                 <Drawer>
                   <DrawerTrigger>
-                    <TooltipProvider>
-                      <CustomTooltip
-                        content="Expand"
-                        trigger={<ChevronDown className="h-4 w-4" />}
-                      />
-                    </TooltipProvider>
+                    <CustomTooltip
+                      content="Expand"
+                      trigger={<ChevronDown className="h-4 w-4" />}
+                    />
                   </DrawerTrigger>
                   <DrawerContent>
                     <BookingDetails booking={booking} />

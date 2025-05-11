@@ -71,5 +71,6 @@ export interface IMentorBookingHistory {
       fee: number
    },
    status: "success" | "pending" | "failed",
+   session_status: "pending" | "complete" | "incomplete";
    user: User;
 };

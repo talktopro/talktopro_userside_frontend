@@ -13,6 +13,7 @@ const Bookings: React.FC = () => {
     isLoading,
     totalPage,
     queryDetails,
+    handleCancellationComplete,
     handleSortChange,
     handleChangeCurrentPage,
     fetchBookingHistory,
@@ -39,6 +40,7 @@ const Bookings: React.FC = () => {
             bookingDetails={bookingHistory}
             currentPage={queryDetails.page}
             limit={queryDetails.limit}
+            handleCancellationComplete={handleCancellationComplete}
           />
           {totalPage > 1 && (
             <CustomPagination
