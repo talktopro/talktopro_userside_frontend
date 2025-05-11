@@ -7,39 +7,43 @@ import { AppDispatch } from "@/redux/store";
 import { changePassword } from "@/redux/slices/authSlice";
 import { useLocation, useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
+import { PasswordInput } from "@/components/ui/password-input";
 import { toast } from "sonner";
 import logo from "@/assets/svg/logo.svg";
+import {
+  Form,
+  FormControl,
+  FormField,
+  FormItem,
+  FormLabel,
+  FormMessage,
+} from "@/components/ui/form";
 
-const changePasswordSchema = z.object({
-  password: z.string().min(6, "Password must be at least 6 characters long"),
-  confirmPassword: z
-    .string()
-    .min(6, "Confirm Password must be at least 6 characters long"),
-});
+const changePasswordSchema = z
+  .object({
+    password: z.string().min(6, "Password must be at least 6 characters long"),
+    confirmPassword: z
+      .string()
+      .min(6, "Confirm Password must be at least 6 characters long"),
+  })
+  .refine((data) => data.password === data.confirmPassword, {
+    path: ["confirmPassword"],
+    message: "Passwords do not match.",
+  });
 
 const ChangePasswordPage: React.FC = () => {
   const dispatch = useDispatch<AppDispatch>();
   const location = useLocation();
   const navigate = useNavigate();
-
   const [token, setToken] = useState<string | null>(null);
 
-  const {
-    register,
-    handleSubmit,
-    formState: { errors, isSubmitting },
-    watch,
-  } = useForm<z.infer<typeof changePasswordSchema>>({
+  const form = useForm<z.infer<typeof changePasswordSchema>>({
     resolver: zodResolver(changePasswordSchema),
     defaultValues: {
       password: "",
       confirmPassword: "",
     },
   });
-
-  const password = watch("password", "");
-  const confirmPassword = watch("confirmPassword", "");
 
   useEffect(() => {
     const tokenFromUrl = location.pathname.split("/")[2];
@@ -49,11 +53,6 @@ const ChangePasswordPage: React.FC = () => {
   const onSubmit = async (values: z.infer<typeof changePasswordSchema>) => {
     if (!token) {
       toast.error("Invalid reset token.");
-      return;
-    }
-
-    if (values.password !== values.confirmPassword) {
-      toast.error("Passwords do not match.");
       return;
     }
 
@@ -71,60 +70,57 @@ const ChangePasswordPage: React.FC = () => {
   };
 
   return (
-    <div className="mx-auto flex min-h-screen w-full flex-col items-center justify-center px-4">
-      <div className="w-full max-w-sm space-y-6">
-        <div className="flex flex-col space-y-2 text-center">
-          <div className="mx-auto h-12 w-12 rounded-full flex items-center justify-center">
-            <img src={logo} alt="Talk to Pro logo" className="size-12" />
-          </div>
-
-          <h1 className="text-2xl font-semibold">Change Password</h1>
-          <p className="text-sm text-gray-500">
+    <div className="min-h-screen flex bg-blue-white items-center justify-center px-4">
+      <div className="w-full max-w-sm">
+        <div className="flex flex-col items-center mb-6">
+          <img src={logo} alt="Talk to Pro logo" className="size-12" />
+          <h2 className="text-2xl font-semibold mt-4 mb-2">Change Password</h2>
+          <p className="text-sm text-gray-500 text-center">
             Enter a new password below to reset your account security.
           </p>
         </div>
 
-        <form
-          onSubmit={handleSubmit(onSubmit)}
-          noValidate
-          className="space-y-4"
-        >
-          <div className="space-y-2">
-            <Input
-              id="password"
-              placeholder="New Password"
-              type="password"
-              {...register("password")}
-              className={errors.password ? "border-red-500" : ""}
-            />
-            {errors.password && (
-              <p className="text-sm text-red-500">{errors.password.message}</p>
-            )}
-          </div>
-
-          <div className="space-y-2">
-            <Input
-              id="confirm-password"
-              placeholder="Confirm Password"
-              type="password"
-              {...register("confirmPassword")}
-              className={errors.confirmPassword ? "border-red-500" : ""}
-            />
-            {errors.confirmPassword && (
-              <p className="text-sm text-red-500">
-                {errors.confirmPassword.message}
-              </p>
-            )}
-          </div>
-
-          <Button
-            type="submit"
-            disabled={isSubmitting || !password || !confirmPassword}
-            className="w-full bg-[#7C3AED] hover:bg-[#6D28D9] disabled:bg-gray-300 disabled:cursor-not-allowed"
+        <Form {...form}>
+          <form
+            onSubmit={form.handleSubmit(onSubmit)}
+            className="space-y-4"
+            noValidate
           >
-            {isSubmitting ? "Changing..." : "Change Password"}
-          </Button>
-        </form>
+            <FormField
+              control={form.control}
+              name="password"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>New Password</FormLabel>
+                  <FormControl>
+                    <PasswordInput placeholder="New password" {...field} />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+            <FormField
+              control={form.control}
+              name="confirmPassword"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Confirm Password</FormLabel>
+                  <FormControl>
+                    <PasswordInput placeholder="Confirm password" {...field} />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+            <Button
+              type="submit"
+              disabled={form.formState.isSubmitting}
+              className="w-full"
+            >
+              {form.formState.isSubmitting ? "Changing..." : "Change Password"}
+            </Button>
+          </form>
+        </Form>
       </div>
     </div>
   );
