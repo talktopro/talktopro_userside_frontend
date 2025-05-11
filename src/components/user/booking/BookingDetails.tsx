@@ -8,6 +8,7 @@ import { Button } from '../../ui/button'
 import { format } from 'date-fns'
 import convert24To12HourRange from '@/utils/convertTo12HourFormat'
 import { useNavigate } from 'react-router-dom'
+import BookingCancellation from './CancellationDetails'
 
 
 interface IBookingDetailsDrawerProps {
@@ -134,35 +135,41 @@ const BookingDetails: FC<IBookingDetailsDrawerProps> = ({ booking }) => {
                   <h3 className="font-medium">Session Details</h3>
                </div>
                <CardContent className="p-0 pt-4">
-                  <div className="space-y-4">
-                     <div className="flex items-center gap-3">
-                        <div className="bg-muted p-2 rounded-full">
-                           <Calendar className="h-5 w-5 text-purple-500" />
+                  <div className="flex flex-col md:h-80">
+                     <div className="space-y-4">
+                        <div className="flex items-center gap-3">
+                           <div className="bg-muted p-2 rounded-full">
+                              <Calendar className="h-5 w-5 text-purple-500" />
+                           </div>
+                           <div>
+                              <p className="text-sm text-muted-foreground">Date</p>
+                              <p className="text-sm">{format(new Date(booking.slot.date), "EEEE, MMMM do, yyyy")}</p>
+                           </div>
                         </div>
-                        <div>
-                           <p className="text-sm text-muted-foreground">Date</p>
-                           <p className="text-sm">{format(new Date(booking.slot.date), "EEEE, MMMM do, yyyy")}</p>
+
+                        <div className="flex items-center gap-3">
+                           <div className="bg-muted p-2 rounded-full">
+                              <Clock className="h-5 w-5 text-purple-500" />
+                           </div>
+                           <div>
+                              <p className="text-sm text-muted-foreground">Time</p>
+                              <p className="text-sm">{convert24To12HourRange(booking.slot.time)}</p>
+                           </div>
+                        </div>
+
+                        <div className="flex items-center gap-3">
+                           <div className="bg-muted p-2 rounded-full">
+                              <CreditCard className="h-5 w-5 text-purple-500" />
+                           </div>
+                           <div>
+                              <p className="text-sm text-muted-foreground">Session Fee</p>
+                              <p className="text-sm">₹{booking.slot.fee.toFixed(2)}</p>
+                           </div>
                         </div>
                      </div>
 
-                     <div className="flex items-center gap-3">
-                        <div className="bg-muted p-2 rounded-full">
-                           <Clock className="h-5 w-5 text-purple-500" />
-                        </div>
-                        <div>
-                           <p className="text-sm text-muted-foreground">Time</p>
-                           <p className="text-sm">{convert24To12HourRange(booking.slot.time)}</p>
-                        </div>
-                     </div>
-
-                     <div className="flex items-center gap-3">
-                        <div className="bg-muted p-2 rounded-full">
-                           <CreditCard className="h-5 w-5 text-purple-500" />
-                        </div>
-                        <div>
-                           <p className="text-sm text-muted-foreground">Session Fee</p>
-                           <p className="text-sm">₹{booking.slot.fee.toFixed(2)}</p>
-                        </div>
+                     <div className="mt-auto pt-4">
+                        <BookingCancellation booking={booking} />
                      </div>
                   </div>
                </CardContent>

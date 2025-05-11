@@ -1,4 +1,4 @@
-import { ChevronRight, Star } from "lucide-react";
+import { ChevronRight } from "lucide-react";
 import sample from "@/assets/avatar/user.png";
 import { Link } from "react-router-dom";
 import { ROUTES } from "@/routes/routes";
@@ -39,7 +39,7 @@ const MentorCard = ({ mentor }: MentorCardProps) => {
             >
               {mentor.mentorDetails.profession}
             </p>
-            <div className="flex items-center gap-0.5 mt-1">
+            {/* <div className="flex items-center gap-0.5 mt-1">
               {Array(mentor.mentorDetails.rating)
                 .fill(0)
                 .map((_, index) => (
@@ -48,7 +48,7 @@ const MentorCard = ({ mentor }: MentorCardProps) => {
                     key={index}
                   />
                 ))}
-            </div>
+            </div> */}
           </div>
           <ChevronRight className="w-6 h-6 text-white opacity-0 group-hover:opacity-100 transition-opacity duration-200 text-md not-md:text-xs" />
         </div>

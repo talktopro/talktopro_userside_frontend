@@ -176,13 +176,14 @@ const SidebarList = () => {
                         <DialogClose asChild>
                           <Button
                             variant="ghost"
-                            className="w-1/2 text-white bg-red-600 hover:bg-red-700"
+                            className="w-1/2 border"
                           >
                             Cancel
                           </Button>
                         </DialogClose>
                         <Button
-                          className="w-1/2 border"
+
+                          className="w-1/2 text-white bg-red-600 hover:bg-red-700 hover:text-white"
                           variant="ghost"
                           onClick={handleLogout}
                         >

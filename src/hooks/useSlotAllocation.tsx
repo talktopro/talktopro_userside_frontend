@@ -3,6 +3,7 @@ import { IBookingSchedule, INewSlotAllocationReqBody, ISlotAllocationApiReponse 
 import convertTo24HourFormat from "@/utils/convertTo24HourFormat";
 import generateTimeSlots from "@/utils/generateTimeSlots";
 import SlotResponseConverter from "@/utils/slotResponseConverter";
+import axios from "axios";
 import { addMonths, addDays, startOfToday, format } from "date-fns";
 import { useMemo } from "react";
 import { toast } from "sonner";
@@ -33,9 +34,14 @@ const useSlotAllocation = () => {
       const unSavedSlots: INewSlotAllocationReqBody = createRequestObject(allocatedSlots);
       const { data } = await apiClient.post(`/mentor/slots`, unSavedSlots);
       setAllocatedSlots(SlotResponseConverter(data.body));
+      toast.success("Your new slots have been successfully allocated.")
     } catch (error) {
       console.error("Failed to allocate new slots:", error);
-      toast.error("Failed to save your changes.");
+      if (axios.isAxiosError(error) && error.response?.data.message === "Time slots must be allocated at least 1 hour in advance.") {
+        toast.error("You can only allocate new slots starting from 1 hour after the current time");
+      } else {
+        toast.error("Failed to save your changes.");
+      }
     }
   };
 

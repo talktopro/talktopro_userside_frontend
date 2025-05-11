@@ -14,18 +14,20 @@ import { Button } from "@/components/ui/button";
 import { useParams } from "react-router-dom";
 import apiClient from "@/api/axiosInstance";
 import { IMentorDetailsWithSlots, IMentorProfileDetailsApiResponse } from "@/types/user";
-import { Star } from "lucide-react";
+import { Check, Share2 } from "lucide-react";
 import MentorProfileSkeleton from "@/components/common/skeletons/MentorProfile";
 import { toast } from "sonner";
 import SlotResponseConverter from "@/utils/slotResponseConverter";
 import PaymentSuccess from "@/components/common/PaymentSuccess";
+import CustomTooltip from "@/components/common/CustomTooltip";
 
 const ProfessionalDetailsPage = () => {
   const { id } = useParams<{ id: string }>();
   const [mentor, setMentor] = useState<IMentorDetailsWithSlots | null>();
   const [loading, setLoading] = useState<boolean>(!mentor);
   const bucketName = import.meta.env.VITE_S3BUCKET_NAME;
-  const [showPaymentSuccess, setShowPaymentSuccess] = useState<boolean>(false)
+  const [showPaymentSuccess, setShowPaymentSuccess] = useState<boolean>(false);
+  const [isCopied, setIsCopied] = useState(false);
 
   useEffect(() => {
     if (!mentor) {
@@ -45,6 +47,19 @@ const ProfessionalDetailsPage = () => {
       fetchMentor();
     }
   }, [id]);
+
+  const handleShareClick = () => {
+    navigator.clipboard.writeText(window.location.href)
+      .then(() => {
+        setIsCopied(true);
+        setTimeout(() => {
+          setIsCopied(false);
+        }, 3000);
+      })
+      .catch((err) => {
+        console.error('Failed to copy URL: ', err);
+      })
+  };
 
   if (showPaymentSuccess) {
     return (
@@ -90,7 +105,7 @@ const ProfessionalDetailsPage = () => {
       <MentorProfileSkeleton />
     ) : (
       <>
-        <div className="w-full min-h-screen p-5">
+        <div className="w-full min-h-fit p-5">
           <div className="w-full block sm:flex">
             <div className="sm:min-w-[22%] max-w-[21rem] p-5 aspect-[3.5/4]">
               <img
@@ -103,16 +118,30 @@ const ProfessionalDetailsPage = () => {
                 className="h-full w-full object-cover rounded-lg"
               />
             </div>
-            <div className="w-full sm:w-[80%] sm:p-5 not-sm:py-5">
+            <div className="w-full sm:w-[80%] sm:p-5 not-sm:py-5 my-auto">
               <div className="flex items-start justify-between">
                 <div>
-                  <h1 className="text-2xl font-bold not-sm:mt-5">
-                    {`${mentor.mentorDetails.first_name} ${mentor.mentorDetails.last_name}`}
-                  </h1>
+                  <div className="flex gap-1">
+                    <h1 className="text-2xl font-bold not-sm:mt-5">
+                      {`${mentor.mentorDetails.first_name} ${mentor.mentorDetails.last_name}`}
+                    </h1>
+                    <CustomTooltip
+                      content={isCopied ? "Link copied!" : `Share ${mentor.mentorDetails.first_name} ${mentor.mentorDetails.last_name} profile`}
+                      trigger={
+                        <button className="not-sm:mt-5" onClick={handleShareClick}>
+                          {isCopied ? (
+                            <Check strokeWidth={1.5} size={20} className="text-green-500" />
+                          ) : (
+                            <Share2 strokeWidth={1.5} size={20} />
+                          )}
+                        </button>
+                      }
+                    />
+                  </div>
                   <p className="opacity-70">{mentor.mentorDetails.profession}</p>
                 </div>
               </div>
-              <div className="mt-5 flex items-center">
+              {/* <div className="mt-5 flex items-center">
                 <div className="flex items-center mt-1">
                   {Array(mentor.mentorDetails.rating)
                     .fill(0)
@@ -126,9 +155,9 @@ const ProfessionalDetailsPage = () => {
                     ))}
                 </div>
                 <span className="text-sm opacity-70 ml-2">5k Reviews</span>
-              </div>
-              <div className="mt-5">
-                <h2 className="text-lg font-semibold">Specializations</h2>
+              </div>*/}
+              <div className="mt-10">
+                <h2 className="text-lg font-semibold">Skills & Expertise</h2>
                 <div className="mt-2 flex flex-wrap gap-2">
                   {mentor.mentorDetails.skills.map(
                     (content: string, key: number) => (
@@ -162,17 +191,6 @@ const ProfessionalDetailsPage = () => {
               <h2 className="text-lg font-semibold">Languages</h2>
               <div className="mt-2 flex flex-wrap gap-2">
                 {mentor.mentorDetails.languages.map(
-                  (content: string, key: number) => (
-                    <Badge content={content} key={key} />
-                  )
-                )}
-              </div>
-
-              <hr className="border-t my-5" />
-
-              <h2 className="text-lg font-semibold">Skills & Expertise</h2>
-              <div className="mt-2 flex flex-wrap gap-2">
-                {mentor.mentorDetails.skills.map(
                   (content: string, key: number) => (
                     <Badge content={content} key={key} />
                   )

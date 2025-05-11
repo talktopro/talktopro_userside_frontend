@@ -52,6 +52,19 @@ const useBookings = <T extends BookingType>({ from }: { from: T }) => {
       setQueryDetails((prev) => ({ ...prev, page }));
    };
 
+   const handleCancelBooking = async (bookingId: string, reason: string): Promise<boolean> => {
+      try {
+         await apiClient.patch(`/bookings/${bookingId}/cancel`,
+            { reason: reason },
+            { params: { booking_id: bookingId } });
+         return true;
+      } catch (error) {
+         toast.error("Failed to cancel booking");
+         console.log("Faile to cancel booking", error);
+         return false;
+      };
+   };
+
    return {
       bookingHistory,
       isLoading,
@@ -60,6 +73,7 @@ const useBookings = <T extends BookingType>({ from }: { from: T }) => {
       handleSortChange,
       handleChangeCurrentPage,
       fetchBookingHistory,
+      handleCancelBooking,
    };
 };
 

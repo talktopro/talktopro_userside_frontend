@@ -105,6 +105,7 @@ const SlotManagement: React.FC = () => {
           <Button
             className="cursor-pointer px-10 min-w-48 disabled:cursor-not-allowed"
             onClick={handleSave}
+            hidden={!hasUnsavedChanges}
             disabled={!hasUnsavedChanges || isSaving}
           >
             {isSaving ? 'Saving...' : 'Save changes'}
@@ -117,7 +118,7 @@ const SlotManagement: React.FC = () => {
       </div>
       <div className="sm:hidden not-sm:fixed not-sm:bottom-0 not-sm:z-10 not-sm:w-screen not-sm:bg-background not-sm:py-3 not-sm:border-t-1 not-sm:px-4 disabled:cursor-not-allowed">
         <Button
-          className="cursor-pointer w-full"
+          className={`cursor-pointer w-full ${!hasUnsavedChanges && "invisible"}`}
           onClick={handleSave}
           disabled={!hasUnsavedChanges || isSaving}
         >
