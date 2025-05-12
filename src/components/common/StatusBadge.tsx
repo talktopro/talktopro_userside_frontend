@@ -2,6 +2,7 @@ import { FC } from "react"
 
 type StatusType =
    | "pending"
+   | "payment_pending"
    | "success"
    | "failed"
    | "refund_pending"
@@ -19,6 +20,11 @@ const StatusBadge: FC<StatusBadgeProps> = ({ status, className = "" }) => {
    // Color configurations for light and dark modes
    const statusConfig = {
       pending: {
+         light: "bg-amber-50 text-amber-800 border-amber-200",
+         dark: "dark:bg-amber-900/30 dark:text-amber-200 dark:border-amber-700",
+         label: "Pending"
+      },
+      payment_pending: {
          light: "bg-amber-50 text-amber-800 border-amber-200",
          dark: "dark:bg-amber-900/30 dark:text-amber-200 dark:border-amber-700",
          label: "Pending"
@@ -57,10 +63,17 @@ const StatusBadge: FC<StatusBadgeProps> = ({ status, className = "" }) => {
          light: "bg-amber-50 text-amber-800 border-amber-200",
          dark: "dark:bg-amber-900/30 dark:text-amber-200 dark:border-amber-700",
          label: "Incomplete"
+      },
+      // Fallback for unknown statuses
+      unknown: {
+         light: "bg-gray-50 text-gray-800 border-gray-200",
+         dark: "dark:bg-gray-900/30 dark:text-gray-200 dark:border-gray-700",
+         label: "Unknown"
       }
    };
 
-   const currentStatus = statusConfig[status];
+   // Safely get the status config or fallback to unknown
+   const currentStatus = statusConfig[status] || statusConfig.unknown;
 
    return (
       <span
