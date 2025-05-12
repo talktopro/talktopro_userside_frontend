@@ -14,7 +14,7 @@ import { Button } from "@/components/ui/button";
 import { useParams } from "react-router-dom";
 import apiClient from "@/api/axiosInstance";
 import { IMentorDetailsWithSlots, IMentorProfileDetailsApiResponse } from "@/types/user";
-import { Check, Share2 } from "lucide-react";
+import { Check, MessageCircleMore, Share2, Star } from "lucide-react";
 import MentorProfileSkeleton from "@/components/common/skeletons/MentorProfile";
 import { toast } from "sonner";
 import SlotResponseConverter from "@/utils/slotResponseConverter";
@@ -118,7 +118,7 @@ const ProfessionalDetailsPage = () => {
                 className="h-full w-full object-cover rounded-lg"
               />
             </div>
-            <div className="w-full sm:w-[80%] sm:p-5 not-sm:py-5 my-auto">
+            <div className="w-full sm:w-[80%] sm:p-5 not-sm:py-5">
               <div className="flex items-start justify-between">
                 <div>
                   <div className="flex gap-1">
@@ -141,21 +141,16 @@ const ProfessionalDetailsPage = () => {
                   <p className="opacity-70">{mentor.mentorDetails.profession}</p>
                 </div>
               </div>
-              {/* <div className="mt-5 flex items-center">
-                <div className="flex items-center mt-1">
-                  {Array(mentor.mentorDetails.rating)
-                    .fill(0)
-                    .map((_, index) => (
-                      <Star
-                        className="text-yellow-400"
-                        fill="#f6e05e"
-                        size={18}
-                        key={index}
-                      />
-                    ))}
+              <div className="mt-2 flex items-center">
+                <div className="flex items-center">
+                  <Star
+                    className="text-yellow-400"
+                    fill="#f6e05e"
+                    size={18}
+                  />
                 </div>
-                <span className="text-sm opacity-70 ml-2">5k Reviews</span>
-              </div>*/}
+                <span className="text-sm opacity-70 ml-2">0 Reviews</span>
+              </div>
               <div className="mt-10">
                 <h2 className="text-lg font-semibold">Skills & Expertise</h2>
                 <div className="mt-2 flex flex-wrap gap-2">
@@ -195,6 +190,14 @@ const ProfessionalDetailsPage = () => {
                     <Badge content={content} key={key} />
                   )
                 )}
+              </div>
+
+              <hr className="border-t my-5" />
+
+              <h2 className="text-lg font-semibold">Reviews</h2>
+              <div className="mt-2 flex items-center bg-muted/50 text-muted-foreground rounded-lg h-20 justify-center">
+                <MessageCircleMore className="h-5 w-5 mr-2" />
+                <span>No reviews found</span>
               </div>
             </div>
           </div>

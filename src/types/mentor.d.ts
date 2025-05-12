@@ -64,13 +64,13 @@ export interface IMentorBookingHistoryApiResponse {
 };
 export interface IMentorBookingHistory {
    _id: string,
-   payment_status: "success" | "pending" | "failed",
+   payment_status: "success" | "pending" | "failed" | "refund_success" | "refund_pending",
    slot: {
       date: string,
       time: string,
       fee: number
    },
-   status: "success" | "pending" | "failed",
+   status: "success" | "pending" | "failed" | "cancelled",
    session_status: "pending" | "complete" | "incomplete";
    user: User;
 };

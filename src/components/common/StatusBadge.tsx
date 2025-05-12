@@ -7,7 +7,7 @@ type StatusType =
    | "failed"
    | "refund_pending"
    | "cancelled"
-   | "refund_complete"
+   | "refund_success"
    | "incomplete"
    | "complete";
 
@@ -34,7 +34,7 @@ const StatusBadge: FC<StatusBadgeProps> = ({ status, className = "" }) => {
          dark: "dark:bg-emerald-900/30 dark:text-emerald-200 dark:border-emerald-700",
          label: "Success"
       },
-      refund_complete: {
+      refund_success: {
          light: "bg-emerald-50 text-emerald-800 border-emerald-200",
          dark: "dark:bg-emerald-900/30 dark:text-emerald-200 dark:border-emerald-700",
          label: "Refund Complete"

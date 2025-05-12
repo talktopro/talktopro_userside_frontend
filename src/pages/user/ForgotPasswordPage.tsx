@@ -70,18 +70,18 @@ const ForgotPasswordPage: React.FC = () => {
 
         {emailSent ? (
           <div className="bg-muted/50 rounded-lg p-4">
-          <MailCheck strokeWidth={1.5} className="text-purple-500 mx-auto mb-3" />
-          <p className="text-sm">
-            Didn’t receive the email? Check your spam or{" "}
-            <span
-              onClick={() => setEmailSent(false)}
-              className="text-purple-500 hover:underline cursor-pointer hover:text-purple-600 font-semibold"
-            >
-              try again
-            </span>
-            .
-          </p>
-        </div>
+            <MailCheck strokeWidth={1.5} className="text-purple-500 mx-auto mb-3" />
+            <p className="text-sm">
+              Didn’t receive the email? Check your spam or{" "}
+              <span
+                onClick={() => setEmailSent(false)}
+                className="text-purple-500 hover:underline cursor-pointer hover:text-purple-600 font-semibold"
+              >
+                try again
+              </span>
+              .
+            </p>
+          </div>
         ) : (
           <form
             onSubmit={handleSubmit(onSubmit)}
@@ -111,7 +111,7 @@ const ForgotPasswordPage: React.FC = () => {
 
             <Link
               to={ROUTES.AUTH.LOGIN}
-              className="flex items-center cursor-pointer gap-2 text-sm hover:text-gray-800 transition absolute top-10 left-10 border rounded-xl px-3 py-2"
+              className="flex items-center cursor-pointer gap-2 text-sm hover:text-gray-800 transition absolute top-10 left-10 not-sm:left-4 border rounded-xl px-3 py-2"
             >
               <ArrowLeft className="h-4 w-4" />
               Back to login

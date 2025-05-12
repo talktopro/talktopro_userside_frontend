@@ -7,19 +7,14 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import { ChevronDown } from "lucide-react";
 import {
   Drawer,
   DrawerContent,
   DrawerTrigger,
 } from "@/components/ui/drawer";
-import {
-  TooltipProvider,
-} from "@/components/ui/tooltip";
 import { IBookingHistory } from "@/types/user";
 import { format } from "date-fns";
 import convert24To12HourRange from "@/utils/convertTo12HourFormat";
-import CustomTooltip from "@/components/common/CustomTooltip";
 import BookingDetails from "./BookingDetails";
 import useBookings from "@/hooks/useBookings";
 import StatusBadge from "@/components/common/StatusBadge";
@@ -54,67 +49,71 @@ const BookingsTable: React.FC<BookingsTableProps> = ({ bookingDetails, currentPa
           <TableHead className="whitespace-nowrap w-48 text-center">
             Amount
           </TableHead>
-          <TableHead className="whitespace-nowrap w-12"></TableHead>
         </TableRow>
       </TableHeader>
-      <TableBody className="divide-y-0">
+      <TableBody>
         {bookingDetails.map((booking, index) => (
-          <React.Fragment key={booking._id}>
-            <TableRow>
-              <TableCell className="py-3 w-24 whitespace-nowrap text-center">
-                {(currentPage - 1) * limit + index + 1}
-              </TableCell>
-              <TableCell className="py-3 lg:pl-10 xl:pl:10 flex-grow whitespace-nowrap min-w-sm ">
-                <div className="flex items-center">
-                  <div className="w-auto h-12 rounded-md overflow-hidden aspect-[3.5/4]">
-                    <img
-                      src={`https://${bucketName}.s3.amazonaws.com/${import.meta.env.VITE_PROFILE_IMAGE_FOLDER}/${booking.mentor.profileImg}`}
-                      alt="Profile picture"
-                      className="w-full h-full object-cover"
-                    />
-                  </div>
-                  <div className="ml-3">
-                    <p className="font-semibold">{`${booking.mentor.first_name} ${booking.mentor.last_name}`}</p>
-                    <p className="text-muted-foreground">{booking.mentor.profession}</p>
-                  </div>
-                </div>
-              </TableCell>
-              <TableCell className="py-3 w-48 text-center whitespace-nowrap">
-                <p className="font-semibold">{convert24To12HourRange(booking.slot.time)}</p>
-                <p className="text-muted-foreground">{format(booking.slot.date, "dd-MM-yyyy")}</p>
-              </TableCell>
-              <TableCell className="pt-5 w-48 flex justify-center items-center whitespace-nowrap">
-                <StatusBadge status={booking.status} />
-              </TableCell>
-              <TableCell className="py-3 w-48 text-center whitespace-nowrap">
-                {booking.slot.fee}
-              </TableCell>
-              <TableCell className="py-3 w-12 whitespace-nowrap">
-                <Drawer
-                  open={openBookingDetailsId === booking._id}
-                  onOpenChange={(open) => {
-                    if (open) {
-                      setOpenBookingDetailsId(booking._id);
-                    } else {
-                      setOpenBookingDetailsId(null);
-                    }
-                  }}
-                >
-                  <DrawerTrigger>
-                    <TooltipProvider>
-                      <CustomTooltip
-                        content="Expand"
-                        trigger={<ChevronDown className="h-4 w-4" />}
+          <Drawer
+            key={booking._id}
+            open={openBookingDetailsId === booking._id}
+            onOpenChange={(open) => {
+              if (open) {
+                setOpenBookingDetailsId(booking._id);
+              } else {
+                setOpenBookingDetailsId(null);
+              }
+            }}
+          >
+            <DrawerTrigger asChild>
+              <TableRow className="cursor-pointer">
+                <TableCell className="w-24 text-center py-4">
+                  {(currentPage - 1) * limit + index + 1}
+                </TableCell>
+                <TableCell className="lg:pl-10 xl:pl-10 py-4">
+                  <div className="flex items-center">
+                    <div className="w-12 h-12 rounded-md overflow-hidden aspect-[3.5/4]">
+                      <img
+                        src={`https://${bucketName}.s3.amazonaws.com/${import.meta.env.VITE_PROFILE_IMAGE_FOLDER}/${booking.mentor.profileImg}`}
+                        alt="Profile picture"
+                        className="w-full h-full object-cover"
+                        onError={(e) => {
+                          (e.target as HTMLImageElement).src = "/default-profile.png";
+                        }}
                       />
-                    </TooltipProvider>
-                  </DrawerTrigger>
-                  <DrawerContent>
-                    <BookingDetails booking={booking} handleCancellationComplete={handleCancellationComplete} />
-                  </DrawerContent>
-                </Drawer>
-              </TableCell>
-            </TableRow>
-          </React.Fragment>
+                    </div>
+                    <div className="ml-3">
+                      <p className="font-semibold whitespace-nowrap">{`${booking.mentor.first_name} ${booking.mentor.last_name}`}</p>
+                      <p className="text-muted-foreground text-sm whitespace-nowrap">
+                        {booking.mentor.profession}
+                      </p>
+                    </div>
+                  </div>
+                </TableCell>
+                <TableCell className="w-48 text-center py-4">
+                  <p className="font-semibold whitespace-nowrap">
+                    {convert24To12HourRange(booking.slot.time)}
+                  </p>
+                  <p className="text-muted-foreground text-sm">
+                    {format(new Date(booking.slot.date), "dd-MM-yyyy")}
+                  </p>
+                </TableCell>
+                <TableCell className="w-48 text-center py-4">
+                  <div className="flex justify-center">
+                    <StatusBadge status={booking.status} />
+                  </div>
+                </TableCell>
+                <TableCell className="w-48 text-center py-4">
+                  ₹{booking.slot.fee.toFixed(2)}
+                </TableCell>
+              </TableRow>
+            </DrawerTrigger>
+            <DrawerContent>
+              <BookingDetails
+                booking={booking}
+                handleCancellationComplete={handleCancellationComplete}
+              />
+            </DrawerContent>
+          </Drawer>
         ))}
       </TableBody>
     </Table>

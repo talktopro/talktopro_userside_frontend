@@ -151,15 +151,17 @@ const BookingDetails: FC<IBookingDetailsDrawerProps> = ({ booking, handleCancell
                   </div>
                 </div>
 
-                <div className="flex items-center gap-3">
-                  <div className="bg-muted p-2 rounded-full">
-                    <SiGoogleclassroom size={20} fill='oklch(55.8% 0.288 302.321)' />
+                {booking.status !== "failed" && booking.status !== "cancelled" && booking.status !== "pending" && (
+                  <div className="flex items-center gap-3">
+                    <div className="bg-muted p-2 rounded-full">
+                      <SiGoogleclassroom size={20} fill='oklch(55.8% 0.288 302.321)' />
+                    </div>
+                    <div>
+                      <p className="text-sm text-muted-foreground">Session status</p>
+                      <StatusBadge status={booking.session_status} />
+                    </div>
                   </div>
-                  <div>
-                    <p className="text-sm text-muted-foreground">Session status</p>
-                    <StatusBadge status={booking.session_status} />
-                  </div>
-                </div>
+                )}
               </div>
 
               <div className="mt-auto pt-4">
