@@ -124,7 +124,7 @@ declare global {
 export interface IBookingHistoryApiResponse {
     body: {
         bookings: IBookingHistory[];
-        total_page: number;
+        total_pages: number;
     };
     message: string;
     success: boolean;

@@ -35,7 +35,7 @@ const useBookings = <T extends BookingType>({ from }: { from: T }) => {
          });
 
          setBookingHistory(data.body.bookings as BookingData<T>);
-         setTotalPage(data.body.total_page || 1);
+         setTotalPage(data.body.total_pages || 1);
       } catch (error) {
          console.error("Error occurred while fetching booking history!", error);
          toast.error("Failed to collect booking history. Please try again later.");
