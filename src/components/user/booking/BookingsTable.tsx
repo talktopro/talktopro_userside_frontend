@@ -16,19 +16,17 @@ import { IBookingHistory } from "@/types/user";
 import { format } from "date-fns";
 import convert24To12HourRange from "@/utils/convertTo12HourFormat";
 import BookingDetails from "./BookingDetails";
-import useBookings from "@/hooks/useBookings";
 import StatusBadge from "@/components/common/StatusBadge";
 
 interface BookingsTableProps {
   bookingDetails: IBookingHistory[];
   currentPage: number;
   limit: number;
-  handleCancellationComplete: () => void
+  handleCancelBooking: (bookingId: string, reason: string) => Promise<boolean>
 }
 
-const BookingsTable: React.FC<BookingsTableProps> = ({ bookingDetails, currentPage, limit, handleCancellationComplete }) => {
+const BookingsTable: React.FC<BookingsTableProps> = ({ bookingDetails, currentPage, limit, handleCancelBooking }) => {
   const bucketName = import.meta.env.VITE_S3BUCKET_NAME;
-  const { openBookingDetailsId, setOpenBookingDetailsId } = useBookings({ from: "user" });
 
   return (
     <Table>
@@ -53,17 +51,7 @@ const BookingsTable: React.FC<BookingsTableProps> = ({ bookingDetails, currentPa
       </TableHeader>
       <TableBody>
         {bookingDetails.map((booking, index) => (
-          <Drawer
-            key={booking._id}
-            open={openBookingDetailsId === booking._id}
-            onOpenChange={(open) => {
-              if (open) {
-                setOpenBookingDetailsId(booking._id);
-              } else {
-                setOpenBookingDetailsId(null);
-              }
-            }}
-          >
+          <Drawer key={booking._id}>
             <DrawerTrigger asChild>
               <TableRow className="cursor-pointer">
                 <TableCell className="w-24 text-center py-4">
@@ -77,7 +65,7 @@ const BookingsTable: React.FC<BookingsTableProps> = ({ bookingDetails, currentPa
                         alt="Profile picture"
                         className="w-full h-full object-cover"
                         onError={(e) => {
-                          (e.target as HTMLImageElement).src = "/default-profile.png";
+                          (e.target as HTMLImageElement).src = "";
                         }}
                       />
                     </div>
@@ -110,7 +98,7 @@ const BookingsTable: React.FC<BookingsTableProps> = ({ bookingDetails, currentPa
             <DrawerContent>
               <BookingDetails
                 booking={booking}
-                handleCancellationComplete={handleCancellationComplete}
+                handleCancelBooking={handleCancelBooking}
               />
             </DrawerContent>
           </Drawer>

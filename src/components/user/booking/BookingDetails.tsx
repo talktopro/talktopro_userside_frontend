@@ -14,10 +14,10 @@ import BookingCancellation from './CancellationDetails';
 
 interface IBookingDetailsDrawerProps {
   booking: IBookingHistory;
-  handleCancellationComplete: () => void;
+  handleCancelBooking: (bookingId: string, reason: string) => Promise<boolean>
 };
 
-const BookingDetails: FC<IBookingDetailsDrawerProps> = ({ booking, handleCancellationComplete }) => {
+const BookingDetails: FC<IBookingDetailsDrawerProps> = ({ booking, handleCancelBooking }) => {
   const bucketName = import.meta.env.VITE_S3BUCKET_NAME;
   const navigate = useNavigate();
 
@@ -165,7 +165,10 @@ const BookingDetails: FC<IBookingDetailsDrawerProps> = ({ booking, handleCancell
               </div>
 
               <div className="mt-auto pt-4">
-                <BookingCancellation booking={booking} onClose={handleCancellationComplete} />
+                <BookingCancellation
+                  booking={booking}
+                  handleCancelBooking={handleCancelBooking}
+                />
               </div>
             </div>
           </CardContent>

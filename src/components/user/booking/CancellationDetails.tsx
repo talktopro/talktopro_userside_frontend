@@ -6,13 +6,12 @@ import { Label } from "@/components/ui/label"
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group"
 import { CheckCircle2, AlertCircle } from "lucide-react"
 import type { IBookingHistory } from "@/types/user"
-import { format, isBefore, isValid, parseISO, subHours } from "date-fns"
+import { format } from "date-fns"
 import convert24To12HourRange from "@/utils/convertTo12HourFormat"
-import useBookings from "@/hooks/useBookings"
 
 interface IBookingCancellationProps {
   booking: IBookingHistory;
-  onClose: () => void
+  handleCancelBooking: (bookingId: string, reason: string) => Promise<boolean>
 }
 
 const cancellationReasons = [
@@ -34,48 +33,12 @@ const dialogDescriptions = [
   "Your booking has been successfully cancelled.",
 ];
 
-const BookingCancellation: React.FC<IBookingCancellationProps> = ({ booking, onClose }) => {
+const BookingCancellation: React.FC<IBookingCancellationProps> = ({ booking, handleCancelBooking }) => {
   const [isOpen, setIsOpen] = useState<boolean>(false)
   const [step, setStep] = useState<number>(1)
   const [selectedReason, setSelectedReason] = useState<string>("")
   const [customReason, setCustomReason] = useState<string>("")
   const [cancellationLoading, setCancellationLoading] = useState<boolean>(false)
-  const { handleCancelBooking } = useBookings({ from: "user" });
-
-  const isCancellationAllowed = () => {
-
-    if (booking.status !== 'success' || booking.payment_status !== 'success') {
-      return false
-    }
-
-    // 2. Parse the session date and time
-    const bookingDate = parseISO(booking.slot.date)
-    const [startTime] = booking.slot.time.split('-') // Gets "HH:MM" from "HH:MM-HH:MM"
-    const [hours, minutes] = startTime.split(':').map(Number)
-
-    // 3. Create session datetime object
-    const sessionDateTime = new Date(bookingDate)
-    sessionDateTime.setHours(hours, minutes, 0, 0)
-
-    // 4. Validate the datetime
-    if (!isValid(sessionDateTime)) {
-      console.error('Invalid session date/time:', booking.slot.date, booking.slot.time)
-      return false
-    }
-
-    // 5. Check if session is in the past
-    if (isBefore(sessionDateTime, new Date())) {
-      console.log('Cancellation not allowed: Session has already occurred')
-      return false
-    }
-
-    // 6. Calculate cancellation deadline (3 hours before session)
-    const cancellationDeadline = subHours(sessionDateTime, 3)
-
-    // 7. Check if current time is before deadline
-    const cancellationAllowed = isBefore(new Date(), cancellationDeadline)
-    return cancellationAllowed;
-  }
 
   const handleCancelClick = () => {
     setIsOpen(true)
@@ -96,24 +59,18 @@ const BookingCancellation: React.FC<IBookingCancellationProps> = ({ booking, onC
     };
   };
 
-  if (!isCancellationAllowed()) {
-    return null
-  }
-
   return (
     <div>
-      <p className="my-1 text-sm">Do you wanna cancel this booking?</p>
-      <Button className="m-0 w-1/2 not-sm:w-full bg-red-500 hover:bg-red-600" onClick={handleCancelClick}>
-        Cancel Booking
-      </Button>
+      {booking.status === "success" && booking.session_status === "pending" && booking.payment_status === "success" && (
+        <>
+          <p className="my-1 text-sm">Do you wanna cancel this booking?</p>
+          <Button className="m-0 w-1/2 not-sm:w-full bg-red-500 hover:bg-red-600" onClick={handleCancelClick}>
+            Cancel Booking
+          </Button>
+        </>
+      )}
 
-      <Dialog open={isOpen} onOpenChange={(open) => {
-        if (!open && step === 3) {
-          onClose();
-        } else {
-          setIsOpen(open);
-        }
-      }}>
+      <Dialog open={isOpen} onOpenChange={(open) => { setIsOpen(open) }}>
         <DialogContent className="sm:max-w-lg p-0 overflow-hidden">
 
 
@@ -255,10 +212,7 @@ const BookingCancellation: React.FC<IBookingCancellationProps> = ({ booking, onC
 
                 <div className="flex justify-center">
                   <Button
-                    onClick={() => {
-                      onClose()
-                      setIsOpen(false);
-                    }}
+                    onClick={() => setIsOpen(false)}
                     className="border w-1/3"
                   >
                     Close

@@ -17,7 +17,6 @@ type BookingData<T extends BookingType> = T extends "user"
 
 const useBookings = <T extends BookingType>({ from }: { from: T }) => {
    const [bookingHistory, setBookingHistory] = useState<BookingData<T>>([] as BookingData<T>);
-   const [openBookingDetailsId, setOpenBookingDetailsId] = useState<string | null>(null);
    const [isLoading, setIsLoading] = useState<boolean>(false);
    const [totalPage, setTotalPage] = useState<number>(1);
    const [queryDetails, setQueryDetails] = useState<IBookingQueryDetails>({
@@ -58,17 +57,20 @@ const useBookings = <T extends BookingType>({ from }: { from: T }) => {
          await apiClient.patch(`/bookings/${bookingId}/cancel`,
             { reason: reason },
             { params: { booking_id: bookingId } });
+
+         setBookingHistory((prev) => (
+            prev.map((booking) => (
+               (booking as IBookingHistory)._id === bookingId
+                  ? { ...booking, payment_status: "refund_pending", status: "cancelled" }
+                  : booking
+            )) as BookingData<T>
+         ));
          return true;
       } catch (error) {
          toast.error("Failed to cancel booking");
-         console.log("Faile to cancel booking", error);
+         console.log("Failed to cancel booking", error);
          return false;
       };
-   };
-
-   const handleCancellationComplete = async () => {
-      await fetchBookingHistory();
-      setOpenBookingDetailsId(null);
    };
 
    return {
@@ -76,13 +78,10 @@ const useBookings = <T extends BookingType>({ from }: { from: T }) => {
       isLoading,
       totalPage,
       queryDetails,
-      openBookingDetailsId,
-      setOpenBookingDetailsId,
       handleSortChange,
       handleChangeCurrentPage,
       fetchBookingHistory,
       handleCancelBooking,
-      handleCancellationComplete,
    };
 };
 

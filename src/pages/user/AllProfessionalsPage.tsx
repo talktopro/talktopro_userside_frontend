@@ -129,7 +129,7 @@ const AllProfessionalsPage = () => {
           {loading ? (
             <SkeletonCards />
           ) : mentorsList.length > 0 ? (
-            <div className="max-h-[80dvh] overflow-auto custom-scrollbar">
+            <div className="sm:max-h-[80dvh] sm:overflow-auto custom-scrollbar">
               <div className="grid gap-3 grid-cols-[repeat(auto-fill,minmax(160px,1fr))] md:grid-cols-[repeat(auto-fill,minmax(200px,1fr))]">
                 {mentorsList.map((mentor) => (
                   <MentorCard key={mentor._id} mentor={mentor} />
