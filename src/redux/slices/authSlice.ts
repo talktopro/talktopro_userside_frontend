@@ -81,6 +81,7 @@ export const changePassword = createAsyncThunk<{ message: string }, { password: 
         try {
             return await changePasswordAPI(password, token);
         } catch (error) {
+            console.log(error)
             return rejectWithValue(extractErrorMessage(error));
         }
     }
@@ -149,6 +150,17 @@ const authSlice = createSlice({
                 state.loading = false;
             })
             .addCase(forgotPassword.rejected, (state, action) => {
+                state.loading = false;
+                state.error = action.payload || "Reset email failed";
+            })
+            .addCase(changePassword.pending, (state) => {
+                state.loading = true;
+                state.error = null;
+            })
+            .addCase(changePassword.fulfilled, (state) => {
+                state.loading = false;
+            })
+            .addCase(changePassword.rejected, (state, action) => {
                 state.loading = false;
                 state.error = action.payload || "Reset email failed";
             })
