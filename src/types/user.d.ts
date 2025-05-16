@@ -129,6 +129,13 @@ export interface IBookingHistoryApiResponse {
     message: string;
     success: boolean;
 };
+
+interface IRefundType {
+    amount: number;
+    date: Date;
+    transaction_id: string;
+};
+
 export interface IBookingHistory {
     _id: string,
     payment_status: "success" | "pending" | "failed" | "refund_success" | "refund_pending",
@@ -137,6 +144,9 @@ export interface IBookingHistory {
         time: string,
         fee: number
     },
+    cancel_reason?: string; // it will only shows if the booking is cancelled 
+    refund_type?: "full" | "partial" // it will only shows if the booking is cancelled 
+    refund_info?: IRefundType; // it will only shows if the booking is cancelled and payment status is refund_success
     status: "success" | "pending" | "failed" | "cancelled",
     session_status: "pending" | "complete" | "incomplete";
     mentor: {

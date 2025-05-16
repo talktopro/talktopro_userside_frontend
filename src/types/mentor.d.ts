@@ -62,6 +62,13 @@ export interface IMentorBookingHistoryApiResponse {
    message: string;
    success: boolean;
 };
+
+interface IRefundType {
+   amount: number;
+   date: Date;
+   transaction_id: string;
+};
+
 export interface IMentorBookingHistory {
    _id: string,
    payment_status: "success" | "pending" | "failed" | "refund_success" | "refund_pending",
@@ -73,4 +80,6 @@ export interface IMentorBookingHistory {
    status: "success" | "pending" | "failed" | "cancelled",
    session_status: "pending" | "complete" | "incomplete";
    user: User;
+   refund_type?: "full" | "partial" // it will only shows if the booking is cancelled
+   mentor_refund_info?: IRefundType; // it will only shows if the booking is cancelled and payment status is refund_success
 };

@@ -1,4 +1,4 @@
-import { useState } from "react"
+import { useCallback, useEffect, useState } from "react"
 import { Button } from "@/components/ui/button"
 import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle } from "@/components/ui/dialog"
 import { Textarea } from "@/components/ui/textarea"
@@ -38,7 +38,52 @@ const BookingCancellation: React.FC<IBookingCancellationProps> = ({ booking, han
   const [step, setStep] = useState<number>(1)
   const [selectedReason, setSelectedReason] = useState<string>("")
   const [customReason, setCustomReason] = useState<string>("")
-  const [cancellationLoading, setCancellationLoading] = useState<boolean>(false)
+  const [cancellationLoading, setCancellationLoading] = useState<boolean>(false);
+  const [isLateCancel, setIsLateCancel] = useState<boolean>(false);
+  const [cancelAvailable, setCancelAvailable] = useState<boolean>(isCancelAvailable(booking.slot.date, booking.slot.time));
+
+  function getSessionDateTime(date: string, timeSlot: string) {
+    const sessionDate = new Date(date);
+    const [startTime] = timeSlot.split('-');
+    const [hours, minutes] = startTime.split(':').map(Number);
+    sessionDate.setHours(hours, minutes, 0, 0);
+    return sessionDate;
+  };
+
+  function isCancelAvailable(date: string, timeSlot: string) {
+    const now = new Date();
+    const sessionDate = getSessionDateTime(date, timeSlot)
+    return now < sessionDate;
+  };
+
+  function isLateCancellation(date: string, timeSlot: string) {
+    const now = new Date();
+    const sessionDate = getSessionDateTime(date, timeSlot)
+    const diffInHours = (sessionDate.getTime() - now.getTime()) / (1000 * 60 * 60);
+    return diffInHours <= 3;
+  };
+
+  const checkLateCancellation = useCallback(() => {
+    return isLateCancellation(booking.slot.date, booking.slot.time);
+  }, [booking.slot.date, booking.slot.time]);
+
+  useEffect(() => {
+    if (!isOpen) return;
+    setIsLateCancel(checkLateCancellation()); //! Initial check
+
+    const intervalId = setInterval(() => {
+      const nowAvailable = isCancelAvailable(booking.slot.date, booking.slot.time);
+      setCancelAvailable(nowAvailable);
+
+      if (!nowAvailable) {//! Close dialog if cancellation is no longer available
+        setIsOpen(false);
+      }
+
+      setIsLateCancel(checkLateCancellation());
+    }, 60000);
+
+    return () => clearInterval(intervalId);
+  }, [isOpen, checkLateCancellation]);
 
   const handleCancelClick = () => {
     setIsOpen(true)
@@ -61,7 +106,7 @@ const BookingCancellation: React.FC<IBookingCancellationProps> = ({ booking, han
 
   return (
     <div>
-      {booking.status === "success" && booking.session_status === "pending" && booking.payment_status === "success" && (
+      {booking.status === "success" && booking.session_status === "pending" && booking.payment_status === "success" && cancelAvailable && (
         <>
           <p className="my-1 text-sm">Do you wanna cancel this booking?</p>
           <Button className="m-0 w-1/2 not-sm:w-full bg-red-500 hover:bg-red-600" onClick={handleCancelClick}>
@@ -106,8 +151,8 @@ const BookingCancellation: React.FC<IBookingCancellationProps> = ({ booking, han
                 </RadioGroup>
 
                 {selectedReason === "Other" && (
-                  <div className="mt-4 space-y-2">
-                    <Label htmlFor="customReason" className="text-sm font-medium">
+                  <div className="mt-4 space-y-3">
+                    <Label htmlFor="customReason" className="text-sm font-medium pl-2">
                       Please specify your reason
                     </Label>
                     <Textarea
@@ -115,7 +160,7 @@ const BookingCancellation: React.FC<IBookingCancellationProps> = ({ booking, han
                       value={customReason}
                       onChange={(e) => setCustomReason(e.target.value)}
                       placeholder="Enter your reason for cancellation..."
-                      className="resize-none min-h-[100px]"
+                      className="resize-none h-[100px] overflow-y-scroll custom-scrollbar mt-2"
                     />
                   </div>
                 )}
@@ -141,14 +186,28 @@ const BookingCancellation: React.FC<IBookingCancellationProps> = ({ booking, han
 
             {step === 2 && (
               <div className="space-y-6">
-                <div className="bg-amber-50 dark:bg-amber-500/5 border border-amber-200 dark:border-amber-800 rounded-lg p-4 flex items-start gap-3">
-                  <AlertCircle className="h-5 w-5 text-amber-500 mt-0.5 flex-shrink-0" />
-                  <div>
-                    <p className="text-sm font-medium text-amber-800 dark:text-amber-500">Please confirm your cancellation</p>
-                    <p className="text-sm text-amber-700 mt-1 dark:text-amber-500">
-                      Your amount will be refunded within 24 hours after cancellation.
-                    </p>
+                <div className="space-y-2">
+                  <div className="bg-amber-50 dark:bg-amber-500/5 border border-amber-200 dark:border-amber-800 rounded-lg p-4 flex items-start gap-3">
+                    <AlertCircle className="h-5 w-5 text-amber-500 mt-0.5 flex-shrink-0" />
+                    <div>
+                      <p className="text-sm font-medium text-amber-800 dark:text-amber-500">Please confirm your cancellation</p>
+                      <p className="text-sm text-amber-700 mt-1 dark:text-amber-500">
+                        Your amount will be refunded within 24 hours after cancellation.
+                      </p>
+                    </div>
                   </div>
+
+                  {isLateCancel && (
+                    <div className="bg-red-50 dark:bg-red-500/5 border border-red-200 dark:border-red-800 rounded-lg p-4 flex items-start gap-3">
+                      <AlertCircle className="h-5 w-5 text-red-500 mt-0.5 flex-shrink-0" />
+                      <div>
+                        <p className="text-sm font-medium text-red-800 dark:text-red-500">Late Cancellation Notice</p>
+                        <p className="text-sm text-red-700 mt-1 dark:text-red-500">
+                          You're cancelling within 3 hours of your session time. A 10% cancellation fee will be deducted from your refund as compensation for the mentor.
+                        </p>
+                      </div>
+                    </div>
+                  )}
                 </div>
 
                 <div className="bg-muted/50 rounded-lg p-4 space-y-2">
@@ -199,7 +258,9 @@ const BookingCancellation: React.FC<IBookingCancellationProps> = ({ booking, han
                   </div>
                   <h3 className="text-lg font-semibold mb-2">Booking Cancelled Successfully</h3>
                   <p className="text-muted-foreground max-w-md">
-                    Your booking has been cancelled and your refund will be processed within 24 hours.
+                    {isLateCancel
+                      ? "Your booking has been cancelled. A 10% cancellation fee has been deducted from your refund, which will be processed within 24 hours."
+                      : "Your booking has been cancelled and your amount refund will be processed within 24 hours."}
                   </p>
                 </div>
 
