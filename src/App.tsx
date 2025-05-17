@@ -17,6 +17,7 @@ if (!clientId) {
   );
 }
 
+
 const App = () => {
   return (
     <Provider store={store}>
