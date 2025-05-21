@@ -7,9 +7,11 @@ import axios from "axios";
 import { addMonths, addDays, startOfToday, format } from "date-fns";
 import { useMemo } from "react";
 import { toast } from "sonner";
+import useErrorHandler from "./useErrorHandler";
 
 const useSlotAllocation = () => {
 
+  const { handleError } = useErrorHandler();
   const predefinedTimeSlots: string[] = useMemo(generateTimeSlots, []);
   const displayMonths = [0, 1].map((i) => addMonths(new Date(), i));
   const startDate = startOfToday();
@@ -22,8 +24,7 @@ const useSlotAllocation = () => {
       const { data } = await apiClient.get<ISlotAllocationApiReponse>('/mentor/slots');
       setAllocatedSlots(SlotResponseConverter(data.body));
     } catch (error) {
-      console.error("Failed to fetch slots:", error);
-      toast.error("Failed to fetch slot details");
+      handleError(error, "Failed to fetch slot details");
     }
   };
 
@@ -36,9 +37,8 @@ const useSlotAllocation = () => {
       setAllocatedSlots(SlotResponseConverter(data.body));
       toast.success("Your new slots have been successfully allocated.")
     } catch (error) {
-      console.error("Failed to allocate new slots:", error);
       if (axios.isAxiosError(error) && error.response?.data.message === "Time slots must be allocated at least 1 hour in advance.") {
-        toast.error("You can only allocate new slots starting from 1 hour after the current time");
+        handleError(error, "You can only allocate new slots starting from 1 hour after the current time");
       } else {
         toast.error("Failed to save your changes.");
       }
@@ -61,8 +61,7 @@ const useSlotAllocation = () => {
         }
       }
     } catch (error) {
-      console.error("Failed to remove slots.", error);
-      toast.error("Oops! Failed to remove slots.");
+      handleError(error, "Oops! Failed to remove slots.");
     }
   };
 

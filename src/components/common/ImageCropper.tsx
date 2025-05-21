@@ -84,8 +84,6 @@ const ImageCropper = ({
       if (croppedBlobImage) {
         await onSave(croppedBlobImage);
       }
-    } catch (error) {
-      console.log(error);
     } finally {
       setIsLoading(false);
     }

@@ -3,7 +3,7 @@ import { IBookingQueryDetails } from "@/interfaces/user";
 import { IMentorBookingHistory, IMentorBookingHistoryApiResponse } from "@/types/mentor";
 import { IBookingHistory, IBookingHistoryApiResponse } from "@/types/user";
 import { useState } from "react";
-import { toast } from "sonner";
+import useErrorHandler from "./useErrorHandler";
 
 type BookingType = 'user' | 'mentor';
 
@@ -16,6 +16,7 @@ type BookingData<T extends BookingType> = T extends "user"
    : IMentorBookingHistory[];
 
 const useBookings = <T extends BookingType>({ from }: { from: T }) => {
+   const { handleError } = useErrorHandler();
    const [bookingHistory, setBookingHistory] = useState<BookingData<T>>([] as BookingData<T>);
    const [isLoading, setIsLoading] = useState<boolean>(false);
    const [totalPage, setTotalPage] = useState<number>(1);
@@ -37,8 +38,7 @@ const useBookings = <T extends BookingType>({ from }: { from: T }) => {
          setBookingHistory(data.body.bookings as BookingData<T>);
          setTotalPage(data.body.total_pages || 1);
       } catch (error) {
-         console.error("Error occurred while fetching booking history!", error);
-         toast.error("Failed to collect booking history. Please try again later.");
+         handleError(error, "Failed to collect booking history. Please try again later.");
       } finally {
          setIsLoading(false);
       }
@@ -67,8 +67,7 @@ const useBookings = <T extends BookingType>({ from }: { from: T }) => {
          ));
          return true;
       } catch (error) {
-         toast.error("Failed to cancel booking");
-         console.log("Failed to cancel booking", error);
+         handleError(error, "Failed to cancel booking");
          return false;
       };
    };

@@ -1,5 +1,5 @@
 import apiClient from "@/api/axiosInstance";
-import { toast } from "sonner";
+import useErrorHandler from "./useErrorHandler";
 
 interface FetchMentorsParams {
   sort?: "NewestToOldest" | "OldestToNewest";
@@ -12,6 +12,7 @@ interface FetchMentorsParams {
 }
 
 const useFetchMentorsList = () => {
+  const { handleError } = useErrorHandler();
   const getAllMentors = async ({
     sort = "NewestToOldest",
     search = "",
@@ -35,8 +36,7 @@ const useFetchMentorsList = () => {
       });
       return data.data;
     } catch (error: unknown) {
-      console.error("Error occurred while fetching the mentors list", error);
-      toast.error("Failed to fetch mentors list.");
+      handleError(error, "Error occurred while fetching the mentors list");
     }
   };
 

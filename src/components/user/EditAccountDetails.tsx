@@ -33,6 +33,7 @@ import {
 import { useDispatch } from "react-redux";
 import { AppDispatch } from "@/redux/store";
 import { updateUser } from "@/redux/slices/authSlice";
+import useErrorHandler from "@/hooks/useErrorHandler";
 
 interface EditAccountDetailsProps {
   user: User | null;
@@ -63,6 +64,7 @@ const EditAccountDetails = ({ user }: EditAccountDetailsProps) => {
 
   const dispatch = useDispatch<AppDispatch>();
   const bucketName = import.meta.env.VITE_S3BUCKET_NAME;
+  const { handleError } = useErrorHandler();
 
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
@@ -90,8 +92,7 @@ const EditAccountDetails = ({ user }: EditAccountDetailsProps) => {
       );
       toast.success("Account details updated successfully");
     } catch (error) {
-      toast.error("Failed to update account details");
-      console.error("Error occur saveAccountDetails", error);
+      handleError(error, "Failed to update account details");
     } finally {
       setLoading(false);
     }

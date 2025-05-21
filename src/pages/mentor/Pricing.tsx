@@ -3,10 +3,10 @@ import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import PricingTips from '@/components/mentor/PricingTips';
 import PricingForm from '@/components/mentor/PricingForm';
-import { toast } from 'sonner';
 import apiClient from '@/api/axiosInstance';
 import { useDispatch, useSelector } from 'react-redux';
 import { selectAuth, updateUser } from '@/redux/slices/authSlice';
+import useErrorHandler from '@/hooks/useErrorHandler';
 
 const amountFormSchema = z.object({
   amount: z
@@ -23,6 +23,7 @@ type AmountFormValues = z.infer<typeof amountFormSchema>;
 
 const Pricing = () => {
 
+  const { handleError } = useErrorHandler();
   const { user } = useSelector(selectAuth)
   const form = useForm<AmountFormValues>({
     resolver: zodResolver(amountFormSchema),
@@ -46,8 +47,7 @@ const Pricing = () => {
       }
       form.reset({ amount: values.amount });
     } catch (error) {
-      toast.error("Failed to save fee.");
-      console.log("Error occured from handle fee save", error);
+      handleError(error, "Failed to save fee.");
     }
   };
 

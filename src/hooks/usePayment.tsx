@@ -6,9 +6,11 @@ import { format } from "date-fns";
 import logo from "@/assets/svg/logo.svg";
 import convertTo24HourFormat from "@/utils/convertTo24HourFormat";
 import apiClient from "@/api/axiosInstance";
+import useErrorHandler from "./useErrorHandler";
 
 const usePayment = () => {
    const { user } = useSelector(selectAuth);
+   const { handleError } = useErrorHandler();
 
    //! ======================================== Creates a new Razorpay instance with the provided options =========================================
    const getRazorPayInstance = (options: IRazorpayOptions) => {
@@ -28,8 +30,7 @@ const usePayment = () => {
          });
          return data.body;
       } catch (error) {
-         toast.error("Payment initialization failed");
-         console.error('Failed to create Razorpay order', error);
+         handleError(error, "Payment initialization failed");
          throw error;
       };
    };
@@ -92,10 +93,8 @@ const usePayment = () => {
          });
          console.log("Payment successful!", data);
          setShowPaymentSuccess(true)
-         //Handle success page
       } catch (error) {
-         toast.error("Failed to confirm payment");
-         console.error("Error confirming payment", error);
+         handleError(error, "Failed to confirm payment");
          throw error;
       }
    };
@@ -109,10 +108,8 @@ const usePayment = () => {
             success: false,
          });
          console.log("Payment was not completed", data);
-         // Handle failed payment page
       } catch (error) {
-         console.error("Error updating failed payment", error);
-         toast.error("Failed to update payment status");
+         handleError(error, "Failed to update payment status");
          throw error;
       }
    };
@@ -147,7 +144,7 @@ const usePayment = () => {
          // Step 5: Open razorpay modal for complete payment
          razorpayInstance.open();
       } catch (error) {
-         console.error('Payment failed:', error);
+         handleError(error, "Failed to proceed payment");
       }
    };
 

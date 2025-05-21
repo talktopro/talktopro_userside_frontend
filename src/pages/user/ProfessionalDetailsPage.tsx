@@ -16,10 +16,10 @@ import apiClient from "@/api/axiosInstance";
 import { IMentorDetailsWithSlots, IMentorProfileDetailsApiResponse } from "@/types/user";
 import { Check, MessageCircleMore, Share2, Star } from "lucide-react";
 import MentorProfileSkeleton from "@/components/common/skeletons/MentorProfile";
-import { toast } from "sonner";
 import SlotResponseConverter from "@/utils/slotResponseConverter";
 import PaymentSuccess from "@/components/common/PaymentSuccess";
 import CustomTooltip from "@/components/common/CustomTooltip";
+import useErrorHandler from "@/hooks/useErrorHandler";
 
 const ProfessionalDetailsPage = () => {
   const { id } = useParams<{ id: string }>();
@@ -28,6 +28,7 @@ const ProfessionalDetailsPage = () => {
   const bucketName = import.meta.env.VITE_S3BUCKET_NAME;
   const [showPaymentSuccess, setShowPaymentSuccess] = useState<boolean>(false);
   const [isCopied, setIsCopied] = useState(false);
+  const { handleError } = useErrorHandler();
 
   useEffect(() => {
     if (!mentor) {
@@ -38,8 +39,7 @@ const ProfessionalDetailsPage = () => {
           const convertedSlots = SlotResponseConverter(data.data.slots);
           setMentor({ ...data.data, slots: convertedSlots });
         } catch (error) {
-          toast.error("Failed to collect mentor details");
-          console.error(error);
+          handleError(error, "Failed to collect mentor details");
         } finally {
           setLoading(false);
         }

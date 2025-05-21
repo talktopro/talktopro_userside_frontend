@@ -7,12 +7,13 @@ import useTheme from "@/hooks/useTheme";
 import { useEffect, useState } from "react";
 import { INotification } from "@/interfaces/mentor";
 import apiClient from "@/api/axiosInstance";
-// import { toast } from "sonner";
+// import useErrorHandler from "@/hooks/useErrorHandler";
 
 const MentorHeader = () => {
   const { theme, toggleTheme } = useTheme();
   const [notifications, setNotifications] = useState<INotification[]>([]);
   const [isLoading, setIsLoading] = useState(false);
+  // const { handleError } = useErrorHandler();
 
   const fetchNotification = async () => {
     try {
@@ -20,8 +21,7 @@ const MentorHeader = () => {
       const { data } = await apiClient.get<INotification[]>(`url`);
       setNotifications(Array.isArray(data) ? data : []);
     } catch (error) {
-      console.error("Error occurred while fetching Notifications!", error);
-      // toast.error("Failed to collect Notifications.");
+      // handleError(error, "Failed to collect Notifications.");
     } finally {
       setIsLoading(false);
     }

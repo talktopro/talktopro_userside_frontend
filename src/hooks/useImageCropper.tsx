@@ -5,12 +5,14 @@ import { useRef, useState } from "react";
 import { Crop } from "react-image-crop";
 import { useDispatch, useSelector } from "react-redux";
 import { toast } from "sonner";
+import useErrorHandler from "./useErrorHandler";
 
 const useImageCropper = () => {
   const inputRef = useRef<HTMLInputElement | null>(null);
   const [selectedImage, setSelectedImage] = useState<File | null>(null);
   const [isCropperOpen, setIsCropperOpen] = useState(false);
   const { user } = useSelector(selectAuth);
+  const { handleError } = useErrorHandler();
   const dispatch = useDispatch<AppDispatch>();
 
   const handleInputTrigger = (): void => {
@@ -100,8 +102,7 @@ const useImageCropper = () => {
       // 4. Update database
       await updateDatabase();
     } catch (error) {
-      console.error("Error in handleSave:", error);
-      toast.error("Failed to update profile image");
+      handleError(error, "Failed to update profile image");
     } finally {
       handleClose();
     }
@@ -133,9 +134,7 @@ const useImageCropper = () => {
         throw new Error("Failed to get presigned url");
       }
     } catch (error) {
-      console.error("Error in getPresignedURL", error);
-      toast.error("Failed to get upload URL");
-      return undefined;
+      throw error
     }
   };
 
@@ -158,7 +157,6 @@ const useImageCropper = () => {
 
       return s3Response;
     } catch (error) {
-      console.error("Error in uploadImageToS3", error);
       throw error;
     }
   };
@@ -181,9 +179,7 @@ const useImageCropper = () => {
 
       dispatch(updateUser({ profileImg: updatedProfileImg }));
       toast.success("Profile image updated successfully");
-      console.log("dbResponse", dbResponse.data);
     } catch (error) {
-      console.error("Error in updateDatabase", error);
       throw error;
     }
   };

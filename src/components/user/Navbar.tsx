@@ -1,7 +1,6 @@
 import { JSX, useEffect, useState } from "react";
 import logo from "@/assets/svg/logo.svg";
 import {
-  // Heart,
   LayoutTemplate,
   LogOut,
   NotebookText,
@@ -22,7 +21,6 @@ import { INotification } from "@/interfaces/user";
 import apiClient from "@/api/axiosInstance";
 import Searchbar from "./Searchbar";
 import CustomTooltip from "../common/CustomTooltip";
-import { toast } from "sonner";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -31,10 +29,12 @@ import {
 } from "../ui/dropdown-menu";
 import { Avatar, AvatarImage } from "../ui/avatar";
 import { Dialog, DialogClose, DialogContent, DialogDescription, DialogHeader, DialogTitle, DialogTrigger } from "../ui/dialog";
+// import useErrorHandler from "@/hooks/useErrorHandler";
 
 const Navbar = () => {
   const dispatch = useDispatch();
   const bucketName = import.meta.env.VITE_S3BUCKET_NAME;
+  // const { handleError } = useErrorHandler();
   const { user } = useSelector(selectAuth);
   const { theme, toggleTheme } = useTheme();
   const navigate = useNavigate();
@@ -50,8 +50,7 @@ const Navbar = () => {
       const { data } = await apiClient.get<INotification[]>(`url`);
       setNotifications(Array.isArray(data) ? data : []);
     } catch (error) {
-      console.error("Error occurred while fetching Notifications!", error);
-      toast.error("Failed to collect Notifications.");
+      // handleError(error, "Failed to collect Notifications.");
     } finally {
       setIsLoading(false);
     }

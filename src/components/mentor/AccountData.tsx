@@ -31,6 +31,7 @@ import {
 import useImageCropper from "@/hooks/useImageCropper";
 import ImageCropper from "../common/ImageCropper";
 import { Camera } from "lucide-react";
+import useErrorHandler from "@/hooks/useErrorHandler";
 
 interface RegisterBodyProps {
   fromRegisterPage: boolean;
@@ -76,6 +77,7 @@ const RegisterBody: FC<RegisterBodyProps> = ({ fromRegisterPage, fromApplication
   const id = user?.id;
   const navigate = useNavigate();
   const dispatch = useDispatch();
+  const { handleError } = useErrorHandler();
   const {
     inputRef,
     handleImageChange,
@@ -173,9 +175,7 @@ const RegisterBody: FC<RegisterBodyProps> = ({ fromRegisterPage, fromApplication
       dispatch(updateUser(response.data.data));
     } catch (error) {
       if (error instanceof AxiosError) {
-        console.log(error.response?.data?.errors[0]);
-
-        toast.error(error.response?.data?.errors[0]);
+        handleError(error, error.response?.data?.errors[0]);
       }
     } finally {
       setIsSubmitting(false);

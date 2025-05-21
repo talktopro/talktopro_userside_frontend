@@ -1,3 +1,4 @@
+import ExpiryDialog from "@/components/common/ExpiryDialog";
 import Footer from "@/components/common/Footer";
 import MentorHeader from "@/components/mentor/Header";
 import { AppSidebar } from "@/components/mentor/sidebar/SidebarMain";
@@ -10,6 +11,7 @@ const MentorLayout = () => {
       <AppSidebar />
       <SidebarInset>
         <MentorHeader />
+        <ExpiryDialog />
         <Outlet /> {/* This is where the child routes will render */}
         <Footer />
       </SidebarInset>

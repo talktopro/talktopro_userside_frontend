@@ -22,6 +22,7 @@ interface AuthState {
     refreshToken: string | null;
     loading: boolean;
     error: string | null;
+    isTokenExpired: boolean;
 }
 
 export interface AuthResponse {
@@ -37,6 +38,7 @@ const initialState: AuthState = {
     refreshToken: null,
     loading: false,
     error: null,
+    isTokenExpired: false,
 };
 
 export const verifyOtp = createAsyncThunk<AuthResponse, { id: string; otp: string }, { rejectValue: string }>(
@@ -114,6 +116,9 @@ const authSlice = createSlice({
             state.accessToken = action.payload.accessToken;
             state.refreshToken = action.payload.refreshToken;
         },
+        changeTokenExpiry: (state: AuthState, action: PayloadAction<boolean>) => {
+            state.isTokenExpired = action.payload;
+        },
     },
     extraReducers: (builder) => {
         builder
@@ -138,6 +143,7 @@ const authSlice = createSlice({
                 state.accessToken = action.payload.accessToken;
                 state.refreshToken = action.payload.refreshToken;
                 state.loading = false;
+                state.isTokenExpired = false;
             })
             .addCase(loginUser.rejected, (state) => {
                 state.loading = false;
@@ -169,6 +175,6 @@ const authSlice = createSlice({
 });
 
 // ✅ Export Actions & Selectors
-export const { logout, setUser, updateUser, setTokens } = authSlice.actions;
+export const { logout, setUser, updateUser, setTokens, changeTokenExpiry } = authSlice.actions;
 export const selectAuth = (state: RootState) => state.auth;
 export default authSlice.reducer;
