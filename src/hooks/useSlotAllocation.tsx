@@ -4,7 +4,7 @@ import convertTo24HourFormat from "@/utils/convertTo24HourFormat";
 import generateTimeSlots from "@/utils/generateTimeSlots";
 import SlotResponseConverter from "@/utils/slotResponseConverter";
 import axios from "axios";
-import { addMonths, addDays, startOfToday, format } from "date-fns";
+import { addMonths, addDays, startOfToday, format, isToday, parse, addMinutes, isAfter } from "date-fns";
 import { useMemo } from "react";
 import { toast } from "sonner";
 import useErrorHandler from "./useErrorHandler";
@@ -47,7 +47,7 @@ const useSlotAllocation = () => {
 
   //!======================================================= remove slot funtion API for update DB ===================================================================================
 
-  async function handleDeleteSlot(date: string, time: string, allocatedSlots: IBookingSchedule): Promise<void> {
+  async function handleDeleteSlot(date: string, time: string, allocatedSlots: IBookingSchedule): Promise<boolean> {
     const time24 = convertTo24HourFormat(time);
 
     try {
@@ -59,9 +59,11 @@ const useSlotAllocation = () => {
             data: { date: date, slots: [time24] }
           });
         }
-      }
+      };
+      return true;
     } catch (error) {
       handleError(error, "Oops! Failed to remove slots.");
+      return false;
     }
   };
 
@@ -111,6 +113,17 @@ const useSlotAllocation = () => {
     return result;
   };
 
+  function isSlotAvailable(slotDate: Date, slotString: string): boolean {
+    if (!isToday(slotDate)) return true;
+    const now = new Date();
+
+    const startTimeStr = slotString.split(' - ')[0];                //* Parse the start time from the slot string (e.g., "10:00 AM - 11:00 AM")
+    const slotStartTime = parse(startTimeStr, 'h:mm a', slotDate);
+    const bufferTime = addMinutes(now, 60);                         //* Add a 1hour buffer to current time to prevent edge cases
+
+    return isAfter(slotStartTime, bufferTime);
+  };
+
   //!================================================================================= return functions =======================================================================
 
   return {
@@ -120,6 +133,7 @@ const useSlotAllocation = () => {
     deleteFrontendTimeSlot,
     addNewTimeSlotToState,
     availableDates,
+    isSlotAvailable,
     displayMonths,
     predefinedTimeSlots,
   };

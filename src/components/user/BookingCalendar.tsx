@@ -3,7 +3,7 @@ import { Calendar } from "@/components/ui/calendar";
 import { Button } from "../ui/button";
 import { DrawerClose } from "../ui/drawer";
 import { cn } from "@/lib/utils";
-import { addDays, format, startOfToday } from "date-fns";
+import { addDays, addMinutes, format, isAfter, isToday, parse, startOfToday } from "date-fns";
 import generateTimeSlots from "@/utils/generateTimeSlots";
 import { IMentorDetailsWithSlots } from "@/types/user";
 import usePayment from "@/hooks/usePayment";
@@ -15,7 +15,7 @@ interface IBookingCalendarProps {
 };
 
 const BookingCalendar: FC<IBookingCalendarProps> = ({ mentor, setShowPaymentSuccess }) => {
-  const [date, setDate] = useState<Date | undefined>(new Date());
+  const [date, setDate] = useState<Date | undefined>(undefined);
   const [selectedTimeSlot, setSelectedTimeSlot] = useState<string | null>(null);
   const today = startOfToday();
   const predefinedTimeSlots: string[] = useMemo(generateTimeSlots, []);
@@ -23,20 +23,58 @@ const BookingCalendar: FC<IBookingCalendarProps> = ({ mentor, setShowPaymentSucc
   const [isRazorpayOrderLoading, setIsRazorpayOrderLoading] = useState(false);
 
   const isDateAvailable = (date: Date) => {
-    if (!mentor.slots) return;
+    if (!mentor.slots) return false;
     const dateKey = format(date, "dd-MM-yyyy");
-    return mentor.slots[dateKey];
+    const slotsForDate = mentor.slots[dateKey];
+    if (!slotsForDate) return false;
+
+    if (isAfter(date, today)) {
+      return Object.values(slotsForDate).some((slot) => {
+        return typeof slot === 'object' && 'isBooked' in slot && slot.isBooked === "free";
+      });
+    }
+
+    if (isToday(date)) {
+      const now = new Date();
+      const bufferTime = addMinutes(now, 60);
+
+      return Object.entries(slotsForDate).some(([timeSlot, slot]) => {
+        if (typeof slot !== 'object' || !('isBooked' in slot) || slot.isBooked !== "free") {
+          return false;
+        }
+
+        const startTimeStr = timeSlot.split(' - ')[0];
+        const slotStartTime = parse(startTimeStr, 'h:mm a', date);
+        return isAfter(slotStartTime, bufferTime);
+      });
+    }
+
+    return false;
   };
 
   const isTimeSlotAvailable = (timeSlot: string) => {
     if (!date || !mentor.slots) return false;
-    const dateKey = format(date, "dd-MM-yyyy");
-    const slotStatus = mentor.slots[dateKey]?.[timeSlot] as { isBooked: "booked" | "free" | "on_hold" } | undefined;
-    if (slotStatus && slotStatus.isBooked === "free") {
-      return true;
-    } else {
-      return false;
+
+    if (isAfter(date, today)) { //* Check if date is in the future
+      const dateKey = format(date, "dd-MM-yyyy");
+      const slotStatus = mentor.slots[dateKey]?.[timeSlot] as { isBooked: "booked" | "free" | "on_hold" } | undefined;
+      return slotStatus && slotStatus.isBooked === "free";
     };
+
+    if (isToday(date)) { //* For today's date, check if time slot is in the future
+      const now = new Date();
+      const startTimeStr = timeSlot.split(' - ')[0];
+      const slotStartTime = parse(startTimeStr, 'h:mm a', date);
+      const bufferTime = addMinutes(now, 60);
+      const isSlotInFuture = isAfter(slotStartTime, bufferTime);
+      if (!isSlotInFuture) return false;
+
+      const dateKey = format(date, "dd-MM-yyyy");
+      const slotStatus = mentor.slots[dateKey]?.[timeSlot] as { isBooked: "booked" | "free" | "on_hold" } | undefined;
+      return slotStatus && slotStatus.isBooked === "free";
+    }
+
+    return false;
   };
 
   const handlePaymentButtonClick = async () => {

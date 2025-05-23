@@ -158,7 +158,7 @@ const RegisterBody: FC<RegisterBodyProps> = ({ fromRegisterPage, fromApplication
     setIsSubmitting(true);
     try {
       const response = await apiClient.post(
-        fromRegisterPage ? "/mentor/signup" : "/mentor/edit-account-details",
+        (fromRegisterPage || fromApplicationRejectedPage) ? "/mentor/signup" : "/mentor/edit-account-details",
         {
           id,
           first_name: values.first_name,

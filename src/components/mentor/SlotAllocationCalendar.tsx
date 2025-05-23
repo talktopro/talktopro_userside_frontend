@@ -2,7 +2,7 @@ import { FC } from "react";
 import { Calendar } from "../ui/calendar";
 import { Popover, PopoverContent, PopoverTrigger } from "../ui/popover";
 import { cn } from "@/lib/utils";
-import { format } from "date-fns";
+import { format, isAfter, isToday, setHours, setMinutes } from "date-fns";
 import TimeSlots from "./TimeSlot";
 import useSlotAllocation from "@/hooks/useSlotAllocation";
 import { SlotAllocationCalendarProps } from "@/types/mentor";
@@ -18,6 +18,13 @@ const SlotAllocationCalendar: FC<SlotAllocationCalendarProps> = ({ allocatedSlot
       document.documentElement.classList.remove('popover-open');
     }
   };
+
+  function shouldDisableToday() {
+    const now = new Date();
+    const lastSlotStartTime = setHours(setMinutes(new Date(), 0), 21); // 9:00 PM
+
+    return isAfter(now, lastSlotStartTime);
+  }
 
   return (
     <div className="flex not-sm:justify-center sm:justify-center gap-5 flex-wrap not-sm:border-1 rounded-md pt-2 pb-4">
@@ -47,7 +54,7 @@ const SlotAllocationCalendar: FC<SlotAllocationCalendarProps> = ({ allocatedSlot
               Day: (props) => {
                 const date = props.date;
                 const dateStr: string = format(date, "dd-MM-yyyy");
-                const isDisabled = !availableDates()[dateStr];
+                const isDisabled = !availableDates()[dateStr] || (isToday(date) && shouldDisableToday());
                 const isSelected = allocatedSlots[dateStr];
                 const isOutsideDay = date.getMonth() !== month.getMonth();
 

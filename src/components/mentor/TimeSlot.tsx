@@ -12,7 +12,7 @@ const TimeSlots: React.FC<TimeSlotsProps> = ({
   handleDeleteSlot,
   deleteFrontendTimeSlot,
 }) => {
-  const { predefinedTimeSlots } = useSlotAllocation();
+  const { predefinedTimeSlots, isSlotAvailable } = useSlotAllocation();
 
   const dateStr = format(title, "dd-MM-yyyy");
   const [selectedTimes, setSelectedTimes] = useState<Record<string, SlotStatus>>(allocatedSlots[dateStr] || {});
@@ -24,16 +24,18 @@ const TimeSlots: React.FC<TimeSlotsProps> = ({
     newSlotsRef.current = [...newSlotsRef.current, slot];
   }
 
-  const handleRemoveSlot = (slot: string) => {
-    handleDeleteSlot(dateStr, slot, allocatedSlots); // api for remove from db
-    setSelectedTimes((prev) => { // remove from component local state
-      const newSlots = { ...prev };
-      delete newSlots[slot];
-      return newSlots;
-    });
-    newSlotsRef.current = newSlotsRef.current.filter((s: string) => s !== slot); // tracking new slots for add to parent component once the popover is closed
-    deletedSlotsRef.current.push(slot); // tracking deleted slots to remove from parent state once the popover is closed
-  }
+  const handleRemoveSlot = async (slot: string) => {
+    const isSuccess = await handleDeleteSlot(dateStr, slot, allocatedSlots); // api for remove from db
+    if (isSuccess) {
+      setSelectedTimes((prev) => { // remove from component local state
+        const newSlots = { ...prev };
+        delete newSlots[slot];
+        return newSlots;
+      });
+      newSlotsRef.current = newSlotsRef.current.filter((s: string) => s !== slot); // tracking new slots for add to parent component once the popover is closed
+      deletedSlotsRef.current.push(slot); // tracking deleted slots to remove from parent state once the popover is closed
+    };
+  };
 
   useEffect(() => {
     return () => {
@@ -60,15 +62,17 @@ const TimeSlots: React.FC<TimeSlotsProps> = ({
         {predefinedTimeSlots.map((slot: string, index: number) => (
           <div
             key={index}
-            className={`py-2 px-3 text-center text-xs rounded-md border cursor-pointer transition-colors relative
+            className={`py-2 px-3 text-center text-xs rounded-md border transition-colors relative
               ${(typeof selectedTimes[slot] === "object" && selectedTimes[slot].isBooked === "free") || selectedTimes[slot] === "newAllocation"
-                ? "border-purple-500 bg-purple-500/10 text-purple-500 font-semibold"
+                ? "border-purple-500 bg-purple-500/10 text-purple-500 font-semibold cursor-default"
                 : typeof selectedTimes[slot] === "object" && selectedTimes[slot].isBooked === "booked"
-                  ? "border-teal-500 bg-teal-500/10 text-teal-500 font-semibold"
-                  : "hover:border-gray-300"
+                  ? "border-teal-500 bg-teal-500/10 text-teal-500 font-semibold cursor-default"
+                  : isSlotAvailable(title, slot)
+                    ? "hover:border-gray-300 hover:opacity-75 cursor-pointer"
+                    : "text-muted-foreground opacity-50 hover:bg-transparent hover:text-muted-foreground cursor-not-allowed"
               }`}
             onClick={() => {
-              if (!selectedTimes[slot]) {
+              if (!selectedTimes[slot] && isSlotAvailable(title, slot)) {
                 handleAddNewSlot(slot);
               }
             }}

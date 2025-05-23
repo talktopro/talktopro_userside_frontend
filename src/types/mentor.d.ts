@@ -37,7 +37,7 @@ export interface TimeSlotsProps {
    allocatedSlots: IBookingSchedule;
    setAllocatedSlots: React.Dispatch<React.SetStateAction<IBookingSchedule>>;
    addNewTimeSlotToState: (date: string, time: string, setAllocatedSlots: React.Dispatch<React.SetStateAction<IBookingSchedule>>) => void;
-   handleDeleteSlot: (date: string, time: string, allocatedSlots: IBookingSchedule) => Promise<void>;
+   handleDeleteSlot: (date: string, time: string, allocatedSlots: IBookingSchedule) => Promise<boolean>;
    deleteFrontendTimeSlot: (date: string, time: string, setAllocatedSlots: React.Dispatch<React.SetStateAction<IBookingSchedule>>) => void
 }
 

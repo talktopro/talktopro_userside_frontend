@@ -5,10 +5,13 @@ import type { RootState } from "@/redux/store"
 import { logout } from "@/redux/slices/authSlice"
 import { LogOut, AlertCircle } from "lucide-react"
 import { cn } from "@/lib/utils"
+import { ROUTES } from "@/routes/routes"
+import { useNavigate } from "react-router-dom"
 
 const ExpiryDialog = () => {
   const isTokenExpired = useSelector((state: RootState) => state.auth.isTokenExpired)
-  const dispatch = useDispatch()
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
 
   return (
     <Dialog open={isTokenExpired}>
@@ -30,7 +33,10 @@ const ExpiryDialog = () => {
           </div>
 
           <Button
-            onClick={() => dispatch(logout())}
+            onClick={() => {
+              dispatch(logout());
+              navigate(ROUTES.AUTH.LOGIN)
+            }}
             className="text-white py-5 cursor-pointer"
           >
             <LogOut className="h-4 w-4" />
