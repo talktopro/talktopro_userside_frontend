@@ -48,8 +48,8 @@ const LoginPage = () => {
   const submitFn = useCallback(
     async (values: z.infer<typeof formSchema>) => {
       try {
-        const result = await dispatch(loginUser(values)).unwrap();
-        toast.success(result.message || "Logged in successfully");
+        await dispatch(loginUser(values)).unwrap();
+        // toast.success(result.message || "Logged in successfully");
         navigate(ROUTES.HOME);
       } catch (error: unknown) {
         toast.error(error as string);

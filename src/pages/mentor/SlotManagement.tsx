@@ -101,7 +101,7 @@ const SlotManagement: React.FC = () => {
             </div>
           </div>
         </div>
-        <div className="not-sm:hidden flex justify-end">
+        <div className="not-sm:hidden min-h-9 flex justify-end">
           <Button
             className="cursor-pointer px-10 min-w-48 disabled:cursor-not-allowed"
             onClick={handleSave}
