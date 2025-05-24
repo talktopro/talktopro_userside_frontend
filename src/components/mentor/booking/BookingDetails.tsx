@@ -1,7 +1,7 @@
 import { FC } from 'react'
 import { DrawerHeader, DrawerTitle } from '../../ui/drawer'
 import { Card, CardContent } from '../../ui/card'
-import { Calendar, CalendarDays, CircleDollarSign, Clock, CreditCard, GraduationCap, Hash, Image, NotebookText } from 'lucide-react';
+import { Calendar, CalendarDays, CircleDollarSign, Clock, CreditCard, FileQuestion, GraduationCap, Hash, Image, NotebookText } from 'lucide-react';
 import { format } from 'date-fns'
 import convert24To12HourRange from '@/utils/convertTo12HourFormat'
 import { IMentorBookingHistory } from '@/types/mentor'
@@ -141,15 +141,32 @@ const BookingDetails: FC<IBookingDetailsDrawerProps> = ({ booking }) => {
                            </div>
                         </div>
                      )}
+
+                     {booking.status === "success" && booking.session_status === "incomplete" && (
+                        <div className="flex items-center gap-3">
+                           <div className="bg-muted p-2 rounded-full">
+                              <FileQuestion className="h-5 w-5 text-purple-500" />
+                           </div>
+                           <div>
+                              <p className="text-sm text-muted-foreground">Incomplete reason</p>
+                              <p className="text-sm">
+                                 {booking.incompletion_caused_by === "mentor"
+                                    ? 'You did not join this session.'
+                                    : 'The client did not join this session.'
+                                 }
+                              </p>
+                           </div>
+                        </div>
+                     )}
                   </div>
                </CardContent>
             </Card>
 
             {/* cancel booking area */}
-            {booking.status === "cancelled" && booking.refund_type === "partial" && (
+            {(booking.status === "cancelled" || (booking.status === "success" && booking.session_status === "incomplete")) && booking.refund_type === "partial" && (
                <Card className="w-full rounded-none border-0 shadow-none">
                   <div className="bg-muted rounded-2xl p-4">
-                     <h3 className="font-medium">Refund Information</h3>
+                     <h3 className="font-medium">Compensation Information</h3>
                   </div>
 
                   {booking.mentor_refund_info?.transaction_id ? (
@@ -209,6 +226,64 @@ const BookingDetails: FC<IBookingDetailsDrawerProps> = ({ booking }) => {
                         </p>
                      </div>
                   )}
+               </Card>
+            )}
+
+            {/* complete session area */}
+            {(booking.status === "success" && booking.session_status === "complete" && booking.mentor_payment_transaction_id) && (
+               <Card className="w-full rounded-none border-0 shadow-none">
+                  <div className="bg-muted rounded-2xl p-4">
+                     <h3 className="font-medium">Transaction Information</h3>
+                  </div>
+
+                  <CardContent className="p-0 pt-4">
+                     <div className="space-y-4">
+                        <div className="flex items-start gap-3">
+                           <div className="bg-muted p-2 rounded-full">
+                              <Hash className="h-5 w-5 text-purple-500" />
+                           </div>
+                           <div>
+                              <p className="text-sm text-muted-foreground mb-1">Transaction ID</p>
+                              <p className="text-sm">{booking.mentor_payment_transaction_id}</p>
+                           </div>
+                        </div>
+
+                        <div className="flex items-start gap-3">
+                           <div className="bg-muted p-2 rounded-full">
+                              <CalendarDays className="h-5 w-5 text-purple-500" />
+                           </div>
+                           <div>
+                              <p className="text-sm text-muted-foreground mb-1">Transaction completed at</p>
+                              {/* <p className="text-sm">{format(new Date(booking.mentor_payment_transaction_at), "EEEE, MMMM do, yyyy 'at' h:mm a")}</p> */}
+                           </div>
+                        </div>
+
+                        <div className="flex items-start gap-3">
+                           <div className="bg-muted p-2 rounded-full">
+                              <Image className="h-5 w-5 text-purple-500" />
+                           </div>
+                           <div>
+                              <p className="text-sm text-muted-foreground mb-1">Transaction image</p>
+                              <div className="flex items-center gap-4">
+                                 <div className="w-auto h-16 rounded-md overflow-hidden aspect-[3.5/4] ">
+                                    <ImageViewer
+                                       trigger={
+                                          <img
+                                             src={`https://${bucketName}.s3.amazonaws.com/${import.meta.env.VITE_TRANSACTION_IMAGE_FOLDER}/${booking.mentor_payment_transaction_id}`}
+                                             alt="Profile picture"
+                                             className="w-full h-full object-cover cursor-pointer"
+                                          />
+                                       }
+                                       folderName={import.meta.env.VITE_TRANSACTION_IMAGE_FOLDER}
+                                       image={booking.mentor_payment_transaction_id}
+                                       title='Transaction image'
+                                    />
+                                 </div>
+                              </div>
+                           </div>
+                        </div>
+                     </div>
+                  </CardContent>
                </Card>
             )}
          </div>

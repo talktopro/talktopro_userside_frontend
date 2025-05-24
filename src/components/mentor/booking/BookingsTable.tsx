@@ -41,7 +41,7 @@ const BookingsTable: React.FC<BookingsTableProps> = ({ bookingDetails, currentPa
             Date & Time
           </TableHead>
           <TableHead className="whitespace-nowrap w-48 text-center">
-            Session status
+            Status
           </TableHead>
           <TableHead className="whitespace-nowrap w-48 text-center">
             Amount
@@ -80,8 +80,8 @@ const BookingsTable: React.FC<BookingsTableProps> = ({ bookingDetails, currentPa
                   <p className="font-semibold">{convert24To12HourRange(booking.slot.time)}</p>
                   <p className="text-muted-foreground">{format(booking.slot.date, "dd-MM-yyyy")}</p>
                 </TableCell>
-                <TableCell className="pt-5 w-48 flex justify-center items-center whitespace-nowrap">
-                  <StatusBadge status={booking.status} />
+                <TableCell className="pt-6 w-48 flex justify-center items-center whitespace-nowrap">
+                  <StatusBadge status={(booking.status === "cancelled" || booking.status === "failed") ? booking.status : booking.session_status} />
                 </TableCell>
                 <TableCell className="py-3 w-48 text-center whitespace-nowrap">
                   ₹{booking.slot.fee.toFixed(2)}

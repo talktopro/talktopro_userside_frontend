@@ -60,8 +60,8 @@ const StatusBadge: FC<StatusBadgeProps> = ({ status, className = "" }) => {
          label: "Refund Pending"
       },
       incomplete: {
-         light: "bg-amber-50 text-amber-800 border-amber-200",
-         dark: "dark:bg-amber-900/30 dark:text-amber-200 dark:border-amber-700",
+         light: "bg-yellow-50 text-yellow-800 border-yellow-200",
+         dark: "dark:bg-yellow-900/30 dark:text-yellow-200 dark:border-yellow-700",
          label: "Incomplete"
       },
       // Fallback for unknown statuses

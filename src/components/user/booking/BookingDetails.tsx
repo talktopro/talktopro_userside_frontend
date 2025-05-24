@@ -1,7 +1,7 @@
 import { FC } from 'react'
 import { DrawerHeader, DrawerTitle } from '../../ui/drawer'
 import { Card, CardContent } from '../../ui/card'
-import { Calendar, CalendarDays, CircleDollarSign, Clock, CreditCard, ExternalLink, GraduationCap, Hash, Image, NotebookText } from 'lucide-react'
+import { Calendar, CalendarDays, CircleDollarSign, Clock, CreditCard, ExternalLink, FileQuestion, GraduationCap, Hash, Image, NotebookText } from 'lucide-react'
 import { SiGoogleclassroom } from "react-icons/si";
 import { IBookingHistory } from '@/types/user'
 import StatusBadge from "@/components/common/StatusBadge";
@@ -163,6 +163,23 @@ const BookingDetails: FC<IBookingDetailsDrawerProps> = ({ booking, handleCancelB
                     </div>
                   </div>
                 )}
+
+                {booking.status === "success" && booking.session_status === "incomplete" && (
+                  <div className="flex items-center gap-3">
+                    <div className="bg-muted p-2 rounded-full">
+                      <FileQuestion className="h-5 w-5 text-purple-500" />
+                    </div>
+                    <div>
+                      <p className="text-sm text-muted-foreground">Incomplete reason</p>
+                      <p className="text-sm">
+                        {booking.incompletion_caused_by === "user"
+                          ? 'You did not join this session.'
+                          : 'The Mentor did not join this session.'
+                        }
+                      </p>
+                    </div>
+                  </div>
+                )}
               </div>
 
               <div className="mt-auto pt-4">
@@ -176,7 +193,7 @@ const BookingDetails: FC<IBookingDetailsDrawerProps> = ({ booking, handleCancelB
         </Card>
 
         {/* cancel booking area */}
-        {booking.status === "cancelled" && (
+        {(booking.status === "cancelled" || (booking.status === "success" && booking.session_status === "incomplete")) && (
           <Card className="w-full rounded-none border-0 shadow-none">
             <div className="bg-muted rounded-2xl p-4">
               <h3 className="font-medium">Refund Information</h3>

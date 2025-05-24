@@ -156,4 +156,6 @@ export interface IBookingHistory {
         profession: string
         profileImg: string
     };
+
+    incompletion_caused_by?: "user" | "mentor"; // it will only show if the booking is in-complete
 };

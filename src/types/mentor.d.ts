@@ -82,4 +82,9 @@ export interface IMentorBookingHistory {
    user: User;
    refund_type?: "full" | "partial" // it will only shows if the booking is cancelled
    mentor_refund_info?: IRefundType; // it will only shows if the booking is cancelled and payment status is refund_success
+
+   mentor_payment_transaction_id?: string // only show if the booking session is completed
+   mentor_payment_transaction_at: string // only show if the booking session is completed
+
+   incompletion_caused_by?: "user" | "mentor"; // it will only show if the booking is in-complete
 };

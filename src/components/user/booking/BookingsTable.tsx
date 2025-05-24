@@ -42,7 +42,7 @@ const BookingsTable: React.FC<BookingsTableProps> = ({ bookingDetails, currentPa
             Date & Time
           </TableHead>
           <TableHead className="whitespace-nowrap w-48 text-center">
-            Booking Status
+            Status
           </TableHead>
           <TableHead className="whitespace-nowrap w-48 text-center">
             Amount
@@ -87,7 +87,7 @@ const BookingsTable: React.FC<BookingsTableProps> = ({ bookingDetails, currentPa
                 </TableCell>
                 <TableCell className="w-48 text-center py-4">
                   <div className="flex justify-center">
-                    <StatusBadge status={booking.status} />
+                    <StatusBadge status={(booking.status === "cancelled" || booking.status === "failed") ? booking.status : booking.session_status} />
                   </div>
                 </TableCell>
                 <TableCell className="w-48 text-center py-4">
