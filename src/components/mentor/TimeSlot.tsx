@@ -25,7 +25,12 @@ const TimeSlots: React.FC<TimeSlotsProps> = ({
   }
 
   const handleRemoveSlot = async (slot: string) => {
-    const isSuccess = await handleDeleteSlot(dateStr, slot, allocatedSlots); // api for remove from db
+    let isSuccess = true;
+
+    if (!newSlotsRef.current.includes(slot)) { //* only need to call api if the slot is already update in DB
+      isSuccess = await handleDeleteSlot(dateStr, slot, allocatedSlots); // api for remove from db
+    };
+
     if (isSuccess) {
       setSelectedTimes((prev) => { // remove from component local state
         const newSlots = { ...prev };
