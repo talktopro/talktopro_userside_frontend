@@ -41,7 +41,11 @@ export const Badge: FC<BadgeProps> = ({
 
       {showCrossIcon && (
         <TooltipProvider>
-          <div onClick={onCrossClick}>
+          <div onClick={(e) => {
+            e.stopPropagation();
+            e.preventDefault();
+            onCrossClick?.();
+          }}>
             <CustomTooltip content="Remove" trigger={<X size={14} strokeWidth={2} />} />
           </div>
         </TooltipProvider>

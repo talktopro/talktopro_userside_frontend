@@ -68,20 +68,48 @@ export const InputBox: FC<InputBoxProps> = ({ onSave, onClose, suggestions = [] 
 
   const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
     if (e.key === "Enter") {
+      e.preventDefault();
+      e.stopPropagation();
       if (highlightedIndex >= 0 && filteredSuggestions.length > 0) {
-        setInputValue(filteredSuggestions[highlightedIndex]);
         setIsDropdownOpen(false);
-      } else {
-        handleSave();
       }
-    } else if (e.key === "ArrowDown" && filteredSuggestions.length > 0) {
+      handleSave();
+    }
+    else if (e.key === "ArrowDown" && filteredSuggestions.length > 0) {
+      e.stopPropagation();
       e.preventDefault();
-      setHighlightedIndex((prev) => Math.min(prev + 1, filteredSuggestions.length - 1));
+
+      new Promise<number>((resolve) => {
+        setHighlightedIndex((prev) => {
+          const newIndex = Math.min(prev + 1, filteredSuggestions.length - 1);
+          resolve(newIndex);
+          return newIndex;
+        });
+      }).then((newIndex) => {
+        setInputValue(filteredSuggestions[newIndex]);
+      });
+
     } else if (e.key === "ArrowUp" && filteredSuggestions.length > 0) {
+      e.stopPropagation();
       e.preventDefault();
-      setHighlightedIndex((prev) => Math.max(prev - 1, -1));
-    } else if (e.key === "Escape") {
+
+      new Promise<number>((resolve) => {
+        setHighlightedIndex((prev) => {
+          const newIndex = Math.max(prev - 1, -1);
+          resolve(newIndex);
+          return newIndex;
+        });
+      }).then((newIndex) => {
+        if (newIndex >= 0) {
+          setInputValue(filteredSuggestions[newIndex]);
+        } else {
+          setInputValue("");
+        }
+      });
+    }
+    else if (e.key === "Escape") {
       setIsDropdownOpen(false);
+      onClose()
     }
   };
 

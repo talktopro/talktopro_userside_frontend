@@ -138,7 +138,6 @@ const RegisterBody: FC<RegisterBodyProps> = ({ fromRegisterPage, fromApplication
     const currentArray = form.getValues(field);
     const updatedArray = [...currentArray, formattedContent];
     form.setValue(field, updatedArray, { shouldValidate: true, shouldDirty: true });
-    handleCloseBadgeInput();
   };
 
   const handleRemoveBadge = (index: number, field: "skills" | "languages") => {
@@ -172,6 +171,7 @@ const RegisterBody: FC<RegisterBodyProps> = ({ fromRegisterPage, fromApplication
       );
 
       toast.success(response.data?.message);
+      handleCloseBadgeInput();
       dispatch(updateUser(response.data.data));
     } catch (error) {
       if (error instanceof AxiosError) {
