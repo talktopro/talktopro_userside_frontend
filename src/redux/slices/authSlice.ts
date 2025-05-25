@@ -3,18 +3,7 @@ import { RootState } from "../store";
 import { changePasswordAPI, forgotPasswordAPI } from "@/api/authService";
 import { extractErrorMessage } from "@/utils/errorHandler";
 import guestApi from "@/api/guestApi";
-import { MentorDetails } from "@/types/user";
-
-interface User {
-    id: string;
-    uname: string;
-    email: string;
-    phone: number;
-    isMentor: boolean;
-    profileImg: string | null;
-    mentor_application_status?: string;
-    mentorDetails?: MentorDetails
-}
+import { User } from "@/types/user";
 
 interface AuthState {
     user: User | null;

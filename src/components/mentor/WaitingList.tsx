@@ -6,8 +6,7 @@ import {
   CheckIcon,
   Hourglass,
 } from "lucide-react";
-import { format, formatDistanceToNow, addHours } from "date-fns";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import CustomTooltip from "../common/CustomTooltip";
 
 interface WaitingPeriodProps {
@@ -18,27 +17,11 @@ interface WaitingPeriodProps {
 }
 
 const WaitingPeriod: React.FC<WaitingPeriodProps> = ({
-  submissionDate,
   estimatedReviewTime = 24,
   email,
   applicationId,
 }) => {
-  const [timeSinceSubmission, setTimeSinceSubmission] = useState(
-    formatDistanceToNow(submissionDate, {
-      addSuffix: true,
-    })
-  );
   const [copied, setCopied] = useState(false);
-
-  useEffect(() => {
-    const interval = setInterval(() => {
-      setTimeSinceSubmission(
-        formatDistanceToNow(submissionDate, { addSuffix: true })
-      );
-    }, 60000);
-
-    return () => clearInterval(interval);
-  }, [submissionDate]);
 
   const handleCopyId = () => {
     navigator.clipboard.writeText(applicationId);
@@ -102,22 +85,6 @@ const WaitingPeriod: React.FC<WaitingPeriodProps> = ({
                       }
                     />
                   </button>
-                </dd>
-              </div>
-              <div className="sm:col-span-1">
-                <dt className="text-sm font-medium">Submitted</dt>
-                <dd className="mt-1 text-sm">
-                  {format(submissionDate, "PPP 'at' p")}
-                  <span className="ml-2">({timeSinceSubmission})</span>
-                </dd>
-              </div>
-              <div className="sm:col-span-1">
-                <dt className="text-sm font-medium">Estimated completion</dt>
-                <dd className="mt-1 text-sm">
-                  {format(
-                    addHours(submissionDate, estimatedReviewTime),
-                    "PPP 'at' p"
-                  )}
                 </dd>
               </div>
               <div className="sm:col-span-1">

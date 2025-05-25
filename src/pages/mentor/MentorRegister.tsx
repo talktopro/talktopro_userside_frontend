@@ -24,6 +24,7 @@ const MentorResiterPage = () => {
             applicationId={user.mentorDetails?._id}
             email={user.email}
             submissionDate={user.mentorDetails.createdAt}
+            rejectionReason={user.mentor_rejected_reason}
           />
         )
       }

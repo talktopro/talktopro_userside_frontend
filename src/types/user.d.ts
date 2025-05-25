@@ -8,7 +8,21 @@ export interface User {
     phone: number;
     isMentor: boolean;
     mentor_application_status?: string;
+    mentor_rejected_reason?: string; // It will only show if the user tries to send a mentor application, and the application was requested.
     profileImg: string | null;
+    mentorDetails?: MentorDetails;
+}
+
+interface User {
+    id: string;
+    uname: string;
+    email: string;
+    phone: number;
+    isMentor: boolean;
+    profileImg: string | null;
+    mentor_application_status?: string;
+    mentorDetails?: MentorDetails;
+    mentor_rejected_reason?: string; // It will only show if the user tries to send a mentor application, and the application was requested.
 }
 
 export interface ImageCropperProps {

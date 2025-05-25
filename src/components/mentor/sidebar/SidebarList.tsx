@@ -67,7 +67,7 @@ const SidebarList = () => {
           className="text-xs border border-dashed py-1.5 border-primary rounded-lg mt-6 w-fit px-3 flex items-center justify-start gap-2 cursor-pointer hover:bg-muted transition-colors duration-100"
           onClick={() => handleNavigation(ROUTES.HOME)}
         >
-          <CircleArrowLeft strokeWidth={1} size={15} />
+          <CircleArrowLeft strokeWidth={1.5} size={15} />
           Go back to user dashboard
         </button>
       ) : (
