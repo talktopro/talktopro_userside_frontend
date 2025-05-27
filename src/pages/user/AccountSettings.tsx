@@ -7,6 +7,9 @@ import { useSelector } from "react-redux";
 const AccountSettings = () => {
   const bucketName = import.meta.env.VITE_S3BUCKET_NAME;
   const { user } = useSelector(selectAuth);
+  if (!user) {
+    return;
+  }
 
   return (
     <div className="w-full mx-auto px-4 sm:px-6 md:px-10 mt-5">
@@ -42,9 +45,9 @@ const AccountSettings = () => {
               <Mail className="w-4 h-4 mr-2 flex-shrink-0" />
               <span className="text-sm break-all text-center">{user?.email || "User email"}</span>
             </div>
-            <div className="flex justify-center items-center opacity-70">
-              <Phone className="w-4 h-4 mr-2 flex-shrink-0" />
-              <span className="text-sm">{user?.phone || "00000-00000"}</span>
+            <div className="flex justify-center items-center">
+              <Phone className="w-4 h-4 mr-2 flex-shrink-0 text-muted-foreground" />
+              <span className="text-sm text-muted-foreground">{user?.phone || <span className="text-destructive font-semibold">*Not provided</span>}</span>
             </div>
           </div>
         </div>

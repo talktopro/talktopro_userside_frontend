@@ -36,7 +36,7 @@ import { updateUser } from "@/redux/slices/authSlice";
 import useErrorHandler from "@/hooks/useErrorHandler";
 
 interface EditAccountDetailsProps {
-  user: User | null;
+  user: User;
 }
 
 const formSchema = z.object({
@@ -47,7 +47,7 @@ const formSchema = z.object({
     .regex(/^[A-Za-z ]+$/, "Name can only contain letters and spaces"),
   phone: z
     .string()
-    .regex(/^[6-9]\d{9}$/, "Please enter a valid 10-digit Indian phone number"),
+    .regex(/^[6-9]\d{9}$/, "Please enter a valid phone number"),
 });
 
 const EditAccountDetails = ({ user }: EditAccountDetailsProps) => {
@@ -69,8 +69,8 @@ const EditAccountDetails = ({ user }: EditAccountDetailsProps) => {
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
-      name: user?.uname,
-      phone: user?.phone.toString(),
+      name: user.uname,
+      phone: user.phone == 0 ? "" : user.phone.toString(),
     },
   });
 
@@ -186,7 +186,7 @@ const EditAccountDetails = ({ user }: EditAccountDetailsProps) => {
                   <Input
                     type="email"
                     id="email"
-                    value={user?.email || ""}
+                    value={user.email}
                     readOnly
                     className="mt-1 block w-full px-3 py-2 sm:text-sm cursor-not-allowed"
                     placeholder="Enter your email"
