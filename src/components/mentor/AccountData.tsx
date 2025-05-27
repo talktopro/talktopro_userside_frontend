@@ -545,36 +545,36 @@ const RegisterBody: FC<RegisterBodyProps> = ({ fromRegisterPage, fromApplication
               </div>
             </div>
           </div>
+          {/* button for small screen */}
+          <div className="flex gap-3 mt-10 not-sm:fixed not-sm:bottom-0 not-sm:z-10 not-sm:w-screen not-sm:bg-background not-sm:py-3 not-sm:border-t-1 not-sm:pe-8 sm:hidden">
+            <Button
+              variant="outline"
+              type="button"
+              className="border-red-500 text-red-500 hover:text-red-600 w-full"
+              disabled={isSubmitting || !form.formState.isDirty}
+              onClick={handleDiscard}
+            >
+              {fromRegisterPage ? "Discard and Cancel" : "Discard"}
+            </Button>
+            <Button
+              type="submit"
+              className="bg-primary w-full"
+              disabled={isSubmitting || !form.formState.isDirty}
+            >
+              {isSubmitting
+                ? fromRegisterPage
+                  ? "Saving and Verifying..."
+                  : fromApplicationRejectedPage
+                    ? "Re-Submitting..."
+                    : "Saving..."
+                : fromRegisterPage
+                  ? "Save and Verify"
+                  : fromApplicationRejectedPage
+                    ? "Save and Re-Submit"
+                    : "Save changes"}
+            </Button>
+          </div>
         </form>
-        {/* button for small screen */}
-        <div className="flex gap-3 mt-10 not-sm:fixed not-sm:bottom-0 not-sm:z-10 not-sm:w-screen not-sm:bg-background not-sm:py-3 not-sm:border-t-1 not-sm:px-4 sm:hidden">
-          <Button
-            variant="outline"
-            type="button"
-            className="border-red-500 text-red-500 hover:text-red-600 w-full"
-            disabled={isSubmitting || !form.formState.isDirty}
-            onClick={handleDiscard}
-          >
-            {fromRegisterPage ? "Discard and Cancel" : "Discard"}
-          </Button>
-          <Button
-            type="submit"
-            className="bg-primary w-full"
-            disabled={isSubmitting || !form.formState.isDirty}
-          >
-            {isSubmitting
-              ? fromRegisterPage
-                ? "Saving and Verifying..."
-                : fromApplicationRejectedPage
-                  ? "Re-Submitting..."
-                  : "Saving..."
-              : fromRegisterPage
-                ? "Save and Verify"
-                : fromApplicationRejectedPage
-                  ? "Save and Re-Submit"
-                  : "Save changes"}
-          </Button>
-        </div>
       </Form>
       {selectedImage && (
         <ImageCropper

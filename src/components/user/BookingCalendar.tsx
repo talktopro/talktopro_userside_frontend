@@ -8,19 +8,26 @@ import generateTimeSlots from "@/utils/generateTimeSlots";
 import { IMentorDetailsWithSlots } from "@/types/user";
 import usePayment from "@/hooks/usePayment";
 import { toast } from "sonner";
+import { useSelector } from "react-redux";
+import { selectAuth } from "@/redux/slices/authSlice";
+import { useNavigate } from "react-router-dom";
+import { ROUTES } from "@/routes/routes";
 
 interface IBookingCalendarProps {
   mentor: IMentorDetailsWithSlots
   setShowPaymentSuccess: React.Dispatch<React.SetStateAction<boolean>>
+  setContactDialogOpen: React.Dispatch<React.SetStateAction<boolean>>
 };
 
-const BookingCalendar: FC<IBookingCalendarProps> = ({ mentor, setShowPaymentSuccess }) => {
+const BookingCalendar: FC<IBookingCalendarProps> = ({ mentor, setShowPaymentSuccess, setContactDialogOpen }) => {
   const [date, setDate] = useState<Date | undefined>(undefined);
   const [selectedTimeSlot, setSelectedTimeSlot] = useState<string | null>(null);
   const today = startOfToday();
   const predefinedTimeSlots: string[] = useMemo(generateTimeSlots, []);
-  const { handleTriggerPayment } = usePayment();
   const [isRazorpayOrderLoading, setIsRazorpayOrderLoading] = useState(false);
+  const { handleTriggerPayment } = usePayment();
+  const { user } = useSelector(selectAuth);
+  const navigate = useNavigate();
 
   const isDateAvailable = (date: Date) => {
     if (!mentor.slots) return false;
@@ -79,6 +86,16 @@ const BookingCalendar: FC<IBookingCalendarProps> = ({ mentor, setShowPaymentSucc
 
   const handlePaymentButtonClick = async () => {
     try {
+      if (!user?.id) {
+        navigate(ROUTES.AUTH.LOGIN);
+        return;
+      }
+
+      if (!user?.phone || user?.phone === 0) {
+        setContactDialogOpen(true);
+        return;
+      };
+
       setIsRazorpayOrderLoading(true);
 
       if (!date || !selectedTimeSlot) {

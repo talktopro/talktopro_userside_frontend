@@ -116,9 +116,9 @@ const SlotManagement: React.FC = () => {
           setAllocatedSlots={setAllocatedSlots}
         />
       </div>
-      <div className="sm:hidden not-sm:fixed not-sm:bottom-0 not-sm:z-10 not-sm:w-screen not-sm:bg-background not-sm:py-3 not-sm:border-t-1 not-sm:px-4 disabled:cursor-not-allowed">
+      <div className={`sm:hidden not-sm:fixed not-sm:bottom-0 not-sm:z-10 not-sm:w-screen not-sm:bg-background not-sm:py-3 not-sm:border-t-1 not-sm:px-4 disabled:cursor-not-allowed ${!hasUnsavedChanges && "invisible"}`}>
         <Button
-          className={`cursor-pointer w-full ${!hasUnsavedChanges && "invisible"}`}
+          className="cursor-pointer w-full"
           onClick={handleSave}
           disabled={!hasUnsavedChanges || isSaving}
         >

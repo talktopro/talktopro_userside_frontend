@@ -14,12 +14,13 @@ import { Button } from "@/components/ui/button";
 import { useParams } from "react-router-dom";
 import apiClient from "@/api/axiosInstance";
 import { IMentorDetailsWithSlots, IMentorProfileDetailsApiResponse } from "@/types/user";
-import { Check, MessageCircleMore, Share2, Star } from "lucide-react";
+import { MessageCircleMore, Share2, Star } from "lucide-react";
 import MentorProfileSkeleton from "@/components/common/skeletons/MentorProfile";
 import SlotResponseConverter from "@/utils/slotResponseConverter";
 import PaymentSuccess from "@/components/common/PaymentSuccess";
-import CustomTooltip from "@/components/common/CustomTooltip";
 import useErrorHandler from "@/hooks/useErrorHandler";
+import PhoneDialog from "@/components/common/PhoneNumberDialog";
+import CopyPaste from "@/components/common/CopyPaste";
 
 const ProfessionalDetailsPage = () => {
   const { id } = useParams<{ id: string }>();
@@ -27,7 +28,7 @@ const ProfessionalDetailsPage = () => {
   const [loading, setLoading] = useState<boolean>(!mentor);
   const bucketName = import.meta.env.VITE_S3BUCKET_NAME;
   const [showPaymentSuccess, setShowPaymentSuccess] = useState<boolean>(false);
-  const [isCopied, setIsCopied] = useState(false);
+  const [contactDialogOpen, setContactDialogOpen] = useState<boolean>(false);
   const { handleError } = useErrorHandler();
 
   useEffect(() => {
@@ -47,19 +48,6 @@ const ProfessionalDetailsPage = () => {
       fetchMentor();
     }
   }, [id]);
-
-  const handleShareClick = () => {
-    navigator.clipboard.writeText(window.location.href)
-      .then(() => {
-        setIsCopied(true);
-        setTimeout(() => {
-          setIsCopied(false);
-        }, 3000);
-      })
-      .catch((err) => {
-        console.error('Failed to copy URL: ', err);
-      })
-  };
 
   if (showPaymentSuccess) {
     return (
@@ -92,7 +80,11 @@ const ProfessionalDetailsPage = () => {
                 <span className="text-sm">Not Available</span>
               </div>
               {mentor && (
-                <BookingCalendar mentor={mentor} setShowPaymentSuccess={setShowPaymentSuccess} />
+                <BookingCalendar
+                  mentor={mentor}
+                  setShowPaymentSuccess={setShowPaymentSuccess}
+                  setContactDialogOpen={setContactDialogOpen}
+                />
               )}
             </DrawerHeader>
           </div>
@@ -105,6 +97,7 @@ const ProfessionalDetailsPage = () => {
       <MentorProfileSkeleton />
     ) : (
       <>
+        <PhoneDialog open={contactDialogOpen} onOpenChange={(isOpen: boolean) => setContactDialogOpen(isOpen)} />
         <div className="w-full min-h-fit p-5">
           <div className="w-full block sm:flex">
             <div className="sm:min-w-[22%] max-w-[21rem] p-5 aspect-[3.5/4]">
@@ -125,18 +118,7 @@ const ProfessionalDetailsPage = () => {
                     <h1 className="text-2xl font-bold not-sm:mt-5">
                       {`${mentor.mentorDetails.first_name} ${mentor.mentorDetails.last_name}`}
                     </h1>
-                    <CustomTooltip
-                      content={isCopied ? "Link copied!" : `Share ${mentor.mentorDetails.first_name} ${mentor.mentorDetails.last_name} profile`}
-                      trigger={
-                        <button className="not-sm:mt-5" onClick={handleShareClick}>
-                          {isCopied ? (
-                            <Check strokeWidth={1.5} size={20} className="text-green-500" />
-                          ) : (
-                            <Share2 strokeWidth={1.5} size={20} />
-                          )}
-                        </button>
-                      }
-                    />
+                    <CopyPaste copyValue={window.location.href} customIcon={<Share2 className="h-4 w-4 opacity-70 text-accent-foreground" />} />
                   </div>
                   <p className="opacity-70">{mentor.mentorDetails.profession}</p>
                 </div>
