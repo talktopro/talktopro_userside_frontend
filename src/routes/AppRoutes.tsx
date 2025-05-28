@@ -1,3 +1,4 @@
+import { lazy, Suspense } from "react";
 import { Route, Routes } from "react-router-dom";
 import { ROUTES } from "./routes";
 import LoginPage from "../pages/user/LoginPage";
@@ -5,22 +6,25 @@ import HomePage from "@/pages/user/HomePage";
 import SignupPage from "@/pages/user/SignupPage";
 import ForgotPasswordPage from "@/pages/user/ForgotPasswordPage";
 import Bookings from "@/pages/user/Bookings";
-import MentorBookings from "@/pages/mentor/Bookings";
 import ProfessionalDetailsPage from "@/pages/user/ProfessionalDetailsPage";
 import AllProfessionalsPage from "@/pages/user/AllProfessionalsPage";
 import MainLayout from "@/layouts/MainLayout";
 import AccountSettings from "@/pages/user/AccountSettings";
 import ChangePasswordPage from "@/pages/user/ChangePasswordPage";
 import SignupOtpPage from "@/pages/user/SignupOtpPage";
-import MentorLayout from "@/layouts/MentorLayout";
 import AboutUs from "@/pages/common/aboutUs";
 
+//! Loading page
+import AppLoader from "@/components/common/loading/AppLoader";
+
 //! Mentor pages
-import Dashboard from "@/pages/mentor/Dashboard";
-import MentorResiterPage from "@/pages/mentor/MentorRegister";
-import MentorAccountDetails from "@/pages/mentor/AccountDetails";
-import SlotManagement from "@/pages/mentor/SlotManagement";
-import Pricing from "@/pages/mentor/Pricing";
+const MentorLayout = lazy(() => import("@/layouts/MentorLayout"));
+const MentorBookings = lazy(() => import("@/pages/mentor/Bookings"));
+const Dashboard = lazy(() => import("@/pages/mentor/Dashboard"));
+const MentorResiterPage = lazy(() => import("@/pages/mentor/MentorRegister"));
+const MentorAccountDetails = lazy(() => import("@/pages/mentor/AccountDetails"));
+const SlotManagement = lazy(() => import("@/pages/mentor/SlotManagement"));
+const Pricing = lazy(() => import("@/pages/mentor/Pricing"));
 
 //! Protectors
 import MentorRouteProtector from "@/auth/mentorProtector";
@@ -81,17 +85,52 @@ const AppRoutes = () => {
 
       {/* All mentor routes */}
       <Route element={<MentorRouteProtector />}>
-        <Route element={<MentorLayout />}>
-          <Route path={ROUTES.MENTOR.DASHBOARD} element={<Dashboard />} />
-          <Route path={ROUTES.MENTOR.BOOKINGS} element={<MentorBookings />} />
+        <Route
+          element={
+            <Suspense fallback={<AppLoader />}>
+              <MentorLayout />
+            </Suspense>
+          }
+        >
+          <Route
+            path={ROUTES.MENTOR.DASHBOARD}
+            element={
+              <Suspense fallback={<AppLoader />}>
+                <Dashboard />
+              </Suspense>
+            }
+          />
+          <Route
+            path={ROUTES.MENTOR.BOOKINGS}
+            element={
+              <Suspense fallback={<AppLoader />}>
+                <MentorBookings />
+              </Suspense>
+            }
+          />
           <Route
             path={ROUTES.MENTOR.SLOT_MANAGEMENT}
-            element={<SlotManagement />}
+            element={
+              <Suspense fallback={<AppLoader />}>
+                <SlotManagement />
+              </Suspense>
+            }
           />
-          <Route path={ROUTES.MENTOR.PRICING} element={<Pricing />} />
+          <Route
+            path={ROUTES.MENTOR.PRICING}
+            element={
+              <Suspense fallback={<AppLoader />}>
+                <Pricing />
+              </Suspense>
+            }
+          />
           <Route
             path={ROUTES.MENTOR.ACCOUNT_SETTINGS}
-            element={<MentorAccountDetails />}
+            element={
+              <Suspense fallback={<AppLoader />}>
+                <MentorAccountDetails />
+              </Suspense>
+            }
           />
         </Route>
       </Route>

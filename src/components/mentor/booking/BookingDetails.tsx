@@ -8,6 +8,7 @@ import { IMentorBookingHistory } from '@/types/mentor'
 import StatusBadge from '@/components/common/StatusBadge'
 import { SiGoogleclassroom } from 'react-icons/si'
 import ImageViewer from '@/components/common/ImageViewer';
+import CopyPaste from '@/components/common/CopyPaste';
 
 
 interface IBookingDetailsDrawerProps {
@@ -44,7 +45,7 @@ const BookingDetails: FC<IBookingDetailsDrawerProps> = ({ booking }) => {
                         </div>
                         <div>
                            <p className="text-sm text-muted-foreground mb-1">Booking ID</p>
-                           <p className="font-sm">{booking._id}</p>
+                           <p className="font-sm flex gap-1 items-center -mt-1">{booking._id}<CopyPaste copyValue={booking._id} /></p>
                         </div>
                      </div>
 

@@ -11,6 +11,7 @@ import convert24To12HourRange from '@/utils/convertTo12HourFormat'
 import { useNavigate } from 'react-router-dom'
 import BookingCancellation from './CancellationDetails';
 import ImageViewer from '@/components/common/ImageViewer';
+import CopyPaste from '@/components/common/CopyPaste';
 
 
 interface IBookingDetailsDrawerProps {
@@ -49,7 +50,7 @@ const BookingDetails: FC<IBookingDetailsDrawerProps> = ({ booking, handleCancelB
                 </div>
                 <div>
                   <p className="text-sm text-muted-foreground mb-1">Booking ID</p>
-                  <p className="font-sm">{booking._id}</p>
+                  <p className="font-sm flex gap-1 items-center -mt-1">{booking._id}<CopyPaste copyValue={booking._id} /></p>
                 </div>
               </div>
 

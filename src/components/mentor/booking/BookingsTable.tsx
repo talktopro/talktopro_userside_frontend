@@ -17,6 +17,7 @@ import convert24To12HourRange from "@/utils/convertTo12HourFormat";
 import BookingDetails from "./BookingDetails";
 import { IMentorBookingHistory } from "@/types/mentor";
 import StatusBadge from "@/components/common/StatusBadge";
+import dummyProfile from '@/assets/avatar/user.png';
 
 interface BookingsTableProps {
   bookingDetails: IMentorBookingHistory[];
@@ -64,7 +65,7 @@ const BookingsTable: React.FC<BookingsTableProps> = ({ bookingDetails, currentPa
                         alt="Profile picture"
                         className="w-full h-full object-cover"
                         onError={(e) => {
-                          (e.target as HTMLImageElement).src = "/default-profile.png";
+                          (e.target as HTMLImageElement).src = dummyProfile;
                         }}
                       />
                     </div>

@@ -218,3 +218,18 @@ input[type="number"] {
         background-color: rgba(0, 0, 0, 0.193);
     }
 }
+
+/* Application loading animation */
+@keyframes train {
+    0% {
+        transform: translateX(-100%);
+    }
+
+    100% {
+        transform: translateX(250%);
+    }
+}
+
+.animate-train {
+    animation: train 1s infinite linear;
+}
