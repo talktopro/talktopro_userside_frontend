@@ -9,7 +9,7 @@ import { Toaster } from "@/components/ui/sonner";
 import { GoogleOAuthProvider } from "@react-oauth/google";
 import "react-loading-skeleton/dist/skeleton.css";
 
-
+//sample
 const clientId = import.meta.env.VITE_GOOGLE_CLIENT_ID;
 if (!clientId) {
   console.error(
