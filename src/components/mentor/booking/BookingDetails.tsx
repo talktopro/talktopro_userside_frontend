@@ -9,6 +9,7 @@ import StatusBadge from '@/components/common/StatusBadge'
 import { SiGoogleclassroom } from 'react-icons/si'
 import ImageViewer from '@/components/common/ImageViewer';
 import CopyPaste from '@/components/common/CopyPaste';
+import dummyProfile from '@/assets/avatar/user.png';
 
 
 interface IBookingDetailsDrawerProps {
@@ -81,6 +82,9 @@ const BookingDetails: FC<IBookingDetailsDrawerProps> = ({ booking }) => {
                                     src={`https://${bucketName}.s3.amazonaws.com/${import.meta.env.VITE_PROFILE_IMAGE_FOLDER}/${booking.user.profileImg}`}
                                     alt="Profile picture"
                                     className="w-full h-full object-cover"
+                                    onError={(e) => {
+                                       (e.target as HTMLImageElement).src = dummyProfile;
+                                    }}
                                  />
                               </div>
                               <h4 className="font-semibold text-md m-0 p-0">

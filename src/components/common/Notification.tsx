@@ -12,18 +12,18 @@ import { INotification as mentorNotification } from "@/interfaces/mentor";
 import CustomTooltip from "./CustomTooltip";
 import { format } from "date-fns";
 import { Button } from "../ui/button";
-import { Badge } from "../ui/Badge";
-
 
 type INotificationType = userNotification | mentorNotification;
 
 interface INotificationProps {
   notifications: INotificationType[];
   loading: boolean;
-  role: "user" | "mentor"
+  role: "user" | "mentor";
+  deleteAllNotification: () => void;
+  isDeleteAllLoading: boolean;
 }
 
-const Notification: FC<INotificationProps> = ({ notifications, loading, role }) => {
+const Notification: FC<INotificationProps> = ({ notifications, loading, role, deleteAllNotification, isDeleteAllLoading }) => {
   const unReadNotificationCount = notifications.filter(n =>
     role === 'user'
       ? !(n as userNotification).isRead.user_is_read
@@ -41,12 +41,11 @@ const Notification: FC<INotificationProps> = ({ notifications, loading, role }) 
                 <div className="relative">
                   <Bell strokeWidth={1.5} width={18} height={18} />
                   {unReadNotificationCount > 0 && (
-                    <Badge
-                      className="absolute -top-2 -right-2 h-4 w-4 flex items-center justify-center p-0 text-xs"
-                      variant="destructive"
+                    <span
+                      className="absolute -top-2 left-2 h-4 w-auto flex items-center justify-center px-1.5 text-xs text-white bg-purple-500 rounded-full text-center"
                     >
                       {unReadNotificationCount}
-                    </Badge>
+                    </span>
                   )}
                 </div>
               }
@@ -95,16 +94,18 @@ const Notification: FC<INotificationProps> = ({ notifications, loading, role }) 
                     <Button
                       variant="ghost"
                       className="w-1/2"
-                    // onClick={() => handleMarkAllAsRead()}
+                    // disabled={isNotificationUpdating}
+                    // onClick={handleMarkAllAsRead}
                     >
                       Mark all as read
                     </Button>
                     <Button
                       variant="ghost"
                       className="w-1/2 text-red-500 hover:text-red-600"
-                    // onClick={() => handleDeleteAll()}
+                      disabled={isDeleteAllLoading}
+                      onClick={deleteAllNotification}
                     >
-                      Delete all
+                      {isDeleteAllLoading ? "Deleting..." : "Delete all"}
                     </Button>
                   </div>
                 </>

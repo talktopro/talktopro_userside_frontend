@@ -31,7 +31,13 @@ export const notificationSlice = createSlice({
     },
     setMentorNotificationFetched: (state, action: PayloadAction<boolean>) => {
       state.mentorNotificationFetched = action.payload;
-    }
+    },
+    resetNotificationState: (state) => {
+      state.userNotificationFetched = false;
+      state.mentorNotificationFetched = false;
+      state.userNotifications = [];
+      state.mentorNotifications = [];
+    },
   },
 });
 
@@ -40,6 +46,7 @@ export const {
   setMentorNotifications,
   setUserNotificationFetched,
   setMentorNotificationFetched,
+  resetNotificationState,
 } = notificationSlice.actions;
 
 export default notificationSlice.reducer;

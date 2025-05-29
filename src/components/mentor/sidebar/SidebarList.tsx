@@ -31,6 +31,7 @@ import { useDispatch } from "react-redux";
 import { logout } from "@/redux/slices/authSlice";
 import { Dialog, DialogClose, DialogContent, DialogDescription, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
+import { resetNotificationState } from "@/redux/slices/notificationSlice";
 
 const SidebarList = () => {
   const navigate = useNavigate();
@@ -50,6 +51,7 @@ const SidebarList = () => {
   };
 
   const handleLogout = () => {
+    dispatch(resetNotificationState());
     dispatch(logout());
   };
 

@@ -1,4 +1,4 @@
-import { JSX, useEffect, useState } from "react";
+import { JSX, useEffect } from "react";
 import logo from "@/assets/svg/logo.svg";
 import {
   LayoutTemplate,
@@ -17,8 +17,6 @@ import Notification from "../common/Notification";
 import { useDispatch, useSelector } from "react-redux";
 import { logout, selectAuth } from "@/redux/slices/authSlice";
 import { Button } from "../ui/button";
-import { INotification, INotificationApiReponse } from "@/interfaces/user";
-import apiClient from "@/api/axiosInstance";
 import Searchbar from "./Searchbar";
 import CustomTooltip from "../common/CustomTooltip";
 import {
@@ -29,42 +27,17 @@ import {
 } from "../ui/dropdown-menu";
 import { Avatar, AvatarImage } from "../ui/avatar";
 import { Dialog, DialogClose, DialogContent, DialogDescription, DialogHeader, DialogTitle, DialogTrigger } from "../ui/dialog";
-import useErrorHandler from "@/hooks/useErrorHandler";
-import { setUserNotificationFetched, setUserNotifications } from "@/redux/slices/notificationSlice";
-import { RootState } from "@/redux/store";
+import useNotification from "@/hooks/useNotification";
+import { resetNotificationState } from "@/redux/slices/notificationSlice";
 
 const Navbar = () => {
   const dispatch = useDispatch();
   const bucketName = import.meta.env.VITE_S3BUCKET_NAME;
-  const { handleError } = useErrorHandler();
   const { user } = useSelector(selectAuth);
   const { theme, toggleTheme } = useTheme();
   const navigate = useNavigate();
-  const [notifications, setNotifications] = useState<INotification[]>([]);
-  const [isLoading, setIsLoading] = useState(false);
-  const userNotificationFetched = useSelector((state: RootState) => state.notification.userNotificationFetched);
-  const userNotifications = useSelector((state: RootState) => state.notification.userNotifications);
+  const { notifications, isLoading, fetchNotification, deleteAllNotification, isDeleteAllLoading } = useNotification("user");
 
-  const fetchNotification = async () => {
-    try {
-      if (!user?.id) {
-        return;
-      }
-      if (userNotificationFetched) {
-        setNotifications(userNotifications)
-        return;
-      }
-      setIsLoading(true);
-      const { data } = await apiClient.get<INotificationApiReponse>(`/notifications`, { params: { role: "user" } });
-      setNotifications(Array.isArray(data.notifications) ? data.notifications : []);
-      dispatch(setUserNotificationFetched(true));
-      dispatch(setUserNotifications(data.notifications));
-    } catch (error) {
-      handleError(error, "Failed to collect Notifications.");
-    } finally {
-      setIsLoading(false);
-    }
-  };
 
   useEffect(() => {
     fetchNotification();
@@ -106,6 +79,7 @@ const Navbar = () => {
   ];
 
   const handleLogout = () => {
+    dispatch(resetNotificationState());
     dispatch(logout());
   };
 
@@ -125,7 +99,13 @@ const Navbar = () => {
 
         <div className="flex items-center">
           {user?.id && (
-            <Notification notifications={notifications} loading={isLoading} role="user" />
+            <Notification
+              notifications={notifications}
+              loading={isLoading}
+              role="user"
+              deleteAllNotification={deleteAllNotification}
+              isDeleteAllLoading={isDeleteAllLoading}
+            />
           )}
 
           <TooltipProvider>
