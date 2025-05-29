@@ -5,26 +5,38 @@ import { Moon, Sun } from "lucide-react";
 import Notification from "../common/Notification";
 import useTheme from "@/hooks/useTheme";
 import { useEffect, useState } from "react";
-import { INotification } from "@/interfaces/mentor";
+import { INotification, INotificationApiReponse } from "@/interfaces/mentor";
 import apiClient from "@/api/axiosInstance";
-// import useErrorHandler from "@/hooks/useErrorHandler";
+import useErrorHandler from "@/hooks/useErrorHandler";
+import { useDispatch, useSelector } from "react-redux";
+import { RootState } from "@/redux/store";
+import { setMentorNotificationFetched, setMentorNotifications } from "@/redux/slices/notificationSlice";
 
 const MentorHeader = () => {
   const { theme, toggleTheme } = useTheme();
   const [notifications, setNotifications] = useState<INotification[]>([]);
   const [isLoading, setIsLoading] = useState(false);
-  // const { handleError } = useErrorHandler();
+  const { handleError } = useErrorHandler();
+  const mentorNotificationFetched = useSelector((state: RootState) => state.notification.mentorNotificationFetched);
+  const mentorNotifications = useSelector((state: RootState) => state.notification.mentorNotifications);
+  const dispatch = useDispatch();
 
   const fetchNotification = async () => {
     try {
+      if (mentorNotificationFetched) {
+        setNotifications(mentorNotifications)
+        return;
+      }
       setIsLoading(true);
-      const { data } = await apiClient.get<INotification[]>(`url`);
-      setNotifications(Array.isArray(data) ? data : []);
+      const { data } = await apiClient.get<INotificationApiReponse>(`/notifications`, { params: { role: "mentor" } });
+      setNotifications(Array.isArray(data.notifications) ? data.notifications : []);
+      dispatch(setMentorNotificationFetched(true));
+      dispatch(setMentorNotifications(data.notifications));
     } catch (error) {
-      // handleError(error, "Failed to collect Notifications.");
+      handleError(error, "Failed to collect Notifications.");
     } finally {
       setIsLoading(false);
-    }
+    };
   };
 
   useEffect(() => {
@@ -37,7 +49,7 @@ const MentorHeader = () => {
         <SidebarTrigger className="-ml-1" />
       </div>
       <div className="px-4 flex gap-1">
-        <Notification loading={isLoading} notifications={notifications} />
+        <Notification loading={isLoading} notifications={notifications} role="mentor" />
         <TooltipProvider>
           <Tooltip>
             <TooltipTrigger>

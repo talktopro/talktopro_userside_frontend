@@ -31,9 +31,15 @@ export interface IBookingQueryDetails {
    sort: "NewestToOldest" | "OldestToNewest";
 };
 
+export interface INotificationApiReponse {
+   notifications: INotification[];
+};
+
 export interface INotification {
-   id: number;
-   message: string;
-   date: string;
-   isRead: boolean;
-}
+   _id: string;
+   messages: string;
+   isRead: {
+      mentor_is_read: boolean
+   };
+   createdAt: string;
+};
