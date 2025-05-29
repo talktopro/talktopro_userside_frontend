@@ -187,7 +187,11 @@ export const InputBox: FC<InputBoxProps> = ({ onSave, onClose, suggestions = [] 
                 strokeWidth={1.5}
                 size={18}
                 className="cursor-pointer"
-                onClick={handleSave}
+                onClick={(e) => {
+                  e.preventDefault();
+                  e.stopPropagation();
+                  handleSave();
+                }}
               />
             </TooltipTrigger>
             <TooltipContent className="bg-white border-1 border-gray-200 text-black">

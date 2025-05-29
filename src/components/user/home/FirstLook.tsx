@@ -24,14 +24,16 @@ const FirstLook = () => {
             navigate your career path with confidence, avoiding the common
             pitfalls of post-graduation confusion.
           </p>
-          <Link to={ROUTES.PROFESSIONALS.LIST}>
-            <button className="bg-purple-500 text-white px-6 py-3 rounded-full flex items-center gap-2 cursor-pointer hover:bg-purple-600 transition-colors">
-              Explore Mentors
-              <span className="bg-white rounded-full p-1">
-                <ArrowRight size={16} className="text-purple-500" />
-              </span>
-            </button>
-          </Link>
+          <div className="flex gap-4">
+            <Link to={ROUTES.PROFESSIONALS.LIST}>
+              <button className="bg-purple-500 text-white px-6 py-3 rounded-full flex items-center gap-2 cursor-pointer hover:bg-purple-600 transition-colors">
+                Explore Mentors
+                <span className="bg-white rounded-full p-1">
+                  <ArrowRight size={16} className="text-purple-500" />
+                </span>
+              </button>
+            </Link>
+          </div>
         </div>
 
         <div className="w-full lg:w-1/2 h-full relative not-lg:hidden">

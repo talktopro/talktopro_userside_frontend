@@ -114,7 +114,9 @@ const Navbar = () => {
         <Searchbar />
 
         <div className="flex items-center">
-          <Notification notifications={notifications} loading={isLoading} />
+          {user?.id && (
+            <Notification notifications={notifications} loading={isLoading} />
+          )}
 
           <TooltipProvider>
             <div onClick={toggleTheme}>
