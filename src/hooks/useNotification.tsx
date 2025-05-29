@@ -53,7 +53,7 @@ const useNotification = (role: "user" | "mentor") => {
       }
 
     } catch (error) {
-      handleError(error, "Failed to collect Notifications.");
+      handleError(error, "Failed to delete Notifications.");
     } finally {
       setIsLoading(false);
     }
