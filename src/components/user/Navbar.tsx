@@ -36,7 +36,16 @@ const Navbar = () => {
   const { user } = useSelector(selectAuth);
   const { theme, toggleTheme } = useTheme();
   const navigate = useNavigate();
-  const { notifications, isLoading, fetchNotification, deleteAllNotification, isDeleteAllLoading } = useNotification("user");
+  const {
+    notifications,
+    isLoading,
+    fetchNotification,
+    deleteAllNotification,
+    isDeleteAllLoading,
+    isReadAllNotification,
+    readAllNotification,
+    handleNotificationClick
+  } = useNotification("user");
 
 
   useEffect(() => {
@@ -105,6 +114,9 @@ const Navbar = () => {
               role="user"
               deleteAllNotification={deleteAllNotification}
               isDeleteAllLoading={isDeleteAllLoading}
+              isReadAllNotification={isReadAllNotification}
+              readAllNotification={readAllNotification}
+              handleNotificationClick={handleNotificationClick}
             />
           )}
 

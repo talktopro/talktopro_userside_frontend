@@ -19,16 +19,30 @@ interface INotificationProps {
   notifications: INotificationType[];
   loading: boolean;
   role: "user" | "mentor";
-  deleteAllNotification: () => void;
+  deleteAllNotification: () => Promise<void>;
   isDeleteAllLoading: boolean;
-}
+  readAllNotification: () => Promise<void>;
+  isReadAllNotification: boolean;
+  handleNotificationClick: (id: string) => Promise<void>;
+};
 
-const Notification: FC<INotificationProps> = ({ notifications, loading, role, deleteAllNotification, isDeleteAllLoading }) => {
+const Notification: FC<INotificationProps> = ({
+  notifications,
+  loading,
+  role,
+  deleteAllNotification,
+  isDeleteAllLoading,
+  isReadAllNotification,
+  readAllNotification,
+  handleNotificationClick,
+}) => {
+  console.log(notifications[0])
   const unReadNotificationCount = notifications.filter(n =>
     role === 'user'
-      ? !(n as userNotification).isRead.user_is_read
-      : !(n as mentorNotification).isRead.mentor_is_read
+      ? (n as userNotification).isRead.user_is_read === false
+      : (n as mentorNotification).isRead.mentor_is_read === false
   ).length;
+  console.log(unReadNotificationCount)
 
   return (
     <TooltipProvider>
@@ -77,6 +91,7 @@ const Notification: FC<INotificationProps> = ({ notifications, loading, role, de
                         <div
                           key={notification._id}
                           className={`px-4 py-2 ${index !== 0 && "mt-0.5"} rounded-sm hover:bg-muted/10 cursor-pointer transition-colors duration-200 ${isRead ? "bg-muted/30" : "bg-muted"}`}
+                          onClick={() => handleNotificationClick(notification._id)}
                         >
                           <p className="text-xs font-medium">
                             {notification.messages}
@@ -94,10 +109,10 @@ const Notification: FC<INotificationProps> = ({ notifications, loading, role, de
                     <Button
                       variant="ghost"
                       className="w-1/2"
-                    // disabled={isNotificationUpdating}
-                    // onClick={handleMarkAllAsRead}
+                      disabled={isReadAllNotification}
+                      onClick={readAllNotification}
                     >
-                      Mark all as read
+                      {isReadAllNotification ? "Marking all as read..." : "Mark all as read"}
                     </Button>
                     <Button
                       variant="ghost"

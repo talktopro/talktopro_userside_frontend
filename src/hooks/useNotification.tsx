@@ -15,6 +15,7 @@ const useNotification = (role: "user" | "mentor") => {
   const [notifications, setNotifications] = useState<INotificationType[]>([]);
   const [isLoading, setIsLoading] = useState(false);
   const [isDeleteAllLoading, setIsDeleteAllLoading] = useState<boolean>(false);
+  const [isReadAllNotification, setIsReadAllNotification] = useState<boolean>(false);
   const { user } = useSelector(selectAuth);
   const dispatch = useDispatch();
   const { handleError } = useErrorHandler();
@@ -78,12 +79,79 @@ const useNotification = (role: "user" | "mentor") => {
     }
   };
 
+  const readAllNotification = async () => {
+    try {
+      setIsReadAllNotification(true);
+
+      await apiClient.patch(`/notifications/is_read_all`,
+        role
+      );
+
+      const afterReadNotifications = notifications.map((n) => {
+        if (role === "user") {
+          return { ...n, isRead: { user_is_read: true } } as userNotification;
+        } else {
+          return { ...n, isRead: { mentor_is_read: true } } as mentorNotification;
+        };
+      });
+
+      setNotifications(afterReadNotifications);
+
+      if (role === "user") {
+        dispatch(setUserNotifications(afterReadNotifications as userNotification[]));
+      } else {
+        dispatch(setMentorNotifications(afterReadNotifications as mentorNotification[]));
+      }
+    } catch (error) {
+      handleError(error, "Failed to mark as read all notifications.");
+    } finally {
+      setIsReadAllNotification(false);
+    }
+  };
+
+  const handleNotificationClick = async (id: string) => {
+    try {
+      const notificationToUpdate = notifications.find((n) => n._id === id);
+      if (!notificationToUpdate) return;
+
+      const isAlreadyRead = role === "user"
+        ? (notificationToUpdate as userNotification).isRead.user_is_read
+        : (notificationToUpdate as mentorNotification).isRead.mentor_is_read;
+
+      if (isAlreadyRead) return;
+
+      await apiClient.patch(`/notifications/is_read`, { role, id });
+
+      const afterReadNotifications = notifications.map((n) => {
+        if (n._id === id) {
+          return role === "user"
+            ? { ...n, isRead: { user_is_read: true } } as userNotification
+            : { ...n, isRead: { mentor_is_read: true } } as mentorNotification;
+        }
+        return n;
+      });
+
+      setNotifications(afterReadNotifications);
+
+      if (role === "user") {
+        dispatch(setUserNotifications(afterReadNotifications as userNotification[]));
+      } else {
+        dispatch(setMentorNotifications(afterReadNotifications as mentorNotification[]));
+      }
+    } catch (error) {
+      handleError(error, "Failed to mark as read notifications.");
+    }
+  };
+
   return {
     notifications,
     isLoading,
     isDeleteAllLoading,
+    isReadAllNotification,
     fetchNotification,
     deleteAllNotification,
+    readAllNotification,
+    handleNotificationClick,
   };
 };
 

@@ -9,7 +9,16 @@ import useNotification from "@/hooks/useNotification";
 
 const MentorHeader = () => {
   const { theme, toggleTheme } = useTheme();
-  const { notifications, isLoading, fetchNotification, deleteAllNotification, isDeleteAllLoading } = useNotification("mentor");
+  const {
+    notifications,
+    isLoading,
+    fetchNotification,
+    deleteAllNotification,
+    isDeleteAllLoading,
+    isReadAllNotification,
+    readAllNotification,
+    handleNotificationClick
+  } = useNotification("mentor");
 
   useEffect(() => {
     fetchNotification();
@@ -27,6 +36,9 @@ const MentorHeader = () => {
           deleteAllNotification={deleteAllNotification}
           isDeleteAllLoading={isDeleteAllLoading}
           role="mentor"
+          isReadAllNotification={isReadAllNotification}
+          readAllNotification={readAllNotification}
+          handleNotificationClick={handleNotificationClick}
         />
         <TooltipProvider>
           <Tooltip>
