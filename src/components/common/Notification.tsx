@@ -36,13 +36,11 @@ const Notification: FC<INotificationProps> = ({
   readAllNotification,
   handleNotificationClick,
 }) => {
-  console.log(notifications[0])
   const unReadNotificationCount = notifications.filter(n =>
     role === 'user'
       ? (n as userNotification).isRead.user_is_read === false
       : (n as mentorNotification).isRead.mentor_is_read === false
   ).length;
-  console.log(unReadNotificationCount)
 
   return (
     <TooltipProvider>

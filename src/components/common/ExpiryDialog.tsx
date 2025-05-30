@@ -43,6 +43,14 @@ const ExpiryDialog = () => {
             Log In Again
           </Button>
         </div>
+        <div className="flex justify-center">
+          <span
+            className="cursor-pointer hover:underline text-sm -mt-2 text-center"
+            onClick={() => {
+              dispatch(logout());
+            }}
+          >Stay logged out</span>
+        </div>
       </DialogContent>
     </Dialog>
   );
