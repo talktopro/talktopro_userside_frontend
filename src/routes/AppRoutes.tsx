@@ -33,6 +33,9 @@ import GuestUserProtector from "@/auth/guestUserProtector";
 import MentorRegisterProtector from "@/auth/mentorRegisterProtector";
 import NotFoundPage from "@/pages/common/404";
 import ContactUs from "@/pages/common/ContactUs";
+import TermsAndConditions from "@/pages/common/Terms&Condition";
+import PrivacyAndPolicy from "@/pages/common/Privacy&Policy";
+import RefundTerms from "@/pages/common/RefundTerms";
 
 const AppRoutes = () => {
   return (
@@ -60,7 +63,10 @@ const AppRoutes = () => {
 
         <Route path={ROUTES.HOME} element={<HomePage />} />
         <Route path={ROUTES.ABOUT} element={<AboutUs />} />
-        <Route path={ROUTES.CONTACT_US} element={<ContactUs />} />
+        <Route path={ROUTES.CONTACT_US} element={<ContactUs from="user" />} />
+        <Route path={ROUTES.TERMS_AND_CONDITION} element={<TermsAndConditions />} />
+        <Route path={ROUTES.PRIVACY_AND_POLICY} element={<PrivacyAndPolicy />} />
+        <Route path={ROUTES.REFUND_POLICY} element={<RefundTerms />} />
         <Route path="*" element={<NotFoundPage />} />
         <Route
           path={ROUTES.PROFESSIONALS.LIST}
@@ -146,7 +152,31 @@ const AppRoutes = () => {
             path={ROUTES.MENTOR.CONTACT_US}
             element={
               <Suspense fallback={<AppLoader />}>
-                <ContactUs />
+                <ContactUs from="mentor" />
+              </Suspense>
+            }
+          />
+          <Route
+            path={ROUTES.MENTOR.TERMS_AND_CONDITION}
+            element={
+              <Suspense fallback={<AppLoader />}>
+                <TermsAndConditions />
+              </Suspense>
+            }
+          />
+          <Route
+            path={ROUTES.MENTOR.PRIVACY_AND_POLICY}
+            element={
+              <Suspense fallback={<AppLoader />}>
+                <PrivacyAndPolicy />
+              </Suspense>
+            }
+          />
+          <Route
+            path={ROUTES.MENTOR.REFUND_POLICY}
+            element={
+              <Suspense fallback={<AppLoader />}>
+                <RefundTerms />
               </Suspense>
             }
           />

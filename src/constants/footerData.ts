@@ -51,21 +51,19 @@ export const teamMembers = [
    },
 ];
 
-export const Products: string[] = [
-   "Business",
-   "Designers",
-   "Classrooms",
-   "Newcomers",
+export const Tags: string[] = [
+   "#TalkToPro",
+   "#CareerGuidance",
+   "#RightMentorRightPath",
+   "#SkillOverInfluencers",
 ];
-export const Learning: string[] = [
-   "Learn Hub",
-   "Manuals",
-   "Tutorials",
-   "Communities",
+export const Policies: { field: string, userPath: string, mentorPath: string }[] = [
+   { field: "Terms and Conditions", userPath: ROUTES.TERMS_AND_CONDITION, mentorPath: ROUTES.MENTOR.TERMS_AND_CONDITION },
+   { field: "Privacy Policy", userPath: ROUTES.PRIVACY_AND_POLICY, mentorPath: ROUTES.MENTOR.PRIVACY_AND_POLICY },
+   { field: "Refund Policy", userPath: ROUTES.REFUND_POLICY, mentorPath: ROUTES.MENTOR.REFUND_POLICY },
 ];
+
 export const About: { field: string, userPath: string, mentorPath: string }[] = [
-   { field: "Company", userPath: ROUTES.HOME, mentorPath: ROUTES.MENTOR.DASHBOARD },
-   { field: "Careers", userPath: ROUTES.HOME, mentorPath: ROUTES.MENTOR.DASHBOARD },
    { field: "Contact Us", userPath: ROUTES.CONTACT_US, mentorPath: ROUTES.MENTOR.CONTACT_US },
    { field: "About Us", userPath: ROUTES.ABOUT, mentorPath: ROUTES.MENTOR.ABOUT },
 ];

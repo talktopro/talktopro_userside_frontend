@@ -2,6 +2,9 @@ export const ROUTES = {
     HOME: "/",
     ABOUT: "/about",
     CONTACT_US: "/contact-us",
+    TERMS_AND_CONDITION: "/terms&condition",
+    PRIVACY_AND_POLICY: "/privacy&policy",
+    REFUND_POLICY: "/refund-policy",
 
     AUTH: {
         LOGIN: "/login",
@@ -29,5 +32,8 @@ export const ROUTES = {
         REGISTER: "/mentor/register",
         ABOUT: "/mentor/about",
         CONTACT_US: "/mentor/contact-us",
+        TERMS_AND_CONDITION: "/mentor/terms&condition",
+        PRIVACY_AND_POLICY: "/mentor/privacy&policy",
+        REFUND_POLICY: "/mentor/refund-policy",
     },
 };
