@@ -2,7 +2,7 @@ import { INotification as userNotification, INotificationApiReponse as userNotif
 import { INotification as mentorNotification, INotificationApiReponse as mentorNotificationApiRes } from "@/interfaces/mentor";
 import { selectAuth } from '@/redux/slices/authSlice';
 import { RootState } from '@/redux/store';
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux';
 import apiClient from "@/api/axiosInstance";
 import { setMentorNotificationFetched, setMentorNotifications, setUserNotificationFetched, setUserNotifications } from "@/redux/slices/notificationSlice";
@@ -17,20 +17,23 @@ const useNotification = (role: "user" | "mentor") => {
   const [isDeleteAllLoading, setIsDeleteAllLoading] = useState<boolean>(false);
   const [isReadAllNotification, setIsReadAllNotification] = useState<boolean>(false);
   const { user } = useSelector(selectAuth);
+  const {
+    userNotificationFetched,
+    mentorNotificationFetched,
+    userNotifications,
+    mentorNotifications
+  } = useSelector((state: RootState) => state.notification);
   const dispatch = useDispatch();
   const { handleError } = useErrorHandler();
 
-  let isNotificationFetched = false;
-  let reduxNotifications: INotificationType[] = [];
+  const isNotificationFetched = role === "user" ? userNotificationFetched : mentorNotificationFetched;
+  const reduxNotifications = role === "user" ? userNotifications : mentorNotifications;
 
-  if (role === "user") {
-    isNotificationFetched = useSelector((state: RootState) => state.notification.userNotificationFetched);
-    reduxNotifications = useSelector((state: RootState) => state.notification.userNotifications);
-  } else if (role === "mentor") {
-    isNotificationFetched = useSelector((state: RootState) => state.notification.mentorNotificationFetched);
-    reduxNotifications = useSelector((state: RootState) => state.notification.mentorNotifications);
-  }
-
+  useEffect(() => {
+    if (isNotificationFetched) {
+      setNotifications(reduxNotifications);
+    }
+  }, [reduxNotifications, isNotificationFetched]);
 
   const fetchNotification = async () => {
     try {
@@ -84,7 +87,7 @@ const useNotification = (role: "user" | "mentor") => {
       setIsReadAllNotification(true);
 
       await apiClient.patch(`/notifications/is_read_all`,
-        role
+        { role }
       );
 
       const afterReadNotifications = notifications.map((n) => {

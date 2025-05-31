@@ -1,6 +1,7 @@
 //! `isBooked` indicates that the slot is already confirmed in the backend and stored in the database.
 //! `"newAllocation"` indicates that the slot is newly selected on the frontend and not yet saved in the backend or database.
 
+import { INotification } from "@/interfaces/mentor";
 import { User } from "./user";
 
 type SlotStatus = { isBooked: "booked" | "free" | "on_hold" } | "newAllocation";
@@ -87,4 +88,13 @@ export interface IMentorBookingHistory {
    mentor_payment_transaction_at: string // only show if the booking session is completed
 
    incompletion_caused_by?: "user" | "mentor"; // it will only show if the booking is in-complete
+};
+
+export interface ISocketResponse {
+   role: "mentor";
+   data: {
+      recieverId: string,
+      messageData: INotification,
+      bookingDetails?: IMentorBookingHistory
+   };
 };

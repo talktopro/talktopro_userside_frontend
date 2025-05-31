@@ -14,8 +14,6 @@ const SlotAllocationCalendar: FC<SlotAllocationCalendarProps> = ({ allocatedSlot
   const togglePopover = (isOpen: boolean) => {
     if (isOpen) {
       document.documentElement.classList.add('popover-open');
-    } else {
-      document.documentElement.classList.remove('popover-open');
     }
   };
 

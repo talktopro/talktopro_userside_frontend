@@ -44,6 +44,8 @@ const TimeSlots: React.FC<TimeSlotsProps> = ({
 
   useEffect(() => {
     return () => {
+      document.documentElement.classList.remove('popover-open'); // first removing background blur
+
       if (deletedSlotsRef.current.length > 0) {
         for (const time of deletedSlotsRef.current) {
           deleteFrontendTimeSlot(dateStr, time, setAllocatedSlots);

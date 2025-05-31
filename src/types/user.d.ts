@@ -1,5 +1,6 @@
 import { boolean, number, string } from "zod";
 import { ApiReponseAllocatedSlotsSchema, IBookingSchedule } from "./mentor";
+import { INotification } from "@/interfaces/user";
 
 export interface User {
     id: string;
@@ -172,4 +173,13 @@ export interface IBookingHistory {
     };
 
     incompletion_caused_by?: "user" | "mentor"; // it will only show if the booking is in-complete
+};
+
+export interface ISocketResponse {
+    role: "user";
+    data: {
+        recieverId: string,
+        messageData: INotification,
+        bookingDetails?: IBookingHistory
+    };
 };

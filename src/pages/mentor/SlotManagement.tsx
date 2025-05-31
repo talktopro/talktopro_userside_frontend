@@ -1,12 +1,14 @@
 import SlotAllocationCalendar from "@/components/mentor/SlotAllocationCalendar";
 import { Button } from "@/components/ui/button";
 import useSlotAllocation from "@/hooks/useSlotAllocation";
-import { IBookingSchedule } from "@/types/mentor";
+import { IBookingSchedule, ISocketResponse } from "@/types/mentor";
 import { useEffect, useState } from "react";
 import { selectAuth } from "@/redux/slices/authSlice";
 import { ROUTES } from "@/routes/routes";
 import { useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
+import { useSocket } from "@/contexts/socket";
+import useSocketHandler from "@/hooks/useSocketHandler";
 
 const SlotManagement: React.FC = () => {
   const navigate = useNavigate();
@@ -15,6 +17,22 @@ const SlotManagement: React.FC = () => {
   const [isSaving, setIsSaving] = useState(false)
   const [hasUnsavedChanges, setHasUnsavedChanges] = useState(false);
   const { handleFetchSlotDetails, handleSaveSlots } = useSlotAllocation();
+  const io = useSocket();
+  const { handleNewBookingSlotChange } = useSocketHandler();
+
+  useEffect(() => {
+    if (io) {
+      io.on("newBooking", (socketData: ISocketResponse) => {
+        handleNewBookingSlotChange(socketData, setAllocatedSlots)
+      });
+    };
+
+    return () => {
+      if (io) {
+        io.off("newBooking");
+      }
+    };
+  }, [io]);
 
   const handleSave = () => {
     try {
