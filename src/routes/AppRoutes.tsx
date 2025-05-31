@@ -32,6 +32,7 @@ import UserRouteProtector from "@/auth/userProtector";
 import GuestUserProtector from "@/auth/guestUserProtector";
 import MentorRegisterProtector from "@/auth/mentorRegisterProtector";
 import NotFoundPage from "@/pages/common/404";
+import ContactUs from "@/pages/common/ContactUs";
 
 const AppRoutes = () => {
   return (
@@ -59,6 +60,7 @@ const AppRoutes = () => {
 
         <Route path={ROUTES.HOME} element={<HomePage />} />
         <Route path={ROUTES.ABOUT} element={<AboutUs />} />
+        <Route path={ROUTES.CONTACT_US} element={<ContactUs />} />
         <Route path="*" element={<NotFoundPage />} />
         <Route
           path={ROUTES.PROFESSIONALS.LIST}
@@ -129,6 +131,22 @@ const AppRoutes = () => {
             element={
               <Suspense fallback={<AppLoader />}>
                 <MentorAccountDetails />
+              </Suspense>
+            }
+          />
+          <Route
+            path={ROUTES.MENTOR.ABOUT}
+            element={
+              <Suspense fallback={<AppLoader />}>
+                <AboutUs />
+              </Suspense>
+            }
+          />
+          <Route
+            path={ROUTES.MENTOR.CONTACT_US}
+            element={
+              <Suspense fallback={<AppLoader />}>
+                <ContactUs />
               </Suspense>
             }
           />

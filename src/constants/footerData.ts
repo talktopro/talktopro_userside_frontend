@@ -63,9 +63,9 @@ export const Learning: string[] = [
    "Tutorials",
    "Communities",
 ];
-export const About: { field: string, path: string }[] = [
-   { field: "Company", path: ROUTES.HOME },
-   { field: "Careers", path: ROUTES.HOME },
-   { field: "Help", path: ROUTES.HOME },
-   { field: "About Us", path: ROUTES.ABOUT },
+export const About: { field: string, userPath: string, mentorPath: string }[] = [
+   { field: "Company", userPath: ROUTES.HOME, mentorPath: ROUTES.MENTOR.DASHBOARD },
+   { field: "Careers", userPath: ROUTES.HOME, mentorPath: ROUTES.MENTOR.DASHBOARD },
+   { field: "Contact Us", userPath: ROUTES.CONTACT_US, mentorPath: ROUTES.MENTOR.CONTACT_US },
+   { field: "About Us", userPath: ROUTES.ABOUT, mentorPath: ROUTES.MENTOR.ABOUT },
 ];

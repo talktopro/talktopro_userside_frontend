@@ -1,6 +1,7 @@
 export const ROUTES = {
     HOME: "/",
     ABOUT: "/about",
+    CONTACT_US: "/contact-us",
 
     AUTH: {
         LOGIN: "/login",
@@ -26,5 +27,7 @@ export const ROUTES = {
         ACCOUNT_SETTINGS: "/mentor/account-settings",
         NOTIFICATION_SETTINGS: "/mentor/notification-settings",
         REGISTER: "/mentor/register",
+        ABOUT: "/mentor/about",
+        CONTACT_US: "/mentor/contact-us",
     },
 };
