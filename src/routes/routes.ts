@@ -5,6 +5,7 @@ export const ROUTES = {
     TERMS_AND_CONDITION: "/terms&condition",
     PRIVACY_AND_POLICY: "/privacy&policy",
     REFUND_POLICY: "/refund-policy",
+    PRICING_POLICY: "/pricing-policy",
 
     AUTH: {
         LOGIN: "/login",
@@ -35,5 +36,6 @@ export const ROUTES = {
         TERMS_AND_CONDITION: "/mentor/terms&condition",
         PRIVACY_AND_POLICY: "/mentor/privacy&policy",
         REFUND_POLICY: "/mentor/refund-policy",
+        PRICING_POLICY: "/mentor/pricing-policy",
     },
 };

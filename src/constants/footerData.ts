@@ -25,7 +25,7 @@ export const teamMembers = [
       id: 6,
       name: "Sameen K A",
       handle: "sameensameen60@gmail.com",
-      role: "Frontend Developer | Team Lead",
+      role: "Team Lead | Frontend Developer",
       image: sameen,
    },
    {
@@ -53,14 +53,15 @@ export const teamMembers = [
 
 export const Tags: string[] = [
    "#TalkToPro",
-   "#CareerGuidance",
-   "#RightMentorRightPath",
-   "#SkillOverInfluencers",
+   "#Career",
+   "#RightMentor",
+   "#RightPath",
 ];
 export const Policies: { field: string, userPath: string, mentorPath: string }[] = [
-   { field: "Terms and Conditions", userPath: ROUTES.TERMS_AND_CONDITION, mentorPath: ROUTES.MENTOR.TERMS_AND_CONDITION },
+   { field: "Terms & Conditions", userPath: ROUTES.TERMS_AND_CONDITION, mentorPath: ROUTES.MENTOR.TERMS_AND_CONDITION },
    { field: "Privacy Policy", userPath: ROUTES.PRIVACY_AND_POLICY, mentorPath: ROUTES.MENTOR.PRIVACY_AND_POLICY },
    { field: "Refund Policy", userPath: ROUTES.REFUND_POLICY, mentorPath: ROUTES.MENTOR.REFUND_POLICY },
+   { field: "Pricing Policy", userPath: ROUTES.PRICING_POLICY, mentorPath: ROUTES.MENTOR.PRICING_POLICY },
 ];
 
 export const About: { field: string, userPath: string, mentorPath: string }[] = [

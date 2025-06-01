@@ -1,6 +1,6 @@
 export const TERMS_CONTENT = {
   title: "Terms & Conditions",
-  lastUpdated: "Last Updated: May 2024",
+  lastUpdated: "Last Updated: May 2025",
   sections: [
     {
       title: "Introduction",
@@ -29,13 +29,17 @@ export const TERMS_CONTENT = {
     {
       title: "Payments",
       content: "We exclusively use Razorpay for payment processing. Failed payments can be retried or reported via our contact page."
+    },
+    {
+      title: "Pricing Policy",
+      content: "Refer to our dedicated Pricing Policy page for details on mentor pricing and platform fees."
     }
   ]
 };
 
 export const PRIVACY_CONTENT = {
   title: "Privacy Policy",
-  lastUpdated: "Last Updated: May 2024",
+  lastUpdated: "Last Updated: May 2025",
   sections: [
     {
       title: "Information We Collect",
@@ -62,7 +66,7 @@ export const PRIVACY_CONTENT = {
 
 export const REFUND_CONTENT = {
   title: "Refund Policy",
-  lastUpdated: "Last Updated: May 2024",
+  lastUpdated: "Last Updated: May 2025",
   sections: [
     {
       title: "General Refund Rules",
@@ -90,6 +94,36 @@ export const REFUND_CONTENT = {
     }
   ]
 };
+
+export const PRICING_CONTENT = {
+  title: "Pricing Policy",
+  lastUpdated: "Last Updated: May 2025",
+  sections: [
+    {
+      title: "Mentor-Determined Pricing",
+      content: "Talk to Pro allows mentors to set their own session fees within our platform guidelines:"
+    },
+    {
+      title: "Pricing Guidelines",
+      content: "",
+      listItems: [
+        "Mentors must set prices between ₹300 to ₹5000 per session",
+        "Consider your experience and expertise when setting prices",
+        "Competitive pricing attracts more mentees",
+        "You can adjust pricing at any time (changes apply only to future sessions)"
+      ]
+    },
+    {
+      title: "Platform Fees",
+      content: "For each completed session:\n- 90% goes to the mentor\n- 10% retained as platform fee"
+    },
+    {
+      title: "Payment Processing",
+      content: "All payments are processed via Razorpay. Mentors receive payments after session completion."
+    }
+  ]
+};
+
 
 export const FOOTER_CONTENT = {
   contact: "Contact us at: admin@talktopro.in",

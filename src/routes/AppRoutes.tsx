@@ -36,6 +36,7 @@ import ContactUs from "@/pages/common/ContactUs";
 import TermsAndConditions from "@/pages/common/Terms&Condition";
 import PrivacyAndPolicy from "@/pages/common/Privacy&Policy";
 import RefundTerms from "@/pages/common/RefundTerms";
+import PricingTerms from "@/pages/common/PricingTerms";
 
 const AppRoutes = () => {
   return (
@@ -67,6 +68,7 @@ const AppRoutes = () => {
         <Route path={ROUTES.TERMS_AND_CONDITION} element={<TermsAndConditions />} />
         <Route path={ROUTES.PRIVACY_AND_POLICY} element={<PrivacyAndPolicy />} />
         <Route path={ROUTES.REFUND_POLICY} element={<RefundTerms />} />
+        <Route path={ROUTES.PRICING_POLICY} element={<PricingTerms />} />
         <Route path="*" element={<NotFoundPage />} />
         <Route
           path={ROUTES.PROFESSIONALS.LIST}
@@ -177,6 +179,14 @@ const AppRoutes = () => {
             element={
               <Suspense fallback={<AppLoader />}>
                 <RefundTerms />
+              </Suspense>
+            }
+          />
+          <Route
+            path={ROUTES.MENTOR.PRICING_POLICY}
+            element={
+              <Suspense fallback={<AppLoader />}>
+                <PricingTerms />
               </Suspense>
             }
           />

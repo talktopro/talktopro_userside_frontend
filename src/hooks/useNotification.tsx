@@ -57,7 +57,7 @@ const useNotification = (role: "user" | "mentor") => {
       }
 
     } catch (error) {
-      handleError(error, "Failed to delete Notifications.");
+      handleError(error, "Failed to collect Notifications.");
     } finally {
       setIsLoading(false);
     }
@@ -76,7 +76,7 @@ const useNotification = (role: "user" | "mentor") => {
         dispatch(setMentorNotifications([]));
       }
     } catch (error) {
-      handleError(error, "Failed to collect Notifications.");
+      handleError(error, "Failed to delete Notifications.");
     } finally {
       setIsDeleteAllLoading(false);
     }
@@ -106,7 +106,7 @@ const useNotification = (role: "user" | "mentor") => {
         dispatch(setMentorNotifications(afterReadNotifications as mentorNotification[]));
       }
     } catch (error) {
-      handleError(error, "Failed to mark as read all notifications.");
+      handleError(error, "Failed to mark as read notifications.");
     } finally {
       setIsReadAllNotification(false);
     }
