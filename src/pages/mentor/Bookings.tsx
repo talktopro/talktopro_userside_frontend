@@ -5,9 +5,11 @@ import BookingsHeader from "@/components/common/BookingTableHeader";
 import BookingsTable from "@/components/mentor/booking/BookingsTable";
 import CustomPagination from "@/components/common/CustomPagination";
 import useBookings from "@/hooks/useBookings";
+import { useSocket } from "@/contexts/socket";
 
 const Bookings: React.FC = () => {
 
+  const io = useSocket();
   const {
     bookingHistory,
     isLoading,
@@ -17,6 +19,21 @@ const Bookings: React.FC = () => {
     handleChangeCurrentPage,
     fetchBookingHistory,
   } = useBookings({ from: "mentor" });
+
+
+  useEffect(() => {
+    if (io) {
+      io.on("newBooking", () => {
+        fetchBookingHistory();
+      });
+    };
+
+    return () => {
+      if (io) {
+        io.off("newBooking");
+      }
+    };
+  }, [io]);
 
   useEffect(() => {
     fetchBookingHistory();
