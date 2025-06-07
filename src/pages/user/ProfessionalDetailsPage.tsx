@@ -52,7 +52,7 @@ const ProfessionalDetailsPage = () => {
 
   if (showPaymentSuccess) {
     return (
-      <BookingConfirmationModal />
+      <BookingConfirmationModal setShowPaymentSuccess={setShowPaymentSuccess} />
     );
   };
 
