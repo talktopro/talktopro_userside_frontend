@@ -12,11 +12,6 @@ import { SocketProvider } from "./contexts/socket";
 
 //sample.
 const clientId = import.meta.env.VITE_GOOGLE_CLIENT_ID;
-if (!clientId) {
-  console.error(
-    "Google Client ID is not defined. Please set VITE_GOOGLE_CLIENT_ID in your environment variables."
-  );
-}
 
 const App = () => {
   return (

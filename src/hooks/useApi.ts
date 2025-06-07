@@ -38,7 +38,6 @@ const useApi = <T>(
             setData(response.data.data);
         } catch (err) {
             if (retryCount < 3) {
-                console.warn(`Retrying request... Attempt ${retryCount + 1}`);
                 fetchData(config, retryCount + 1);
             } else {
                 const errorMessage = err instanceof AxiosError && err.response?.data?.message

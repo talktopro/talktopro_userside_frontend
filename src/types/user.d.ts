@@ -124,6 +124,13 @@ export interface IRazorpaySuccessResponse {
     razorpay_signature: string;
 };
 
+export interface IBookingOrderResponse {
+  order_id: string;
+  amount: number;
+  currency: string;
+}
+
+
 declare global {
     interface Window {
         Razorpay: {

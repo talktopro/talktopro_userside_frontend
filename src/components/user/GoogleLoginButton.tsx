@@ -28,7 +28,6 @@ const GoogleLoginButton = () => {
             token: tokenResponse.access_token,
           }
         );
-        console.log("Google login response:", data);
         dispatch(setUser(data?.user));
         dispatch(
           setTokens({

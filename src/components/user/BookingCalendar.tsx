@@ -3,7 +3,15 @@ import { Calendar } from "@/components/ui/calendar";
 import { Button } from "../ui/button";
 import { DrawerClose } from "../ui/drawer";
 import { cn } from "@/lib/utils";
-import { addDays, addMinutes, format, isAfter, isToday, parse, startOfToday } from "date-fns";
+import {
+  addDays,
+  addMinutes,
+  format,
+  isAfter,
+  isToday,
+  parse,
+  startOfToday,
+} from "date-fns";
 import generateTimeSlots from "@/utils/generateTimeSlots";
 import { IMentorDetailsWithSlots } from "@/types/user";
 import usePayment from "@/hooks/usePayment";
@@ -14,17 +22,22 @@ import { useNavigate } from "react-router-dom";
 import { ROUTES } from "@/routes/routes";
 
 interface IBookingCalendarProps {
-  mentor: IMentorDetailsWithSlots
-  setShowPaymentSuccess: React.Dispatch<React.SetStateAction<boolean>>
-  setContactDialogOpen: React.Dispatch<React.SetStateAction<boolean>>
-};
+  mentor: IMentorDetailsWithSlots;
+  setShowPaymentSuccess: React.Dispatch<React.SetStateAction<boolean>>;
+  setContactDialogOpen: React.Dispatch<React.SetStateAction<boolean>>;
+}
 
-const BookingCalendar: FC<IBookingCalendarProps> = ({ mentor, setShowPaymentSuccess, setContactDialogOpen }) => {
+const BookingCalendar: FC<IBookingCalendarProps> = ({
+  mentor,
+  setShowPaymentSuccess,
+  setContactDialogOpen,
+}) => {
   const [date, setDate] = useState<Date | undefined>(undefined);
   const [selectedTimeSlot, setSelectedTimeSlot] = useState<string | null>(null);
   const today = startOfToday();
   const predefinedTimeSlots: string[] = useMemo(generateTimeSlots, []);
   const [isRazorpayOrderLoading, setIsRazorpayOrderLoading] = useState(false);
+  // const [showPaymentInfoModal, setShowPaymentInfoModal] = useState(false);
   const { handleTriggerPayment } = usePayment();
   const { user } = useSelector(selectAuth);
   const navigate = useNavigate();
@@ -37,7 +50,11 @@ const BookingCalendar: FC<IBookingCalendarProps> = ({ mentor, setShowPaymentSucc
 
     if (isAfter(date, today)) {
       return Object.values(slotsForDate).some((slot) => {
-        return typeof slot === 'object' && 'isBooked' in slot && slot.isBooked === "free";
+        return (
+          typeof slot === "object" &&
+          "isBooked" in slot &&
+          slot.isBooked === "free"
+        );
       });
     }
 
@@ -46,12 +63,16 @@ const BookingCalendar: FC<IBookingCalendarProps> = ({ mentor, setShowPaymentSucc
       const bufferTime = addMinutes(now, 60);
 
       return Object.entries(slotsForDate).some(([timeSlot, slot]) => {
-        if (typeof slot !== 'object' || !('isBooked' in slot) || slot.isBooked !== "free") {
+        if (
+          typeof slot !== "object" ||
+          !("isBooked" in slot) ||
+          slot.isBooked !== "free"
+        ) {
           return false;
         }
 
-        const startTimeStr = timeSlot.split(' - ')[0];
-        const slotStartTime = parse(startTimeStr, 'h:mm a', date);
+        const startTimeStr = timeSlot.split(" - ")[0];
+        const slotStartTime = parse(startTimeStr, "h:mm a", date);
         return isAfter(slotStartTime, bufferTime);
       });
     }
@@ -62,22 +83,28 @@ const BookingCalendar: FC<IBookingCalendarProps> = ({ mentor, setShowPaymentSucc
   const isTimeSlotAvailable = (timeSlot: string) => {
     if (!date || !mentor.slots) return false;
 
-    if (isAfter(date, today)) { //* Check if date is in the future
+    if (isAfter(date, today)) {
+      //* Check if date is in the future
       const dateKey = format(date, "dd-MM-yyyy");
-      const slotStatus = mentor.slots[dateKey]?.[timeSlot] as { isBooked: "booked" | "free" | "on_hold" } | undefined;
+      const slotStatus = mentor.slots[dateKey]?.[timeSlot] as
+        | { isBooked: "booked" | "free" | "on_hold" }
+        | undefined;
       return slotStatus && slotStatus.isBooked === "free";
-    };
+    }
 
-    if (isToday(date)) { //* For today's date, check if time slot is in the future
+    if (isToday(date)) {
+      //* For today's date, check if time slot is in the future
       const now = new Date();
-      const startTimeStr = timeSlot.split(' - ')[0];
-      const slotStartTime = parse(startTimeStr, 'h:mm a', date);
+      const startTimeStr = timeSlot.split(" - ")[0];
+      const slotStartTime = parse(startTimeStr, "h:mm a", date);
       const bufferTime = addMinutes(now, 60);
       const isSlotInFuture = isAfter(slotStartTime, bufferTime);
       if (!isSlotInFuture) return false;
 
       const dateKey = format(date, "dd-MM-yyyy");
-      const slotStatus = mentor.slots[dateKey]?.[timeSlot] as { isBooked: "booked" | "free" | "on_hold" } | undefined;
+      const slotStatus = mentor.slots[dateKey]?.[timeSlot] as
+        | { isBooked: "booked" | "free" | "on_hold" }
+        | undefined;
       return slotStatus && slotStatus.isBooked === "free";
     }
 
@@ -94,7 +121,7 @@ const BookingCalendar: FC<IBookingCalendarProps> = ({ mentor, setShowPaymentSucc
       if (!user?.phone || user?.phone === 0) {
         setContactDialogOpen(true);
         return;
-      };
+      }
 
       setIsRazorpayOrderLoading(true);
 
@@ -102,12 +129,16 @@ const BookingCalendar: FC<IBookingCalendarProps> = ({ mentor, setShowPaymentSucc
         toast.error("Choose your appoinment date and slot");
         return;
       }
-
-      const result = await handleTriggerPayment(date, selectedTimeSlot, mentor, setShowPaymentSuccess)
-      console.log(result)
+      console.log("booking");
+      await handleTriggerPayment(
+        date,
+        selectedTimeSlot,
+        mentor,
+        setShowPaymentSuccess
+      );
     } finally {
       setIsRazorpayOrderLoading(false);
-    };
+    }
   };
 
   return (
@@ -140,11 +171,11 @@ const BookingCalendar: FC<IBookingCalendarProps> = ({ mentor, setShowPaymentSucc
                   const currentMonth = props.displayMonth;
                   const isOutsideDay =
                     currentDate.getMonth() !== currentMonth?.getMonth();
-                  const isDisabled = !isDateAvailable(currentDate)
+                  const isDisabled = !isDateAvailable(currentDate);
                   const isSelected =
                     date &&
                     format(date, "yyyy-MM-dd") ===
-                    format(currentDate, "yyyy-MM-dd");
+                      format(currentDate, "yyyy-MM-dd");
 
                   if (isOutsideDay) {
                     return (
@@ -159,17 +190,19 @@ const BookingCalendar: FC<IBookingCalendarProps> = ({ mentor, setShowPaymentSucc
                       <button
                         className={cn(
                           "h-8 w-8 p-0 font-normal rounded-sm mx-1",
-                          !isDisabled && "cursor-pointer font-semibold hover:bg-accent hover:text-accent-foreground",
+                          !isDisabled &&
+                            "cursor-pointer font-semibold hover:bg-accent hover:text-accent-foreground",
                           "focus-visible:bg-accent focus-visible:text-accent-foreground focus-visible:ring-2",
-                          isSelected && !isDisabled &&
-                          "bg-primary text-primary-foreground hover:bg-primary hover:text-primary-foreground focus:bg-primary focus:text-primary-foreground",
+                          isSelected &&
+                            !isDisabled &&
+                            "bg-primary text-primary-foreground hover:bg-primary hover:text-primary-foreground focus:bg-primary focus:text-primary-foreground",
                           isDisabled &&
-                          "text-muted-foreground opacity-50 hover:bg-transparent hover:text-muted-foreground cursor-not-allowed"
+                            "text-muted-foreground opacity-50 hover:bg-transparent hover:text-muted-foreground cursor-not-allowed"
                         )}
                         disabled={isDisabled}
                         onClick={() => {
                           setDate(currentDate);
-                          setSelectedTimeSlot(null)
+                          setSelectedTimeSlot(null);
                         }}
                       >
                         {currentDate.getDate()}
@@ -188,12 +221,13 @@ const BookingCalendar: FC<IBookingCalendarProps> = ({ mentor, setShowPaymentSucc
                     <div
                       key={index}
                       className={`py-2 px-3 text-center text-xs rounded-md border transition-colors
-                      ${selectedTimeSlot === slot
+                      ${
+                        selectedTimeSlot === slot
                           ? "border-purple-500 bg-purple-500/10 text-purple-700 font-semibold"
                           : isAvailable
-                            ? "hover:border-gray-300 font-semibold cursor-pointer"
-                            : "opacity-50 cursor-not-allowed"
-                        }`}
+                          ? "hover:border-gray-300 font-semibold cursor-pointer"
+                          : "opacity-50 cursor-not-allowed"
+                      }`}
                       onClick={() => isAvailable && setSelectedTimeSlot(slot)}
                     >
                       {slot}
@@ -217,7 +251,9 @@ const BookingCalendar: FC<IBookingCalendarProps> = ({ mentor, setShowPaymentSucc
                 disabled={!date || !selectedTimeSlot || isRazorpayOrderLoading}
                 onClick={handlePaymentButtonClick}
               >
-                {selectedTimeSlot ? `Pay now ${mentor.mentorDetails.fee}₹/-` : "Pay now"}
+                {selectedTimeSlot
+                  ? `Pay now ${mentor.mentorDetails.fee}₹/-`
+                  : "Pay now"}
               </Button>
             </DrawerClose>
           </div>
@@ -235,7 +271,9 @@ const BookingCalendar: FC<IBookingCalendarProps> = ({ mentor, setShowPaymentSucc
               disabled={!date || !selectedTimeSlot || isRazorpayOrderLoading}
               onClick={handlePaymentButtonClick}
             >
-              {selectedTimeSlot ? `Pay now ${mentor.mentorDetails.fee}₹/-` : "Pay now"}
+              {selectedTimeSlot
+                ? `Pay now ${mentor.mentorDetails.fee}₹/-`
+                : "Pay now"}
             </Button>
           </DrawerClose>
         </div>
