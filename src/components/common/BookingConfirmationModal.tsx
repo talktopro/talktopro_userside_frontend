@@ -1,18 +1,15 @@
 import { Button } from "@/components/ui/button";
 import { Copy } from "lucide-react";
-import { useState } from "react";
 import { toast } from "sonner";
 
 const BookingConfirmationModal = () => {
-  const [copied, setCopied] = useState(false);
   const phoneNumber = "9567790123";
 
-  const handleCopy = () => {
-    navigator.clipboard.writeText(phoneNumber);
-    setCopied(true);
-    toast.success("Phone number copied!");
-    setTimeout(() => setCopied(false), 1500);
-  };
+const handleCopy = () => {
+  navigator.clipboard.writeText(phoneNumber);
+  toast.success("Phone number copied!");
+};
+
 
   return (
     <div className="fixed inset-0 bg-black/40 backdrop-blur-sm flex items-center justify-center z-50">

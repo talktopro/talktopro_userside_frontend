@@ -17,7 +17,7 @@ import { IMentorDetailsWithSlots, IMentorProfileDetailsApiResponse } from "@/typ
 import { MessageCircleMore, Share2, Star } from "lucide-react";
 import MentorProfileSkeleton from "@/components/common/skeletons/MentorProfile";
 import SlotResponseConverter from "@/utils/slotResponseConverter";
-import PaymentSuccess from "@/components/common/PaymentSuccess";
+// import PaymentSuccess from "@/components/common/PaymentSuccess";
 import useErrorHandler from "@/hooks/useErrorHandler";
 import PhoneDialog from "@/components/common/PhoneNumberDialog";
 import CopyPaste from "@/components/common/CopyPaste";
