@@ -29,6 +29,7 @@ import { Avatar, AvatarImage } from "../ui/avatar";
 import { Dialog, DialogClose, DialogContent, DialogDescription, DialogHeader, DialogTitle, DialogTrigger } from "../ui/dialog";
 import useNotification from "@/hooks/useNotification";
 import { resetNotificationState } from "@/redux/slices/notificationSlice";
+import MobileSearchbar from "./MobileSearchBar";
 
 const Navbar = () => {
   const dispatch = useDispatch();
@@ -216,6 +217,8 @@ const Navbar = () => {
           )}
         </div>
       </div>
+       {/* <Searchbar /> */}
+       <MobileSearchbar />
     </nav>
   );
 };
