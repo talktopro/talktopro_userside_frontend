@@ -55,13 +55,13 @@ const MobileSearchbar = () => {
         <Input
           type="text"
           placeholder="Search mentors..."
-          className="w-full pl-10 pr-8 py-5 rounded-xl bg-gray-50 dark:bg-gray-800 border border-gray-200 dark:border-gray-700 focus-visible:ring-2 focus-visible:ring-primary/50"
+          className="w-full pl-10 pr-10 py-5 rounded-xl bg-gray-50 dark:bg-gray-800 border border-gray-200 dark:border-gray-700 focus-visible:ring-2 focus-visible:ring-primary/50"
           value={searchValue}
           onChange={(e) => setSearchValue(e.target.value)}
         />
         {searchValue.length > 0 && (
           <button
-            className="absolute  right-2 cursor-pointer text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-200"
+            className="absolute inset-y-0 right-0 pr-3 flex items-center cursor-pointer text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-200"
             onClick={closeSearch}
           >
             <X size={18} />
