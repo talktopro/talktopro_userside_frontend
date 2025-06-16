@@ -13,7 +13,6 @@ const useErrorHandler = () => {
     if (error.status === 401 || error.response?.status === 401) {
       dispatch(changeTokenExpiry(true));
     } else {
-      console.error(error);
       toast.error(message);
     };
   };

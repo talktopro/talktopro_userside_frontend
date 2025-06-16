@@ -37,7 +37,6 @@ export const verifyOtp = createAsyncThunk<AuthResponse, { id: string; otp: strin
             const response = await guestApi.post("/auth/verify-otp", otpData);
             return response.data;
         } catch (error) {
-            console.log("error", error);
             return rejectWithValue(extractErrorMessage(error));
         }
     }
@@ -72,7 +71,6 @@ export const changePassword = createAsyncThunk<{ message: string }, { password: 
         try {
             return await changePasswordAPI(password, token);
         } catch (error) {
-            console.log(error)
             return rejectWithValue(extractErrorMessage(error));
         }
     }

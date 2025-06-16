@@ -69,7 +69,6 @@ const SignupPage = () => {
           state: { email: data.email, id: data.id },
         });
       } catch (error: unknown) {
-        console.error("Authentication error:", error);
         if (error instanceof AxiosError) {
           toast.error(error.response?.data.errors[0]);
         } else {

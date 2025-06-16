@@ -17,10 +17,11 @@ import { IMentorDetailsWithSlots, IMentorProfileDetailsApiResponse } from "@/typ
 import { MessageCircleMore, Share2, Star } from "lucide-react";
 import MentorProfileSkeleton from "@/components/common/skeletons/MentorProfile";
 import SlotResponseConverter from "@/utils/slotResponseConverter";
-import PaymentSuccess from "@/components/common/PaymentSuccess";
+// import PaymentSuccess from "@/components/common/PaymentSuccess";
 import useErrorHandler from "@/hooks/useErrorHandler";
 import PhoneDialog from "@/components/common/PhoneNumberDialog";
 import CopyPaste from "@/components/common/CopyPaste";
+import BookingConfirmationModal from "@/components/common/BookingConfirmationModal";
 
 const ProfessionalDetailsPage = () => {
   const { id } = useParams<{ id: string }>();
@@ -51,7 +52,7 @@ const ProfessionalDetailsPage = () => {
 
   if (showPaymentSuccess) {
     return (
-      <PaymentSuccess />
+      <BookingConfirmationModal setShowPaymentSuccess={setShowPaymentSuccess} />
     );
   };
 
