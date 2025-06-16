@@ -1,9 +1,27 @@
+import AnalyticsGraph from "@/components/mentor/dashboard/AnalyticsGraph";
+import YoutubePart from "@/components/mentor/dashboard/YoutubePart";
+import { selectAuth } from "@/redux/slices/authSlice";
+import getGreeting from "@/utils/getGreeting";
+import { useSelector } from "react-redux";
+
 const Dashboard = () => {
+  const { user } = useSelector(selectAuth);
+  if (!user) {
+    return null;
+  };
+
   return (
     <div className="p-4 space-y-3">
-      <h2 className="text-2xl not-sm:text-lg font-bold pb-10">Dashboard</h2>
-      <div className="h-60 rounded-xl bg-muted md:min-h-min" />
-      <div className="h-60 rounded-xl bg-muted md:min-h-min" />
+      <div>
+        <h2 className="text-2xl not-sm:text-lg font-bold">
+          Hello {user.uname},
+        </h2>
+        <p className="text-xl not-sm:text-sm pb-10">{getGreeting()} -</p>
+      </div>
+      <div className="flex gap-2 h-auto lg:flex-row flex-col">
+        <AnalyticsGraph />
+        <YoutubePart />
+      </div>
     </div>
   );
 };
