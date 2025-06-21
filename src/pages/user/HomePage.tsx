@@ -18,7 +18,7 @@ const HomePage = () => {
     try {
       setLoading(true);
       const response = await getAllMentors({ type: "top", limit: 5 });
-      setMentors(response || []);
+      setMentors(response?.mentors || []);
     } finally {
       setLoading(false);
     }

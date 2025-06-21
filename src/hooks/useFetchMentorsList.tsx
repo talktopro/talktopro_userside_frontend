@@ -34,7 +34,10 @@ const useFetchMentorsList = () => {
           profession: profession.join(","),
         },
       });
-      return data.data;
+      return {
+        mentors: data.data.mentors,
+        total_pages: data.data.total_pages,
+      };
     } catch (error: unknown) {
       handleError(error, "Error occurred while fetching the mentors list");
     }
