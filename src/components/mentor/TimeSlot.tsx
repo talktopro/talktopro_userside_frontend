@@ -74,9 +74,11 @@ const TimeSlots: React.FC<TimeSlotsProps> = ({
                 ? "border-purple-500 bg-purple-500/10 text-purple-500 font-semibold cursor-default"
                 : typeof selectedTimes[slot] === "object" && selectedTimes[slot].isBooked === "booked"
                   ? "border-teal-500 bg-teal-500/10 text-teal-500 font-semibold cursor-default"
-                  : isSlotAvailable(title, slot)
-                    ? "hover:border-gray-300 hover:opacity-75 cursor-pointer"
-                    : "text-muted-foreground opacity-50 hover:bg-transparent hover:text-muted-foreground cursor-not-allowed"
+                  : typeof selectedTimes[slot] === "object" && selectedTimes[slot].isBooked === "on_hold"
+                    ? "border-amber-500 bg-amber-500/10 text-amber-500 font-semibold cursor-default"
+                    : isSlotAvailable(title, slot)
+                      ? "hover:border-gray-300 hover:opacity-75 cursor-pointer"
+                      : "text-muted-foreground opacity-50 hover:bg-transparent hover:text-muted-foreground cursor-not-allowed"
               }`}
             onClick={() => {
               if (!selectedTimes[slot] && isSlotAvailable(title, slot)) {

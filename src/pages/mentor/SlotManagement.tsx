@@ -114,6 +114,10 @@ const SlotManagement: React.FC = () => {
               <span className="text-sm not-sm:text-xs">Booked</span>
             </div>
             <div className="flex items-center gap-2 not-sm:gap-1">
+              <div className="w-3 h-3 bg-amber-500 border border-amber-700 rounded ml-3" />
+              <span className="text-sm not-sm:text-xs">On-Hold</span>
+            </div>
+            <div className="flex items-center gap-2 not-sm:gap-1">
               <div className="w-3 h-3 bg-gray-400 border border-gray-700 rounded ml-3" />
               <span className="text-sm not-sm:text-xs whitespace-nowrap">Not Available</span>
             </div>
