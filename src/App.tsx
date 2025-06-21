@@ -10,7 +10,7 @@ import { GoogleOAuthProvider } from "@react-oauth/google";
 import "react-loading-skeleton/dist/skeleton.css";
 import { SocketProvider } from "./contexts/socket";
 
-//sample.
+//sample....
 const clientId = import.meta.env.VITE_GOOGLE_CLIENT_ID;
 
 const App = () => {
