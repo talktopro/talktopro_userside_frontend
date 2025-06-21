@@ -20,17 +20,22 @@ import { useSelector } from "react-redux";
 import { selectAuth } from "@/redux/slices/authSlice";
 import { useNavigate } from "react-router-dom";
 import { ROUTES } from "@/routes/routes";
+import { Dialog } from "../ui/dialog";
+import { DialogTrigger } from "@radix-ui/react-dialog";
+import ConfirmBookingModal from "./booking/ConfirmBookings";
 
 interface IBookingCalendarProps {
   mentor: IMentorDetailsWithSlots;
   setShowPaymentSuccess: React.Dispatch<React.SetStateAction<boolean>>;
   setContactDialogOpen: React.Dispatch<React.SetStateAction<boolean>>;
+  setIsDrawerOpen: React.Dispatch<React.SetStateAction<boolean>>
 }
 
 const BookingCalendar: FC<IBookingCalendarProps> = ({
   mentor,
   setShowPaymentSuccess,
   setContactDialogOpen,
+  setIsDrawerOpen
 }) => {
   const [date, setDate] = useState<Date | undefined>(undefined);
   const [selectedTimeSlot, setSelectedTimeSlot] = useState<string | null>(null);
@@ -129,7 +134,6 @@ const BookingCalendar: FC<IBookingCalendarProps> = ({
         toast.error("Choose your appoinment date and slot");
         return;
       }
-      console.log("booking");
       await handleTriggerPayment(
         date,
         selectedTimeSlot,
@@ -169,13 +173,9 @@ const BookingCalendar: FC<IBookingCalendarProps> = ({
                 Day: (props) => {
                   const currentDate = props.date;
                   const currentMonth = props.displayMonth;
-                  const isOutsideDay =
-                    currentDate.getMonth() !== currentMonth?.getMonth();
+                  const isOutsideDay = currentDate.getMonth() !== currentMonth?.getMonth();
                   const isDisabled = !isDateAvailable(currentDate);
-                  const isSelected =
-                    date &&
-                    format(date, "yyyy-MM-dd") ===
-                      format(currentDate, "yyyy-MM-dd");
+                  const isSelected = date && format(date, "yyyy-MM-dd") === format(currentDate, "yyyy-MM-dd");
 
                   if (isOutsideDay) {
                     return (
@@ -191,13 +191,13 @@ const BookingCalendar: FC<IBookingCalendarProps> = ({
                         className={cn(
                           "h-8 w-8 p-0 font-normal rounded-sm mx-1",
                           !isDisabled &&
-                            "cursor-pointer font-semibold hover:bg-accent hover:text-accent-foreground",
+                          "cursor-pointer font-semibold hover:bg-accent hover:text-accent-foreground",
                           "focus-visible:bg-accent focus-visible:text-accent-foreground focus-visible:ring-2",
                           isSelected &&
-                            !isDisabled &&
-                            "bg-primary text-primary-foreground hover:bg-primary hover:text-primary-foreground focus:bg-primary focus:text-primary-foreground",
+                          !isDisabled &&
+                          "bg-primary text-primary-foreground hover:bg-primary hover:text-primary-foreground focus:bg-primary focus:text-primary-foreground",
                           isDisabled &&
-                            "text-muted-foreground opacity-50 hover:bg-transparent hover:text-muted-foreground cursor-not-allowed"
+                          "text-muted-foreground opacity-50 hover:bg-transparent hover:text-muted-foreground cursor-not-allowed"
                         )}
                         disabled={isDisabled}
                         onClick={() => {
@@ -221,13 +221,12 @@ const BookingCalendar: FC<IBookingCalendarProps> = ({
                     <div
                       key={index}
                       className={`py-2 px-3 text-center text-xs rounded-md border transition-colors
-                      ${
-                        selectedTimeSlot === slot
+                      ${selectedTimeSlot === slot
                           ? "border-purple-500 bg-purple-500/10 text-purple-700 font-semibold"
                           : isAvailable
-                          ? "hover:border-gray-300 font-semibold cursor-pointer"
-                          : "opacity-50 cursor-not-allowed"
-                      }`}
+                            ? "hover:border-gray-300 font-semibold cursor-pointer"
+                            : "opacity-50 cursor-not-allowed"
+                        }`}
                       onClick={() => isAvailable && setSelectedTimeSlot(slot)}
                     >
                       {slot}
@@ -239,42 +238,52 @@ const BookingCalendar: FC<IBookingCalendarProps> = ({
           </div>
 
           <div className="flex gap-3 mt-10 not-sm:hidden">
-            <DrawerClose asChild>
-              <Button className="w-full cursor-pointer" variant="outline">
-                Cancel
-              </Button>
-            </DrawerClose>
+            <Button className="w-full cursor-pointer" variant="outline" onClick={() => setIsDrawerOpen(false)}>
+              Cancel
+            </Button>
 
-            <DrawerClose asChild>
-              <Button
-                className="w-full cursor-pointer"
-                disabled={!date || !selectedTimeSlot || isRazorpayOrderLoading}
-                onClick={handlePaymentButtonClick}
-              >
-                {selectedTimeSlot
-                  ? `Pay now ${mentor.mentorDetails.fee}₹/-`
-                  : "Pay now"}
-              </Button>
-            </DrawerClose>
+            <Dialog>
+              <DialogTrigger asChild>
+                <Button
+                  className="w-full cursor-pointer"
+                  disabled={!date || !selectedTimeSlot || isRazorpayOrderLoading}
+                >
+                  Book Session
+                </Button>
+              </DialogTrigger>
+              <ConfirmBookingModal
+                handleConfirmBooking={handlePaymentButtonClick}
+                mentor={mentor}
+                selectedDate={date}
+                selectedSlot={selectedTimeSlot}
+                setIsDrawerOpen={setIsDrawerOpen}
+              />
+            </Dialog>
           </div>
         </div>
         <div className="flex gap-3 mt-10 not-sm:fixed not-sm:bottom-0 not-sm:z-10 not-sm:w-screen not-sm:bg-background not-sm:py-3 not-sm:border-t-1 not-sm:px-4 sm:hidden">
-          <DrawerClose asChild>
-            <Button className="w-full cursor-pointer" variant="outline">
-              Cancel
-            </Button>
-          </DrawerClose>
+          <Button className="w-full cursor-pointer" variant="outline" onClick={() => setIsDrawerOpen(false)}>
+            Cancel
+          </Button>
 
           <DrawerClose asChild>
-            <Button
-              className="w-full cursor-pointer"
-              disabled={!date || !selectedTimeSlot || isRazorpayOrderLoading}
-              onClick={handlePaymentButtonClick}
-            >
-              {selectedTimeSlot
-                ? `Pay now ${mentor.mentorDetails.fee}₹/-`
-                : "Pay now"}
-            </Button>
+            <Dialog>
+              <DialogTrigger asChild>
+                <Button
+                  className="w-full cursor-pointer"
+                  disabled={!date || !selectedTimeSlot || isRazorpayOrderLoading}
+                >
+                  Book Session
+                </Button>
+              </DialogTrigger>
+              <ConfirmBookingModal
+                handleConfirmBooking={handlePaymentButtonClick}
+                mentor={mentor}
+                selectedDate={date}
+                selectedSlot={selectedTimeSlot}
+                setIsDrawerOpen={setIsDrawerOpen}
+              />
+            </Dialog>
           </DrawerClose>
         </div>
       </div>

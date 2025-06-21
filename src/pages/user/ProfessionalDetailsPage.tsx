@@ -21,7 +21,7 @@ import SlotResponseConverter from "@/utils/slotResponseConverter";
 import useErrorHandler from "@/hooks/useErrorHandler";
 import PhoneDialog from "@/components/common/PhoneNumberDialog";
 import CopyPaste from "@/components/common/CopyPaste";
-import BookingConfirmationModal from "@/components/common/BookingConfirmationModal";
+import BookingSuccessModal from "@/components/common/BookingSuccessModal";
 
 const ProfessionalDetailsPage = () => {
   const { id } = useParams<{ id: string }>();
@@ -30,6 +30,7 @@ const ProfessionalDetailsPage = () => {
   const bucketName = import.meta.env.VITE_S3BUCKET_NAME;
   const [showPaymentSuccess, setShowPaymentSuccess] = useState<boolean>(false);
   const [contactDialogOpen, setContactDialogOpen] = useState<boolean>(false);
+  const [isDrawerOpen, setIsDrawerOpen] = useState<boolean>(false);
   const { handleError } = useErrorHandler();
 
   useEffect(() => {
@@ -52,7 +53,7 @@ const ProfessionalDetailsPage = () => {
 
   if (showPaymentSuccess) {
     return (
-      <BookingConfirmationModal setShowPaymentSuccess={setShowPaymentSuccess} />
+      <BookingSuccessModal setShowPaymentSuccess={setShowPaymentSuccess} />
     );
   };
 
@@ -61,7 +62,7 @@ const ProfessionalDetailsPage = () => {
   }
   const TriggerSlots: FC<ITriggerSlots> = ({ trigger }) => {
     return (
-      <Drawer>
+      <Drawer open={isDrawerOpen} onOpenChange={(open) => setIsDrawerOpen(open)}>
         <DrawerTrigger>{trigger}</DrawerTrigger>
         <DrawerContent>
           <div className="max-h-[80vh] overflow-y-auto custom-scrollbar">
@@ -85,6 +86,7 @@ const ProfessionalDetailsPage = () => {
                   mentor={mentor}
                   setShowPaymentSuccess={setShowPaymentSuccess}
                   setContactDialogOpen={setContactDialogOpen}
+                  setIsDrawerOpen={setIsDrawerOpen}
                 />
               )}
             </DrawerHeader>
@@ -145,13 +147,9 @@ const ProfessionalDetailsPage = () => {
                 </div>
               </div>
               <div className="not-sm:hidden">
-                <TriggerSlots
-                  trigger={
-                    <div className="mt-6 flex flex-wrap gap-3 ">
-                      <Button className="cursor-pointer">Book a Session</Button>
-                    </div>
-                  }
-                />
+                <div className="mt-6 flex flex-wrap gap-3 ">
+                  <Button className="cursor-pointer" onClick={() => setIsDrawerOpen(true)}>Book a Session</Button>
+                </div>
               </div>
             </div>
           </div>

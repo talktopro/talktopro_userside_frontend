@@ -2,21 +2,21 @@
 // import { selectAuth } from "@/redux/slices/authSlice";
 import {
   IMentorDetailsWithSlots,
-//   IRazorpayOptions,
+  //   IRazorpayOptions,
   IRazorpayOrderResponse,
-//   IRazorpaySuccessResponse,
+  //   IRazorpaySuccessResponse,
   //   IRazorpayError,
   IBookingOrderResponse,
 } from "@/types/user";
-import { toast } from "sonner";
 import { format } from "date-fns";
 // import logo from "@/assets/svg/logo.svg";
 import convertTo24HourFormat from "@/utils/convertTo24HourFormat";
 import apiClient from "@/api/axiosInstance";
 import useErrorHandler from "./useErrorHandler";
+import axios from "axios";
 
 const usePayment = () => {
-//   const { user } = useSelector(selectAuth);
+  //   const { user } = useSelector(selectAuth);
   const { handleError } = useErrorHandler();
 
   //! ======================================== Creates a new Razorpay instance with the provided options =========================================
@@ -47,7 +47,6 @@ const usePayment = () => {
       );
       return data.body;
     } catch (error) {
-      handleError(error, "Payment initialization failed");
       throw error;
     }
   };
@@ -124,24 +123,23 @@ const usePayment = () => {
       });
       setShowPaymentSuccess(true);
     } catch (error) {
-      handleError(error, "Failed to confirm payment");
       throw error;
     }
   };
 
   //! =============================================== Handles failed or cancelled payment ===========================================================
 
-//   const handleFailedPayment = async (reason: string, bookingId: string) => {
-//     try {
-//       const { data } = await apiClient.patch(`/bookings/${bookingId}`, {
-//         reason,
-//         success: false,
-//       });
-//     } catch (error) {
-//       handleError(error, "Failed to update payment status");
-//       throw error;
-//     }
-//   };
+  //   const handleFailedPayment = async (reason: string, bookingId: string) => {
+  //     try {
+  //       const { data } = await apiClient.patch(`/bookings/${bookingId}`, {
+  //         reason,
+  //         success: false,
+  //       });
+  //     } catch (error) {
+  //       handleError(error, "Failed to update payment status");
+  //       throw error;
+  //     }
+  //   };
 
   //! ============================= Main function to trigger razorpay payment after click the paynow button =====================================
   const handleTriggerPayment = async (
@@ -158,14 +156,12 @@ const usePayment = () => {
         date,
         slot
       );
-      console.log(bookingData);
       if (
         !bookingData?.amount ||
         !bookingData?.currency ||
         !bookingData?.order_id ||
         !bookingId
       ) {
-        toast.error("Failed to collect order details.");
         throw Error("Failed to collect order details.");
       }
 
@@ -196,8 +192,12 @@ const usePayment = () => {
 
       // // Step 5: Open razorpay modal for complete payment
       // razorpayInstance.open();
-    } catch (error) {
-      handleError(error, "Failed to proceed payment");
+    } catch (error: unknown) {
+      if (axios.isAxiosError(error) && error.response?.status === 404) {
+        handleError(error, "The slot is already booked or unavailable");
+      } else {
+        handleError(error, "Something went wrong. Please try again later.");
+      }
     }
   };
 
