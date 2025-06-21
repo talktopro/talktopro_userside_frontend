@@ -106,7 +106,8 @@ const BookingCancellation: React.FC<IBookingCancellationProps> = ({ booking, han
 
   return (
     <div>
-      {booking.status === "success" && booking.session_status === "pending" && booking.payment_status === "success" && cancelAvailable && (
+      {(booking.status === "success" || booking.status === "initiated")
+ && booking.session_status === "pending" && (booking.payment_status === "success" || booking.payment_status === "pending") && cancelAvailable && (
         <>
           <p className="my-1 text-sm">Do you wanna cancel this booking?</p>
           <Button className="m-0 w-1/2 not-sm:w-full bg-red-500 hover:bg-red-600" onClick={handleCancelClick}>

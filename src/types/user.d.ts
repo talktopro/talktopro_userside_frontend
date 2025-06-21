@@ -169,7 +169,7 @@ export interface IBookingHistory {
     cancel_reason?: string; // it will only shows if the booking is cancelled 
     refund_type?: "full" | "partial" // it will only shows if the booking is cancelled 
     refund_info?: IRefundType; // it will only shows if the booking is cancelled and payment status is refund_success
-    status: "success" | "pending" | "failed" | "cancelled",
+    status: "success" | "pending" | "failed" | "cancelled" | "initiated",
     session_status: "pending" | "complete" | "incomplete";
     mentor: {
         _id: string,

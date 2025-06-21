@@ -1,6 +1,7 @@
 import { FC } from "react"
 
 type StatusType =
+   |"initiated"
    | "pending"
    | "payment_pending"
    | "success"
@@ -19,6 +20,11 @@ interface StatusBadgeProps {
 const StatusBadge: FC<StatusBadgeProps> = ({ status, className = "" }) => {
    // Color configurations for light and dark modes
    const statusConfig = {
+      initiated: {
+         light: "bg-amber-50 text-amber-800 border-amber-200",
+         dark: "dark:bg-amber-900/30 dark:text-amber-200 dark:border-amber-700",
+         label: "Pending"
+      },
       pending: {
          light: "bg-amber-50 text-amber-800 border-amber-200",
          dark: "dark:bg-amber-900/30 dark:text-amber-200 dark:border-amber-700",
