@@ -18,7 +18,7 @@ interface StatusBadgeProps {
 };
 
 const StatusBadge: FC<StatusBadgeProps> = ({ status, className = "" }) => {
-   // Color configurations for light and dark modes
+   // Color configurations for light and dark modes.....
    const statusConfig = {
       initiated: {
          light: "bg-amber-50 text-amber-800 border-amber-200",
