@@ -26,7 +26,7 @@ const Searchbar = () => {
     setIsSearching(true);
     try {
       const result = await getAllMentors({ search: value });
-      setMentorsList(result);
+      setMentorsList(result?.mentors || []);
     } catch (error) {
       setMentorsList([]);
     } finally {

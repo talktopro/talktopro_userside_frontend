@@ -29,7 +29,7 @@ const MobileSearchbar = () => {
     setIsSearching(true);
     try {
       const result = await getAllMentors({ search: value });
-      setMentorsList(result);
+      setMentorsList(result?.mentors || []);
     } catch (error) {
       setMentorsList([]);
     } finally {
@@ -46,8 +46,8 @@ const MobileSearchbar = () => {
     <div className="w-full max-w-md sm:max-w-sm relative md:hidden mb-4" ref={searchRef}>
       <div className="relative">
         <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-          <Search 
-            size={18} 
+          <Search
+            size={18}
             className="text-gray-400 dark:text-gray-500"
             strokeWidth={2.5}
           />
@@ -87,7 +87,7 @@ const MobileSearchbar = () => {
               <p className="opacity-60 mt-3">No mentor details found!</p>
             </div>
           ) : (
-            <div 
+            <div
               className="w-full overflow-x-auto pb-2 "
               ref={scrollContainerRef}
             >

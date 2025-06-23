@@ -16,7 +16,7 @@ type FilterDataType = {
   selectedRating: number;
 };
 
-const mentorsPerPage = 10;
+const mentorsPerPage = 20;
 
 const AllProfessionalsPage = () => {
   const [mentorsList, setMentorsList] = useState<Mentor[]>([]);
@@ -45,27 +45,27 @@ const AllProfessionalsPage = () => {
     }
   };
 
- const fetchData = async () => {
-  if (!fetchDataFlag.current) return;
+  const fetchData = async () => {
+    if (!fetchDataFlag.current) return;
 
-  try {
-    setLoading(true);
-    const result = await getAllMentors({
-      sort: filterData.sort,
-      profession: filterData.selectedProfessions,
-      rating: filterData.selectedRating,
-      page: currentPage,
-      limit: mentorsPerPage,
-    });
+    try {
+      setLoading(true);
+      const result = await getAllMentors({
+        sort: filterData.sort,
+        profession: filterData.selectedProfessions,
+        rating: filterData.selectedRating,
+        page: currentPage,
+        limit: mentorsPerPage,
+      });
 
-    setMentorsList(result?.mentors || []);
-    setTotalPage(result?.total_pages || 1);
-    setCopyFilterData(filterData);
-  } finally {
-    fetchDataFlag.current = false;
-    setLoading(false);
-  }
-};
+      setMentorsList(result?.mentors || []);
+      setTotalPage(result?.total_pages || 1);
+      setCopyFilterData(filterData);
+    } finally {
+      fetchDataFlag.current = false;
+      setLoading(false);
+    }
+  };
 
 
   useEffect(() => {
@@ -109,7 +109,7 @@ const AllProfessionalsPage = () => {
       filterData.sort === copyFilterData.sort &&
       filterData.selectedRating === copyFilterData.selectedRating &&
       JSON.stringify(filterData.selectedProfessions.sort()) ===
-        JSON.stringify(copyFilterData.selectedProfessions.sort())
+      JSON.stringify(copyFilterData.selectedProfessions.sort())
     );
   };
 
