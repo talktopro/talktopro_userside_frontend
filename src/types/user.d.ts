@@ -125,9 +125,9 @@ export interface IRazorpaySuccessResponse {
 };
 
 export interface IBookingOrderResponse {
-  order_id: string;
-  amount: number;
-  currency: string;
+    order_id: string;
+    amount: number;
+    currency: string;
 }
 
 
@@ -180,6 +180,8 @@ export interface IBookingHistory {
     };
 
     incompletion_caused_by?: "user" | "mentor"; // it will only show if the booking is in-complete
+    order_id: string;
+    payment_id?: string // it means user booked mentor transaction id it and it will only show once the payment status success 
 };
 
 export interface ISocketResponse {

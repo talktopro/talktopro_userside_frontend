@@ -119,9 +119,8 @@ const ProfessionalDetailsPage = () => {
             <img
               src={
                 mentor.profileImg
-                  ? `https://${bucketName}.s3.amazonaws.com/${
-                      import.meta.env.VITE_PROFILE_IMAGE_FOLDER
-                    }/${mentor.profileImg}`
+                  ? `https://${bucketName}.s3.amazonaws.com/${import.meta.env.VITE_PROFILE_IMAGE_FOLDER
+                  }/${mentor.profileImg}`
                   : dummy
               }
               alt="Mentor profile"
@@ -131,8 +130,8 @@ const ProfessionalDetailsPage = () => {
           <div className="w-full sm:w-[80%] sm:p-5 not-sm:py-5">
             <div className="flex items-start justify-between">
               <div>
-                <div className="flex gap-1">
-                  <h1 className="text-2xl font-bold not-sm:mt-5">
+                <div className="flex gap-1 items-center not-sm:mt-5">
+                  <h1 className="text-2xl font-bold">
                     {`${mentor.mentorDetails.first_name} ${mentor.mentorDetails.last_name}`}
                   </h1>
                   <CopyPaste

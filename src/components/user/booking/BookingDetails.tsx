@@ -50,7 +50,7 @@ const BookingDetails: FC<IBookingDetailsDrawerProps> = ({ booking, handleCancelB
                 </div>
                 <div>
                   <p className="text-sm text-muted-foreground mb-1">Booking ID</p>
-                  <p className="font-sm flex gap-1 items-center -mt-1">{booking._id}<CopyPaste copyValue={booking._id} /></p>
+                  <p className="font-sm flex gap-1 items-center -mt-1">{booking.order_id}<CopyPaste copyValue={booking.order_id} /></p>
                 </div>
               </div>
 

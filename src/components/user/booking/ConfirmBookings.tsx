@@ -71,10 +71,12 @@ const ConfirmBookingModal: React.FC<IBookingConfirmProps> = ({ mentor, handleCon
               <div className="text-muted-foreground">Session Time:</div>
               <div className="font-medium">{selectedSlot && selectedSlot}</div>
             </div>
-            <div className="grid grid-cols-2 gap-y-3 text-sm">
-              <div className="text-muted-foreground">Session Fee:</div>
-              <div className="font-medium">₹{mentor.mentorDetails.fee.toFixed(2)}</div>
-            </div>
+            {mentor.mentorDetails.fee && (
+              <div className="grid grid-cols-2 gap-y-3 text-sm">
+                <div className="text-muted-foreground">Session Fee:</div>
+                <div className="font-medium">₹{mentor.mentorDetails.fee.toFixed(2)}</div>
+              </div>
+            )}
           </div>
 
           <div className="flex justify-center w-full gap-1 sticky bottom-0 bg-background not-sm:py-4">

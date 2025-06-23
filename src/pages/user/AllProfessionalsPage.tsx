@@ -150,11 +150,13 @@ const AllProfessionalsPage = () => {
                 </div>
               </div>
 
-              <CustomPagination
-                totalPage={totalPage}
-                currentPage={currentPage}
-                onChange={setCurrentPage}
-              />
+              {totalPage > 1 && (
+                <CustomPagination
+                  totalPage={totalPage}
+                  currentPage={currentPage}
+                  onChange={setCurrentPage}
+                />
+              )}
             </>
           ) : (
             <div className="flex flex-col justify-center items-center w-full h-96">
