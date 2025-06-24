@@ -1,4 +1,4 @@
-import { JSX, useEffect } from "react";
+import { JSX, useEffect, useState } from "react";
 import logo from "@/assets/svg/logo.svg";
 import {
   LayoutTemplate,
@@ -8,6 +8,8 @@ import {
   Moon,
   Sun,
   ChevronDown,
+  Search,
+  X,
 } from "lucide-react";
 import { ROUTES } from "../../routes/routes";
 import { Link, useNavigate } from "react-router-dom";
@@ -26,7 +28,15 @@ import {
   DropdownMenuTrigger,
 } from "../ui/dropdown-menu";
 import { Avatar, AvatarImage } from "../ui/avatar";
-import { Dialog, DialogClose, DialogContent, DialogDescription, DialogHeader, DialogTitle, DialogTrigger } from "../ui/dialog";
+import {
+  Dialog,
+  DialogClose,
+  DialogContent,
+  DialogDescription,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from "../ui/dialog";
 import useNotification from "@/hooks/useNotification";
 import { resetNotificationState } from "@/redux/slices/notificationSlice";
 import MobileSearchbar from "./MobileSearchBar";
@@ -34,6 +44,7 @@ import MobileSearchbar from "./MobileSearchBar";
 const Navbar = () => {
   const dispatch = useDispatch();
   const bucketName = import.meta.env.VITE_S3BUCKET_NAME;
+  const [showMobileSearch, setShowMobileSearch] = useState(false);
   const { user } = useSelector(selectAuth);
   const { theme, toggleTheme } = useTheme();
   const navigate = useNavigate();
@@ -45,9 +56,8 @@ const Navbar = () => {
     isDeleteAllLoading,
     isReadAllNotification,
     readAllNotification,
-    handleNotificationClick
+    handleNotificationClick,
   } = useNotification("user");
-
 
   useEffect(() => {
     fetchNotification();
@@ -74,18 +84,19 @@ const Navbar = () => {
       icon: <NotebookText strokeWidth={1.5} size={18} />,
     },
 
-    !user?.isMentor ?
-      {
-        label: "Register as Mentor",
-        pathLocation: ROUTES.MENTOR.REGISTER,
-        value: "registerMentor",
-        icon: <LayoutTemplate strokeWidth={1.5} size={18} />,
-      } : {
-        label: "Professional Dashboard",
-        pathLocation: ROUTES.MENTOR.DASHBOARD,
-        value: "service_provider_console",
-        icon: <LayoutTemplate strokeWidth={1.5} size={18} />,
-      },
+    !user?.isMentor
+      ? {
+          label: "Register as Mentor",
+          pathLocation: ROUTES.MENTOR.REGISTER,
+          value: "registerMentor",
+          icon: <LayoutTemplate strokeWidth={1.5} size={18} />,
+        }
+      : {
+          label: "Professional Dashboard",
+          pathLocation: ROUTES.MENTOR.DASHBOARD,
+          value: "service_provider_console",
+          icon: <LayoutTemplate strokeWidth={1.5} size={18} />,
+        },
   ];
 
   const handleLogout = () => {
@@ -108,6 +119,17 @@ const Navbar = () => {
         <Searchbar />
 
         <div className="flex items-center">
+
+          <div className="sm:hidden mr-2">
+            <Button
+              size="icon"
+              variant="ghost"
+              onClick={() => setShowMobileSearch((prev) => !prev)}
+            >
+              {showMobileSearch ? <X size={18} /> : <Search size={18} />}
+            </Button>
+          </div>
+
           {user?.id && (
             <Notification
               notifications={notifications}
@@ -144,7 +166,9 @@ const Navbar = () => {
                     <AvatarImage
                       src={
                         user.profileImg
-                          ? `https://${bucketName}.s3.amazonaws.com/${import.meta.env.VITE_PROFILE_IMAGE_FOLDER}/${user.profileImg}`
+                          ? `https://${bucketName}.s3.amazonaws.com/${
+                              import.meta.env.VITE_PROFILE_IMAGE_FOLDER
+                            }/${user.profileImg}`
                           : logo
                       }
                     />
@@ -175,7 +199,9 @@ const Navbar = () => {
                       onSelect={(e) => e.preventDefault()}
                     >
                       <div className="flex items-center gap-2">
-                        <span><LogOut strokeWidth={1.5} size={18} /></span>
+                        <span>
+                          <LogOut strokeWidth={1.5} size={18} />
+                        </span>
                         <span>Logout</span>
                       </div>
                     </DropdownMenuItem>
@@ -186,15 +212,13 @@ const Navbar = () => {
                         Confirm Logout
                       </DialogTitle>
                       <DialogDescription className="text-center">
-                        You will be logged out of your account. Are you sure you want to continue?
+                        You will be logged out of your account. Are you sure you
+                        want to continue?
                       </DialogDescription>
                     </DialogHeader>
                     <div className="flex justify-center gap-1">
                       <DialogClose asChild>
-                        <Button
-                          variant="ghost"
-                          className="w-1/2 border"
-                        >
+                        <Button variant="ghost" className="w-1/2 border">
                           Cancel
                         </Button>
                       </DialogClose>
@@ -217,8 +241,9 @@ const Navbar = () => {
           )}
         </div>
       </div>
-       {/* <Searchbar /> */}
-       <MobileSearchbar />
+      {/* <Searchbar /> */}
+      {showMobileSearch && <MobileSearchbar />}
+
     </nav>
   );
 };
