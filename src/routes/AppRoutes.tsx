@@ -93,7 +93,7 @@ const AppRoutes = () => {
         </Route>
       </Route>
 
-      {/*      All mentor routes  */}
+      {/* All mentor routes */}
       <Route element={<MentorRouteProtector />}>
         <Route
           element={
