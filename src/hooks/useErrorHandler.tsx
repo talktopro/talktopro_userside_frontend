@@ -12,6 +12,8 @@ const useErrorHandler = () => {
   ) => {
     if (error.status === 401 || error.response?.status === 401) {
       dispatch(changeTokenExpiry(true));
+    } if (error.status === 429) { // to handle rate limit error
+      toast.error("Too many requests from this IP, please try again after 1 minutes");
     } else {
       toast.error(message);
     };
