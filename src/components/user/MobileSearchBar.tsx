@@ -16,7 +16,7 @@ const MobileSearchbar = ({ closeSearchBar }: MobileSearchbarProps) => {
   const [isSearching, setIsSearching] = useState<boolean>(false);
   const [mentorsList, setMentorsList] = useState<Mentor[]>([]);
   const searchRef = useRef<HTMLDivElement>(null);
-  const scrollContainerRef = useRef<HTMLDivElement>(null);
+
   const { getAllMentors } = useFetchMentorsList();
 
   const debouncedSearchValue = useDebounce(searchValue, 500);
