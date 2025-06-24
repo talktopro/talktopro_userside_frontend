@@ -166,9 +166,8 @@ const BookingCancellation: React.FC<IBookingCancellationProps> = ({
             <div className="flex justify-center gap-2 mb-10">
               {[1, 2, 3].map((bar) => (
                 <div
-                  className={`w-15 h-1 rounded-xl ${
-                    step >= bar ? "bg-primary" : "bg-muted"
-                  }`}
+                  className={`w-15 h-1 rounded-xl ${step >= bar ? "bg-primary" : "bg-muted"
+                    }`}
                   key={bar}
                 />
               ))}
@@ -184,11 +183,10 @@ const BookingCancellation: React.FC<IBookingCancellationProps> = ({
                   {cancellationReasons.map((reason) => (
                     <div
                       key={reason}
-                      className={`flex items-center pl-3 rounded-md border transition-all ${
-                        selectedReason === reason
-                          ? "border-primary bg-primary/5"
-                          : "border-border"
-                      }`}
+                      className={`flex items-center pl-3 rounded-md border transition-all ${selectedReason === reason
+                        ? "border-primary bg-primary/5"
+                        : "border-border"
+                        }`}
                     >
                       <RadioGroupItem value={reason} id={reason} />
                       <Label
@@ -217,19 +215,15 @@ const BookingCancellation: React.FC<IBookingCancellationProps> = ({
                         setCustomReason(value);
 
                         if (value.trim().length < 10) {
-                          setCustomReasonError(
-                            "Please enter at least 10 characters."
-                          );
+                          setCustomReasonError("Please enter at least 10 characters.");
                         } else if (value.trim().length > 200) {
-                          setCustomReasonError(
-                            "Maximum 200 characters allowed."
-                          );
+                          setCustomReasonError("Maximum 200 characters allowed.");
                         } else {
                           setCustomReasonError(null);
                         }
                       }}
                       placeholder="Enter your reason for cancellation..."
-                      className="resize-none h-[100px] overflow-y-scroll custom-scrollbar mt-2"
+                      className="resize-none h-[100px] overflow-y-scroll custom-scrollbar mt-2 w-full max-w-full overflow-x-hidden"
                     />
                     {customReasonError && (
                       <p className="text-xs text-red-500 pl-2">

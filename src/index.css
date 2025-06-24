@@ -234,7 +234,8 @@ input[type="number"] {
     animation: train 1s infinite linear;
 }
 
-
-
-
-
+textarea {
+    word-break: break-word;
+    overflow-wrap: break-word;
+    max-width: 100%;
+}
