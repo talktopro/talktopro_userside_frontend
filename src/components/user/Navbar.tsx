@@ -119,16 +119,15 @@ const Navbar = () => {
         <Searchbar />
 
         <div className="flex items-center">
-
-          <div className="sm:hidden mr-2">
-            <Button
-              size="icon"
-              variant="ghost"
-              onClick={() => setShowMobileSearch((prev) => !prev)}
-            >
-              {showMobileSearch ? <X size={18} /> : <Search size={18} />}
-            </Button>
+        <CustomTooltip 
+        trigger={
+           <div className="sm:hidden " onClick={() => setShowMobileSearch((prev) => !prev)}>
+              {showMobileSearch ? <X size={18} strokeWidth={1.5} /> : <Search size={18} strokeWidth={1.5} />}
           </div>
+        }
+        content={showMobileSearch ? "Close" : "Search"}
+        />
+         
 
           {user?.id && (
             <Notification
@@ -242,7 +241,7 @@ const Navbar = () => {
         </div>
       </div>
       {/* <Searchbar /> */}
-      {showMobileSearch && <MobileSearchbar />}
+      {showMobileSearch && <MobileSearchbar  closeSearchBar={() => setShowMobileSearch(false)} />}
 
     </nav>
   );

@@ -7,7 +7,11 @@ import useFetchMentorsList from "@/hooks/useFetchMentorsList";
 import useDebounce from "@/hooks/useDebounce";
 import MobileMentorCard from "./MobileMentorCard";
 
-const MobileSearchbar = () => {
+type MobileSearchbarProps = {
+  closeSearchBar: () => void;
+};
+
+const MobileSearchbar = ({ closeSearchBar }: MobileSearchbarProps) => {
   const [searchValue, setSearchValue] = useState<string>("");
   const [isSearching, setIsSearching] = useState<boolean>(false);
   const [mentorsList, setMentorsList] = useState<Mentor[]>([]);
@@ -40,10 +44,13 @@ const MobileSearchbar = () => {
   const closeSearch = () => {
     setSearchValue("");
     setMentorsList([]);
+    closeSearchBar()
   };
 
   return (
-    <div className="w-full max-w-md sm:max-w-sm relative md:hidden mb-4" ref={searchRef}>
+  <div className="max-w-md sm:max-w-sm w-full mx-auto px-4 relative md:hidden mb-4" ref={searchRef}>
+
+
       <div className="relative">
         <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
           <Search
@@ -70,37 +77,46 @@ const MobileSearchbar = () => {
       </div>
 
       {searchValue.length > 0 && (
-        <div className="mt-4 bg-background rounded-lg shadow-sm border p-4">
-          {isSearching ? (
-            <div className="flex overflow-x-auto gap-4 pb-2">
-              {Array.from({ length: 4 }).map((_, index) => (
-                <Skeleton key={index} className="h-64 min-w-[170px] flex-shrink-0" />
-              ))}
-            </div>
-          ) : mentorsList.length === 0 ? (
-            <div className="flex flex-col justify-center items-center h-40 w-full">
-              <GraduationCap
-                strokeWidth={1}
-                size={50}
-                className="opacity-60"
-              />
-              <p className="opacity-60 mt-3">No mentor details found!</p>
-            </div>
-          ) : (
-            <div
-              className="w-full overflow-x-auto pb-2 "
-              ref={scrollContainerRef}
-            >
-              <div className="flex gap-4">
-                {mentorsList.map((mentor) => (
-                  <div key={mentor._id} className="flex-shrink-0 w-[170px] ">
-                    <MobileMentorCard mentor={mentor} />
-                  </div>
+        
+ <>
+          <div
+            className="fixed inset-0 bg-black/50 dark:bg-black/70  backdrop-blur-sm z-40"
+            onClick={closeSearch}
+            style={{ top: "var(--navbar-height, 72px)",marginTop: "3rem" }}
+          />
+          
+
+          <div className="fixed top-18 left-1/2 p-4 transform -translate-x-1/2 mt-14 bg-background border rounded-lg shadow-xl z-50 max-w-screen overflow-hidden ">
+            {isSearching ? (
+              <div className="flex overflow-x-auto custom-scrollbar gap-6 pb-4">
+                {Array.from({ length: 4 }).map((_, index) => (
+                  <Skeleton key={index} className="h-64 min-w-[240px]" />
                 ))}
               </div>
-            </div>
-          )}
-        </div>
+            ) : mentorsList.length === 0 ? (
+              <div className="flex flex-col justify-center items-center h-72 w-4xl">
+                <GraduationCap
+                  strokeWidth={1} 
+                  size={50}
+                  className="opacity-60"
+                />
+                <p className="opacity-60 mt-3">No mentor details found!</p>
+              </div>
+            ) : (
+              <div className="w-full overflow-x-auto custom-scrollbar">
+                <div
+                  className=" grid gap-0 grid-flow-col auto-cols-[170px] md:auto-cols-[240px]"
+                  onClick={closeSearch}
+                >
+                  {mentorsList.map((mentor) => (
+                    <MobileMentorCard key={mentor._id} mentor={mentor} />
+                  ))}
+                </div>
+              </div>
+            )}
+          </div>
+        </>
+
       )}
     </div>
   );
