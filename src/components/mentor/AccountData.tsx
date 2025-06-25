@@ -1,5 +1,4 @@
 import { Textarea } from "../ui/textarea";
-import avatar from "@/assets/avatar/user.png";
 import { BadgeButton, InputBox } from "./InputBadge";
 import { Input } from "../ui/input";
 import { Checkbox } from "../ui/checkbox";
@@ -8,14 +7,7 @@ import { Button } from "../ui/button";
 import * as z from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
-import {
-  Form,
-  FormControl,
-  FormField,
-  FormItem,
-  FormLabel,
-  FormMessage,
-} from "@/components/ui/form";
+import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
 import { FC, useEffect, useState } from "react";
 import { AxiosError } from "axios";
 import { toast } from "sonner";
@@ -24,13 +16,10 @@ import { selectAuth, updateUser } from "@/redux/slices/authSlice";
 import { useNavigate } from "react-router-dom";
 import { ROUTES } from "@/routes/routes";
 import apiClient from "@/api/axiosInstance";
-import {
-  languageSuggestions,
-  skillSuggestions,
-} from "@/constants/MentorRegister";
+import { languageSuggestions, skillSuggestions } from "@/constants/MentorRegister";
 import useImageCropper from "@/hooks/useImageCropper";
 import ImageCropper from "../common/ImageCropper";
-import { Camera } from "lucide-react";
+import { Camera, ImageUp } from "lucide-react";
 import useErrorHandler from "@/hooks/useErrorHandler";
 
 interface RegisterBodyProps {
@@ -78,16 +67,7 @@ const RegisterBody: FC<RegisterBodyProps> = ({ fromRegisterPage, fromApplication
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const { handleError } = useErrorHandler();
-  const {
-    inputRef,
-    handleImageChange,
-    handleInputTrigger,
-    handleClose,
-    createCroppedBlobImage,
-    handleSave,
-    isCropperOpen,
-    selectedImage,
-  } = useImageCropper();
+  const { inputRef, handleImageChange, handleInputTrigger, handleClose, createCroppedBlobImage, handleSave, isCropperOpen, selectedImage } = useImageCropper();
 
   const form = useForm<z.infer<ReturnType<typeof createFormSchema>>>({
     resolver: zodResolver(createFormSchema(fromRegisterPage)),
@@ -230,23 +210,28 @@ const RegisterBody: FC<RegisterBodyProps> = ({ fromRegisterPage, fromApplication
             />
             <div className={`${fromApplicationRejectedPage ? "mt-20" : "px-10"}`}>
               <div className="relative flex items-end not-sm:items-center not-sm:flex-col not-sm:text-center -top-12">
-                <div className="w-auto h-32 rounded-md overflow-hidden aspect-[3.5/4] relative mr-4 not-sm:mr-0 bg-background">
-                  <img
-                    src={
-                      user?.profileImg
-                        ? `https://${bucketName}.s3.amazonaws.com/${import.meta.env.VITE_PROFILE_IMAGE_FOLDER}/${user.profileImg}`
-                        : avatar
-                    }
-                    alt="Profile picture"
-                    className="w-full h-full object-cover"
-                  />
-                  <div className="absolute bottom-1 right-1">
-                    <Camera
-                      strokeWidth={1.5}
-                      className="bg-background rounded-full p-1 w-6 h-6 cursor-pointer"
-                      onClick={handleInputTrigger}
+                <div className="w-auto h-32 rounded-md overflow-hidden aspect-[3.5/4] relative mr-4 not-sm:mr-0 bg-background border">
+                  {user?.profileImg ? (
+                    <img
+                      src={`https://${bucketName}.s3.amazonaws.com/${import.meta.env.VITE_PROFILE_IMAGE_FOLDER}/${user.profileImg}`}
+                      alt="Profile picture"
+                      className="w-full h-full object-cover"
                     />
-                  </div>
+                  ) : (
+                    <div className="flex flex-col justify-center items-center h-full text-muted-foreground cursor-pointer" onClick={handleInputTrigger}>
+                      <ImageUp strokeWidth={1.5} height={18} />
+                      <span className="text-xs text-center mt-2">Click to<br /> Upload<br />Profile image</span>
+                    </div>
+                  )}
+                  {user?.profileImg && (
+                    <div className="absolute bottom-1 right-1">
+                      <Camera
+                        strokeWidth={1.5}
+                        className="bg-background rounded-full p-1 w-6 h-6 cursor-pointer border"
+                        onClick={handleInputTrigger}
+                      />
+                    </div>
+                  )}
                 </div>
                 <input
                   type="file"

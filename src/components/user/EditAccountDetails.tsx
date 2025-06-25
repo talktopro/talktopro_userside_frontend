@@ -1,19 +1,10 @@
-import avatar from "@/assets/avatar/user.png";
 import { User } from "@/types/user";
-import {
-  Drawer,
-  DrawerClose,
-  DrawerContent,
-  DrawerDescription,
-  DrawerHeader,
-  DrawerTitle,
-  DrawerTrigger,
-} from "@/components/ui/drawer";
+import { Drawer, DrawerClose, DrawerContent, DrawerDescription, DrawerHeader, DrawerTitle, DrawerTrigger } from "@/components/ui/drawer";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import CustomTooltip from "@/components/common/CustomTooltip";
-import { Camera, MoreVertical } from "lucide-react";
+import { Camera, ImageUp, MoreVertical } from "lucide-react";
 import ImageCropper from "@/components/common/ImageCropper";
 import useImageCropper from "@/hooks/useImageCropper";
 import { toast } from "sonner";
@@ -22,14 +13,7 @@ import apiClient from "@/api/axiosInstance";
 import { useForm } from "react-hook-form";
 import * as z from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
-import {
-  Form,
-  FormControl,
-  FormField,
-  FormItem,
-  FormLabel,
-  FormMessage,
-} from "@/components/ui/form";
+import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
 import { useDispatch } from "react-redux";
 import { AppDispatch } from "@/redux/store";
 import { updateUser } from "@/redux/slices/authSlice";
@@ -51,17 +35,7 @@ const formSchema = z.object({
 });
 
 const EditAccountDetails = ({ user }: EditAccountDetailsProps) => {
-  const {
-    inputRef,
-    handleImageChange,
-    handleInputTrigger,
-    handleClose,
-    createCroppedBlobImage,
-    handleSave,
-    isCropperOpen,
-    selectedImage,
-  } = useImageCropper();
-
+  const { inputRef, handleImageChange, handleInputTrigger, handleClose, createCroppedBlobImage, handleSave, isCropperOpen, selectedImage } = useImageCropper();
   const dispatch = useDispatch<AppDispatch>();
   const bucketName = import.meta.env.VITE_S3BUCKET_NAME;
   const { handleError } = useErrorHandler();
@@ -134,23 +108,28 @@ const EditAccountDetails = ({ user }: EditAccountDetailsProps) => {
                 className="px-6 space-y-4 pt-3"
               >
                 <div className="flex items-center flex-col">
-                  <div className="w-auto h-32 rounded-md overflow-hidden aspect-[3.5/4] relative">
-                    <img
-                      src={
-                        user?.profileImg
-                          ? `https://${bucketName}.s3.amazonaws.com/${import.meta.env.VITE_PROFILE_IMAGE_FOLDER}/${user.profileImg}`
-                          : avatar
-                      }
-                      alt="Profile picture"
-                      className="w-full h-full object-cover"
-                    />
-                    <div className="absolute bottom-1 right-1">
-                      <Camera
-                        strokeWidth={1.5}
-                        className="bg-background rounded-full p-1 w-6 h-6 cursor-pointer"
-                        onClick={handleInputTrigger}
+                  <div className="w-auto h-32 rounded-md overflow-hidden aspect-[3.5/4] relative mr-4 not-sm:mr-0 bg-background border">
+                    {user?.profileImg ? (
+                      <img
+                        src={`https://${bucketName}.s3.amazonaws.com/${import.meta.env.VITE_PROFILE_IMAGE_FOLDER}/${user.profileImg}`}
+                        alt="Profile picture"
+                        className="w-full h-full object-cover"
                       />
-                    </div>
+                    ) : (
+                      <div className="flex flex-col justify-center items-center h-full text-muted-foreground cursor-pointer" onClick={handleInputTrigger}>
+                        <ImageUp strokeWidth={1.5} height={18} />
+                        <span className="text-xs text-center mt-2">Click to<br /> Upload<br />Profile image</span>
+                      </div>
+                    )}
+                    {user?.profileImg && (
+                      <div className="absolute bottom-1 right-1">
+                        <Camera
+                          strokeWidth={1.5}
+                          className="bg-background rounded-full p-1 w-6 h-6 cursor-pointer border"
+                          onClick={handleInputTrigger}
+                        />
+                      </div>
+                    )}
                   </div>
 
                   <input
