@@ -1,16 +1,6 @@
 import { JSX, useEffect, useState } from "react";
 import logo from "@/assets/svg/logo.svg";
-import {
-  LayoutTemplate,
-  LogOut,
-  NotebookText,
-  UserRound,
-  Moon,
-  Sun,
-  ChevronDown,
-  Search,
-  X,
-} from "lucide-react";
+import { LayoutTemplate, LogOut, NotebookText, UserRound, Moon, Sun, ChevronDown, Search, X, } from "lucide-react";
 import { ROUTES } from "../../routes/routes";
 import { Link, useNavigate } from "react-router-dom";
 import useTheme from "@/hooks/useTheme";
@@ -21,22 +11,9 @@ import { logout, selectAuth } from "@/redux/slices/authSlice";
 import { Button } from "../ui/button";
 import Searchbar from "./Searchbar";
 import CustomTooltip from "../common/CustomTooltip";
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuTrigger,
-} from "../ui/dropdown-menu";
+import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger, } from "../ui/dropdown-menu";
 import { Avatar, AvatarImage } from "../ui/avatar";
-import {
-  Dialog,
-  DialogClose,
-  DialogContent,
-  DialogDescription,
-  DialogHeader,
-  DialogTitle,
-  DialogTrigger,
-} from "../ui/dialog";
+import { Dialog, DialogClose, DialogContent, DialogDescription, DialogHeader, DialogTitle, DialogTrigger, } from "../ui/dialog";
 import useNotification from "@/hooks/useNotification";
 import { resetNotificationState } from "@/redux/slices/notificationSlice";
 import MobileSearchbar from "./MobileSearchBar";
@@ -76,27 +53,24 @@ const Navbar = () => {
       pathLocation: ROUTES.ACCOUNT_SETTINGS,
       value: "account_details",
       icon: <UserRound strokeWidth={1.5} size={18} />,
-    },
-    {
+    }, {
       label: "Bookings",
       pathLocation: ROUTES.BOOKINGS,
       value: "bookings",
       icon: <NotebookText strokeWidth={1.5} size={18} />,
     },
 
-    !user?.isMentor
-      ? {
-          label: "Register as Mentor",
-          pathLocation: ROUTES.MENTOR.REGISTER,
-          value: "registerMentor",
-          icon: <LayoutTemplate strokeWidth={1.5} size={18} />,
-        }
-      : {
-          label: "Professional Dashboard",
-          pathLocation: ROUTES.MENTOR.DASHBOARD,
-          value: "service_provider_console",
-          icon: <LayoutTemplate strokeWidth={1.5} size={18} />,
-        },
+    !user?.isMentor ? {
+      label: "Register as Mentor",
+      pathLocation: ROUTES.MENTOR.REGISTER,
+      value: "registerMentor",
+      icon: <LayoutTemplate strokeWidth={1.5} size={18} />,
+    } : {
+      label: "Professional Dashboard",
+      pathLocation: ROUTES.MENTOR.DASHBOARD,
+      value: "service_provider_console",
+      icon: <LayoutTemplate strokeWidth={1.5} size={18} />,
+    },
   ];
 
   const handleLogout = () => {
@@ -119,15 +93,15 @@ const Navbar = () => {
         <Searchbar />
 
         <div className="flex items-center">
-        <CustomTooltip 
-        trigger={
-           <div className="sm:hidden " onClick={() => setShowMobileSearch((prev) => !prev)}>
-              {showMobileSearch ? <X size={18} strokeWidth={1.5} /> : <Search size={18} strokeWidth={1.5} />}
-          </div>
-        }
-        content={showMobileSearch ? "Close" : "Search"}
-        />
-         
+
+          <CustomTooltip
+            trigger={
+              <div className="sm:hidden " onClick={() => setShowMobileSearch((prev) => !prev)}>
+                {showMobileSearch ? <X size={18} strokeWidth={1.5} /> : <Search size={18} strokeWidth={1.5} />}
+              </div>
+            }
+            content={showMobileSearch ? "Close" : "Search"}
+          />
 
           {user?.id && (
             <Notification
@@ -165,9 +139,7 @@ const Navbar = () => {
                     <AvatarImage
                       src={
                         user.profileImg
-                          ? `https://${bucketName}.s3.amazonaws.com/${
-                              import.meta.env.VITE_PROFILE_IMAGE_FOLDER
-                            }/${user.profileImg}`
+                          ? `https://${bucketName}.s3.amazonaws.com/${import.meta.env.VITE_PROFILE_IMAGE_FOLDER}/${user.profileImg}`
                           : logo
                       }
                     />
@@ -241,7 +213,7 @@ const Navbar = () => {
         </div>
       </div>
       {/* <Searchbar /> */}
-      {showMobileSearch && <MobileSearchbar  closeSearchBar={() => setShowMobileSearch(false)} />}
+      {showMobileSearch && <MobileSearchbar closeSearchBar={() => setShowMobileSearch(false)} />}
 
     </nav>
   );

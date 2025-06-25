@@ -9,6 +9,7 @@ import { Toaster } from "@/components/ui/sonner";
 import { GoogleOAuthProvider } from "@react-oauth/google";
 import "react-loading-skeleton/dist/skeleton.css";
 import { SocketProvider } from "./contexts/socket";
+import InitialLoadingWrapper from "./components/common/loading/LoadingWrapper";
 
 //sample...
 const clientId = import.meta.env.VITE_GOOGLE_CLIENT_ID;
@@ -19,14 +20,16 @@ const App = () => {
       <PersistGate loading={null} persistor={persistor}>
         <GoogleOAuthProvider clientId={clientId}>
           <ThemeProvider>
-            <SocketProvider>
-              <BrowserRouter>
-                <Toaster />
-                <ScrollToTop />{" "}
-                {/* Ensures scrolling to the top on route change */}
-                <AppRoutes />
-              </BrowserRouter>
-            </SocketProvider>
+            <InitialLoadingWrapper>
+              <SocketProvider>
+                <BrowserRouter>
+                  <Toaster />
+                  <ScrollToTop />{" "}
+                  {/* Ensures scrolling to the top on route change */}
+                  <AppRoutes />
+                </BrowserRouter>
+              </SocketProvider>
+            </InitialLoadingWrapper>
           </ThemeProvider>
         </GoogleOAuthProvider>
       </PersistGate>

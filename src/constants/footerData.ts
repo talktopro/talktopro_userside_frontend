@@ -15,18 +15,18 @@ export const teamMembers = [
       image: visnuPrem,
    },
    {
-      id: 2,
-      name: "Abhiraj T R",
-      handle: "abhirajtr007@gmail.com",
-      role: "Backend Developer | System Architect",
-      image: abhirajTR,
-   },
-   {
       id: 6,
       name: "Sameen K A",
       handle: "sameensameen60@gmail.com",
       role: "Team Lead | Frontend Developer",
       image: sameen,
+   },
+   {
+      id: 2,
+      name: "Abhiraj T R",
+      handle: "abhirajtr007@gmail.com",
+      role: "Backend Developer | System Architect",
+      image: abhirajTR,
    },
    {
       id: 3,

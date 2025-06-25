@@ -54,9 +54,9 @@ const Notification: FC<INotificationProps> = ({
                   <Bell strokeWidth={1.5} width={18} height={18} />
                   {unReadNotificationCount > 0 && (
                     <span
-                      className="absolute -top-2 left-2 h-4 w-auto flex items-center justify-center px-1.5 text-xs text-white bg-purple-500 rounded-full text-center"
+                      className={`absolute -top-2 ${unReadNotificationCount > 9 ? "left-1.5" : "left-2"} h-4 w-auto flex items-center justify-center px-1.5 text-xs text-white bg-purple-500 rounded-full text-center`}
                     >
-                      {unReadNotificationCount}
+                      {unReadNotificationCount > 9 ? `9+` : unReadNotificationCount}
                     </span>
                   )}
                 </div>

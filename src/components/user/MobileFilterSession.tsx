@@ -23,12 +23,16 @@ interface MobileFilterSessionProps {
     sort: "NewestToOldest" | "OldestToNewest";
     selectedProfessions: string[];
     selectedRating: number;
+    page: number;
+    limit: number;
   };
   setFilterData: React.Dispatch<
     React.SetStateAction<{
       sort: "NewestToOldest" | "OldestToNewest";
       selectedProfessions: string[];
       selectedRating: number;
+      page: number;
+      limit: number;
     }>
   >;
   professions: string[];
@@ -59,12 +63,12 @@ const MobileFilterSession = ({
     });
   };
 
-  const handleRatingChange = (rating: number) => {
-    setFilterData((prev) => ({
-      ...prev,
-      selectedRating: prev.selectedRating === rating ? 0 : rating,
-    }));
-  };
+  // const handleRatingChange = (rating: number) => {
+  //   setFilterData((prev) => ({
+  //     ...prev,
+  //     selectedRating: prev.selectedRating === rating ? 0 : rating,
+  //   }));
+  // };
 
   return (
     <div className="mb-5 flex justify-center items-center gap-3">
@@ -109,7 +113,7 @@ const MobileFilterSession = ({
                 </div>
               </div>
 
-              <div>
+              {/* <div>
                 <h3 className="text-md font-semibold mb-2">Rating</h3>
                 <div className="space-y-2">
                   {[5, 4, 3, 2, 1].map((rating) => (
@@ -131,7 +135,7 @@ const MobileFilterSession = ({
                     </div>
                   ))}
                 </div>
-              </div>
+              </div> */}
             </div>
 
             <div className="sticky bottom-0 left-0 right-0 border-t bg-muted">

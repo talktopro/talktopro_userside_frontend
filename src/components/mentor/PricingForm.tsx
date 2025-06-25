@@ -52,10 +52,10 @@ const PricingForm: FC<IPricingFormProps> = ({
                            <input
                               type="text"
                               autoFocus
-                              className="text-4xl w-28 font-bold focus:outline-none text-center"
+                              className="text-4xl w-32 font-bold focus:outline-none text-center"
                               value={`₹${field.value}`}
                               onChange={handleAmountChange}
-                              maxLength={5}
+                              maxLength={6}
                            />
                            {hasChanges && (
                               <div className="flex mt-1">

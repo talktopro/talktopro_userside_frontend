@@ -14,9 +14,9 @@ type FilterDataType = {
   sort: "NewestToOldest" | "OldestToNewest";
   selectedProfessions: string[];
   selectedRating: number;
+  page: number;
+  limit: number;
 };
-
-const mentorsPerPage = 20;
 
 const AllProfessionalsPage = () => {
   const [mentorsList, setMentorsList] = useState<Mentor[]>([]);
@@ -29,11 +29,11 @@ const AllProfessionalsPage = () => {
     sort: "NewestToOldest",
     selectedProfessions: [],
     selectedRating: 0,
+    page: 1,
+    limit: 20,
   };
   const [filterData, setFilterData] = useState<FilterDataType>(defaultFilterVal);
   const [copyFilterData, setCopyFilterData] = useState<FilterDataType>(defaultFilterVal);
-
-  const [currentPage, setCurrentPage] = useState<number>(1);
   const [totalPage, setTotalPage] = useState<number>(1);
 
   const fetchProfessions = async () => {
@@ -46,16 +46,14 @@ const AllProfessionalsPage = () => {
   };
 
   const fetchData = async () => {
-    if (!fetchDataFlag.current) return;
-
     try {
       setLoading(true);
       const result = await getAllMentors({
         sort: filterData.sort,
         profession: filterData.selectedProfessions,
         rating: filterData.selectedRating,
-        page: currentPage,
-        limit: mentorsPerPage,
+        page: filterData.page,
+        limit: filterData.limit,
       });
 
       setMentorsList(result?.mentors || []);
@@ -67,33 +65,25 @@ const AllProfessionalsPage = () => {
     }
   };
 
-
   useEffect(() => {
     fetchProfessions();
   }, []);
 
-  // useEffect(() => {
-  //   setCurrentPage(1); 
-  //   fetchDataFlag.current = true;
-  //   fetchData();
-  // }, [filterData]);
-
   useEffect(() => {
-    fetchDataFlag.current = true;
-    fetchData();
-  }, [currentPage]);
+    if (fetchDataFlag.current) {
+      fetchData();
+    };
+  }, [filterData]);
 
   const applyFilter = () => {
-    setCurrentPage(1);
     fetchDataFlag.current = true;
-    fetchData();
+    setFilterData((prev) => ({ ...prev, page: 1 }));
   };
 
   const clearFilter = () => {
+    fetchDataFlag.current = true;
     setFilterData(defaultFilterVal);
     setCopyFilterData(defaultFilterVal);
-    setCurrentPage(1);
-    fetchDataFlag.current = true;
   };
 
   const disableClearFilter = () => {
@@ -111,6 +101,11 @@ const AllProfessionalsPage = () => {
       JSON.stringify(filterData.selectedProfessions.sort()) ===
       JSON.stringify(copyFilterData.selectedProfessions.sort())
     );
+  };
+
+  const onPageChange = (page: number) => {
+    fetchDataFlag.current = true;
+    setFilterData((prev) => ({ ...prev, page: page }))
   };
 
   return (
@@ -153,8 +148,8 @@ const AllProfessionalsPage = () => {
               {totalPage > 1 && (
                 <CustomPagination
                   totalPage={totalPage}
-                  currentPage={currentPage}
-                  onChange={setCurrentPage}
+                  currentPage={filterData.page}
+                  onChange={onPageChange}
                 />
               )}
             </>

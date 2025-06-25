@@ -459,54 +459,59 @@ const RegisterBody: FC<RegisterBodyProps> = ({ fromRegisterPage, fromApplication
                   Terms and Conditions
                 </h2>
                 <div className="space-y-2 mt-4">
-                  <p className="text-xs opacity-70">
+                  <p className="text-xs text-muted-foreground">
                     By agreeing, you acknowledge that you have read and
-                    understood our terms.
+                    understood our terms. <span className="underline cursor-pointer text-purple-500" onClick={() => navigate(ROUTES.TERMS_AND_CONDITION)}>Terms and Condition</span>
                   </p>
                   <FormField
                     control={form.control}
                     name="termsAndConditions"
                     render={({ field }) => (
-                      <FormItem className="flex items-center space-x-2">
-                        <FormControl>
-                          <Checkbox
-                            checked={field.value}
-                            onCheckedChange={(checked) => {
-                              field.onChange(checked);
-                              form.trigger("termsAndConditions");
-                            }}
-                            className="cursor-pointer"
-                          />
-                        </FormControl>
-                        <FormLabel className="text-sm font-medium">
-                          I agree to the Terms and Conditions
-                        </FormLabel>
+                      <FormItem>
+                        <div className="flex items-center justify-start gap-2">
+                          <FormControl>
+                            <Checkbox
+                              checked={field.value}
+                              onCheckedChange={(checked) => {
+                                field.onChange(checked);
+                                form.trigger("termsAndConditions");
+                              }}
+                              className="cursor-pointer"
+                            />
+                          </FormControl>
+                          <FormLabel className="text-sm font-medium">
+                            I agree to the Terms and Conditions
+                          </FormLabel>
+                        </div>
                         <FormMessage />
                       </FormItem>
                     )}
+
                   />
-                  <p className="text-xs opacity-70">
+                  <p className="text-xs text-muted-foreground">
                     Your data will be processed in accordance with our privacy
-                    policy.
+                    policy. <span className="underline cursor-pointer text-purple-500" onClick={() => navigate(ROUTES.PRIVACY_AND_POLICY)}>Privacy and Policy</span>
                   </p>
                   <FormField
                     control={form.control}
                     name="privacyAndPolicy"
                     render={({ field }) => (
-                      <FormItem className="flex items-center space-x-2">
-                        <FormControl>
-                          <Checkbox
-                            checked={field.value}
-                            onCheckedChange={(checked) => {
-                              field.onChange(checked);
-                              form.trigger("privacyAndPolicy");
-                            }}
-                            className="cursor-pointer"
-                          />
-                        </FormControl>
-                        <FormLabel className="text-sm font-medium">
-                          I agree to the Privacy Policy
-                        </FormLabel>
+                      <FormItem>
+                        <div className="flex items-center justify-start gap-2">
+                          <FormControl>
+                            <Checkbox
+                              checked={field.value}
+                              onCheckedChange={(checked) => {
+                                field.onChange(checked);
+                                form.trigger("privacyAndPolicy");
+                              }}
+                              className="cursor-pointer"
+                            />
+                          </FormControl>
+                          <FormLabel className="text-sm font-medium">
+                            I agree to the Privacy Policy
+                          </FormLabel>
+                        </div>
                         <FormMessage />
                       </FormItem>
                     )}

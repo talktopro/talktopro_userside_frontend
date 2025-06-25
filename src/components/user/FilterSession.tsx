@@ -13,12 +13,16 @@ interface FilterSessionProps {
     sort: "NewestToOldest" | "OldestToNewest";
     selectedProfessions: string[];
     selectedRating: number;
+    page: number;
+    limit: number;
   };
   setFilterData: React.Dispatch<
     React.SetStateAction<{
       sort: "NewestToOldest" | "OldestToNewest";
       selectedProfessions: string[];
       selectedRating: number;
+      page: number;
+      limit: number;
     }>
   >;
   professions: string[];
@@ -46,12 +50,12 @@ const FilterSession = ({
     });
   };
 
-  const handleRatingChange = (rating: number) => {
-    setFilterData((prev) => ({
-      ...prev,
-      selectedRating: prev.selectedRating === rating ? 0 : rating,
-    }));
-  };
+  // const handleRatingChange = (rating: number) => {
+  //   setFilterData((prev) => ({
+  //     ...prev,
+  //     selectedRating: prev.selectedRating === rating ? 0 : rating,
+  //   }));
+  // };
 
   return (
     <div className="h-full w-[250px] min-w-[250px] bg-background border rounded-lg p-4 space-y-8 relative hidden md:block">
@@ -73,7 +77,7 @@ const FilterSession = ({
         </RadioGroup>
       </div>
 
-      <div>
+      <div className="mb-15">
         <h3 className="text-md font-semibold mb-2">Profession</h3>
         <div className="space-y-2 max-h-[200px] overflow-y-auto custom-scrollbar">
           {professions.map((profession) => (
@@ -94,7 +98,7 @@ const FilterSession = ({
         </div>
       </div>
 
-      <div className="mb-15">
+      {/* <div className="mb-15">
         <h3 className="text-md font-semibold mb-2">Rating</h3>
         <div className="space-y-2">
           {[5, 4, 3, 2, 1].map((rating) => (
@@ -116,7 +120,7 @@ const FilterSession = ({
             </div>
           ))}
         </div>
-      </div>
+      </div> */}
 
       <div className="absolute bottom-0 left-0 right-0 border-t bg-muted rounded-b-lg">
         <div className="flex justify-center gap-6 py-4">

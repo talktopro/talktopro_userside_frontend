@@ -17,7 +17,7 @@ import {
   IMentorDetailsWithSlots,
   IMentorProfileDetailsApiResponse,
 } from "@/types/user";
-import { MessageCircleMore, Share2, Star } from "lucide-react";
+import { MessageCircleMore, Share2 } from "lucide-react";
 import MentorProfileSkeleton from "@/components/common/skeletons/MentorProfile";
 import SlotResponseConverter from "@/utils/slotResponseConverter";
 // import PaymentSuccess from "@/components/common/PaymentSuccess";
@@ -144,12 +144,12 @@ const ProfessionalDetailsPage = () => {
                 <p className="opacity-70">{mentor.mentorDetails.profession}</p>
               </div>
             </div>
-            <div className="mt-2 flex items-center">
+            {/* <div className="mt-2 flex items-center">
               <div className="flex items-center">
                 <Star className="text-yellow-400" fill="#f6e05e" size={18} />
               </div>
               <span className="text-sm opacity-70 ml-2">0 Reviews</span>
-            </div>
+            </div> */}
             <div className="mt-10">
               <h2 className="text-lg font-semibold">Skills & Expertise</h2>
               <div className="mt-2 flex flex-wrap gap-2">

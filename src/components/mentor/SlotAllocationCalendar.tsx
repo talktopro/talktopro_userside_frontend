@@ -59,6 +59,9 @@ const SlotAllocationCalendar: FC<SlotAllocationCalendarProps> = ({ allocatedSlot
                 const hasBookedSlots = allocatedSlots[dateStr]
                   ? Object.values(allocatedSlots[dateStr]).some(status => typeof status === "object" && status.isBooked === "booked")
                   : false;
+                const hasOnholdSlots = allocatedSlots[dateStr]
+                  ? Object.values(allocatedSlots[dateStr]).some(status => typeof status === "object" && status.isBooked === "on_hold")
+                  : false;
 
                 if (isOutsideDay) {
                   return (
@@ -71,6 +74,7 @@ const SlotAllocationCalendar: FC<SlotAllocationCalendarProps> = ({ allocatedSlot
                 return (
                   <div className="relative">
                     <div className="absolute -top-1 -right-0 w-3 h-3 rounded-full bg-teal-500 border-3 border-background" hidden={!hasBookedSlots || isDisabled} />
+                    <div className="absolute -top-1 -right-0 w-3 h-3 rounded-full bg-amber-500 border-3 border-background" hidden={hasBookedSlots || !hasOnholdSlots || isDisabled} />
                     <Popover
                       onOpenChange={(isOpen) => togglePopover(isOpen)}
                     >

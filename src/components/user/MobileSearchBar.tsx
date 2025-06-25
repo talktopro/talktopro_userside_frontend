@@ -62,7 +62,7 @@ const MobileSearchbar = ({ closeSearchBar }: MobileSearchbarProps) => {
         </div>
         <Input
           type="text"
-          placeholder="Search mentors..."
+          placeholder="Search Mentors or Profession..."
           className="w-full pl-10 pr-10 py-5 rounded-sm    focus-visible:ring-2 focus-visible:ring-primary/50"
           value={searchValue}
           onChange={(e) => setSearchValue(e.target.value)}

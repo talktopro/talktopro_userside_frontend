@@ -1,12 +1,6 @@
 import { FaFacebookF, FaTwitter, FaYoutube } from "react-icons/fa";
 import { AiFillInstagram } from "react-icons/ai";
-import { Avatar, AvatarImage } from "@/components/ui/avatar";
-import {
-  HoverCard,
-  HoverCardContent,
-  HoverCardTrigger,
-} from "@/components/ui/hover-card";
-import { teamMembers, About, Policies, Tags } from "@/constants/footerData";
+import { About, Policies, Tags } from "@/constants/footerData";
 import { Link, useNavigate } from "react-router-dom";
 
 const Footer = () => {
@@ -52,37 +46,6 @@ const Footer = () => {
                   <a className="text-muted-foreground hover:text-foreground text-sm cursor-pointer">
                     {item.field}
                   </a>
-                </li>
-              ))}
-            </ul>
-          </div>
-
-          <div className="space-y-4 mx-10 mt-10 relative">
-            <h3 className="font-medium text-center">Team</h3>
-            <ul className="grid grid-cols-6 md:grid-cols-3 gap-3">
-              {teamMembers.map((member) => (
-                <li key={member.id} className="relative">
-                  <HoverCard>
-                    <HoverCardTrigger>
-                      <Avatar>
-                        <AvatarImage src={member.image} />
-                      </Avatar>
-                    </HoverCardTrigger>
-                    <HoverCardContent style={{ width: "auto" }}>
-                      <div className="flex items-start">
-                        <Avatar>
-                          <AvatarImage src={member.image} />
-                        </Avatar>
-                        <div className="ml-3">
-                          <h4 className="font-bold text-sm">{member.name}</h4>
-                          <p className="text-gray-500 dark:text-gray-400 text-sm">
-                            {member.handle}
-                          </p>
-                        </div>
-                      </div>
-                      <p className="my-2 text-sm">{member.role}</p>
-                    </HoverCardContent>
-                  </HoverCard>
                 </li>
               ))}
             </ul>

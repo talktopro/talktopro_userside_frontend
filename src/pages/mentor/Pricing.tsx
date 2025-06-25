@@ -11,11 +11,11 @@ import useErrorHandler from '@/hooks/useErrorHandler';
 const amountFormSchema = z.object({
   amount: z
     .number()
-    .min(300, {
-      message: "Minimum amount is ₹300",
+    .min(200, {
+      message: "Minimum amount is ₹200",
     })
-    .max(5000, {
-      message: "Maximum amount is ₹5000",
+    .max(10000, {
+      message: "Maximum amount is ₹10,000",
     }),
 });
 
@@ -38,7 +38,7 @@ const Pricing = () => {
 
   const handleSave = async (values: AmountFormValues) => {
     try {
-      if (values.amount < 300 || values.amount > 5000) {
+      if (values.amount < 200 || values.amount > 10000) {
         return;
       }
       await apiClient.patch(`/mentor/fee`, { fee: values.amount });

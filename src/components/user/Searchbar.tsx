@@ -63,7 +63,7 @@ const Searchbar = () => {
       <div className="flex items-center relative">
         <Input
           type="text"
-          placeholder="Search Mentors..."
+          placeholder="Search Mentors or Profession..."
           className="w-full pr-8 not-md:hidden"
           value={searchValue}
           onChange={(e) => setSearchValue(e.target.value)}

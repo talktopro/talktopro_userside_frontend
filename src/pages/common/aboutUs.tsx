@@ -1,6 +1,7 @@
 import React from 'react';
 import successTeam from "@/assets/backgrounds/successTeam.png"
 import { CircleDollarSign, Clock, LayoutPanelTop, ShieldCheck } from 'lucide-react';
+import TeamSection from '@/components/common/TeamSection';
 
 const AboutUs: React.FC = () => {
    return (
@@ -117,6 +118,7 @@ const AboutUs: React.FC = () => {
                </div>
             </div>
          </div>
+         <TeamSection />
       </div>
    );
 };
