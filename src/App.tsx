@@ -11,7 +11,7 @@ import "react-loading-skeleton/dist/skeleton.css";
 import { SocketProvider } from "./contexts/socket";
 import InitialLoadingWrapper from "./components/common/loading/LoadingWrapper";
 
-//sample...
+//sample.
 const clientId = import.meta.env.VITE_GOOGLE_CLIENT_ID;
 
 const App = () => {
