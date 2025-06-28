@@ -1,5 +1,6 @@
 import dummy from "@/assets/avatar/user.png";
 import { Badge } from "@/components/common/Badge";
+import { Badge as ShardCnBadge } from "@/components/ui/Badge";
 import { FC, JSX, useEffect, useState } from "react";
 import {
   Drawer,
@@ -141,7 +142,8 @@ const ProfessionalDetailsPage = () => {
                     }
                   />
                 </div>
-                <p className="opacity-70">{mentor.mentorDetails.profession}</p>
+                <p className="text-muted-foreground">{mentor.mentorDetails.profession}</p>
+                <ShardCnBadge variant="secondary" className="rounded-sm px-3 py-1">{mentor.mentorDetails.experience}+ Experience</ShardCnBadge>
               </div>
             </div>
             {/* <div className="mt-2 flex items-center">

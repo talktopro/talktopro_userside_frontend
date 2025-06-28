@@ -38,6 +38,16 @@ const createFormSchema = (fromRegisterPage: boolean) =>
     phone_number: z
       .string()
       .regex(/^\d{10,15}$/, "Enter a valid phone number."),
+    experience: z
+      .number()
+      .min(3, "Experience must be at least 3 years.")
+      .max(50, "Experience must not exceed 50 years.")
+      .refine((val) => {
+        const decimalPart = val.toString().split(".")[1];
+        return !decimalPart || decimalPart.length <= 1;
+      }, {
+        message: "Experience can have at most one digit after the decimal."
+      }),
     profileImg: z.string().min(1, "Profile image is required"),
     profession: z.string().nonempty("Profession is required."),
     about: z
@@ -75,6 +85,7 @@ const RegisterBody: FC<RegisterBodyProps> = ({ fromRegisterPage, fromApplication
       first_name: user?.mentorDetails?.first_name || "",
       last_name: user?.mentorDetails?.last_name || "",
       phone_number: user?.phone.toString(),
+      experience: user?.mentorDetails?.experience || 0,
       profileImg: user?.profileImg || "",
       profession: user?.mentorDetails?.profession || "",
       about: user?.mentorDetails?.about || "",
@@ -143,6 +154,7 @@ const RegisterBody: FC<RegisterBodyProps> = ({ fromRegisterPage, fromApplication
           first_name: values.first_name,
           last_name: values.last_name,
           profession: values.profession,
+          experience: values.experience,
           about: values.about,
           skills: values.skills,
           languages: values.languages,
@@ -170,6 +182,7 @@ const RegisterBody: FC<RegisterBodyProps> = ({ fromRegisterPage, fromApplication
         phone_number: user.phone.toString(),
         profileImg: user.profileImg || "",
         profession: user.mentorDetails?.profession || "",
+        experience: user.mentorDetails?.experience || 0,
         about: user.mentorDetails?.about || "",
         skills: [...(user.mentorDetails?.skills || [])],
         languages: [...(user.mentorDetails?.languages || [])],
@@ -323,9 +336,34 @@ const RegisterBody: FC<RegisterBodyProps> = ({ fromRegisterPage, fromApplication
                   />
                   <FormField
                     control={form.control}
-                    name="profession"
+                    name="experience"
                     render={({ field }) => (
                       <FormItem className="sm:w-1/2 not-sm:w-full sm:pl-2">
+                        <FormLabel className="text-xs ml-3">
+                          Experience (Decimal)
+                        </FormLabel>
+                        <FormControl>
+                          <Input
+                            type="number"
+                            step="0.1"
+                            min="3"
+                            max="50"
+                            readOnly={!fromRegisterPage && !fromApplicationRejectedPage}
+                            placeholder="Enter experience in years"
+                            className="hover:bg-muted transition-colors duration-300 mt-1"
+                            {...field}
+                            onChange={(e) => field.onChange(parseFloat(e.target.value))}
+                          />
+                        </FormControl>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+                  <FormField
+                    control={form.control}
+                    name="profession"
+                    render={({ field }) => (
+                      <FormItem className="sm:w-1/2 not-sm:w-full">
                         <FormLabel className="text-xs ml-3">
                           Profession
                         </FormLabel>
