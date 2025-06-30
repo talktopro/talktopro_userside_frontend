@@ -22,19 +22,12 @@ import apiClient from "@/api/axiosInstance";
 import { AxiosError } from "axios";
 import GoogleLoginButton from "@/components/user/GoogleLoginButton";
 
-const countryCodes = [
-  { code: "+91", country: "India" },
-  // { code: "+1", country: "USA" },
-  // { code: "+44", country: "UK" },
-  // { code: "+81", country: "Japan" },
-];
-
 const formSchema = z
   .object({
     uname: z.string().min(4, "Username must be at least 4 characters long."),
     email: z.string().email("Please enter a valid email address."),
     countryCode: z.string().nonempty("Country code is required."),
-    phone: z.string().regex(/^\d{10,15}$/, "Enter a valid phone number."),
+    phone: z.string().regex(/^\+?[0-9\s\-().]{6,20}$/, "Enter a valid phone number."),
     pwd: z.string().min(6, "Password must be at least 6 characters long."),
     confirm_pwd: z.string(),
   })
@@ -140,15 +133,6 @@ const SignupPage = () => {
                       <FormLabel>Phone Number</FormLabel>
                       <FormControl>
                         <div className="flex gap-2">
-                          {/* Country Code Dropdown */}
-                          <select className="h-9 rounded-md border border-input bg-transparent px-3 py-1 text-base shadow-sm transition-colors placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring md:text-sm">
-                            {countryCodes.map(({ code }) => (
-                              <option key={code} value={code}>
-                                {code}
-                              </option>
-                            ))}
-                          </select>
-
                           {/* Mobile Number Input */}
                           <Input
                             type="text"

@@ -14,3 +14,16 @@ export const languageSuggestions: string[] = [
    "French",
    "Japanese",
 ];
+
+export const locationSuggestions = [
+   "Kochi, Kerala, India",
+   "Kozhikode, Kerala, India",
+   "Thiruvananthapuram, Kerala, India",
+   "Chennai, Tamil Nadu, India",
+   "Bangalore, Karnataka, India",
+   "Hyderabad, Telangana, India",
+   "Mumbai, Maharashtra, India",
+   "Delhi, India",
+   "Pune, Maharashtra, India",
+   "Goa, India"
+];

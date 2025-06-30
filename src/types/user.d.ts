@@ -49,6 +49,7 @@ export interface MentorDetails {
     first_name: string;
     last_name: string;
     profession: string;
+    location?: string;
     experience: number;
     rating: number;
     about: string;

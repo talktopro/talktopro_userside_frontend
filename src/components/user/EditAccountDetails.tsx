@@ -31,7 +31,7 @@ const formSchema = z.object({
     .regex(/^[A-Za-z ]+$/, "Name can only contain letters and spaces"),
   phone: z
     .string()
-    .regex(/^[6-9]\d{9}$/, "Please enter a valid phone number"),
+    .regex(/^\+?[0-9\s\-().]{6,20}$/, "Enter a valid phone number."),
 });
 
 const EditAccountDetails = ({ user }: EditAccountDetailsProps) => {

@@ -16,7 +16,7 @@ import { selectAuth, updateUser } from "@/redux/slices/authSlice";
 import { useNavigate } from "react-router-dom";
 import { ROUTES } from "@/routes/routes";
 import apiClient from "@/api/axiosInstance";
-import { languageSuggestions, skillSuggestions } from "@/constants/MentorRegister";
+import { languageSuggestions, skillSuggestions, locationSuggestions } from "@/constants/MentorRegister";
 import useImageCropper from "@/hooks/useImageCropper";
 import ImageCropper from "../common/ImageCropper";
 import { Camera, ImageUp } from "lucide-react";
@@ -37,7 +37,7 @@ const createFormSchema = (fromRegisterPage: boolean) =>
       .min(2, "Last name must be at least 2 characters long."),
     phone_number: z
       .string()
-      .regex(/^\d{10,15}$/, "Enter a valid phone number."),
+      .regex(/^\+?[0-9\s\-().]{6,20}$/, "Enter a valid phone number."),
     experience: z
       .number()
       .min(3, "Experience must be at least 3 years.")
@@ -48,6 +48,10 @@ const createFormSchema = (fromRegisterPage: boolean) =>
       }, {
         message: "Experience can have at most one digit after the decimal."
       }),
+    location: z
+      .string()
+      .max(100, "Location must not exceed 100 characters.")
+      .optional(),
     profileImg: z.string().min(1, "Profile image is required"),
     profession: z.string().nonempty("Profession is required."),
     about: z
@@ -88,6 +92,7 @@ const RegisterBody: FC<RegisterBodyProps> = ({ fromRegisterPage, fromApplication
       experience: user?.mentorDetails?.experience || 0,
       profileImg: user?.profileImg || "",
       profession: user?.mentorDetails?.profession || "",
+      location: user?.mentorDetails?.location || "",
       about: user?.mentorDetails?.about || "",
       skills: user?.mentorDetails?.skills || [],
       languages: user?.mentorDetails?.languages || [],
@@ -154,6 +159,7 @@ const RegisterBody: FC<RegisterBodyProps> = ({ fromRegisterPage, fromApplication
           first_name: values.first_name,
           last_name: values.last_name,
           profession: values.profession,
+          location: values.location,
           experience: values.experience,
           about: values.about,
           skills: values.skills,
@@ -182,6 +188,7 @@ const RegisterBody: FC<RegisterBodyProps> = ({ fromRegisterPage, fromApplication
         phone_number: user.phone.toString(),
         profileImg: user.profileImg || "",
         profession: user.mentorDetails?.profession || "",
+        location: user.mentorDetails?.location || "",
         experience: user.mentorDetails?.experience || 0,
         about: user.mentorDetails?.about || "",
         skills: [...(user.mentorDetails?.skills || [])],
@@ -361,6 +368,38 @@ const RegisterBody: FC<RegisterBodyProps> = ({ fromRegisterPage, fromApplication
                   />
                   <FormField
                     control={form.control}
+                    name="experience"
+                    render={() => (
+                      <FormField
+                        control={form.control}
+                        name="location"
+                        render={({ field }) => (
+                          <FormItem className="sm:w-1/2 not-sm:w-full sm:pr-2">
+                            <FormLabel className="text-xs ml-3">
+                              Location (Optional)
+                            </FormLabel>
+                            <FormControl>
+                              <Input
+                                type="text"
+                                placeholder="Kochi, Kerala, India"
+                                className="hover:bg-muted transition-colors duration-300 mt-1"
+                                list="locationOptions"
+                                {...field}
+                              />
+                            </FormControl>
+                            <datalist id="locationOptions" className="">
+                              {locationSuggestions.map((location, index) => (
+                                <option key={index} value={location} />
+                              ))}
+                            </datalist>
+                            <FormMessage />
+                          </FormItem>
+                        )}
+                      />
+                    )}
+                  />
+                  <FormField
+                    control={form.control}
                     name="profession"
                     render={({ field }) => (
                       <FormItem className="sm:w-1/2 not-sm:w-full">
@@ -371,7 +410,7 @@ const RegisterBody: FC<RegisterBodyProps> = ({ fromRegisterPage, fromApplication
                           <Input
                             type="text"
                             placeholder="Enter profession"
-                            className="hover:bg-muted transition-colors duration-300 mt-1"
+                            className="hover:bg-muted transition-colors duration-300 mt-1 sm:ml-2"
                             {...field}
                           />
                         </FormControl>
