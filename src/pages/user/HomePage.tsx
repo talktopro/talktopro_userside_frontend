@@ -47,9 +47,9 @@ const HomePage = () => {
             className="absolute top-0 left-0 w-full"
           >
             {currentSlide === 0 ? (
-              <FirstLook key="first" />
-            ) : (
               <SecondLook key="second" />
+            ) : (
+              <FirstLook key="first" />
             )}
           </motion.div>
         </AnimatePresence>

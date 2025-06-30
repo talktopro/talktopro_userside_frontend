@@ -18,7 +18,7 @@ import {
   IMentorDetailsWithSlots,
   IMentorProfileDetailsApiResponse,
 } from "@/types/user";
-import { MessageCircleMore, Share2 } from "lucide-react";
+import { MapPin, MessageCircleMore, Share2 } from "lucide-react";
 import MentorProfileSkeleton from "@/components/common/skeletons/MentorProfile";
 import SlotResponseConverter from "@/utils/slotResponseConverter";
 // import PaymentSuccess from "@/components/common/PaymentSuccess";
@@ -142,8 +142,11 @@ const ProfessionalDetailsPage = () => {
                     }
                   />
                 </div>
-                <p className="text-muted-foreground">{mentor.mentorDetails.profession}</p>
-                <ShardCnBadge variant="secondary" className="rounded-sm px-3 py-1">{mentor.mentorDetails.experience}+ Experience</ShardCnBadge>
+                <p className="text-muted-foreground mt-2">{mentor.mentorDetails.profession}</p>
+                {mentor.mentorDetails.location && (
+                  <p className="text-muted-foreground mt-2 flex items-center gap-2"><MapPin size={15} />{mentor.mentorDetails.location}</p>
+                )}
+                <ShardCnBadge variant="secondary" className="rounded-sm px-3 py-1 mt-3">{mentor.mentorDetails.experience}+ Experience</ShardCnBadge>
               </div>
             </div>
             {/* <div className="mt-2 flex items-center">
