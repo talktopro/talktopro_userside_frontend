@@ -34,6 +34,7 @@ const MentorCard = ({ mentor }: MentorCardProps) => {
                 size={15}
                 className="transition-transform duration-300 group-hover:translate-x-1"
               />
+
             </div>
           </div>
         </div>
