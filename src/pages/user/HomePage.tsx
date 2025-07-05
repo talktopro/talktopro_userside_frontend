@@ -7,6 +7,7 @@ import SecondLook from "@/components/user/home/SecondLook";
 import { motion, AnimatePresence } from "framer-motion";
 import useFetchMentorsList from "@/hooks/useFetchMentorsList";
 import FAQ_Session from "@/components/user/home/FaqSession";
+import Tutorials from "@/components/user/home/VideoSection";
 
 const HomePage = () => {
   const [mentors, setMentors] = useState<Mentor[]>([]);
@@ -56,6 +57,7 @@ const HomePage = () => {
       </div>
 
       <MentorSection mentors={mentors} loading={loading} />
+      <Tutorials />
       <KeyFeatures />
       <FAQ_Session />
     </>
