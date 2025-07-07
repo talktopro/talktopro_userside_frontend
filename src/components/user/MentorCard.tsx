@@ -2,6 +2,9 @@ import { ChevronRight } from "lucide-react";
 import { Link } from "react-router-dom";
 import { ROUTES } from "@/routes/routes";
 import { Mentor } from "@/types/user";
+import { useState } from "react";
+import { Skeleton } from "../ui/skeleton";
+import SkeletonCards from "../common/skeletons/Cards";
 
 interface MentorCardProps {
   mentor: Mentor;
@@ -9,13 +12,25 @@ interface MentorCardProps {
 
 const MentorCard = ({ mentor }: MentorCardProps) => {
   const bucketName = import.meta.env.VITE_S3BUCKET_NAME;
+  const [imgLoaded, setImgLoaded] = useState(false);
+
+  const realImgSrc = `https://${bucketName}.s3.amazonaws.com/${import.meta.env.VITE_PROFILE_IMAGE_FOLDER}/${mentor.profileImg}`;
+
   return (
     <Link to={`${ROUTES.PROFESSIONALS.DETAILS(mentor._id)}`}>
       <div className="h-fit border p-2 rounded-lg cursor-pointer overflow-hidden transition-all duration-600">
+      
+        {(!imgLoaded ) && (
+            <SkeletonCards
+           
+            />
+          )}
+
         <img
-          src={`https://${bucketName}.s3.amazonaws.com/${import.meta.env.VITE_PROFILE_IMAGE_FOLDER}/${mentor.profileImg}`}
+          src={realImgSrc}
           alt="Profile"
           className="w-full h-full object-cover rounded-lg"
+          onLoad={() => setImgLoaded(true)}
         />
 
         <div className="mt-2">
