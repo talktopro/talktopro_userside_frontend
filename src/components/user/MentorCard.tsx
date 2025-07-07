@@ -3,7 +3,6 @@ import { Link } from "react-router-dom";
 import { ROUTES } from "@/routes/routes";
 import { Mentor } from "@/types/user";
 import { useState } from "react";
-import { Skeleton } from "../ui/skeleton";
 import SkeletonCards from "../common/skeletons/Cards";
 
 interface MentorCardProps {

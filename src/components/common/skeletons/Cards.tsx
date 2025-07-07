@@ -7,7 +7,7 @@ const SkeletonCards = () => {
         {[...Array(10)].map((_, index) => (
           <Skeleton
             className="h-70 not-sm:h-50 rounded-lg bg-muted animate-pulse"
-            key={index}
+            key={index} 
           />
         ))}
       </div>
