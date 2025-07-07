@@ -33,14 +33,15 @@ const useImageCropper = () => {
     }
   };
 
-  const createCroppedBlobImage = async (crop: Crop, imageRef: HTMLImageElement | null): Promise<Blob | null> => {
+  const createCroppedBlobImage = async (crop: Crop, imageRef: HTMLImageElement | null, quality = 0.8, maxWidth = 1200): Promise<Blob | null> => {
     if (!imageRef || !crop.width || !crop.height) return null;
 
     return new Promise((resolve) => {
       const canvas = document.createElement('canvas');
-      // Use natural dimensions for highest quality
-      canvas.width = crop.width * (imageRef.naturalWidth / imageRef.width);
-      canvas.height = crop.height * (imageRef.naturalHeight / imageRef.height);
+
+      const scale = Math.min(1, maxWidth / (crop.width * (imageRef.naturalWidth / imageRef.width)));
+      canvas.width = crop.width * (imageRef.naturalWidth / imageRef.width) * scale;
+      canvas.height = crop.height * (imageRef.naturalHeight / imageRef.height) * scale;
 
       const ctx = canvas.getContext('2d');
       if (!ctx) {
@@ -48,7 +49,6 @@ const useImageCropper = () => {
         return;
       }
 
-      // Set high-quality rendering
       ctx.imageSmoothingQuality = 'high';
       ctx.imageSmoothingEnabled = true;
 
@@ -64,11 +64,31 @@ const useImageCropper = () => {
         canvas.height
       );
 
-      // Use maximum quality (1.0) and specify the exact MIME type
+      let finalQuality = quality;
+      if (canvas.width > 1000 || canvas.height > 1000) {
+        finalQuality = Math.max(0.6, quality);
+      }
+
       canvas.toBlob(
-        (blob) => resolve(blob),
+        (blob) => {
+          if (!blob) {
+            resolve(null);
+            return;
+          }
+
+          if (blob.size > 500 * 1024) {
+            const adjustedQuality = Math.max(0.5, finalQuality - 0.1);
+            canvas.toBlob(
+              (smallerBlob) => resolve(smallerBlob || blob),
+              'image/jpeg',
+              adjustedQuality
+            );
+          } else {
+            resolve(blob);
+          }
+        },
         'image/jpeg',
-        1.0 // Maximum quality
+        finalQuality
       );
     });
   };
