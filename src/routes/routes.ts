@@ -28,6 +28,7 @@ export const ROUTES = {
         SLOT_MANAGEMENT: "/mentor/slot-management",
         PRICING: "/mentor/pricing",
         ANALYTICS: "/mentor/analytics",
+        ACCOUNT: `/mentor/account`,
         ACCOUNT_SETTINGS: "/mentor/account-settings",
         NOTIFICATION_SETTINGS: "/mentor/notification-settings",
         REGISTER: "/mentor/register",

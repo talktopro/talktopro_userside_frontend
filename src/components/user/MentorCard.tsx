@@ -3,7 +3,6 @@ import { Link } from "react-router-dom";
 import { ROUTES } from "@/routes/routes";
 import { Mentor } from "@/types/user";
 import { useState } from "react";
-import { Skeleton } from "../ui/skeleton";
 import SkeletonCards from "../common/skeletons/Cards";
 
 interface MentorCardProps {
@@ -19,12 +18,12 @@ const MentorCard = ({ mentor }: MentorCardProps) => {
   return (
     <Link to={`${ROUTES.PROFESSIONALS.DETAILS(mentor._id)}`}>
       <div className="h-fit border p-2 rounded-lg cursor-pointer overflow-hidden transition-all duration-600">
-      
-        {(!imgLoaded ) && (
-            <SkeletonCards
-           
-            />
-          )}
+
+        {(!imgLoaded) && (
+          <SkeletonCards
+
+          />
+        )}
 
         <img
           src={realImgSrc}
