@@ -4,6 +4,7 @@ import { ROUTES } from "@/routes/routes";
 import { Mentor } from "@/types/user";
 import { useState } from "react";
 import SkeletonCards from "../common/skeletons/Cards";
+import SingleSkeletonCard from "../common/skeletons/SingleCard";
 
 interface MentorCardProps {
   mentor: Mentor;
@@ -20,9 +21,7 @@ const MentorCard = ({ mentor }: MentorCardProps) => {
       <div className="h-fit border p-2 rounded-lg cursor-pointer overflow-hidden transition-all duration-600">
       
         {(!imgLoaded ) && (
-            <SkeletonCards
-           
-            />
+            <SingleSkeletonCard />
           )}
 
         <img
