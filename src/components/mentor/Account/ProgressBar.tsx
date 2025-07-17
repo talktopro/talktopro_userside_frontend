@@ -24,7 +24,7 @@ export const MentorAccountProgressBar: React.FC<MentorAccountProgressBarProps> =
         </p>
       </div>
 
-      <div className="relative overflow-x-scroll">
+      <div className="relative overflow-x-auto">
         <div className="w-full h-2 bg-muted-foreground/20 rounded-full">
           <div
             className="h-2 bg-gradient-to-r from-purple-500 to-purple-700 rounded-full transition-all duration-300 ease-in-out"

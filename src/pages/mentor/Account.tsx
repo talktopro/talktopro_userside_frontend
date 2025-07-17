@@ -11,12 +11,15 @@ import { ProfessionalInformation } from '@/components/mentor/Account/Professiona
 import { EducationInformation } from '@/components/mentor/Account/EducationInformation';
 import { SkillsAndLanguageTerms } from '@/components/mentor/Account/SkillsLang';
 import { FinalCheck } from '@/components/mentor/Account/FinalCheck';
+import ProfileImageSection from '@/components/mentor/Account/ProfileImageSection';
+import { useSelector } from 'react-redux';
+import { selectAuth } from '@/redux/slices/authSlice';
 
 const mentorFormSchema = z.object({
   personalInfo: z.object({
     fullName: z.string().min(2, 'Full name must be at least 2 characters'),
     email: z.string().email('Please enter a valid email address'),
-    phoneNumber: z.string().regex(/^\+91\s\d{10}$/, 'Please enter a valid Indian phone number (+91 XXXXXXXXXX)'),
+    phoneNumber: z.string().regex(/^\+91\s\d{10}$/, 'Please enter a valid phone number'),
     dateOfBirth: z.date({
       required_error: 'Date of birth is required',
     }),
@@ -63,21 +66,24 @@ const STEP_LABELS = [
 ];
 
 export const MentorAccount: React.FC = () => {
+  const { user } = useSelector(selectAuth);
+  if (!user) return;
+
   const [currentStep, setCurrentStep] = useState(1);
 
   const form = useForm<MentorFormData>({
     resolver: zodResolver(mentorFormSchema),
     defaultValues: {
       personalInfo: {
-        email: 'mentor@example.com',
-        fullName: '',
-        phoneNumber: '',
+        email: user.email,
+        fullName: user.uname || '',
+        phoneNumber: user.phone.toString() || undefined,
         dateOfBirth: undefined,
         gender: undefined,
-        location: '',
+        location: user.mentorDetails?.location || '',
       },
       professionalInfo: {
-        profession: '',
+        profession: user?.uname || '',
         about: '',
         yearsOfExperience: 0,
         workExperience: [{
@@ -104,7 +110,6 @@ export const MentorAccount: React.FC = () => {
 
   const { trigger, getValues } = form;
 
-  // Validate current step before proceeding
   const validateCurrentStep = async (): Promise<boolean> => {
     let fieldsToValidate: (keyof MentorFormData)[] = [];
 
@@ -146,23 +151,22 @@ export const MentorAccount: React.FC = () => {
     if (isValid) {
       const formData = getValues();
       console.log('Form submitted:', formData);
-
-      // Here you would typically send the data to your backend
-      // await submitMentorRegistration(formData);
     }
   };
 
   const renderCurrentStep = () => {
     switch (currentStep) {
       case 1:
-        return <PersonalInformation form={form} />;
+        return <PersonalInformation form={form} user={user} />;
       case 2:
-        return <ProfessionalInformation form={form} />;
+        return <ProfileImageSection />;
       case 3:
-        return <EducationInformation form={form} />;
+        return <ProfessionalInformation form={form} />;
       case 4:
-        return <SkillsAndLanguageTerms form={form} />;
+        return <EducationInformation form={form} />;
       case 5:
+        return <SkillsAndLanguageTerms form={form} />;
+      case 6:
         return <FinalCheck form={form} />;
       default:
         return null;
@@ -178,28 +182,27 @@ export const MentorAccount: React.FC = () => {
           stepLabels={STEP_LABELS}
         />
 
-        <Card className="bg-card border-border shadow-lg">
-          <CardContent className="p-8 md:p-12">
+        <Card className="border-none shadow-none">
+          <CardContent className="p-4 md:p-6">
             {renderCurrentStep()}
 
-            {/* Navigation Buttons */}
-            <div className="flex justify-between items-center mt-12 pt-8 border-t border-border">
+            <div className="flex justify-between items-center gap-2 mt-10 pt-8 border-t border-border">
               <Button
                 type="button"
-                variant="outline"
+                variant="ghost"
                 onClick={handleBack}
                 disabled={currentStep === 1}
-                className="flex items-center gap-2 h-11 px-6"
+                className="flex items-center gap-2 border w-full"
               >
                 <ArrowLeft className="h-4 w-4" />
                 Back
               </Button>
 
-              {currentStep < 5 ? (
+              {currentStep < STEP_LABELS.length ? (
                 <Button
                   type="button"
                   onClick={handleNext}
-                  className="flex items-center gap-2 h-11 px-6 bg-primary hover:bg-primary/90"
+                  className="flex items-center gap-2 w-full bg-primary"
                 >
                   Next
                   <ArrowRight className="h-4 w-4" />
