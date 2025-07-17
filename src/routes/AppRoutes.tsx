@@ -14,10 +14,10 @@ import ChangePasswordPage from "@/pages/user/ChangePasswordPage";
 import SignupOtpPage from "@/pages/user/SignupOtpPage";
 import AboutUs from "@/pages/common/aboutUs";
 
-//! Loading page
+// Loading page
 import AppLoader from "@/components/common/loading/AppLoader";
 
-//! Mentor pages
+// Mentor pages
 const MentorLayout = lazy(() => import("@/layouts/MentorLayout"));
 const MentorBookings = lazy(() => import("@/pages/mentor/Bookings"));
 const Dashboard = lazy(() => import("@/pages/mentor/Dashboard"));
@@ -26,7 +26,7 @@ const MentorAccountDetails = lazy(() => import("@/pages/mentor/AccountDetails"))
 const SlotManagement = lazy(() => import("@/pages/mentor/SlotManagement"));
 const Pricing = lazy(() => import("@/pages/mentor/Pricing"));
 
-//! Protectors
+// Protectors
 import MentorRouteProtector from "@/auth/mentorProtector";
 import UserRouteProtector from "@/auth/userProtector";
 import GuestUserProtector from "@/auth/guestUserProtector";
