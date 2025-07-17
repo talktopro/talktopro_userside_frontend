@@ -19,6 +19,7 @@ const MentorCard = ({ mentor }: MentorCardProps) => {
   return (
     <Link to={`${ROUTES.PROFESSIONALS.DETAILS(mentor._id)}`}>
       <div className="h-fit border p-2 rounded-lg cursor-pointer overflow-hidden transition-all duration-600">
+
       
         {(!imgLoaded ) && (
             <SingleSkeletonCard />
@@ -32,8 +33,8 @@ const MentorCard = ({ mentor }: MentorCardProps) => {
         />
 
         <div className="mt-2">
-          <h3 className="font-bold">{`${mentor.mentorDetails.first_name} ${mentor.mentorDetails.last_name}`}</h3>
-          <p className="text-muted-foreground text-sm font-semibold">{mentor.mentorDetails.profession}</p>
+          <h3 className="font-bold line-clamp-1">{`${mentor.mentorDetails.first_name} ${mentor.mentorDetails.last_name}`}</h3>
+          <p className="text-muted-foreground text-sm font-semibold line-clamp-1">{mentor.mentorDetails.profession}</p>
         </div>
 
         <div className="flex justify-between items-center rounded-lg p-2 w-full bg-muted mt-2">

@@ -7,7 +7,7 @@ import SecondLook from "@/components/user/home/SecondLook";
 import { motion, AnimatePresence } from "framer-motion";
 import useFetchMentorsList from "@/hooks/useFetchMentorsList";
 import FAQ_Session from "@/components/user/home/FaqSession";
-import Tutorials from "@/components/user/home/VideoSection";
+// import Tutorials from "@/components/user/home/VideoSection";
 
 const HomePage = () => {
   const [mentors, setMentors] = useState<Mentor[]>([]);
@@ -18,7 +18,7 @@ const HomePage = () => {
   const fetchTopMentors = useCallback(async () => {
     try {
       setLoading(true);
-      const response = await getAllMentors({ type: "top", limit: 5 });
+      const response = await getAllMentors({ type: "top", limit: 6 });
       setMentors(response?.mentors || []);
     } finally {
       setLoading(false);
@@ -57,7 +57,7 @@ const HomePage = () => {
       </div>
 
       <MentorSection mentors={mentors} loading={loading} />
-      <Tutorials />
+      {/* <Tutorials /> */}
       <KeyFeatures />
       <FAQ_Session />
     </>
