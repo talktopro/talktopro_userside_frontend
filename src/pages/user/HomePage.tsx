@@ -18,7 +18,7 @@ const HomePage = () => {
   const fetchTopMentors = useCallback(async () => {
     try {
       setLoading(true);
-      const response = await getAllMentors({ type: "top", limit: 5 });
+      const response = await getAllMentors({ type: "top", limit: 6 });
       setMentors(response?.mentors || []);
     } finally {
       setLoading(false);
