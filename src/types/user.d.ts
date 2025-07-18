@@ -194,3 +194,9 @@ export interface ISocketResponse {
         bookingDetails?: IBookingHistory
     };
 };
+
+// ========================= AI =========================
+export interface IChatbotMessage {
+    text: string
+    isUser: boolean
+};
