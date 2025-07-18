@@ -67,7 +67,7 @@ const Footer = () => {
               />
             </Link>
             <Link
-              to="https://www.instagram.com/talktopro_?utm_source=ig_web_button_share_sheet&igsh=ZDNlZDc0MzIxNw=="
+              to="https://www.instagram.com/talktopro.in?utm_source=ig_web_button_share_sheet&igsh=eGN1Ym9rbjB1dzJk"
               target="_blank"
               rel="noopener noreferrer"
             >
