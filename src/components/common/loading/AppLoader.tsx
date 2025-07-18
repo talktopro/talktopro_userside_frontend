@@ -5,7 +5,7 @@ const AppLoader: React.FC = () => {
     <div className="min-h-screen homepage_keyFeatures_bg flex items-center justify-center p-4">
       <div className="text-center">
         <h3 className="text-4xl not-sm:text-3xl font-bold">
-          Talk<span>To</span> <span className="text-purple-500">Pro</span>
+          Talk<span> To</span> <span className="text-purple-500">Pro</span>
         </h3>
 
         {/* Train Loading Animation */}

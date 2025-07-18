@@ -43,10 +43,14 @@ const MentorSection = ({
           <p className="opacity-60 mt-3">No mentor details found!</p>
         </div>
       ) : (
-        <div className="grid gap-3 grid-cols-[repeat(auto-fill,minmax(160px,1fr))] md:grid-cols-[repeat(auto-fill,minmax(240px,1fr))]">
-          {mentors.map((mentor) => (
-            <MentorCard key={mentor._id} mentor={mentor} />
-          ))}
+        <div className="w-full overflow-x-auto custom-scrollbar px-2 lg:overflow-x-hidden">
+          <div className="grid grid-flow-col auto-cols-[170px] md:auto-cols-[240px] gap-4 lg:grid-flow-row lg:auto-cols-auto lg:grid-cols-5 lg:w-full">
+            {mentors.map((mentor) => (
+              <div key={mentor._id} className="lg:w-full">
+                <MentorCard mentor={mentor} />
+              </div>
+            ))}
+          </div>
         </div>
       )}
     </section>
