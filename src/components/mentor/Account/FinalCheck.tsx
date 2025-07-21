@@ -1,219 +1,161 @@
-import React from 'react';
-import { UseFormReturn } from 'react-hook-form';
-import { MentorFormData } from '@/pages/mentor/Account';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { Badge } from '@/components/ui/Badge';
-import { format } from 'date-fns';
-import { CheckCircle, User, Briefcase, GraduationCap, Award } from 'lucide-react';
+import type React from "react"
+import type { UseFormReturn } from "react-hook-form"
+import type { MentorFormData } from "@/pages/mentor/Account"
+import { Badge } from "@/components/ui/Badge"
+import { format } from "date-fns"
+import { Mail, MapPin, Phone, Calendar, UserRound, Briefcase, CheckCircle } from "lucide-react"
+import type { User } from "@/types/user"
 
 interface FinalCheckProps {
-   form: UseFormReturn<MentorFormData>;
+   form: UseFormReturn<MentorFormData>
+   user: User
 }
 
-export const FinalCheck: React.FC<FinalCheckProps> = ({ form }) => {
+export const FinalCheck: React.FC<FinalCheckProps> = ({ form, user }) => {
    const formData = form.getValues();
+   const bucketName = import.meta.env.VITE_S3BUCKET_NAME;
 
    return (
-      <div className="space-y-6">
-         <div className="text-center mb-8">
-            <div className="flex justify-center mb-4">
-               <div className="bg-primary/10 p-3 rounded-full">
-                  <CheckCircle className="h-8 w-8 text-primary" />
+      <div>
+         <div className="flex flex-col lg:flex-row">
+            <div className="lg:w-1/3">
+
+               <div className="mb-8">
+                  <div className="w-auto h-32 rounded-md overflow-hidden aspect-[3.5/4] relative mr-4 not-sm:mr-0 bg-background border">
+                     <img
+                        src={`https://${bucketName}.s3.amazonaws.com/${import.meta.env.VITE_PROFILE_IMAGE_FOLDER}/${user.profileImg}`}
+                        alt="Profile picture"
+                        className="w-full h-full object-cover"
+                     />
+                  </div>
+                  <h1 className="text-xl font-semibold">{formData.personalInfo.fullName}</h1>
+                  <p className="text-muted-foreground">{formData.professionalInfo.profession}</p>
+               </div>
+
+               <div className="space-y-2 mb-6">
+                  <div className="flex items-center gap-3 text-muted-foreground">
+                     <Mail className="w-4 h-4" />
+                     <span className="text-sm">{formData.personalInfo.email}</span>
+                  </div>
+                  <div className="flex items-center gap-3 text-muted-foreground">
+                     <MapPin className="w-4 h-4" />
+                     <span className="text-sm">{formData.personalInfo.location}</span>
+                  </div>
+                  <div className="flex items-center gap-3 text-muted-foreground">
+                     <Phone className="w-4 h-4" />
+                     <span className="text-sm">{formData.personalInfo.phoneNumber}</span>
+                  </div>
+                  <div className="flex items-center gap-3 text-muted-foreground">
+                     <Calendar className="w-4 h-4" />
+                     <span className="text-sm">
+                        {formData.personalInfo.dateOfBirth
+                           ? format(formData.personalInfo.dateOfBirth, "MMM dd, yyyy")
+                           : "Not specified"}
+                     </span>
+                  </div>
+                  <div className="flex items-center gap-3 text-muted-foreground">
+                     <Briefcase className="w-4 h-4" />
+                     <span className="text-sm">{formData.professionalInfo.experience} years experience</span>
+                  </div>
+                  <div className="flex items-center gap-3 text-muted-foreground">
+                     <UserRound className="w-4 h-4" />
+                     <span className="text-sm capitalize">{formData.personalInfo.gender}</span>
+                  </div>
+               </div>
+
+               {/* Skills Section */}
+               <div className="mb-6">
+                  <h3 className="text-lg font-semibold mb-2">Skills</h3>
+                  <div className="flex flex-wrap gap-1">
+                     {formData.skillsAndTerms.skills.map((skill, index) => (
+                        <Badge key={index} className="bg-muted text-xs text-accent-foreground">
+                           {skill}
+                        </Badge>
+                     ))}
+                  </div>
+               </div>
+
+               {/* Languages Section */}
+               <div className="mb-6">
+                  <h3 className="text-lg font-semibold mb-2">Languages</h3>
+                  <div className="flex flex-wrap gap-1">
+                     {formData.skillsAndTerms.languages.map((language, index) => (
+                        <Badge key={index} variant="outline" className="bg-muted text-xs">
+                           {language}
+                        </Badge>
+                     ))}
+                  </div>
                </div>
             </div>
-            <h3 className="text-2xl font-bold text-foreground mb-2">Review Your Information</h3>
-            <p className="text-muted-foreground">Please review all the information before submitting your mentor registration</p>
-         </div>
 
-         <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-            {/* Personal Information */}
-            <Card className="bg-form-background border-form-border">
-               <CardHeader className="pb-4">
-                  <CardTitle className="flex items-center gap-2 text-lg">
-                     <User className="h-5 w-5 text-primary" />
-                     Personal Information
-                  </CardTitle>
-               </CardHeader>
-               <CardContent className="space-y-3">
-                  <div>
-                     <span className="text-sm font-medium text-muted-foreground">Full Name:</span>
-                     <p className="text-foreground">{formData.personalInfo.fullName}</p>
-                  </div>
-                  <div>
-                     <span className="text-sm font-medium text-muted-foreground">Email:</span>
-                     <p className="text-foreground">{formData.personalInfo.email}</p>
-                  </div>
-                  <div>
-                     <span className="text-sm font-medium text-muted-foreground">Phone:</span>
-                     <p className="text-foreground">{formData.personalInfo.phoneNumber}</p>
-                  </div>
-                  <div>
-                     <span className="text-sm font-medium text-muted-foreground">Date of Birth:</span>
-                     <p className="text-foreground">
-                        {formData.personalInfo.dateOfBirth
-                           ? format(formData.personalInfo.dateOfBirth, 'MMMM dd, yyyy')
-                           : 'Not specified'
-                        }
-                     </p>
-                  </div>
-                  <div>
-                     <span className="text-sm font-medium text-muted-foreground">Gender:</span>
-                     <p className="text-foreground capitalize">{formData.personalInfo.gender}</p>
-                  </div>
-                  <div>
-                     <span className="text-sm font-medium text-muted-foreground">Location:</span>
-                     <p className="text-foreground">{formData.personalInfo.location}</p>
-                  </div>
-               </CardContent>
-            </Card>
+            <div className="lg:w-2/3 pl-0 sm:pl-2">
+               <section className="mb-6">
+                  <h2 className="text-xl font-semibold mb-2">Professional Summary</h2>
+                  <p className="text-muted-foreground">{formData.professionalInfo.about}</p>
+               </section>
 
-            {/* Professional Information */}
-            <Card className="bg-form-background border-form-border">
-               <CardHeader className="pb-4">
-                  <CardTitle className="flex items-center gap-2 text-lg">
-                     <Briefcase className="h-5 w-5 text-primary" />
-                     Professional Information
-                  </CardTitle>
-               </CardHeader>
-               <CardContent className="space-y-3">
-                  <div>
-                     <span className="text-sm font-medium text-muted-foreground">Profession:</span>
-                     <p className="text-foreground">{formData.professionalInfo.profession}</p>
-                  </div>
-                  <div>
-                     <span className="text-sm font-medium text-muted-foreground">Experience:</span>
-                     <p className="text-foreground">{formData.professionalInfo.yearsOfExperience} years</p>
-                  </div>
-                  <div>
-                     <span className="text-sm font-medium text-muted-foreground">About:</span>
-                     <p className="text-foreground text-sm leading-relaxed">{formData.professionalInfo.about}</p>
-                  </div>
-               </CardContent>
-            </Card>
+               {/* Work Experience */}
+               <section className="mb-6">
+                  <h2 className="text-lg font-semibold mb-1">Work Experience</h2>
+                  <div className="space-y-1">
+                     {formData.professionalInfo.workExperience.map((experience, index) => (
+                        <div key={index} className="border-l-2 relative rounded-xl bg-muted/50 p-2 px-4">
 
-            {/* Education */}
-            <Card className="bg-form-background border-form-border">
-               <CardHeader className="pb-4">
-                  <CardTitle className="flex items-center gap-2 text-lg">
-                     <GraduationCap className="h-5 w-5 text-primary" />
-                     Education
-                  </CardTitle>
-               </CardHeader>
-               <CardContent className="space-y-3">
-                  <div>
-                     <span className="text-sm font-medium text-muted-foreground">Highest Degree:</span>
-                     <p className="text-foreground">{formData.education.highestDegree}</p>
-                  </div>
-                  <div>
-                     <span className="text-sm font-medium text-muted-foreground">Institute:</span>
-                     <p className="text-foreground">{formData.education.instituteName}</p>
-                  </div>
-                  <div>
-                     <span className="text-sm font-medium text-muted-foreground">Duration:</span>
-                     <p className="text-foreground">{formData.education.startYear} - {formData.education.endYear}</p>
-                  </div>
-               </CardContent>
-            </Card>
-
-            {/* Skills & Languages */}
-            <Card className="bg-form-background border-form-border">
-               <CardHeader className="pb-4">
-                  <CardTitle className="flex items-center gap-2 text-lg">
-                     <Award className="h-5 w-5 text-primary" />
-                     Skills & Languages
-                  </CardTitle>
-               </CardHeader>
-               <CardContent className="space-y-4">
-                  <div>
-                     <span className="text-sm font-medium text-muted-foreground block mb-2">Skills:</span>
-                     <div className="flex flex-wrap gap-2">
-                        {formData.skillsAndTerms.skills.map((skill, index) => (
-                           <Badge key={index} variant="secondary" className="text-xs">
-                              {skill}
-                           </Badge>
-                        ))}
-                     </div>
-                  </div>
-                  <div>
-                     <span className="text-sm font-medium text-muted-foreground block mb-2">Languages:</span>
-                     <div className="flex flex-wrap gap-2">
-                        {formData.skillsAndTerms.languages.map((language, index) => (
-                           <Badge key={index} variant="outline" className="text-xs">
-                              {language}
-                           </Badge>
-                        ))}
-                     </div>
-                  </div>
-               </CardContent>
-            </Card>
-         </div>
-
-         {/* Work Experience */}
-         <Card className="bg-form-background border-form-border">
-            <CardHeader className="pb-4">
-               <CardTitle className="flex items-center gap-2 text-lg">
-                  <Briefcase className="h-5 w-5 text-primary" />
-                  Work Experience
-               </CardTitle>
-            </CardHeader>
-            <CardContent>
-               <div className="space-y-4">
-                  {formData.professionalInfo.workExperience.map((experience, index) => (
-                     <div key={index} className="border border-border rounded-lg p-4 bg-background">
-                        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                           <div>
-                              <span className="text-sm font-medium text-muted-foreground">Job Title:</span>
-                              <p className="text-foreground">{experience.jobTitle}</p>
+                           <div className="flex flex-col lg:flex-row lg:justify-between lg:items-start">
+                              <h3 className="font-semibold">{experience.jobTitle}</h3>
                            </div>
-                           <div>
-                              <span className="text-sm font-medium text-muted-foreground">Company:</span>
-                              <p className="text-foreground">{experience.companyName}</p>
-                           </div>
-                           <div>
-                              <span className="text-sm font-medium text-muted-foreground">Start Date:</span>
-                              <p className="text-foreground">{experience.startDate}</p>
-                           </div>
-                           <div>
-                              <span className="text-sm font-medium text-muted-foreground">End Date:</span>
-                              <p className="text-foreground">{experience.endDate}</p>
+
+                           <div className="flex flex-col lg:flex-row lg:justify-between text-sm text-muted-foreground">
+                              <span>{experience.companyName}</span>
+                              <div className="flex items-center gap-2 mt-1 lg:mt-0">
+                                 <Calendar className="w-4 h-4" />
+                                 <span>
+                                    {/* {experience.startDate.toString()} - {experience.endDate.toString()} */}
+                                 </span>
+                              </div>
                            </div>
                         </div>
-                     </div>
-                  ))}
-               </div>
-            </CardContent>
-         </Card>
+                     ))}
+                  </div>
+               </section>
 
-         {/* Terms Acceptance */}
-         <Card className="bg-muted/50 border-border">
-            <CardContent className="pt-6">
-               <div className="flex items-start gap-3">
-                  <CheckCircle className="h-5 w-5 text-primary mt-0.5" />
-                  <div>
-                     <h4 className="text-sm font-medium text-foreground mb-2">Terms & Conditions</h4>
-                     <div className="space-y-1 text-sm text-muted-foreground">
-                        <p>✓ I have accepted the Terms and Conditions</p>
-                        <p>✓ I have accepted the Privacy Policy</p>
+               {/* Education */}
+               <section className="mb-6">
+                  <h2 className="text-xl font-semibold mb-3">Education</h2>
+                  <div className="border-l-2 relative rounded-xl bg-muted/50 p-2 px-4">
+                     <h3 className="font-semibold">{formData.education.highestDegree}</h3>
+                     <div className="flex flex-col lg:flex-row lg:justify-between text-sm text-muted-foreground">
+                        <div className="flex items-center gap-2">
+                           <Briefcase className="w-4 h-4" />
+                           <span>{formData.education.instituteName}</span>
+                        </div>
+                        <div className="flex items-center gap-2 mt-1 lg:mt-0">
+                           <Calendar className="w-4 h-4" />
+                           <span>
+                              {formData.education.startYear} - {formData.education.endYear}
+                           </span>
+                        </div>
                      </div>
                   </div>
-               </div>
-            </CardContent>
-         </Card>
+               </section>
 
-         {/* Final Note */}
-         <div className="bg-primary/5 border border-primary/20 rounded-lg p-6">
-            <div className="flex items-start gap-3">
-               <div className="bg-primary/10 p-2 rounded-full mt-1">
-                  <CheckCircle className="w-4 h-4 text-primary" />
-               </div>
-               <div>
-                  <h4 className="text-sm font-medium text-foreground mb-1">Ready to Submit</h4>
-                  <p className="text-sm text-muted-foreground">
-                     Please review all the information above. Once you submit your registration, our team will review your profile and get back to you within 2-3 business days.
-                  </p>
-               </div>
+               {/* Terms & Conditions */}
+               <section className="mb-8">
+                  <div className="bg-muted/50 rounded-lg p-4">
+                     <div className="space-y-2 text-sm">
+                        <div className="flex items-center gap-2">
+                           <CheckCircle className="w-4 h-4 text-green-600" />
+                           <span>Terms and Conditions accepted</span>
+                        </div>
+                        <div className="flex items-center gap-2">
+                           <CheckCircle className="w-4 h-4 text-green-600" />
+                           <span>Privacy Policy accepted</span>
+                        </div>
+                     </div>
+                  </div>
+               </section>
             </div>
          </div>
       </div>
-   );
-};
+   )
+}

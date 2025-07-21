@@ -11,43 +11,82 @@ import { ProfessionalInformation } from '@/components/mentor/Account/Professiona
 import { EducationInformation } from '@/components/mentor/Account/EducationInformation';
 import { SkillsAndLanguageTerms } from '@/components/mentor/Account/SkillsLang';
 import { FinalCheck } from '@/components/mentor/Account/FinalCheck';
-import ProfileImageSection from '@/components/mentor/Account/ProfileImageSection';
 import { useSelector } from 'react-redux';
 import { selectAuth } from '@/redux/slices/authSlice';
 
 const mentorFormSchema = z.object({
   personalInfo: z.object({
-    fullName: z.string().min(2, 'Full name must be at least 2 characters'),
-    email: z.string().email('Please enter a valid email address'),
-    phoneNumber: z.string().regex(/^\+91\s\d{10}$/, 'Please enter a valid phone number'),
-    dateOfBirth: z.date({
-      required_error: 'Date of birth is required',
-    }),
+    fullName: z.string().trim().min(2, 'Full name must be at least 2 characters'),
+    email: z.string().trim().readonly(),
+    phoneNumber: z.string().trim().regex(/^\+?[0-9\s\-().]{6,20}$/, "Enter a valid phone number."),
+    dateOfBirth: z
+      .string()
+      .transform((val) => new Date(val))
+      .pipe(
+        z.date()
+          .max(new Date(), 'Date of birth cannot be in the future')
+          .min(new Date(new Date().setFullYear(new Date().getFullYear() - 100)), "This date is not acceptable.")
+      ),
     gender: z.enum(['male', 'female'], {
       required_error: 'Please select your gender',
     }),
-    location: z.string().min(2, 'Location must be at least 2 characters'),
+    location: z.string().trim().min(2, 'Location must be at least 2 characters'),
   }),
   professionalInfo: z.object({
-    profession: z.string().min(2, 'Profession must be at least 2 characters'),
-    about: z.string().min(50, 'About section must be at least 50 characters').max(500, 'About section must not exceed 500 characters'),
-    yearsOfExperience: z.number().min(0, 'Experience cannot be negative').max(50, 'Experience cannot exceed 50 years'),
-    workExperience: z.array(z.object({
-      jobTitle: z.string().min(2, 'Job title is required'),
-      companyName: z.string().min(2, 'Company name is required'),
-      startDate: z.string().regex(/^(0[1-9]|1[0-2])\/\d{4}$/, 'Please use MM/YYYY format'),
-      endDate: z.string().regex(/^(0[1-9]|1[0-2])\/\d{4}$/, 'Please use MM/YYYY format'),
-    })).min(1, 'At least one work experience is required'),
+    profession: z.string().trim().nonempty("Profession is required."),
+    about: z
+      .string()
+      .trim()
+      .min(50, "About section must need minimum 50 characters.")
+      .max(500, "About section must not exceed 500 characters."),
+    experience: z
+      .number()
+      .min(3, "Experience must be at least 3 years.")
+      .max(50, "Experience must not exceed 50 years.")
+      .refine((val) => {
+        const decimalPart = val.toString().split(".")[1];
+        return !decimalPart || decimalPart.length <= 1;
+      }, {
+        message: "Experience can have at most one digit after the decimal."
+      }),
+    workExperience: z.array(
+      z.object({
+        jobTitle: z.string().trim().min(2, 'Job title is required'),
+        companyName: z.string().trim().min(2, 'Company name is required'),
+        startDate: z.string()
+          .transform(val => new Date(val))
+          .pipe(z.date().min(new Date(new Date().setFullYear(new Date().getFullYear() - 100)), "This date is not acceptable.")),
+        endDate: z.union([
+          z.string()
+            .transform(val => new Date(val))
+            .pipe(z.date()
+              .min(new Date(new Date().setFullYear(new Date().getFullYear() - 100)), "This date is not acceptable.")
+            ),
+          z.literal("Present")
+        ]).optional(),
+        currentlyWorking: z.boolean().optional(),
+      }).refine(
+        (data) => {
+          if (data.currentlyWorking) return true;
+          if (!data.startDate || !data.endDate || data.endDate === "Present") return false;
+          return new Date(data.endDate) > new Date(data.startDate);
+        },
+        {
+          message: "End date must be after start date.",
+          path: ["endDate"],
+        }
+      )
+    ).min(1, 'At least one work experience is required'),
   }),
   education: z.object({
-    highestDegree: z.string().min(2, 'Highest degree is required'),
-    instituteName: z.string().min(2, 'Institute name is required'),
-    startYear: z.string().regex(/^\d{4}$/, 'Please enter a valid year (YYYY)'),
-    endYear: z.string().regex(/^\d{4}$/, 'Please enter a valid year (YYYY)'),
+    highestDegree: z.string().trim().min(2, 'Highest degree is required'),
+    instituteName: z.string().trim().min(2, 'Institute name is required'),
+    startYear: z.string().trim().regex(/^\d{4}$/, 'Please enter a valid year (YYYY)'),
+    endYear: z.string().trim().regex(/^\d{4}$/, 'Please enter a valid year (YYYY)'),
   }),
   skillsAndTerms: z.object({
-    skills: z.array(z.string()).min(1, 'At least one skill is required'),
-    languages: z.array(z.string()).min(1, 'At least one language is required'),
+    skills: z.array(z.string().trim()).min(1, 'At least one skill is required'),
+    languages: z.array(z.string().trim()).min(1, 'At least one language is required'),
     termsAndConditions: z.boolean().refine(val => val === true, 'You must accept the terms and conditions'),
     privacyPolicy: z.boolean().refine(val => val === true, 'You must accept the privacy policy'),
   }),
@@ -57,11 +96,9 @@ export type MentorFormData = z.infer<typeof mentorFormSchema>;
 
 const STEP_LABELS = [
   'Personal Information',
-  'Profile image',
   'Professional Information',
   'Education',
-  'Skills & Language',
-  'Terms & Condition',
+  'Skills, Language & Terms',
   'Review & Submit'
 ];
 
@@ -75,22 +112,23 @@ export const MentorAccount: React.FC = () => {
     resolver: zodResolver(mentorFormSchema),
     defaultValues: {
       personalInfo: {
+        fullName: user.uname,
         email: user.email,
-        fullName: user.uname || '',
         phoneNumber: user.phone.toString() || undefined,
         dateOfBirth: undefined,
         gender: undefined,
         location: user.mentorDetails?.location || '',
       },
       professionalInfo: {
-        profession: user?.uname || '',
-        about: '',
-        yearsOfExperience: 0,
+        profession: user.mentorDetails?.profession || '',
+        about: user.mentorDetails?.about || '',
+        experience: user.mentorDetails?.experience || undefined,
         workExperience: [{
           jobTitle: '',
           companyName: '',
-          startDate: '',
-          endDate: '',
+          startDate: undefined,
+          endDate: undefined,
+          currentlyWorking: false,
         }],
       },
       education: {
@@ -100,12 +138,14 @@ export const MentorAccount: React.FC = () => {
         endYear: '',
       },
       skillsAndTerms: {
-        skills: [],
-        languages: [],
+        skills: user.mentorDetails?.skills || [],
+        languages: user.mentorDetails?.languages || [],
         termsAndConditions: false,
         privacyPolicy: false,
       },
     },
+    mode: "onChange",
+    criteriaMode: "all"
   });
 
   const { trigger, getValues } = form;
@@ -124,6 +164,9 @@ export const MentorAccount: React.FC = () => {
         fieldsToValidate = ['education'];
         break;
       case 4:
+        fieldsToValidate = ['skillsAndTerms'];
+        break;
+      case 5:
         fieldsToValidate = ['skillsAndTerms'];
         break;
       default:
@@ -159,15 +202,13 @@ export const MentorAccount: React.FC = () => {
       case 1:
         return <PersonalInformation form={form} user={user} />;
       case 2:
-        return <ProfileImageSection />;
-      case 3:
         return <ProfessionalInformation form={form} />;
-      case 4:
+      case 3:
         return <EducationInformation form={form} />;
-      case 5:
+      case 4:
         return <SkillsAndLanguageTerms form={form} />;
-      case 6:
-        return <FinalCheck form={form} />;
+      case 5:
+        return <FinalCheck form={form} user={user} />;
       default:
         return null;
     }
@@ -183,39 +224,41 @@ export const MentorAccount: React.FC = () => {
         />
 
         <Card className="border-none shadow-none">
-          <CardContent className="p-4 md:p-6">
+          <CardContent className="p-4">
             {renderCurrentStep()}
 
-            <div className="flex justify-between items-center gap-2 mt-10 pt-8 border-t border-border">
-              <Button
-                type="button"
-                variant="ghost"
-                onClick={handleBack}
-                disabled={currentStep === 1}
-                className="flex items-center gap-2 border w-full"
-              >
-                <ArrowLeft className="h-4 w-4" />
-                Back
-              </Button>
+            <div className='w-full mx-auto border-t mt-10 pt-8'>
+              <div className="flex justify-end w-full items-center gap-2">
+                <Button
+                  type="button"
+                  variant="ghost"
+                  onClick={handleBack}
+                  hidden={currentStep === 1}
+                  className="flex items-center gap-2 border min-w-28"
+                >
+                  <ArrowLeft className="h-4 w-4" />
+                  Back
+                </Button>
 
-              {currentStep < STEP_LABELS.length ? (
-                <Button
-                  type="button"
-                  onClick={handleNext}
-                  className="flex items-center gap-2 w-full bg-primary"
-                >
-                  Next
-                  <ArrowRight className="h-4 w-4" />
-                </Button>
-              ) : (
-                <Button
-                  type="button"
-                  onClick={handleSubmit}
-                  className="flex items-center gap-2 h-11 px-8 bg-primary hover:bg-primary/90"
-                >
-                  Submit Registration
-                </Button>
-              )}
+                {currentStep < STEP_LABELS.length ? (
+                  <Button
+                    type="button"
+                    onClick={handleNext}
+                    className="flex items-center gap-2 bg-primary min-w-28"
+                  >
+                    Next
+                    <ArrowRight className="h-4 w-4" />
+                  </Button>
+                ) : (
+                  <Button
+                    type="button"
+                    onClick={handleSubmit}
+                    className="flex items-center gap-2 px-8"
+                  >
+                    Submit Registration
+                  </Button>
+                )}
+              </div>
             </div>
           </CardContent>
         </Card>

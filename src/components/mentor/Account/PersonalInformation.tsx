@@ -4,12 +4,10 @@ import { MentorFormData } from '@/pages/mentor/Account';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group';
-import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover';
-import { CalendarIcon, Camera, ImageUp } from 'lucide-react';
-import { format } from 'date-fns';
-import { cn } from '@/lib/utils';
+import { Camera, ImageUp } from 'lucide-react';
 import useImageCropper from '@/hooks/useImageCropper';
 import { User } from '@/types/user';
+import ImageCropper from '@/components/common/ImageCropper';
 
 interface PersonalInformationProps {
   form: UseFormReturn<MentorFormData>;
@@ -18,8 +16,8 @@ interface PersonalInformationProps {
 
 export const PersonalInformation: React.FC<PersonalInformationProps> = ({ form, user }) => {
   const { register, formState: { errors }, watch, setValue } = form;
-  const { inputRef, handleImageChange, handleInputTrigger } = useImageCropper();
-  const dateOfBirth = watch('personalInfo.dateOfBirth');
+  const { inputRef, handleImageChange, handleInputTrigger, selectedImage, createCroppedBlobImage, handleClose, handleSave, isCropperOpen } = useImageCropper();
+  const bucketName = import.meta.env.VITE_S3BUCKET_NAME;
 
   return (
     <div className="space-y-6">
@@ -27,7 +25,7 @@ export const PersonalInformation: React.FC<PersonalInformationProps> = ({ form, 
         <div className="w-auto h-32 rounded-md overflow-hidden aspect-[3.5/4] relative mr-4 not-sm:mr-0 bg-background border">
           {user.profileImg ? (
             <img
-              src={`https://talk-to-pro-bucket.s3.amazonaws.com/profile/6870fc245a0f2a78284b476f`}
+              src={`https://${bucketName}.s3.amazonaws.com/${import.meta.env.VITE_PROFILE_IMAGE_FOLDER}/${user.profileImg}`}
               alt="Profile picture"
               className="w-full h-full object-cover"
             />
@@ -58,7 +56,7 @@ export const PersonalInformation: React.FC<PersonalInformationProps> = ({ form, 
       </div>
 
       <div className="grid grid-cols-1 md:grid-cols-2 gap-2">
-        <div className="space-y-2">
+        <div className="space-y-1">
           <Label htmlFor="fullName" className="text-sm font-medium text-foreground">
             Full Name
           </Label>
@@ -66,13 +64,13 @@ export const PersonalInformation: React.FC<PersonalInformationProps> = ({ form, 
             id="fullName"
             {...register('personalInfo.fullName')}
             placeholder="Enter your full name"
-            className={cn("h-11 bg-form-background border-form-border focus:border-form-focus focus:ring-form-focus")}
+            className="h-11"
           />
           {errors.personalInfo?.fullName && (<p className="text-xs font-semibold text-red-500">{errors.personalInfo.fullName.message}</p>)}
         </div>
 
         {/* Email */}
-        <div className="space-y-2">
+        <div className="space-y-1">
           <Label htmlFor="email" className="text-sm font-medium text-foreground flex items-center gap-1">
             Email Address <p className="text-xs font-semibold text-muted-foreground">(cannot be changed)</p>
           </Label>
@@ -82,7 +80,7 @@ export const PersonalInformation: React.FC<PersonalInformationProps> = ({ form, 
             {...register('personalInfo.email')}
             placeholder="your.email@example.com"
             readOnly
-            className="h-11 bg-muted border-form-border cursor-not-allowed"
+            className="h-11 bg-muted cursor-not-allowed"
           />
         </div>
 
@@ -94,8 +92,8 @@ export const PersonalInformation: React.FC<PersonalInformationProps> = ({ form, 
           <Input
             id="phoneNumber"
             {...register('personalInfo.phoneNumber')}
-            placeholder="+91 9876543210"
-            className={cn("h-11 bg-form-background border-form-border focus:border-form-focus focus:ring-form-focus")}
+            placeholder="00000 00000"
+            className="h-11"
           />
           {errors.personalInfo?.phoneNumber && (
             <p className="text-xs font-semibold text-red-500">{errors.personalInfo.phoneNumber.message}</p>
@@ -106,25 +104,13 @@ export const PersonalInformation: React.FC<PersonalInformationProps> = ({ form, 
           <Label htmlFor="dateOfBirth" className="text-sm font-medium text-foreground">
             Date of Birth
           </Label>
-          <Popover>
-            <PopoverTrigger asChild>
-              <div
-                className={cn(
-                  "w-full h-11 border rounded-md flex justify-between text-sm items-center px-2 cursor-pointer",
-                  !dateOfBirth && "text-muted-foreground",
-                )}
-              >
-                {dateOfBirth ? format(dateOfBirth, 'PPP') : 'Select your date of birth'}
-                <CalendarIcon strokeWidth={1} className="mr-2 h-4 w-4 text-muted-foreground" />
-              </div>
-            </PopoverTrigger>
-            <PopoverContent className="w-auto p-0" align="start">
-              <Input
-                type="date"
-                className="h-11 bg-form-background border-form-border focus:border-form-focus focus:ring-form-focus"
-              />
-            </PopoverContent>
-          </Popover>
+          <Input
+            type='date'
+            id="dateOfBirth"
+            {...register('personalInfo.dateOfBirth')}
+            placeholder="Enter your DOB"
+            className="w-full h-11 border rounded-md flex justify-between text-sm items-center px-2 cursor-pointer"
+          />
           {errors.personalInfo?.dateOfBirth && (
             <p className="text-xs font-semibold text-red-500">{errors.personalInfo.dateOfBirth.message}</p>
           )}
@@ -134,7 +120,7 @@ export const PersonalInformation: React.FC<PersonalInformationProps> = ({ form, 
           <Label className="text-sm font-medium text-foreground">Gender</Label>
           <RadioGroup
             value={watch('personalInfo.gender')}
-            onValueChange={(value) => setValue('personalInfo.gender', value as 'male' | 'female')}
+            onValueChange={(value) => setValue('personalInfo.gender', value as 'male' | 'female', { shouldValidate: true })}
             className="flex flex-col mt-2"
           >
             <div className="flex items-center space-x-2">
@@ -163,13 +149,22 @@ export const PersonalInformation: React.FC<PersonalInformationProps> = ({ form, 
             id="location"
             {...register('personalInfo.location')}
             placeholder="City, State"
-            className={cn("h-11 bg-form-background border-form-border focus:border-form-focus focus:ring-form-focus")}
+            className="h-11"
           />
           {errors.personalInfo?.location && (
             <p className="text-xs font-semibold text-red-500">{errors.personalInfo.location.message}</p>
           )}
         </div>
       </div>
+      {selectedImage && (
+        <ImageCropper
+          image={selectedImage}
+          createCroppedBlobImage={createCroppedBlobImage}
+          onSave={handleSave}
+          onClose={handleClose}
+          isOpen={isCropperOpen}
+        />
+      )}
     </div>
   );
 };

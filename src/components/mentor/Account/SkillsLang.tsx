@@ -60,16 +60,11 @@ export const SkillsAndLanguageTerms: React.FC<SkillsAndLanguageTermsProps> = ({ 
   };
 
   return (
-    <div className="space-y-8">
-      <div className="text-center mb-8">
-        <h3 className="text-2xl font-bold text-foreground mb-2">Skills, Languages & Terms</h3>
-        <p className="text-muted-foreground">Add your skills, languages, and accept our terms</p>
-      </div>
-
+    <div className="space-y-6">
       {/* Skills Section */}
       <div className="space-y-4">
         <div>
-          <Label className="text-sm font-medium text-foreground">Skills *</Label>
+          <Label className="text-sm font-medium text-foreground">Skills</Label>
           <p className="text-sm text-muted-foreground">Add skills relevant to your mentoring expertise</p>
         </div>
 
@@ -77,12 +72,9 @@ export const SkillsAndLanguageTerms: React.FC<SkillsAndLanguageTermsProps> = ({ 
           <Input
             value={skillInput}
             onChange={(e) => setSkillInput(e.target.value)}
-            onKeyPress={handleSkillKeyPress}
-            placeholder="e.g., JavaScript, Leadership, Communication"
-            className={cn(
-              "h-10 bg-form-background border-form-border focus:border-form-focus focus:ring-form-focus",
-              errors.skillsAndTerms?.skills && "border-form-error"
-            )}
+            onKeyDown={handleSkillKeyPress}
+            placeholder="eg: Leadership, Communication"
+            className="h-10"
           />
           <Button
             type="button"
@@ -102,7 +94,7 @@ export const SkillsAndLanguageTerms: React.FC<SkillsAndLanguageTermsProps> = ({ 
                 <button
                   type="button"
                   onClick={() => removeSkill(skill)}
-                  className="ml-1 hover:text-form-error"
+                  className="ml-1 hover:text-red-500 cursor-pointer"
                 >
                   <X className="h-3 w-3" />
                 </button>
@@ -113,14 +105,14 @@ export const SkillsAndLanguageTerms: React.FC<SkillsAndLanguageTermsProps> = ({ 
         )}
 
         {errors.skillsAndTerms?.skills && (
-          <p className="text-sm text-form-error">{errors.skillsAndTerms.skills.message}</p>
+          <p className="text-xs font-semibold text-red-500">{errors.skillsAndTerms.skills.message}</p>
         )}
       </div>
 
       {/* Languages Section */}
       <div className="space-y-4">
         <div>
-          <Label className="text-sm font-medium text-foreground">Languages *</Label>
+          <Label className="text-sm font-medium text-foreground">Languages</Label>
           <p className="text-sm text-muted-foreground">Add languages you can communicate in</p>
         </div>
 
@@ -128,12 +120,9 @@ export const SkillsAndLanguageTerms: React.FC<SkillsAndLanguageTermsProps> = ({ 
           <Input
             value={languageInput}
             onChange={(e) => setLanguageInput(e.target.value)}
-            onKeyPress={handleLanguageKeyPress}
-            placeholder="e.g., English, Hindi, Malayalam"
-            className={cn(
-              "h-10 bg-form-background border-form-border focus:border-form-focus focus:ring-form-focus",
-              errors.skillsAndTerms?.languages && "border-form-error"
-            )}
+            onKeyDown={handleLanguageKeyPress}
+            placeholder="eg: English, Hindi, Malayalam"
+            className="h-10"
           />
           <Button
             type="button"
