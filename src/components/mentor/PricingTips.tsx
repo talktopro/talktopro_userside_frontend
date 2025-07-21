@@ -10,7 +10,7 @@ const PricingTips = () => {
             <li>You can adjust your pricing at any time</li>
             <li>For each booking, 10% will be deducted as platform fees</li>
             <li>Price changes will only apply to future sessions</li>
-            <li>Pricing must be between ₹200 to ₹10,000</li>
+            <li>Pricing must be between ₹100 to ₹10,000</li>
          </ul>
       </div>
    )

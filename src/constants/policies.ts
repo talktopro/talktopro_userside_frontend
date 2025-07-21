@@ -107,7 +107,7 @@ export const PRICING_CONTENT = {
       title: "Pricing Guidelines",
       content: "",
       listItems: [
-        "Mentors must set prices between ₹200 to ₹10,000 per session",
+        "Mentors must set prices between ₹100 to ₹10,000 per session",
         "Consider your experience and expertise when setting prices",
         "Competitive pricing attracts more mentees",
         "You can adjust pricing at any time (changes apply only to future sessions)"
