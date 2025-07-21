@@ -1,5 +1,5 @@
-import AnalyticsGraph from "@/components/mentor/dashboard/AnalyticsGraph";
-import YoutubePart from "@/components/mentor/dashboard/YoutubePart";
+// import AnalyticsGraph from "@/components/mentor/dashboard/AnalyticsGraph";
+// import YoutubePart from "@/components/mentor/dashboard/YoutubePart";
 import { selectAuth } from "@/redux/slices/authSlice";
 import getGreeting from "@/utils/getGreeting";
 import { useSelector } from "react-redux";
@@ -18,9 +18,12 @@ const Dashboard = () => {
         </h2>
         <p className="text-xl not-sm:text-sm pb-10">{getGreeting()} -</p>
       </div>
-      <div className="flex gap-2 h-auto lg:flex-row flex-col">
+      {/* <div className="flex gap-2 h-auto lg:flex-row flex-col">
         <AnalyticsGraph />
         <YoutubePart />
+      </div> */}
+      <div className="flex items-center justify-center gap-2 text-sm h-auto min-h-96 lg:flex-row flex-col text-center">
+        Dashboard details are currently unavailable in the beta version.
       </div>
     </div>
   );
