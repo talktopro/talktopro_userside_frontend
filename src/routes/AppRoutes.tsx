@@ -37,6 +37,7 @@ import TermsAndConditions from "@/pages/common/Terms&Condition";
 import PrivacyAndPolicy from "@/pages/common/Privacy&Policy";
 import RefundTerms from "@/pages/common/RefundTerms";
 import PricingTerms from "@/pages/common/PricingTerms";
+import { MentorAccount } from "@/pages/mentor/Account";
 
 const AppRoutes = () => {
   return (
@@ -62,6 +63,7 @@ const AppRoutes = () => {
       <Route element={<MainLayout />}>
         {/* common routes */}
 
+        <Route path={ROUTES.MENTOR.ACCOUNT} element={<MentorAccount />} />
         <Route path={ROUTES.HOME} element={<HomePage />} />
         <Route path={ROUTES.ABOUT} element={<AboutUs />} />
         <Route path={ROUTES.CONTACT_US} element={<ContactUs from="user" />} />
