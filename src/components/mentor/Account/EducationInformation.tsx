@@ -1,4 +1,5 @@
-import React from 'react';
+import React, { useState, useRef, useEffect } from 'react';
+import axios from 'axios';
 import { UseFormReturn } from 'react-hook-form';
 import { MentorFormData } from '@/pages/mentor/Account';
 import { Input } from '@/components/ui/input';
@@ -9,7 +10,49 @@ interface EducationInformationProps {
 }
 
 export const EducationInformation: React.FC<EducationInformationProps> = ({ form }) => {
-  const { register, formState: { errors } } = form;
+  const { register, setValue, watch, formState: { errors } } = form;
+
+  const [instituteInput, setInstituteInput] = useState('');
+  const [suggestions, setSuggestions] = useState<string[]>([]);
+  const dropdownRef = useRef<HTMLDivElement | null>(null);
+
+  useEffect(() => {
+    const delayDebounce = setTimeout(() => {
+      if (instituteInput.length >= 2) {
+        fetchUniversitySuggestions(instituteInput);
+      } else {
+        setSuggestions([]);
+      }
+    }, 300);
+
+    return () => clearTimeout(delayDebounce);
+  }, [instituteInput]);
+
+  const fetchUniversitySuggestions = async (input: string) => {
+    try {
+      const res = await axios.get('http://universities.hipolabs.com/search', {
+        params: {
+          name: input,
+          country: 'India',
+        },
+      });
+      console.log(res.data)
+      const names = [...new Set(res.data.map((uni: any) => uni.name))].sort();
+      setSuggestions(names);
+    } catch (error) {
+      console.error('Failed to fetch universities', error);
+    }
+  };
+
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      if (dropdownRef.current && !dropdownRef.current.contains(event.target as Node)) {
+        setSuggestions([]);
+      }
+    };
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => document.removeEventListener('mousedown', handleClickOutside);
+  }, []);
 
   return (
     <div className="space-y-6">
@@ -27,23 +70,50 @@ export const EducationInformation: React.FC<EducationInformationProps> = ({ form
             className="h-11"
           />
           {errors.education?.highestDegree && (
-            <p className="text-xs font-semibold text-red-500">{errors.education.highestDegree.message}</p>
+            <p className="text-xs font-semibold text-red-500">
+              {errors.education.highestDegree.message}
+            </p>
           )}
         </div>
 
-        {/* Institute Name */}
-        <div className="space-y-2">
+
+        <div className="space-y-2 relative" ref={dropdownRef}>
           <Label htmlFor="instituteName" className="text-sm font-medium text-foreground">
             Institute/University Name
           </Label>
           <Input
             id="instituteName"
-            {...register('education.instituteName')}
+            value={instituteInput || watch('education.instituteName') || ''}
+            onChange={(e) => {
+              const value = e.target.value;
+              setInstituteInput(value);
+              setValue('education.instituteName', value);
+            }}
             placeholder="eg: Indian Institute of Technology"
             className="h-11"
+            autoComplete="off"
           />
+          {suggestions.length > 0 && (
+            <ul className="absolute z-50 bg-white dark:bg-muted border border-border rounded-md mt-1 w-full shadow text-sm max-h-40 overflow-y-auto">
+              {suggestions.map((name, i) => (
+                <li
+                  key={i}
+                  className="px-3 py-2 hover:bg-muted cursor-pointer"
+                  onClick={() => {
+                    setValue('education.instituteName', name);
+                    setInstituteInput(name);
+                    setSuggestions([]);
+                  }}
+                >
+                  {name}
+                </li>
+              ))}
+            </ul>
+          )}
           {errors.education?.instituteName && (
-            <p className="text-xs font-semibold text-red-500">{errors.education.instituteName.message}</p>
+            <p className="text-xs font-semibold text-red-500">
+              {errors.education.instituteName.message}
+            </p>
           )}
         </div>
 
@@ -59,23 +129,27 @@ export const EducationInformation: React.FC<EducationInformationProps> = ({ form
             className="h-11"
           />
           {errors.education?.startYear && (
-            <p className="text-xs font-semibold text-red-500">{errors.education.startYear.message}</p>
+            <p className="text-xs font-semibold text-red-500">
+              {errors.education.startYear.message}
+            </p>
           )}
         </div>
 
-        {/* Start Year */}
+        {/* End Year */}
         <div className="space-y-2">
           <Label htmlFor="endYear" className="text-sm font-medium text-foreground">
             End Year
           </Label>
           <Input
             id="endYear"
-            {...register('education.startYear')}
-            placeholder="eg: 2018"
+            {...register('education.endYear')}
+            placeholder="eg: 2022"
             className="h-11"
           />
           {errors.education?.endYear && (
-            <p className="text-xs font-semibold text-red-500">{errors.education.endYear.message}</p>
+            <p className="text-xs font-semibold text-red-500">
+              {errors.education.endYear.message}
+            </p>
           )}
         </div>
       </div>

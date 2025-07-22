@@ -157,7 +157,7 @@ export const SkillsAndLanguageTerms: React.FC<SkillsAndLanguageTermsProps> = ({ 
       </div>
 
       {/* Terms and Conditions */}
-      <div className="space-y-6 pt-6 border-t border-border">
+      {/* <div className="space-y-6 pt-6 border-t border-border">
         <div className="space-y-4">
           <div className="flex items-start space-x-3">
             <Checkbox
@@ -217,7 +217,7 @@ export const SkillsAndLanguageTerms: React.FC<SkillsAndLanguageTermsProps> = ({ 
             <p className="text-sm text-form-error ml-6">{errors.skillsAndTerms.privacyPolicy.message}</p>
           )}
         </div>
-      </div>
+      </div> */}
 
       {/* Info Box */}
       <div className="bg-muted/50 border border-border rounded-lg p-6">
