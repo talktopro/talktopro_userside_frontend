@@ -1,5 +1,5 @@
-import { useEffect, useState } from 'react';
-import AppLoader from './AppLoader';
+import { useEffect, useState } from "react";
+import AppLoader from "./AppLoader";
 
 const InitialLoadingWrapper = ({ children }: { children: React.ReactNode }) => {
   const [isLoading, setIsLoading] = useState(true);
@@ -16,11 +16,7 @@ const InitialLoadingWrapper = ({ children }: { children: React.ReactNode }) => {
     return <AppLoader />;
   }
 
-  return (
-    <>
-      {children}
-    </>
-  );
+  return <>{children}</>;
 };
 
 export default InitialLoadingWrapper;
