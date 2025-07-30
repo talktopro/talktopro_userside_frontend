@@ -13,6 +13,7 @@ import AccountSettings from "@/pages/user/AccountSettings";
 import ChangePasswordPage from "@/pages/user/ChangePasswordPage";
 import SignupOtpPage from "@/pages/user/SignupOtpPage";
 import AboutUs from "@/pages/common/aboutUs";
+import Webinars from "@/pages/user/Webinars";
 
 // Loading page
 import AppLoader from "@/components/common/loading/AppLoader";
@@ -62,7 +63,9 @@ const AppRoutes = () => {
       <Route element={<MainLayout />}>
         {/* common routes */}
 
+
         <Route path={ROUTES.HOME} element={<HomePage />} />
+        <Route path={ROUTES.WEBINAR} element={<Webinars />} />
         <Route path={ROUTES.ABOUT} element={<AboutUs />} />
         <Route path={ROUTES.CONTACT_US} element={<ContactUs from="user" />} />
         <Route path={ROUTES.TERMS_AND_CONDITION} element={<TermsAndConditions />} />
