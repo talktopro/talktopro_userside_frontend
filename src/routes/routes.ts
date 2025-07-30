@@ -1,5 +1,6 @@
 export const ROUTES = {
     HOME: "/",
+    WEBINAR: "/webinars",
     ABOUT: "/about",
     CONTACT_US: "/contact-us",
     TERMS_AND_CONDITION: "/terms&condition",
