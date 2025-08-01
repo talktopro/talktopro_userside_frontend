@@ -3,15 +3,7 @@ import { Calendar } from "@/components/ui/calendar";
 import { Button } from "../ui/button";
 import { DrawerClose } from "../ui/drawer";
 import { cn } from "@/lib/utils";
-import {
-  addDays,
-  addMinutes,
-  format,
-  isAfter,
-  isToday,
-  parse,
-  startOfToday,
-} from "date-fns";
+import { addDays, addMinutes, format, isAfter, isToday, parse, startOfToday } from "date-fns";
 import generateTimeSlots from "@/utils/generateTimeSlots";
 import { IMentorDetailsWithSlots } from "@/types/user";
 import usePayment from "@/hooks/usePayment";
@@ -44,12 +36,11 @@ const BookingCalendar: FC<IBookingCalendarProps> = ({
   const today = startOfToday();
   const predefinedTimeSlots: string[] = useMemo(generateTimeSlots, []);
   const [isRazorpayOrderLoading, setIsRazorpayOrderLoading] = useState(false);
-  // const [showPaymentInfoModal, setShowPaymentInfoModal] = useState(false);
   const { handleTriggerPayment } = usePayment();
   const { user } = useSelector(selectAuth);
   const navigate = useNavigate();
 
-  const isDateAvailable = (date: Date) => {
+  const isDateAvailable = (date: Date) => { // individual
     if (!mentor.slots) return false;
     const dateKey = format(date, "dd-MM-yyyy");
     const slotsForDate = mentor.slots[dateKey];
@@ -87,7 +78,7 @@ const BookingCalendar: FC<IBookingCalendarProps> = ({
     return false;
   };
 
-  const isTimeSlotAvailable = (timeSlot: string) => {
+  const isTimeSlotAvailable = (timeSlot: string) => { // individual
     if (!date || !mentor.slots) return false;
 
     if (isAfter(date, today)) {
@@ -117,6 +108,37 @@ const BookingCalendar: FC<IBookingCalendarProps> = ({
 
     return false;
   };
+
+  const isAnySlotAvailable = useMemo(() => { // overall calculation
+    if (!mentor.slots) return false;
+
+    const dates = Object.entries(mentor.slots);
+    const now = new Date();
+    const bufferTime = addMinutes(now, 60);
+
+    return dates.some(([dateStr, slots]) => {
+      return Object.entries(slots).some(([time, slot]) => {
+        if (
+          typeof slot !== "object" ||
+          !("isBooked" in slot) ||
+          slot.isBooked !== "free"
+        )
+          return false;
+
+        const [day, month, year] = dateStr.split("-").map(Number);
+        const dateObj = new Date(year, month - 1, day);
+        const startTimeStr = time.split(" - ")[0];
+        const slotStartTime = parse(startTimeStr, "h:mm a", dateObj);
+
+        if (isToday(dateObj)) {
+          return isAfter(slotStartTime, bufferTime);
+        }
+
+        return isAfter(dateObj, startOfToday());
+      });
+    });
+  }, [mentor.slots]);
+
 
   const handlePaymentButtonClick = async () => {
     try {
@@ -245,65 +267,84 @@ const BookingCalendar: FC<IBookingCalendarProps> = ({
           </div>
 
           <div className="flex gap-3 mt-10 not-sm:hidden">
-            <Button
-              className="w-full cursor-pointer"
-              variant="outline"
-              onClick={() => setIsDrawerOpen(false)}
-            >
-              Cancel
-            </Button>
 
-            <Dialog>
-              <DialogTrigger asChild>
+            {!isAnySlotAvailable ? (
+              <div className="w-full border border-red-500 text-red-500 bg-red-500/5 p-4 rounded-md text-sm text-center mb-4">
+                This mentor has no available slots for booking. Please request a new slot or consider choosing another mentor.
+              </div>
+            ) : (
+              <>
                 <Button
                   className="w-full cursor-pointer"
-                  disabled={
-                    !date || !selectedTimeSlot || isRazorpayOrderLoading
-                  }
+                  variant="outline"
+                  onClick={() => setIsDrawerOpen(false)}
                 >
-                  Book Session
+                  Cancel
                 </Button>
-              </DialogTrigger>
-              <ConfirmBookingModal
-                handleConfirmBooking={handlePaymentButtonClick}
-                mentor={mentor}
-                selectedDate={date}
-                selectedSlot={selectedTimeSlot}
-                setIsDrawerOpen={setIsDrawerOpen}
-              />
-            </Dialog>
+
+                <Dialog>
+                  <DialogTrigger asChild>
+                    <Button
+                      className="w-full cursor-pointer"
+                      disabled={
+                        !date || !selectedTimeSlot || isRazorpayOrderLoading
+                      }
+                    >
+                      Book Session
+                    </Button>
+                  </DialogTrigger>
+                  <ConfirmBookingModal
+                    handleConfirmBooking={handlePaymentButtonClick}
+                    mentor={mentor}
+                    selectedDate={date}
+                    selectedSlot={selectedTimeSlot}
+                    setIsDrawerOpen={setIsDrawerOpen}
+                  />
+                </Dialog>
+              </>
+            )}
+
           </div>
         </div>
         <div className="flex gap-3 mt-10 not-sm:fixed not-sm:bottom-0 not-sm:z-10 not-sm:w-screen not-sm:bg-background not-sm:py-3 not-sm:border-t-1 not-sm:px-4 sm:hidden">
-          <Button
-            className="w-full cursor-pointer"
-            variant="outline"
-            onClick={() => setIsDrawerOpen(false)}
-          >
-            Cancel
-          </Button>
 
-          <DrawerClose asChild>
-            <Dialog>
-              <DialogTrigger asChild>
-                <Button
-                  className="w-full cursor-pointer"
-                  disabled={
-                    !date || !selectedTimeSlot || isRazorpayOrderLoading
-                  }
-                >
-                  Book Session
-                </Button>
-              </DialogTrigger>
-              <ConfirmBookingModal
-                handleConfirmBooking={handlePaymentButtonClick}
-                mentor={mentor}
-                selectedDate={date}
-                selectedSlot={selectedTimeSlot}
-                setIsDrawerOpen={setIsDrawerOpen}
-              />
-            </Dialog>
-          </DrawerClose>
+          {!isAnySlotAvailable ? (
+            <div className="w-full border border-red-500 text-red-500 bg-red-500/5 p-4 rounded-md text-sm text-center">
+              This mentor has no available slots for booking. Please request a new slot or consider choosing another mentor.
+            </div>
+          ) : (
+            <>
+              <Button
+                className="w-full cursor-pointer"
+                variant="outline"
+                onClick={() => setIsDrawerOpen(false)}
+              >
+                Cancel
+              </Button>
+
+              <DrawerClose asChild>
+                <Dialog>
+                  <DialogTrigger asChild>
+                    <Button
+                      className="w-full cursor-pointer"
+                      disabled={
+                        !date || !selectedTimeSlot || isRazorpayOrderLoading
+                      }
+                    >
+                      Book Session
+                    </Button>
+                  </DialogTrigger>
+                  <ConfirmBookingModal
+                    handleConfirmBooking={handlePaymentButtonClick}
+                    mentor={mentor}
+                    selectedDate={date}
+                    selectedSlot={selectedTimeSlot}
+                    setIsDrawerOpen={setIsDrawerOpen}
+                  />
+                </Dialog>
+              </DrawerClose>
+            </>
+          )}
         </div>
       </div>
     </>
