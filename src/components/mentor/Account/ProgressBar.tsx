@@ -1,4 +1,4 @@
-import React from 'react';
+import React from "react";
 
 interface MentorAccountProgressBarProps {
   currentStep: number;
@@ -6,8 +6,9 @@ interface MentorAccountProgressBarProps {
   stepLabels: string[];
 }
 
-export const MentorAccountProgressBar: React.FC<MentorAccountProgressBarProps> = ({ currentStep, totalSteps, stepLabels }) => {
-
+export const MentorAccountProgressBar: React.FC<
+  MentorAccountProgressBarProps
+> = ({ currentStep, totalSteps, stepLabels }) => {
   return (
     <div className="w-full max-w-3xl mx-auto mb-8 px-4">
       <div className="text-center mb-4">

@@ -7,7 +7,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { toast } from "sonner";
 import useErrorHandler from "./useErrorHandler";
 
-const useImageCropper = () => {
+const useImageCropper = (onImageUploaded?: (url: string) => void) => {
   const inputRef = useRef<HTMLInputElement | null>(null);
   const [selectedImage, setSelectedImage] = useState<File | null>(null);
   const [isCropperOpen, setIsCropperOpen] = useState(false);
@@ -33,23 +33,33 @@ const useImageCropper = () => {
     }
   };
 
-  const createCroppedBlobImage = async (crop: Crop, imageRef: HTMLImageElement | null, quality = 0.8, maxWidth = 1200): Promise<Blob | null> => {
+  const createCroppedBlobImage = async (
+    crop: Crop,
+    imageRef: HTMLImageElement | null,
+    quality = 0.8,
+    maxWidth = 1200
+  ): Promise<Blob | null> => {
     if (!imageRef || !crop.width || !crop.height) return null;
 
     return new Promise((resolve) => {
-      const canvas = document.createElement('canvas');
+      const canvas = document.createElement("canvas");
 
-      const scale = Math.min(1, maxWidth / (crop.width * (imageRef.naturalWidth / imageRef.width)));
-      canvas.width = crop.width * (imageRef.naturalWidth / imageRef.width) * scale;
-      canvas.height = crop.height * (imageRef.naturalHeight / imageRef.height) * scale;
+      const scale = Math.min(
+        1,
+        maxWidth / (crop.width * (imageRef.naturalWidth / imageRef.width))
+      );
+      canvas.width =
+        crop.width * (imageRef.naturalWidth / imageRef.width) * scale;
+      canvas.height =
+        crop.height * (imageRef.naturalHeight / imageRef.height) * scale;
 
-      const ctx = canvas.getContext('2d');
+      const ctx = canvas.getContext("2d");
       if (!ctx) {
         resolve(null);
         return;
       }
 
-      ctx.imageSmoothingQuality = 'high';
+      ctx.imageSmoothingQuality = "high";
       ctx.imageSmoothingEnabled = true;
 
       ctx.drawImage(
@@ -80,14 +90,14 @@ const useImageCropper = () => {
             const adjustedQuality = Math.max(0.5, finalQuality - 0.1);
             canvas.toBlob(
               (smallerBlob) => resolve(smallerBlob || blob),
-              'image/jpeg',
+              "image/jpeg",
               adjustedQuality
             );
           } else {
             resolve(blob);
           }
         },
-        'image/jpeg',
+        "image/jpeg",
         finalQuality
       );
     });
@@ -105,10 +115,14 @@ const useImageCropper = () => {
       if (!presignedUrl) return;
 
       // 2. Create a File from the Blob
-      const croppedImageFile = new File([croppedImageBlob], selectedImage.name, {
-        type: selectedImage.type,
-        lastModified: Date.now(),
-      });
+      const croppedImageFile = new File(
+        [croppedImageBlob],
+        selectedImage.name,
+        {
+          type: selectedImage.type,
+          lastModified: Date.now(),
+        }
+      );
 
       // 3. Upload to S3
       const s3Response: Response = await uploadImageToS3(
@@ -121,6 +135,13 @@ const useImageCropper = () => {
 
       // 4. Update database
       await updateDatabase();
+      
+      // This is the updated profileImg key + cache-busting
+      const uploadedUrl = `${user?.id}?${Date.now()}`;
+
+      if (onImageUploaded) {
+        onImageUploaded(uploadedUrl);
+      }
     } catch (error) {
       handleError(error, "Failed to update profile image");
     } finally {
@@ -142,7 +163,9 @@ const useImageCropper = () => {
         `/get-presigned-url`,
         {
           params: {
-            imageName: `${import.meta.env.VITE_PROFILE_IMAGE_FOLDER}/${user?.id}`,
+            imageName: `${import.meta.env.VITE_PROFILE_IMAGE_FOLDER}/${
+              user?.id
+            }`,
             imageType: selectedImage.type,
           },
         }
@@ -154,7 +177,7 @@ const useImageCropper = () => {
         throw new Error("Failed to get presigned url");
       }
     } catch (error) {
-      throw error
+      throw error;
     }
   };
 

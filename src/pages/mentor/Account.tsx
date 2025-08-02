@@ -5,61 +5,76 @@ import { z } from "zod";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { ArrowLeft, ArrowRight } from "lucide-react";
+
 import { MentorAccountProgressBar } from "@/components/mentor/Account/ProgressBar";
 import { PersonalInformation } from "@/components/mentor/Account/PersonalInformation";
 import { ProfessionalInformation } from "@/components/mentor/Account/ProfessionalInformation";
 import { EducationInformation } from "@/components/mentor/Account/EducationInformation";
-import { SkillsAndLanguageTerms } from "@/components/mentor/Account/SkillsLang";
+import { SkillsAndLanguages } from "@/components/mentor/Account/SkillsAndLanguages";
 import { FinalCheck } from "@/components/mentor/Account/FinalCheck";
 import { useSelector } from "react-redux";
 import { selectAuth } from "@/redux/slices/authSlice";
+import { TermsAndDiscovery } from "@/components/mentor/Account/TermsAndDiscovery";
 
 const mentorFormSchema = z.object({
   personalInfo: z.object({
     fullName: z
       .string()
       .trim()
-      .min(2, "Full name must be at least 2 characters"),
-    email: z.string().trim().readonly(),
+      .min(2, { message: "Full name must be at least 2 characters." }),
+    email: z.string().trim().email({ message: "Please enter a valid email." }),
     phoneNumber: z
       .string()
       .trim()
-      .regex(/^\+?[0-9\s\-().]{6,20}$/, "Enter a valid phone number."),
+      .regex(/^[+]?\d{6,20}$/, { message: "Enter a valid phone number." }),
     dateOfBirth: z
       .string()
+      .refine(
+        (val) => {
+          const parsed = new Date(val);
+          return !isNaN(parsed.getTime());
+        },
+        {
+          message: "Please enter a valid date.",
+        }
+      )
       .transform((val) => new Date(val))
-      .pipe(
-        z
-          .date()
-          .max(new Date(), "Date of birth cannot be in the future")
-          .min(
-            new Date(new Date().setFullYear(new Date().getFullYear() - 100)),
-            "This date is not acceptable."
-          )
-      ),
+      .refine((date) => date <= new Date(), {
+        message: "Date of birth cannot be in the future.",
+      }),
     gender: z.enum(["male", "female"], {
-      required_error: "Please select your gender",
+      required_error: "Please select your gender.",
     }),
     location: z
       .string()
       .trim()
-      .min(2, "Location must be at least 2 characters"),
+      .min(2, { message: "Location must be at least 2 characters." }),
   }),
+
   professionalInfo: z.object({
-    profession: z.string().trim().nonempty("Profession is required."),
+    profession: z
+      .string()
+      .trim()
+      .nonempty({ message: "Profession is required." }),
     about: z
       .string()
       .trim()
-      .min(50, "About section must need minimum 50 characters.")
-      .max(500, "About section must not exceed 500 characters."),
+      .min(50, {
+        message: "About section must be at least 50 characters.",
+      })
+      .max(500, {
+        message: "About section cannot exceed 500 characters.",
+      }),
     experience: z
-      .number()
-      .min(3, "Experience must be at least 3 years.")
-      .max(50, "Experience must not exceed 50 years.")
+      .number({
+        invalid_type_error: "Experience must be a number.",
+      })
+      .min(3, { message: "Minimum experience should be 3 years." })
+      .max(50, { message: "Experience cannot exceed 50 years." })
       .refine(
         (val) => {
-          const decimalPart = val.toString().split(".")[1];
-          return !decimalPart || decimalPart.length <= 1;
+          const decimal = val.toString().split(".")[1];
+          return !decimal || decimal.length <= 1;
         },
         {
           message: "Experience can have at most one digit after the decimal.",
@@ -69,37 +84,29 @@ const mentorFormSchema = z.object({
       .array(
         z
           .object({
-            jobTitle: z.string().trim().min(2, "Job title is required"),
-            companyName: z.string().trim().min(2, "Company name is required"),
+            jobTitle: z.string().min(2, {
+              message: "Job title must be at least 2 characters.",
+            }),
+            companyName: z.string().min(2, {
+              message: "Company name must be at least 2 characters.",
+            }),
             startDate: z
               .string()
-              .transform((val) => new Date(val))
-              .pipe(
-                z
-                  .date()
-                  .min(
-                    new Date(
-                      new Date().setFullYear(new Date().getFullYear() - 100)
-                    ),
-                    "This date is not acceptable."
-                  )
-              ),
+              .refine((val) => !isNaN(new Date(val).getTime()), {
+                message: "Please enter a valid start date.",
+              })
+              .transform((val) => new Date(val)),
             endDate: z
               .union([
                 z
                   .string()
-                  .transform((val) => new Date(val))
-                  .pipe(
-                    z
-                      .date()
-                      .min(
-                        new Date(
-                          new Date().setFullYear(new Date().getFullYear() - 100)
-                        ),
-                        "This date is not acceptable."
-                      )
-                  ),
+                  .refine((val) => !isNaN(new Date(val).getTime()), {
+                    message: "Please enter a valid end date.",
+                  })
+                  .transform((val) => new Date(val)),
                 z.literal("Present"),
+                z.null(),
+                z.undefined(),
               ])
               .optional(),
             currentlyWorking: z.boolean().optional(),
@@ -107,60 +114,58 @@ const mentorFormSchema = z.object({
           .refine(
             (data) => {
               if (data.currentlyWorking) return true;
-              if (
-                !data.startDate ||
-                !data.endDate ||
-                data.endDate === "Present"
-              )
-                return false;
-              return new Date(data.endDate) > new Date(data.startDate);
+              if (!data.endDate || data.endDate === "Present") return true;
+
+              const end = new Date(data.endDate as Date);
+              const start = new Date(data.startDate);
+
+              return end > start;
             },
             {
-              message: "End date must be after start date.",
+              message: "End date must be after the start date.",
               path: ["endDate"],
             }
           )
       )
-      .min(1, "At least one work experience is required"),
+      .min(1, { message: "Please add at least one work experience." }),
   }),
+
   education: z
     .object({
-      highestDegree: z.string().trim().min(2, "Highest degree is required"),
-      instituteName: z.string().trim().min(2, "Institute name is required"),
-      startYear: z
+      highestDegree: z
         .string()
-        .trim()
-        .regex(/^\d{4}$/, "Please enter a valid year (YYYY)"),
-      endYear: z
+        .min(2, { message: "Please enter your highest degree." }),
+      instituteName: z
         .string()
-        .trim()
-        .regex(/^\d{4}$/, "Please enter a valid year (YYYY)"),
+        .min(2, { message: "Please enter the institute name." }),
+      startYear: z.string().regex(/^\d{4}$/, {
+        message: "Start year must be a 4-digit number.",
+      }),
+      endYear: z.string().regex(/^\d{4}$/, {
+        message: "End year must be a 4-digit number.",
+      }),
     })
-    .refine(
-      (data) => {
-        const start = parseInt(data.startYear);
-        const end = parseInt(data.endYear);
-        return !isNaN(start) && !isNaN(end) && end >= start;
-      },
-      {
-        path: ["endYear"],
-        message: "End year cannot be earlier than start year",
-      }
-    ),
-  skillsAndTerms: z.object({
-    skills: z.array(z.string().trim()).min(1, "At least one skill is required"),
+    .refine((data) => parseInt(data.endYear) >= parseInt(data.startYear), {
+      path: ["endYear"],
+      message: "End year cannot be earlier than start year.",
+    }),
+
+  languages: z.object({
+    skills: z
+      .array(z.string())
+      .min(1, { message: "Please add at least one skill." }),
     languages: z
-      .array(z.string().trim())
-      .min(1, "At least one language is required"),
-    termsAndConditions: z
-      .boolean()
-      .refine(
-        (val) => val === true,
-        "You must accept the terms and conditions"
-      ),
-    privacyPolicy: z
-      .boolean()
-      .refine((val) => val === true, "You must accept the privacy policy"),
+      .array(z.string())
+      .min(1, { message: "Please select at least one language." }),
+  }),
+  termsAndDiscovery: z.object({
+    termsAndConditions: z.boolean().refine((val) => val === true, {
+      message: "You must accept the terms and conditions.",
+    }),
+    privacyPolicy: z.boolean().refine((val) => val === true, {
+      message: "You must accept the privacy policy.",
+    }),
+    foundUs: z.string().min(2, { message: "Please select how you found us." }),
   }),
 });
 
@@ -170,31 +175,35 @@ const STEP_LABELS = [
   "Personal Information",
   "Professional Information",
   "Education",
-  "Skills, Language & Terms",
+  "Skills & Languages",
+  "Terms & Discovery",
   "Review & Submit",
 ];
 
 export const MentorAccount: React.FC = () => {
   const { user } = useSelector(selectAuth);
-  if (!user) return;
 
-  const [currentStep, setCurrentStep] = useState(4);
+  const [uploadedImage, setUploadedImage] = useState<string | null>(
+    (user && user.profileImg) || null
+  );
+  const [imageError, setImageError] = useState<string | null>(null);
+  const [currentStep, setCurrentStep] = useState(2);
 
   const form = useForm<MentorFormData>({
     resolver: zodResolver(mentorFormSchema),
     defaultValues: {
       personalInfo: {
-        fullName: user.uname,
-        email: user.email,
-        phoneNumber: user.phone.toString() || undefined,
+        fullName: user?.uname,
+        email: user?.email,
+        phoneNumber: user?.phone.toString(),
         dateOfBirth: undefined,
         gender: undefined,
-        location: user.mentorDetails?.location || "",
+        location: user?.mentorDetails?.location || "",
       },
       professionalInfo: {
-        profession: user.mentorDetails?.profession || "",
-        about: user.mentorDetails?.about || "",
-        experience: user.mentorDetails?.experience || undefined,
+        profession: user?.mentorDetails?.profession || "",
+        about: user?.mentorDetails?.about || "",
+        experience: user?.mentorDetails?.experience || undefined,
         workExperience: [
           {
             jobTitle: "",
@@ -211,56 +220,49 @@ export const MentorAccount: React.FC = () => {
         startYear: "",
         endYear: "",
       },
-      skillsAndTerms: {
-        skills: user.mentorDetails?.skills || [],
-        languages: user.mentorDetails?.languages || [],
+      languages: {
+        skills: user?.mentorDetails?.skills || [],
+        languages: user?.mentorDetails?.languages || [],
+      },
+      termsAndDiscovery: {
         termsAndConditions: false,
         privacyPolicy: false,
+        foundUs: "",
       },
     },
     mode: "onChange",
     criteriaMode: "all",
   });
 
+  if (!user) return null;
   const { trigger, getValues } = form;
 
   const validateCurrentStep = async (): Promise<boolean> => {
-    let fieldsToValidate: (keyof MentorFormData)[] = [];
+    const stepFields: Record<number, (keyof MentorFormData)[]> = {
+      1: ["personalInfo"],
+      2: ["professionalInfo"],
+      3: ["education"],
+      4: ["languages"],
+      5: ["termsAndDiscovery"],
+    };
 
-    switch (currentStep) {
-      case 1:
-        fieldsToValidate = ["personalInfo"];
-        break;
-      case 2:
-        fieldsToValidate = ["professionalInfo"];
-        break;
-      case 3:
-        fieldsToValidate = ["education"];
-        break;
-      case 4:
-        fieldsToValidate = ["skillsAndTerms"];
-        break;
-      case 5:
-        fieldsToValidate = ["skillsAndTerms"];
-        break;
-      default:
-        return true;
-    }
-
-    return await trigger(fieldsToValidate);
+    return await trigger(stepFields[currentStep] || []);
   };
 
   const handleNext = async () => {
     const isValid = await validateCurrentStep();
-    if (isValid && currentStep < 5) {
+    if (currentStep === 1 && !uploadedImage) {
+      setImageError("Please upload your profile image.");
+    }
+
+    if (isValid && currentStep < STEP_LABELS.length) {
+      setImageError(null);
       setCurrentStep(currentStep + 1);
     }
   };
 
   const handleBack = () => {
-    if (currentStep > 1) {
-      setCurrentStep(currentStep - 1);
-    }
+    if (currentStep > 1) setCurrentStep(currentStep - 1);
   };
 
   const handleSubmit = async () => {
@@ -274,14 +276,25 @@ export const MentorAccount: React.FC = () => {
   const renderCurrentStep = () => {
     switch (currentStep) {
       case 1:
-        return <PersonalInformation form={form} user={user} />;
+        return (
+          <PersonalInformation
+            form={form}
+            user={user}
+            imageError={imageError}
+            setImageError={setImageError}
+            uploadedImage={uploadedImage}
+            setUploadedImage={setUploadedImage}
+          />
+        );
       case 2:
         return <ProfessionalInformation form={form} />;
       case 3:
         return <EducationInformation form={form} />;
       case 4:
-        return <SkillsAndLanguageTerms form={form} />;
+        return <SkillsAndLanguages form={form} />;
       case 5:
+        return <TermsAndDiscovery form={form} />;
+      case 6:
         return <FinalCheck form={form} user={user} />;
       default:
         return null;

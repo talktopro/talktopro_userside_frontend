@@ -120,7 +120,7 @@ export const ProfessionalInformation: React.FC<
           id="about"
           {...register("professionalInfo.about" as const)}
           placeholder="Tell us about your background..."
-          className="min-h-24 max-h-40 resize-none"
+          className="min-h-24 max-h-40 resize-none shadow-none"
         />
         <div className="flex justify-between items-center">
           {errors.professionalInfo?.about && (
@@ -156,7 +156,7 @@ export const ProfessionalInformation: React.FC<
 
         <div className="space-y-4">
           {fields.map((field, index) => (
-            <Card key={field.id}>
+            <Card key={field.id} className="shadow-none">
               <CardContent className="p-4 space-y-4">
                 <div className="flex justify-between items-center">
                   <h4 className="text-sm font-medium">
@@ -197,7 +197,9 @@ export const ProfessionalInformation: React.FC<
 
                   <div
                     className="space-y-2 relative"
-                    ref={(el) => (dropdownRefs.current[index] = el)}
+                    ref={(el) => {
+                      dropdownRefs.current[index] = el;
+                    }}
                   >
                     <Label>Company Name</Label>
                     <Input
@@ -216,7 +218,8 @@ export const ProfessionalInformation: React.FC<
                         }));
                         setValue(
                           `professionalInfo.workExperience.${index}.companyName`,
-                          value
+                          value,
+                          { shouldValidate: true }
                         );
                         fetchCompanySuggestions(value, index);
                       }}
@@ -241,7 +244,8 @@ export const ProfessionalInformation: React.FC<
                             onClick={() => {
                               setValue(
                                 `professionalInfo.workExperience.${index}.companyName`,
-                                name
+                                name,
+                                { shouldValidate: true }
                               );
                               setCompanyInput((prev) => ({
                                 ...prev,
