@@ -8,6 +8,7 @@ import { motion, AnimatePresence } from "framer-motion";
 import useFetchMentorsList from "@/hooks/useFetchMentorsList";
 import FAQ_Session from "@/components/user/home/FaqSession";
 import HeroWebinar from "@/components/user/home/heroSection/WebinarSection";
+import WebinarSection from "@/components/user/home/WebinarSection";
 // import Tutorials from "@/components/user/home/VideoSection";
 
 const HomePage = () => {
@@ -61,7 +62,11 @@ const HomePage = () => {
               <button
                 key={i}
                 onClick={() => setCurrentSlide(i)}
-                className={`h-3 w-3 rounded-full cursor-pointer border-2 border-purple-500 ${currentSlide === i ? "bg-gradient-to-r from-purple-500 to-purple-500/70 w-10" : "bg-transparent"} transition-all duration-200`}
+                className={`h-3 w-3 rounded-full cursor-pointer border-2 border-purple-500 ${
+                  currentSlide === i
+                    ? "bg-gradient-to-r from-purple-500 to-purple-500/70 w-10"
+                    : "bg-transparent"
+                } transition-all duration-200`}
                 aria-label={`Go to slide ${i}`}
               />
             ))}
@@ -71,6 +76,8 @@ const HomePage = () => {
 
       <MentorSection mentors={mentors} loading={loading} />
       {/* <Tutorials /> */}
+
+      <WebinarSection />
       <KeyFeatures />
       <FAQ_Session />
     </>

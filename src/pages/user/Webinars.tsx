@@ -1,4 +1,4 @@
-import WebinarCard from "@/components/user/WebinarCard"
+import WebinarCard from "@/components/user/WebinarCard";
 
 const dummyWebinars = [
   {
@@ -55,7 +55,7 @@ const dummyWebinars = [
     ],
     recordingViews: 3521,
   },
-]
+];
 
 const upcomingWebinars = [
   {
@@ -94,43 +94,48 @@ const upcomingWebinars = [
     availableSlots: 85,
     totalSlots: 400,
   },
-]
+];
 
 export default function Webinars() {
   return (
     <section className="w-screen">
       <div className="pt-10 sm:px-8 px-8 not-sm:px-4 mx-auto">
         <div className="container mx-auto px-4">
-
           {/* Upcoming Webinars Section */}
-          <div className="mb-12">
+          <div className="mb-12 ">
             <div className="text-left mb-6">
               <h1 className="text-2xl font-bold">Upcoming Webinars</h1>
-              <p className="text-muted-foreground">Register now for our upcoming sessions</p>
+              <p className="text-muted-foreground">
+                Register now for our upcoming sessions
+              </p>
             </div>
 
-            <div className="flex flex-wrap gap-2">
-              {upcomingWebinars.map((webinar) => (
-                <WebinarCard key={webinar.id} webinar={webinar} />
+            <div className="grid gap-x-3 gap-y-3  grid-cols-[repeat(auto-fill,minmax(200px,1fr))] md:grid-cols-[repeat(auto-fill,minmax(300px,1fr))]">
+              {upcomingWebinars.map((webinar, index) => (
+                <WebinarCard key={`${webinar.id}-${index}`} webinar={webinar} />
               ))}
             </div>
           </div>
 
           {/* Conducted Webinars Section */}
-          <div>
-            <div className="text-left mb-6">
-              <h1 className="text-2xl font-bold">Conducted Webinars</h1>
-              <p className="text-muted-foreground">Explore our past webinars and their impact</p>
-            </div>
+          {dummyWebinars.length > 1 && (
+            <div>
+              <div className="text-left mb-6">
+                <h1 className="text-2xl font-bold">Conducted Webinars</h1>
+                <p className="text-muted-foreground">
+                  Explore our past webinars and their impact
+                </p>
+              </div>
 
-            <div className="flex flex-wrap gap-2">
-              {dummyWebinars.map((webinar) => (
-                <WebinarCard key={webinar.id} webinar={webinar} />
-              ))}
+              <div className="grid gap-x-3 gap-y-3 grid-cols-[repeat(auto-fill,minmax(200px,1fr))] md:grid-cols-[repeat(auto-fill,minmax(300px,1fr))]">
+                {dummyWebinars.map((webinar) => (
+                  <WebinarCard key={webinar.id} webinar={webinar} />
+                ))}
+              </div>
             </div>
-          </div>
+          )}
         </div>
       </div>
     </section>
-  )
-};
+  );
+}
