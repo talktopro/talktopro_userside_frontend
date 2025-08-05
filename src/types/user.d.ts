@@ -194,3 +194,36 @@ export interface ISocketResponse {
         bookingDetails?: IBookingHistory
     };
 };
+
+export type WebinarStatus = "Upcoming" | "Live" | "Completed" ; 
+
+
+export interface IWebinar {
+id: string
+name: string
+description: string
+guestName: string
+guestRole: string
+date: string
+time: string
+duration: string
+amount: number
+status: WebinarStatus
+posterUrl: string
+totalRegistrations: number
+};
+
+export interface UpcomingWeb extends IWebinar {
+  slots: number
+}
+
+
+
+export interface ConductedWeb extends IWebinar {
+  actualAttendees: number
+  totalRatings: number
+  rating: number
+  attendancePercentage: number
+  keyTakeaways: string[]
+  recordingViews: number
+}

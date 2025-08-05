@@ -37,27 +37,3 @@ export interface INotification {
    createdAt: string;
 };
 
-
-export interface WebinarData {
-  id: string
-  title: string
-  presenter: {
-    name: string
-    avatar: string
-    title: string
-  }
-  date: string
-  duration: string
-  image: string
-  description: string
-  attendancePercentage?: number
-  totalRegistrations: number
-  actualAttendees?: number
-  rating?: number
-  totalRatings?: number
-  status: "completed" | "live" | "upcoming"
-  keyTakeaways?: string[]
-  recordingViews?: number
-  availableSlots?: number
-  totalSlots?: number
-}

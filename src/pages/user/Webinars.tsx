@@ -1,25 +1,22 @@
 import WebinarCard from "@/components/user/WebinarCard";
+import { ConductedWeb,  UpcomingWeb } from "@/types/user";
 
-const dummyWebinars = [
+const dummyWebinars:ConductedWeb[] = [
   {
     id: "1",
-    title: "Building Scalable React Applications with Modern Architecture",
-    presenter: {
-      name: "Sarah Chen",
-      avatar: "/placeholder.svg?height=40&width=40",
-      title: "Senior Frontend Architect",
-    },
+    name: "Building Scalable React Applications with Modern Architecture",
+    guestName: "Suhail",
+    guestRole: "MEAN Stack Developer",
     date: "2024-01-15",
     duration: "90 minutes",
-    image: "/placeholder.svg?height=300&width=500",
-    description:
-      "Learn how to build scalable React applications using modern architecture patterns, state management solutions, and performance optimization techniques.",
+    posterUrl: "/placeholder.svg?height=300&width=500",
+    description: "Learn how to build scalable React applications using modern architecture patterns, state management solutions, and performance optimization techniques.",
     attendancePercentage: 87,
     totalRegistrations: 1250,
     actualAttendees: 1088,
     rating: 4.8,
     totalRatings: 342,
-    status: "completed" as const,
+    status: "Completed" as const,
     keyTakeaways: [
       "Component composition patterns for better reusability",
       "State management with Zustand and React Query",
@@ -27,18 +24,17 @@ const dummyWebinars = [
       "Micro-frontend architecture implementation",
     ],
     recordingViews: 2847,
+    time: "3:00",
+    amount: 400,
   },
   {
     id: "2",
-    title: "AI-Powered Development: Integrating Machine Learning into Web Apps",
-    presenter: {
-      name: "Dr. Michael Thompson",
-      avatar: "/placeholder.svg?height=40&width=40",
-      title: "AI Research Lead",
-    },
+    name: "AI-Powered Development: Integrating Machine Learning into Web Apps",
+    guestName:"Jasir K",
+    guestRole: 'Software Developer',
     date: "2024-01-22",
     duration: "120 minutes",
-    image: "/placeholder.svg?height=300&width=500",
+    posterUrl: "/placeholder.svg?height=300&width=500",
     description:
       "Discover how to integrate AI and machine learning capabilities into your web applications using modern frameworks and APIs.",
     attendancePercentage: 92,
@@ -46,7 +42,7 @@ const dummyWebinars = [
     actualAttendees: 901,
     rating: 4.9,
     totalRatings: 287,
-    status: "completed" as const,
+    status: "Completed" as const,
     keyTakeaways: [
       "TensorFlow.js integration patterns",
       "OpenAI API implementation strategies",
@@ -54,45 +50,45 @@ const dummyWebinars = [
       "Privacy-first AI development practices",
     ],
     recordingViews: 3521,
+    time: "4:00",
+    amount: 500,
   },
 ];
 
-const upcomingWebinars = [
+const upcomingWebinars:UpcomingWeb[] = [
   {
     id: "upcoming-1",
-    title: "Next.js 15: What's New and How to Migrate",
-    presenter: {
-      name: "Emma Wilson",
-      avatar: "/placeholder.svg?height=40&width=40",
-      title: "Full Stack Developer",
-    },
+    name: "Next.js 15: What's New and How to Migrate",
+    guestName:"Suhail",
+    guestRole:"MEAN Stack Developer",
     date: "2024-02-15",
     duration: "75 minutes",
-    image: "/placeholder.svg?height=300&width=500",
+    posterUrl: "/placeholder.svg?height=300&width=500",
     description:
       "Explore the latest features in Next.js 15 and learn step-by-step migration strategies for your existing applications.",
     totalRegistrations: 450,
-    status: "upcoming" as const,
-    availableSlots: 30,
-    totalSlots: 500,
+    status: "Upcoming" as const,
+    slots: 30,
+    // totalSlots: 500,
+    amount:400,
+    time:"3:00",
   },
   {
     id: "upcoming-2",
-    title: "Mastering TypeScript: Advanced Patterns and Best Practices",
-    presenter: {
-      name: "James Rodriguez",
-      avatar: "/placeholder.svg?height=40&width=40",
-      title: "TypeScript Expert",
-    },
+    name: "Mastering TypeScript: Advanced Patterns and Best Practices",
+    guestName:"Jasir K",
+    guestRole: 'Software Developer',
     date: "2024-02-22",
     duration: "100 minutes",
-    image: "/placeholder.svg?height=300&width=500",
+    posterUrl: "/placeholder.svg?height=300&width=500",
     description:
       "Deep dive into advanced TypeScript patterns, utility types, and best practices for large-scale applications.",
     totalRegistrations: 320,
-    status: "upcoming" as const,
-    availableSlots: 85,
-    totalSlots: 400,
+    status: "Upcoming" as const,
+    slots: 85,
+    // totalSlots: 400,
+    time:"5:00",
+    amount:500
   },
 ];
 
