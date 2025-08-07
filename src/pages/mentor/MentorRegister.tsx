@@ -1,8 +1,9 @@
-import AccountData from "@/components/mentor/AccountData";
+// import AccountData from "@/components/mentor/AccountData";
 import { useSelector } from "react-redux";
 import { selectAuth } from "@/redux/slices/authSlice";
 import WaitingPeriod from "@/components/mentor/WaitingList";
 import ApplicationRejected from "@/components/mentor/RejectedApplication";
+import { MentorAccount } from "./Account";
 
 const MentorResiterPage = () => {
   const { user } = useSelector(selectAuth);
@@ -29,7 +30,8 @@ const MentorResiterPage = () => {
         )
       }
       {!user?.mentor_application_status && (
-        <AccountData fromRegisterPage={true} />
+        // <AccountData fromRegisterPage={true} />
+        <MentorAccount/>
       )}
     </>
   );

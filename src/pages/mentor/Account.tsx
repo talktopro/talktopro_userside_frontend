@@ -12,9 +12,11 @@ import { ProfessionalInformation } from "@/components/mentor/Account/Professiona
 import { EducationInformation } from "@/components/mentor/Account/EducationInformation";
 import { SkillsAndLanguages } from "@/components/mentor/Account/SkillsAndLanguages";
 import { FinalCheck } from "@/components/mentor/Account/FinalCheck";
-import { useSelector } from "react-redux";
-import { selectAuth } from "@/redux/slices/authSlice";
+import { useDispatch, useSelector } from "react-redux";
+import { selectAuth, updateUser } from "@/redux/slices/authSlice";
 import { TermsAndDiscovery } from "@/components/mentor/Account/TermsAndDiscovery";
+import apiClient from "@/api/axiosInstance";
+import { toast } from "sonner";
 
 const mentorFormSchema = z.object({
   personalInfo: z.object({
@@ -182,12 +184,12 @@ const STEP_LABELS = [
 
 export const MentorAccount: React.FC = () => {
   const { user } = useSelector(selectAuth);
-
   const [uploadedImage, setUploadedImage] = useState<string | null>(
     (user && user.profileImg) || null
   );
   const [imageError, setImageError] = useState<string | null>(null);
-  const [currentStep, setCurrentStep] = useState(2);
+  const [currentStep, setCurrentStep] = useState(1);
+  const dispatch = useDispatch();
 
   const form = useForm<MentorFormData>({
     resolver: zodResolver(mentorFormSchema),
@@ -262,14 +264,35 @@ export const MentorAccount: React.FC = () => {
   };
 
   const handleBack = () => {
-    if (currentStep > 1) setCurrentStep(currentStep - 1);
+    if (currentStep > 1) {
+      setCurrentStep(currentStep - 1);
+    }
   };
 
   const handleSubmit = async () => {
     const isValid = await trigger();
+
+    if (!user?.id) {
+      console.error("User not logged in");
+      return;
+    }
+
     if (isValid) {
       const formData = getValues();
-      console.log("Form submitted:", formData);
+
+      try {
+        const response = await apiClient.post("/mentor/registration", {
+          userId: user.id,
+          ...formData,
+        });
+
+        console.log("✅ Mentor registration successful:", response.data);
+        toast.success(response.data?.message);
+        dispatch(updateUser(response.data.data));
+        // You can navigate or show success message here
+      } catch (error) {
+        console.error("❌ Failed to submit mentor data:", error);
+      }
     }
   };
 
